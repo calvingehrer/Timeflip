@@ -14,15 +14,6 @@
         <exception-type>org.springframework.security.access.AccessDeniedException</exception-type>
         <location>/error/access_denied.xhtml</location>
     </error-page>
-    <error-page>
-        <error-code>404</error-code>
-        <location>/404.xhtml</location>
-    </error-page>
-
-    <error-page>
-        <error-code>500</error-code>
-        <location>/error.xhtml</location>
-    </error-page>
 
 
     <context-param>
@@ -33,10 +24,7 @@
         <param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>
         <param-value>true</param-value>
     </context-param>
-    <context-param>
-        <param-name>primefaces.FONT_AWESOME</param-name>
-        <param-value>true</param-value>
-    </context-param>
+
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>

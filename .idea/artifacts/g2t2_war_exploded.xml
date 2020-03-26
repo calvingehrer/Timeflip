@@ -90,7 +90,6 @@
           <element id="library" level="project" name="Maven: org.apache.tomcat.embed:tomcat-embed-el:9.0.27" />
           <element id="library" level="project" name="Maven: org.eclipse.jdt:ecj:3.18.0" />
           <element id="library" level="project" name="Maven: org.primefaces:primefaces:6.2" />
-          <element id="library" level="project" name="Maven: org.webjars:font-awesome:4.6.3" />
           <element id="library" level="project" name="Maven: jakarta.xml.bind:jakarta.xml.bind-api:2.3.2" />
           <element id="library" level="project" name="Maven: org.springframework:spring-core:5.2.0.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-jcl:5.2.0.RELEASE" />
