@@ -33,7 +33,9 @@
             <div class="bottom">
                 <span class="exception-panel-header">Error Occured</span>
                 <span class="exception-panel-subheader">Something went wrong.</span>
-                <p:commandButton type="button" value="Turn to home page" styleClass="raised-btn"/>
+                <h:form>
+                    <p:commandButton ajax="false" value="TURN TO HOME PAGE" styleClass="raised-btn" action="/empty.xhtml?faces-redirect=true"/>
+                </h:form>
             </div>
         </div>
         
