@@ -734,15 +734,15 @@ body .layout-wrapper .layout-main {
   transition: margin-left 0.3s; }
   .layout-wrapper .layout-main .layout-footer {
     width: 100%;
-    background-color: #F3F3F3;
+    background-color: ##dededeb8;
     padding: 16px 38px;
     color: #1F1F1F;
     bottom: 0;
-    position: relative; }
+    position: absolute; bottom:0px; }
     .layout-wrapper .layout-main .layout-footer .logo-container {
       text-decoration: none; }
       .layout-wrapper .layout-main .layout-footer .logo-container img {
-        height: 26px;
+        height: 20px;
         vertical-align: middle; }
       .layout-wrapper .layout-main .layout-footer .logo-container .app-name {
         font-weight: 400;
@@ -753,16 +753,16 @@ body .layout-wrapper .layout-main {
     .layout-wrapper .layout-main .layout-footer #footer-menu .footer-box {
       text-align: left; }
       .layout-wrapper .layout-main .layout-footer #footer-menu .footer-box span {
-        font-size: 15px;
-        font-weight: 500;
+        font-size: 12px;
+        font-weight: 400;
         text-align: left;
         color: #8A8A8A;
         display: block; }
       .layout-wrapper .layout-main .layout-footer #footer-menu .footer-box a {
         text-decoration: none;
         margin-top: 8px;
-        font-size: 13px;
-        font-weight: 400;
+        font-size: 10px;
+        font-weight: 100;
         display: block;
         color: #666666; }
         .layout-wrapper .layout-main .layout-footer #footer-menu .footer-box a > a {
