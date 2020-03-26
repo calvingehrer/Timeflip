@@ -40,7 +40,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 //Permit access to the H2 console
-                .antMatchers("/h2-console/**").permitAll()
                 //Permit access for all to error pages
                 .antMatchers("/error/**")
                 .permitAll()
@@ -55,7 +54,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/login.xhtml")
                 .loginProcessingUrl("/login")
-                .defaultSuccessUrl("/secured/welcome.xhtml");
+                .defaultSuccessUrl("/dashboard.xhtml");
         // :TODO: user failureUrl(/login.xhtml?error) and make sure that a corresponding message is displayed
 
         http.exceptionHandling().accessDeniedPage("/error/denied.xhtml");
