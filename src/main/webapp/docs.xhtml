@@ -81,12 +81,12 @@ mvn jetty:run
                     refer to this bean to dynamically change their behavior such as menu mode or theme. This bean is not necessary to run the ecuador
                     and only used for demo purposes. For example template.xhtml includes layout color depending on a user preference using an EL expression.</p>
 <pre>
-&lt;h:outputStylesheet name="css/layout-\#{guestPreferences.layout}.css" library="ecuador-layout" /&gt;   
+&lt;h:outputStylesheet name="css/layout-cyan.css" library="ecuador-layout" /&gt;
 </pre>               
                     <p>In your application, you may also need a similar bean to make the template dynamic so that your users will be able to change their preferred menu or theme.</p>  
                     
 <pre>
-&lt;h:outputStylesheet name="css/layout-blue.css" library="ecuador-layout" /&gt;   
+&lt;h:outputStylesheet name="css/layout-cyan.css" library="ecuador-layout" /&gt;
 </pre>   
                     <p>Source code of GuestPreferences.</p>
 <pre>
