@@ -18,6 +18,29 @@
                 <div class="card">
                     <h1>User</h1>
 
+                    <h:form id="selection">
+                        <h:panelGrid columns="5">
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="Username: "/>
+                                <p:inputText value="#{userListController.username}"/>
+                            </h:panelGrid>
+                            <p:commandButton value="Find" update=":userForm"/>
+                            <h:panelGrid columns="3">
+                                <p:outputLabel value="User Role: " />
+                                <p:selectOneMenu value="#{userListController.userrole}">
+                                    <f:selectItem itemLabel="All" itemValue=""/>
+                                    <f:selectItem itemLabel="Admin" itemValue="Admin"/>
+                                    <f:selectItem itemLabel="Manager" itemValue="Manager"/>
+                                    <f:selectItem itemLabel="Teamleader" itemValue="Teamleader"/>
+                                    <f:selectItem itemLabel="Employee" itemValue="Employee"/>
+                                </p:selectOneMenu>
+                                <p:commandButton value="Filter" update=":userForm"/>
+                            </h:panelGrid>
+                            <p:commandButton value="Reset" action="#{userListController.resetFilter}" update=":selection :userForm:usersTable"/>
+                            <p:commandButton value="Add User" styleClass="addButton" oncomplete="PF('addUserDialog').show()" />
+                        </h:panelGrid>
+                    </h:form>
+
                     <h:form id="userForm">
                         <p:dataTable id="usersTable" var="user" value="#{userListController.users}">
                             <p:column headerText="Username">
@@ -64,8 +87,6 @@
                                     <p:inputText id="lastName" value="#{userDetailController.user.lastName}"/>
                                     <p:outputLabel for="email" value="E-Mail: " />
                                     <p:inputText id="email" value="#{userDetailController.user.email}"/>
-                                    <p:outputLabel for="phone" value="Phone: " />
-                                    <p:inputMask id="phone" value="#{userDetailController.user.phone}" mask="+99? 999 9999999"/>
                                 </h:panelGrid>
                                 <p:separator />
                                 <h:panelGrid columns="2">
@@ -87,6 +108,50 @@
                         </p:confirmDialog>
 
                     </h:form>
+
+                    <p:dialog header="Add User" id="addUserDialog" widgetVar="addUserDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                        <p:outputPanel>
+                            <h:form>
+                                <h:panelGrid columns="2">
+                                    <p:outputLabel value="Username: " />
+                                    <p:inputText value="#{addUserController.user.username}" />
+                                    <p:outputLabel value="Password: " />
+                                    <p:password value="#{addUserController.user.password}" />
+                                </h:panelGrid>
+                                <p:separator />
+                                <p:outputLabel value="Roles: " />
+                                <h:panelGrid columns="2">
+                                    <p:selectBooleanCheckbox value="#{addUserController.admin}"/>
+                                    <p:outputLabel value="Admin" />
+                                    <p:selectBooleanCheckbox value="#{addUserController.manager}"/>
+                                    <p:outputLabel value="Department Manager" />
+                                    <p:selectBooleanCheckbox value="#{addUserController.teamleader}"/>
+                                    <p:outputLabel value="Teamleader" />
+                                    <p:selectBooleanCheckbox value="#{addUserController.employee}"/>
+                                    <p:outputLabel value="Employee" />
+                                </h:panelGrid>
+                                <p:separator />
+                                <h:panelGrid columns="2">
+                                    <p:outputLabel value="First Name: " />
+                                    <p:inputText value="#{addUserController.user.firstName}"/>
+                                    <p:outputLabel value="Last Name: " />
+                                    <p:inputText value="#{addUserController.user.lastName}"/>
+                                    <p:outputLabel value="E-Mail: " />
+                                    <p:inputText value="#{addUserController.user.email}"/>
+                                </h:panelGrid>
+                                <p:separator />
+                                <h:panelGrid columns="2">
+                                    <p:outputLabel value="Enabled: " />
+                                    <p:selectBooleanCheckbox value="#{addUserController.user.enabled}"/>
+                                </h:panelGrid>
+                                <p:separator />
+                                <h:panelGrid columns="2">
+                                    <p:commandButton update="@form :userForm:usersTable" value="Add" action="#{addUserController.add}" oncomplete="PF('addUserDialog').hide()" />
+                                    <p:commandButton value="Abort" type="reset" onclick="PF('addUserDialog').hide()"/>
+                                </h:panelGrid>
+                            </h:form>
+                        </p:outputPanel>
+                    </p:dialog>
 
                 </div>
             </div>

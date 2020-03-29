@@ -37,6 +37,10 @@
                     <p:outputLabel for="password" value="Password:"/>
                     <p:inputText id="password" type="password" required="true"/>
 
+                    <div class="login_error">
+                        <p:outputLabel value="Invalid Username/Password combination!" style="color: red" rendered="${!empty param['error']}"/>
+                    </div>
+
                     <button type="submit" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">
                         <span class="ui-button-text">Login</span>
                     </button>

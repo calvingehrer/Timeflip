@@ -11,6 +11,7 @@ public enum UserRole {
 
     ADMIN,
     MANAGER,
+    TEAMLEADER,
     EMPLOYEE
 
 }
