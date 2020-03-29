@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -51,8 +50,8 @@ public class UserService {
     public Collection<User> getAllUsersByRole(String role){
         if (role.equals("Admin")){
             return userRepository.findByRole(UserRole.ADMIN);
-        } else if (role.equals("Manager")){
-            return userRepository.findByRole(UserRole.MANAGER);
+        } else if (role.equals("Departmentleader")){
+            return userRepository.findByRole(UserRole.DEPARTMENTLEADER);
         }
         else if(role.equals("Teamleader")){
             return userRepository.findByRole(UserRole.TEAMLEADER);
@@ -100,7 +99,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('MANAGER')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DEPARTMENTLEADER')")
     public void addNewUser(User user) {
         User newUser = new User();
         newUser.setUsername(user.getUsername());

@@ -21,7 +21,7 @@
             <p>If the currently logged on user does not have the denoted role, you will be directed to the access-denied-page.</p>
             <h:panelGrid columns="3">
                 <p:commandButton action="#{securityTestBean.doEmployeeAction}" value="EMPLOYEE" update="okDialog"/>
-                <p:commandButton action="#{securityTestBean.doManagerAction}" value="MANAGER" update="okDialog"/>
+                <p:commandButton action="#{securityTestBean.doManagerAction}" value="DEPARTMENTLEADER" update="okDialog"/>
                 <p:commandButton action="#{securityTestBean.doAdminAction}" value="ADMIN" update="okDialog"/>
             </h:panelGrid>
         </p:panel>

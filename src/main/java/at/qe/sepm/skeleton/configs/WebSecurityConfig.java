@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -49,7 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .hasAnyAuthority("ADMIN")
                 //Permit access only for some roles
                 .antMatchers("/secured/**")
-                .hasAnyAuthority("ADMIN", "MANAGER", "EMPLOYEE")
+                .hasAnyAuthority("ADMIN", "DEPARTMENTLEADER", "EMPLOYEE")
                 //If user doesn't have permission, forward him to login page
                 .and()
                 .formLogin()

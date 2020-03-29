@@ -20,7 +20,7 @@ public class AddUserController {
 
     private Set<UserRole> roles;
     private boolean admin = false;
-    private boolean manager = false;
+    private boolean departmentleader = false;
     private boolean teamleader = false;
     private boolean employee = false;
 
@@ -37,8 +37,8 @@ public class AddUserController {
         if(admin){
             roles.add(UserRole.ADMIN);
         }
-        if(manager){
-            roles.add(UserRole.MANAGER);
+        if(departmentleader){
+            roles.add(UserRole.DEPARTMENTLEADER);
         }
         if(teamleader){
             roles.add(UserRole.TEAMLEADER);
@@ -60,7 +60,7 @@ public class AddUserController {
         roles.clear();
         employee = false;
         teamleader = false;
-        manager = false;
+        departmentleader = false;
         admin = false;
         user.setEnabled(false);
     }
@@ -81,13 +81,9 @@ public class AddUserController {
         this.admin = admin;
     }
 
-    public boolean isManager() {
-        return manager;
-    }
+    public boolean isDepartmentleader() { return departmentleader; }
 
-    public void setManager(boolean manager) {
-        this.manager = manager;
-    }
+    public void setDepartmentleader(boolean departmentleader) { this.departmentleader = departmentleader; }
 
     public boolean isTeamleader() {
         return teamleader;

@@ -10,8 +10,8 @@ package at.qe.sepm.skeleton.model;
 public enum UserRole {
 
     ADMIN,
-    MANAGER,
+    DEPARTMENTLEADER,
     TEAMLEADER,
-    EMPLOYEE
+    EMPLOYEE,
 
 }
