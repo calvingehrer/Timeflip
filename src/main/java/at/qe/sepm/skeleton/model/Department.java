@@ -2,13 +2,14 @@ package at.qe.sepm.skeleton.model;
 
 import javax.persistence.OneToMany;
 import java.util.List;
+import java.util.Set;
 
 public class Department {
 
     private int departmentId;
 
     @OneToMany
-    private List<Team> teams;
+    private Set<Team> teams;
 
     private User headOfDepartment;
 
@@ -20,11 +21,11 @@ public class Department {
         this.departmentId = departmentId;
     }
 
-    public List<Team> getTeams() {
+    public Set<Team> getTeams() {
         return teams;
     }
 
-    public void setTeams(List<Team> teams) {
+    public void setTeams(Set<Team> teams) {
         this.teams = teams;
     }
 

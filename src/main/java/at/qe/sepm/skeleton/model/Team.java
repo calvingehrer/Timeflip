@@ -2,13 +2,14 @@ package at.qe.sepm.skeleton.model;
 
 import javax.persistence.ManyToMany;
 import java.util.List;
+import java.util.Set;
 
 public class Team {
 
     private int teamId;
 
     @ManyToMany
-    private List<User> employees;
+    private Set<User> employees;
     private User leader;
 
 
@@ -20,11 +21,11 @@ public class Team {
         this.teamId = ID;
     }
 
-    public List<User> getEmployees() {
+    public Set<User> getEmployees() {
         return employees;
     }
 
-    public void setEmployees(List<User> employees) {
+    public void setEmployees(Set<User> employees) {
         this.employees = employees;
     }
 
