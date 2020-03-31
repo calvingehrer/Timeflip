@@ -25,6 +25,9 @@ import org.springframework.stereotype.Component;
 public class UserService {
 
     @Autowired
+    private MailService mailService;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -109,6 +112,7 @@ public class UserService {
         newUser.setEmail(user.getEmail());
         newUser.setEnabled(user.isEnabled());
         newUser.setRoles(user.getRoles());
+        mailService.sendEmailTo(newUser, "New user added", "You've been added as a new user");
         saveUser(newUser);
     }
 

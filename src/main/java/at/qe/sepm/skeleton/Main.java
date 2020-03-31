@@ -1,6 +1,7 @@
 package at.qe.sepm.skeleton;
 
 import at.qe.sepm.skeleton.configs.CustomServletContextInitializer;
+import at.qe.sepm.skeleton.configs.MailConfig;
 import at.qe.sepm.skeleton.configs.WebSecurityConfig;
 import at.qe.sepm.skeleton.utils.ViewScope;
 import java.util.HashMap;
@@ -32,7 +33,7 @@ public class Main extends SpringBootServletInitializer {
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(new Class[]{Main.class, CustomServletContextInitializer.class, WebSecurityConfig.class});
+        return application.sources(Main.class, CustomServletContextInitializer.class, WebSecurityConfig.class, MailConfig.class);
     }
 
     @Bean
