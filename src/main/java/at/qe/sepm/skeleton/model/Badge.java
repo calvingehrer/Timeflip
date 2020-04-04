@@ -6,34 +6,40 @@ import javax.persistence.Entity;
 
 
 
-
+@Entity
 public class Badge {
 
 
-    private int badgeId;
+    @Id
+    private String badgeId;
 
     @ElementCollection(targetClass = BadgeEnum.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "Badge_BadgeType")
     @Enumerated(EnumType.STRING)
-    private Set<UserRole> badgeType;
+    private Set<BadgeEnum> badgeType;
 
-    public Set<UserRole> getBadgeType() {
+    public Set<BadgeEnum> getBadgeType() {
         return badgeType;
     }
 
-    public void setBadgeType(Set<UserRole> badgeType) {
+    public void setBadgeType(Set<BadgeEnum> badgeType) {
         this.badgeType = badgeType;
     }
 
-    public int getBadgeId() {
+    public String getBadgeId() {
         return badgeId;
     }
 
-    public void setBadgeId(int badgeId) {
+    public void setBadgeId(String badgeId) {
         this.badgeId = badgeId;
     }
+
     @Override
     public String toString() {
         return "at.qe.sepm.skeleton.model.User[ id=" + badgeId + " ]";
     }
+
+
+
+
 }

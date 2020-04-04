@@ -1,25 +1,29 @@
 package at.qe.sepm.skeleton.model;
 
-import javax.persistence.OneToMany;
+import org.springframework.data.domain.Persistable;
+
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
-public class Department {
 
-    private int departmentId;
+@Entity
+public class Department implements Persistable<String>, Serializable {
+
+    private static final long serialVersionDID = 1L;
+
+    @Id
+    @Column(length = 100)
+    private String departmentName;
+
 
     @OneToMany
     private Set<Team> teams;
 
+    @OneToOne
     private User headOfDepartment;
 
-    public int getDepartmentId() {
-        return departmentId;
-    }
-
-    public void setDepartmentId(int departmentId) {
-        this.departmentId = departmentId;
-    }
 
     public Set<Team> getTeams() {
         return teams;
@@ -37,8 +41,31 @@ public class Department {
         this.headOfDepartment = headOfDepartment;
     }
 
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
+
+    public static long getSerialVersionDID() {
+        return serialVersionDID;
+    }
+
     @Override
     public String toString() {
-        return "at.qe.sepm.skeleton.model.User[ id=" + departmentId + " ]";
+        return "at.qe.sepm.skeleton.model.User[ id=" + departmentName + " ]";
+    }
+
+    @Override
+    public String getId() {
+        return getDepartmentName();
+    }
+
+
+    @Override
+    public boolean isNew() {
+        return false;
     }
 }

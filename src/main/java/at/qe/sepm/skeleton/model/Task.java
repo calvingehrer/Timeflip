@@ -1,33 +1,40 @@
 package at.qe.sepm.skeleton.model;
 
+import javax.persistence.*;
+import java.util.Set;
+
 /**
  * Entity representing a Task.
  *
  */
 
-
+@Entity
 public class Task {
 
-    private Integer taskID;
-
-    private TaskEnum task;
+    @Id
+    private String taskID;
 
     private Integer duration;
 
-    public Integer getTaskID() {
+    @ElementCollection(targetClass = TaskEnum.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "Task_TaskType")
+    @Enumerated(EnumType.STRING)
+    private Set<TaskEnum> tasks;
+
+    public String getTaskID() {
         return taskID;
     }
 
-    public void setTaskID(Integer taskID) {
+    public void setTaskID(String taskID) {
         this.taskID = taskID;
     }
 
-    public TaskEnum getTask() {
-        return task;
+    public Set<TaskEnum> getTasks() {
+        return tasks;
     }
 
-    public void setTask(TaskEnum task) {
-        this.task = task;
+    public void setTasks(Set<TaskEnum> tasks) {
+        this.tasks = tasks;
     }
 
     public Integer getDuration() {
@@ -36,5 +43,10 @@ public class Task {
 
     public void setDuration(Integer duration) {
         this.duration = duration;
+    }
+
+    @Override
+    public String toString() {
+        return "at.qe.sepm.skeleton.model.Task[ id=" + taskID + " ]";
     }
 }

@@ -1,5 +1,9 @@
 package at.qe.sepm.skeleton.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
 /**
  * Entity representing E-Mail.
  *
@@ -9,22 +13,12 @@ package at.qe.sepm.skeleton.model;
 public class Email {
 
 
-    private Integer emailID;
-
     private String address;
 
     private Integer interval;
 
     private boolean isActivated;
 
-
-    public Integer getEmailID() {
-        return emailID;
-    }
-
-    public void setEmailID(Integer emailID) {
-        this.emailID = emailID;
-    }
 
     public String getAddress() {
         return address;
