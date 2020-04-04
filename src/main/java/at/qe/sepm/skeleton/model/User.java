@@ -51,6 +51,8 @@ public class User implements Persistable<String>, Serializable {
 
     boolean enabled;
 
+    private Intervall intervall;
+
     @ElementCollection(targetClass = UserRole.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "User_UserRole")
     @Enumerated(EnumType.STRING)
@@ -143,6 +145,10 @@ public class User implements Persistable<String>, Serializable {
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
     }
+
+    public Intervall getIntervall() { return intervall; }
+
+    public void setIntervall(Intervall intervall) { this.intervall = intervall; }
 
     @Override
     public int hashCode() {
