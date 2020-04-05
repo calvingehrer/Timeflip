@@ -9,10 +9,10 @@ import java.util.Set;
 
 public interface VacationService {
 
-    @PreAuthorize("@customPermissionEvaluator.hasPermission(MANAGER) or principal.username eq user.username")
+    @PreAuthorize("@customPermissionEvaluator.hasPermission(DEPARMENTLEADER) or principal.username eq user.username")
     void addVacation(User user, Vacation vacation) throws VacationException;
 
-    @PreAuthorize("@customPermissionEvaluator.hasPermission(MANAGER) or principal.username eq user.username")
+    @PreAuthorize("@customPermissionEvaluator.hasPermission(DEPARMENTLEADER) or principal.username eq user.username")
     Set<Vacation> getVAcationsFromUser(User user);
 
 }
