@@ -3,8 +3,6 @@ package at.qe.sepm.skeleton.services;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.model.UserRole;
 import at.qe.sepm.skeleton.repositories.UserRepository;
-import java.util.Collection;
-import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,6 +10,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import javax.transaction.Transactional;
+import java.util.Collection;
+import java.util.Date;
 
 /**
  * Service for accessing and manipulating user data.
@@ -130,6 +132,11 @@ public class UserService {
     public User getAuthenticatedUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return userRepository.findFirstByUsername(auth.getName());
+    }
+
+    @Transactional
+    public User getManagedUser(User user) {
+        return this.userRepository.findFirstByUsername(user.getUsername());
     }
 
 }

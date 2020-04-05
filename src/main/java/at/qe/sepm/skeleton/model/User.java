@@ -1,22 +1,16 @@
 package at.qe.sepm.skeleton.model;
 
+import org.springframework.data.domain.Persistable;
+
+import javax.persistence.*;
+import javax.transaction.Transactional;
+import javax.validation.constraints.Email;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import org.springframework.data.domain.Persistable;
-import javax.validation.constraints.Email;
 
 /**
  * Entity representing users.
@@ -29,6 +23,7 @@ import javax.validation.constraints.Email;
 public class User implements Persistable<String>, Serializable {
 
     private static final long serialVersionUID = 1L;
+
 
     @Id
     @Column(length = 100)
@@ -58,6 +53,22 @@ public class User implements Persistable<String>, Serializable {
     @CollectionTable(name = "User_UserRole")
     @Enumerated(EnumType.STRING)
     private Set<UserRole> roles;
+
+    @ElementCollection
+    @CollectionTable(name = "userVacation")
+    Set<Vacation> vacations = new HashSet<>();
+
+    public Set<Vacation> getVacations() {
+        return vacations;
+    }
+
+    public void setVacations(Set<Vacation> vacations) {
+        this.vacations = vacations;
+    }
+
+    public void addVacation(Vacation vacation) {
+        this.vacations.add(vacation);
+    }
 
     public String getUsername() {
         return username;
@@ -163,10 +174,7 @@ public class User implements Persistable<String>, Serializable {
             return false;
         }
         final User other = (User) obj;
-        if (!Objects.equals(this.username, other.username)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.username, other.username);
     }
 
     @Override
@@ -186,6 +194,11 @@ public class User implements Persistable<String>, Serializable {
     @Override
     public boolean isNew() {
         return (null == createDate);
+    }
+
+    @Transactional
+    public boolean hasVacationInTime(Instant begin, Instant end) {
+        return this.getVacations().stream().anyMatch(x -> x.getStart().compareTo(begin) <= 0 && x.getEnd().compareTo(begin) >= 0 || x.getStart().compareTo(end) <= 0 && x.getEnd().compareTo(end) >= 0 || x.getStart().compareTo(begin) >= 0 && x.getEnd().compareTo(end) <= 0);
     }
 
 }
