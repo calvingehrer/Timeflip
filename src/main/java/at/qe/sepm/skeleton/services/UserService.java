@@ -82,10 +82,10 @@ public class UserService {
     }
 
     /**
-     * Saves the user. This method will also set {@link User#createDate} for new
-     * entities or {@link User#updateDate} for updated entities. The user
-     * requesting this operation will also be stored as {@link User#createDate}
-     * or {@link User#updateUser} respectively.
+     * Saves the user. This method will also set {@link User# createDate} for new
+     * entities or {@link User# updateDate} for updated entities. The user
+     * requesting this operation will also be stored as {@link User# createDate}
+     * or {@link User# updateUser} respectively.
      *
      * @param user the user to save
      * @return the updated user
@@ -127,7 +127,7 @@ public class UserService {
         // :TODO: write some audit log stating who and when this user was permanently deleted.
     }
 
-    private User getAuthenticatedUser() {
+    public User getAuthenticatedUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return userRepository.findFirstByUsername(auth.getName());
     }
