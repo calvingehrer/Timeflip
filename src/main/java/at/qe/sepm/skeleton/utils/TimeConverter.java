@@ -1,10 +1,7 @@
 package at.qe.sepm.skeleton.utils;
 
-import jdk.vm.ci.meta.Local;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
