@@ -1,9 +1,6 @@
 package at.qe.sepm.skeleton.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import java.time.Instant;
 import java.util.Objects;
 
@@ -12,15 +9,13 @@ import java.util.Objects;
  *
  */
 
-
+@Embeddable
 public class Vacation {
 
     public final static long MAX_VACATION_DAYS_PER_YEAR = 25;
 
-    @Temporal(TemporalType.TIMESTAMP)
     private Instant start;
 
-    @Temporal(TemporalType.TIMESTAMP)
     private Instant end;
 
     private static Long MAX_DAYS;
@@ -40,14 +35,6 @@ public class Vacation {
 
     public void setEnd(Instant end) {
         this.end = end;
-    }
-
-    public static Long getMaxDays() {
-        return MAX_DAYS;
-    }
-
-    public static void setMaxDays(Long maxDays) {
-        MAX_DAYS = maxDays;
     }
 
     @Override
