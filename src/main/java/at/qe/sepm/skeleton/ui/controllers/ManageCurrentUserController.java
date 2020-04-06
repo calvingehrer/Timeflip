@@ -21,7 +21,7 @@ public class ManageCurrentUserController {
     @Autowired
     private UserService userService;
 
-    private User me;
+    private User currentUser;
 
     private String intervall;
 
@@ -29,25 +29,25 @@ public class ManageCurrentUserController {
 
     public void setIntervall(String intervall) { this.intervall = intervall; }
 
-    public User getMe() {
-        return me;
+    public User getCurrentUser() {
+        return currentUser;
     }
 
-    public void setMe(User me) {
-        this.me = me;
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
     }
 
     public void reloadUser() {
-        this.setMe(this.userService.loadUser(me.getUsername()));
+        this.setCurrentUser(this.userService.loadUser(currentUser.getUsername()));
     }
 
     @PostConstruct
     public void init() {
-        this.setMe(userService.getAuthenticatedUser());
+        this.setCurrentUser(userService.getAuthenticatedUser());
     }
 
     public String getFullName() {
-        return me.getFirstName() + " " + me.getLastName();
+        return currentUser.getFirstName() + " " + currentUser.getLastName();
     }
 
     /**
@@ -55,8 +55,7 @@ public class ManageCurrentUserController {
      */
     public void saveUserDetails() {
         try {
-            this.getMe().setIntervall(Intervall.convertStringToIntervall(this.intervall));
-            this.userService.updateUser(me);
+            this.userService.updateUser(currentUser);
             reloadUser();
         } catch (Exception e) {
             e.printStackTrace();
