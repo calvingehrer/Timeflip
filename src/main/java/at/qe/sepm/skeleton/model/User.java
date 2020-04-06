@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import org.springframework.data.domain.Persistable;
+import javax.validation.constraints.Email;
 
 /**
  * Entity representing users.
@@ -47,7 +48,9 @@ public class User implements Persistable<String>, Serializable {
 
     private String firstName;
     private String lastName;
+    @Email
     private String email;
+
 
     boolean enabled;
 
