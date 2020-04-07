@@ -11,24 +11,41 @@
                 <h:form id="menuform">
                     <div class="layout-menu-title">MAIN MENU</div>
                     <pe:menu widgetVar="me">
-                        <p:submenu label="Employee Submenu 1" rendered="#{sessionInfoBean.hasRole('EMPLOYEE')}" icon="fa fa-fw fa-file-code-o">
-                            <p:menuitem value="Employee Action 1 - 1"/>
-                            <p:menuitem value="Employee Action 1 - 2"/>
+
+                        <p:menuitem value="Overview" url="/employee/overview.xhtml" rendered="#{sessionInfoBean.hasRole('EMPLOYEE')}" icon="fa fa-fw fa-file-code-o"/>
+
+                        <p:submenu label="Statistics" rendered="#{sessionInfoBean.hasRole('EMPLOYEE')}" icon="fa fa-fw fa-file-code-o">
+                            <p:menuitem value="My Statistics" url="/employee/personal-statistics.xhtml"/>
+                            <p:menuitem value="Team Statistics" url="/teamleader/team-statistics.xhtml" rendered="#{sessionInfoBean.hasRole('TEAMLEADER') or sessionInfoBean.hasRole('DEPARTMENTLEADER')}"/>
+                            <p:menuitem value="Department Statistics" url="/departmentleader/department-statistics.xhtml" rendered="#{sessionInfoBean.hasRole('DEPARTMENTLEADER')}"/>
+                            <p:menuitem value="Collected Timedata" url="/employee/timelist.xhtml"/>
                         </p:submenu>
-                        <p:submenu label="Employee Submenu 2" rendered="#{sessionInfoBean.hasRole('EMPLOYEE')}" icon="fa fa-fw fa-file-code-o">
-                            <p:menuitem value="Employee Action 2 - 1"/>
-                            <p:menuitem value="Employee Action 2 - 2"/>
+                        <p:submenu label="Manage Team" rendered="#{sessionInfoBean.hasRole('TEAMLEADER')}" icon="fa fa-fw fa-file-code-o">
+                            <p:menuitem value="My Team" url="/teamleader/team.xhtml"/>
+                            <p:menuitem value="Time Changes" url="/teamleader/change-requests.xhtml"/>
                         </p:submenu>
-                        <p:submenu label="Manager Submenu" rendered="#{sessionInfoBean.hasRole('DEPARTMENTLEADER')}" icon="fa fa-fw fa-file-code-o">
-                            <p:menuitem value="Manager Action 1"/>
-                            <p:menuitem value="Manager Action 2"/>
+                        <p:submenu label="Manage Department" rendered="#{sessionInfoBean.hasRole('DEPARTMENTLEADER')}" icon="fa fa-fw fa-file-code-o">
+                            <p:menuitem value="My Department" url="/departmentleader/department.xhtml"/>
+                            <p:menuitem value="Time Changes" url="/teamleader/change-requests.xhtml"/>
                         </p:submenu>
-                        <p:submenu label="Admin Submenu" rendered="#{sessionInfoBean.hasRole('ADMIN')}" icon="fa fa-fw fa-file-code-o">
-                            <p:menuitem value="Manage Users" url="/admin/users.xhtml"/>
+                        <p:menuitem value="Vacation" url="/employee/vacation.xhtml" rendered="#{sessionInfoBean.hasRole('EMPLOYEE')}" icon="fa fa-fw fa-file-code-o"/>
+                        <p:submenu label="Badges" rendered="#{sessionInfoBean.hasRole('EMPLOYEE')}" icon="fa fa-fw fa-file-code-o">
+                            <p:menuitem value="My Badges" url="/employee/badges.xhtml"/>
+                            <p:menuitem value="Team" url="/teamleader/team-badges.xhtml" rendered="#{sessionInfoBean.hasRole('TEAMLEADER') or sessionInfoBean.hasRole('DEPARTMENTLEADER')}"/>
+                            <p:menuitem value="Department" url="/departmentleader/department-badges.xhtml" rendered="#{sessionInfoBean.hasRole('DEPARTMENTLEADER')}"/>
+                            <p:menuitem value="Leaderboard" url="/employee/leaderboard.xhtml"/>
                         </p:submenu>
-                        <p:submenu label="Test Submenu" rendered="#{sessionInfoBean.loggedIn}" icon="fa fa-fw fa-file-code-o">
-                            <p:menuitem value="Security Test" url="/secured/test.xhtml"/>
+                        <p:submenu label="Manage User" rendered="#{sessionInfoBean.hasRole('ADMIN')}" icon="fa fa-fw fa-file-code-o">
+                            <p:menuitem value="User" url="/admin/users.xhtml"/>
+                            <p:menuitem value="Teams" url="/admin/teams.xhtml"/>
+                            <p:menuitem value="Departments" url="/admin/departments.xhtml"/>
                         </p:submenu>
+                        <p:submenu label="Manage Hardware" rendered="#{sessionInfoBean.hasRole('ADMIN')}" icon="fa fa-fw fa-file-code-o">
+                            <p:menuitem value="TimeFlip" url="/admin/timeflip.xhtml"/>
+                            <p:menuitem value="Raspberry Pi" url="/admin/raspberry-pi.xhtml"/>
+                        </p:submenu>
+
+
                         <p:menuitem id="logout" value="Logout" icon="fa fa-fw fa-file-code-o" rendered="#{sessionInfoBean.loggedIn}" outcome="/login"/>
                     </pe:menu>
                 </h:form>
