@@ -6,4 +6,45 @@
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="title">Overview</ui:define>
+
+    <ui:define name="viewname">
+        <li>Pages</li>
+        <li>/</li>
+        <li><p:link outcome="/empty">Manage Teams</p:link></li>
+    </ui:define>
+
+
+    <ui:define name="content">
+            <h:form id="teamForm">
+                <p:dataTable id="TeamTable" var="team" value="#{teamListController.teams}">
+                    <p:column headerText="Teamname">
+                        <h:outputText value="#{team.teamName}"/>
+                    </p:column>
+
+                </p:dataTable>
+
+            <p:commandButton value="Add Team" styleClass="addButton" oncomplete="PF('addTeamDialog').show()" />
+            </h:form>
+
+
+
+        <p:dialog header="Add Team" id="addTeamDialog" widgetVar="addTeamDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+            <p:outputPanel>
+                <h:form>
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="Teamname: " />
+                        <p:inputText value="#{addTeamController.team.teamName}" />
+                    </h:panelGrid>
+                    <p:separator />
+                    <h:panelGrid columns="2">
+                        <p:commandButton update="@form :teamForm:TeamTable" value="Add" action="#{addTeamController.add}" oncomplete="PF('addTeamDialog').hide()" />
+                        <p:commandButton value="Abort" type="reset" onclick="PF('addTeamDialog').hide()"/>
+                    </h:panelGrid>
+                </h:form>
+            </p:outputPanel>
+        </p:dialog>
+
+
+    </ui:define>
+
 </ui:composition>

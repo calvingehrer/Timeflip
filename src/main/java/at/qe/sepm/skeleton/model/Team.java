@@ -2,10 +2,7 @@ package at.qe.sepm.skeleton.model;
 
 import org.springframework.data.domain.Persistable;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
@@ -17,6 +14,7 @@ public class Team implements Persistable<String>, Serializable {
     private static final long serialVersionTID = 1L;
 
     @Id
+    @Column(length = 100)
     private String teamName;
 
     @ManyToMany
