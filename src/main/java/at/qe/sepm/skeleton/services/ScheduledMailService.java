@@ -1,6 +1,6 @@
 package at.qe.sepm.skeleton.services;
 
-import at.qe.sepm.skeleton.model.Intervall;
+import at.qe.sepm.skeleton.model.Interval;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.MailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,22 +17,22 @@ public class ScheduledMailService {
 
     @Scheduled(cron = "0 0 8 * * *", zone = "Europe/Vienna")
     public void sendDailyStatistics () {
-        for (User u: mailRepository.findByInterval(Intervall.DAILY)) {
-            mailService.sendEmailTo(u, "your stats", "statistics");
+        for (User u: mailRepository.findByInterval(Interval.DAILY)) {
+            mailService.sendEmailTo(u, "your daily stats", "default");
         }
     }
 
     @Scheduled(cron = "0 0 8 * * MON", zone = "Europe/Vienna")
     public void sendWeeklyStatistics () {
-        for (User u: mailRepository.findByInterval(Intervall.WEEKLY)) {
-            mailService.sendEmailTo(u, "your stats", "statistics");
+        for (User u: mailRepository.findByInterval(Interval.WEEKLY)) {
+            mailService.sendEmailTo(u, "your weekly stats", "default");
         }
     }
 
     @Scheduled(cron = "0 0 8 1-7 * MON", zone = "Europe/Vienna")
     public void sendMonthlyStatistics () {
-        for (User u: mailRepository.findByInterval(Intervall.MONTHLY)) {
-            mailService.sendEmailTo(u, "your stats", "statistics");
+        for (User u: mailRepository.findByInterval(Interval.MONTHLY)) {
+            mailService.sendEmailTo(u, "your monthly stats", "default");
         }
     }
 }

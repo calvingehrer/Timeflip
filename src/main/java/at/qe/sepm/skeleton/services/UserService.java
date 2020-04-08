@@ -1,7 +1,7 @@
 package at.qe.sepm.skeleton.services;
 
 import at.qe.sepm.skeleton.configs.WebSecurityConfig;
-import at.qe.sepm.skeleton.model.Intervall;
+import at.qe.sepm.skeleton.model.Interval;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.model.UserRole;
 import at.qe.sepm.skeleton.repositories.UserRepository;
@@ -115,7 +115,7 @@ public class UserService {
         newUser.setEmail(user.getEmail());
         newUser.setEnabled(user.isEnabled());
         newUser.setRoles(user.getRoles());
-        newUser.setIntervall(Intervall.NONE);
+        newUser.setIntervall(Interval.NONE);
         mailService.sendEmailTo(newUser, "New user added", "You've been added as a new user");
         saveUser(newUser);
     }
