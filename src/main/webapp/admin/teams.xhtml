@@ -20,6 +20,9 @@
                     <p:column headerText="Teamname">
                         <h:outputText value="#{team.teamName}"/>
                     </p:column>
+                    <p:column headerText="Employees">
+                        <h:outputText value="#{team.employees}"/>
+                    </p:column>
 
                 </p:dataTable>
 
@@ -37,11 +40,32 @@
                     </h:panelGrid>
                     <p:separator />
                     <h:panelGrid columns="2">
+                        <p:outputLabel value="Select employees: "/>
+                        <p:commandButton value="Select" update=":employeeForm" oncomplete="PF('selectEmployeesDialog').show()" />
+                    </h:panelGrid>
+                    <h:panelGrid columns="2">
                         <p:commandButton update="@form :teamForm:TeamTable" value="Add" action="#{addTeamController.add}" oncomplete="PF('addTeamDialog').hide()" />
                         <p:commandButton value="Abort" type="reset" onclick="PF('addTeamDialog').hide()"/>
                     </h:panelGrid>
                 </h:form>
             </p:outputPanel>
+        </p:dialog>
+
+        <p:dialog header="Select Employees" id="selectEmployeesDialog" widgetVar="selectEmployeesDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+            <h:form id="employeeForm">
+                <p:dataTable id="employeeTable" var="employee" value="#{userListController.getUsers()}">
+                    <p:column headerText="Employee ID">
+                        <h:outputText value="#{employee.username}"/>
+                    </p:column>
+
+                    <p:column style="width:100px;text-align: center">
+                        <p:commandButton action="#{addTeamController.addEmployees}" oncomplete="PF('selectEmployeeDialog').hide()" icon="ui-icon-check" title="Select">
+                            <f:setPropertyActionListener value="#{employee}" target="#{addTeamController.employees}" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+
+            </h:form>
         </p:dialog>
 
 
