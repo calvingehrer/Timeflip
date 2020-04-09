@@ -1,13 +1,14 @@
-<ui:composition xmlns:h="http://java.sun.com/jsf/html"
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns="http://www.w3.org/1999/xhtml"
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="title">My Vacations • Timeflippers</ui:define>
     <ui:define name="breadcrumbs">
         <li>
-            <p:link outcome="/secured/vacation">Vacations</p:link>
+            <p:link outcome="/secured/vacation.xhtml">Vacations</p:link>
         </li>
     </ui:define>
 

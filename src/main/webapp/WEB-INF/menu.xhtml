@@ -26,8 +26,8 @@
                         <p:submenu label="Admin Submenu" rendered="#{sessionInfoBean.hasRole('ADMIN')}" icon="fa fa-fw fa-file-code-o">
                             <p:menuitem value="Manage Users" url="/admin/users.xhtml"/>
                         </p:submenu>
-                        <p:submenu label="Test Submenu" rendered="#{sessionInfoBean.loggedIn}" icon="fa fa-fw fa-file-code-o">
-                            <p:menuitem value="Security Test" url="/secured/test.xhtml"/>
+                        <p:submenu label="Vacation" rendered="#{sessionInfoBean.loggedIn}" icon="fa fa-fw fa-file-code-o">
+                            <p:menuitem value="Vacation" url="/secured/vacation.xhtml"/>
                         </p:submenu>
                         <p:menuitem id="logout" value="Logout" icon="fa fa-fw fa-file-code-o" rendered="#{sessionInfoBean.loggedIn}" outcome="/login"/>
                     </pe:menu>
