@@ -54,6 +54,7 @@ public class User implements Persistable<String>, Serializable {
 
     boolean enabled;
 
+    @Enumerated(EnumType.STRING)
     private Interval intervall;
 
     @ElementCollection(targetClass = UserRole.class, fetch = FetchType.EAGER)
