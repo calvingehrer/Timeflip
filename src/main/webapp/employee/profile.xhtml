@@ -12,8 +12,20 @@
         <h1>Profile</h1>
 
         <h:panelGrid columns="2">
-                <p:outputLabel value="Firstname"/>
-                <p:outputLabel id="username" value="#{userDetailController.getUser().getFirstName()}"/>
+            <p:outputLabel value="Username:"/>
+            <p:outputLabel id="username" value="#{sessionInfoBean.getCurrentUser().getUsername()}"/>
+            <p:outputLabel value="ID:"/>
+            <p:outputLabel id="id" value="#{sessionInfoBean.getCurrentUser().getId()}"/>
+            <p:outputLabel value="Firstname:"/>
+            <p:outputLabel id="firstname" value="#{sessionInfoBean.getCurrentUser().getFirstName()}"/>
+            <p:outputLabel value="Lastname:"/>
+            <p:outputLabel id="lastname" value="#{sessionInfoBean.getCurrentUser().getLastName()}"/>
+            <p:outputLabel value="E-Mail:"/>
+            <p:outputLabel id="email" value="#{sessionInfoBean.getCurrentUser().getEmail()}"/>
+            <p:outputLabel value="Password:"/>
+            <p:outputLabel id="password" value="#{sessionInfoBean.getCurrentUser().getPassword()}"/>
+            <p:outputLabel value="Roles:"/>
+            <p:outputLabel id="roles" value="#{sessionInfoBean.getCurrentUser().getRoles()}"/>
         </h:panelGrid>
 
 
