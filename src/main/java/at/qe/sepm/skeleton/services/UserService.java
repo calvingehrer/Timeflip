@@ -1,5 +1,7 @@
 package at.qe.sepm.skeleton.services;
 
+import at.qe.sepm.skeleton.configs.WebSecurityConfig;
+import at.qe.sepm.skeleton.model.Interval;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.model.UserRole;
 import at.qe.sepm.skeleton.repositories.UserRepository;
@@ -12,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service for accessing and manipulating user data.
@@ -112,6 +115,7 @@ public class UserService {
         newUser.setEmail(user.getEmail());
         newUser.setEnabled(user.isEnabled());
         newUser.setRoles(user.getRoles());
+        newUser.setIntervall(Interval.NONE);
         mailService.sendEmailTo(newUser, "New user added", "You've been added as a new user");
         saveUser(newUser);
     }
@@ -127,9 +131,28 @@ public class UserService {
         // :TODO: write some audit log stating who and when this user was permanently deleted.
     }
 
-    private User getAuthenticatedUser() {
+    public User getAuthenticatedUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return userRepository.findFirstByUsername(auth.getName());
     }
+
+    protected User setUpdatingFieldsBeforePersist(User toSave) {
+        if (toSave.isNew()) {
+            if (toSave.getPassword() != null) {
+                toSave.getPassword();
+                toSave.setPassword(WebSecurityConfig.passwordEncoder().encode(toSave.getPassword()));
+            }
+            toSave.setCreateUser(getAuthenticatedUser());
+        } else {
+            toSave.setUpdateUser(getAuthenticatedUser());
+        }
+        return toSave;
+    }
+
+    @Transactional
+    public User updateUser(User toSave) {
+        return userRepository.save(setUpdatingFieldsBeforePersist(toSave));
+    }
+
 
 }
