@@ -26,17 +26,24 @@
             <p:outputLabel id="password" value="#{sessionInfoBean.getCurrentUser().getPassword()}"/>
             <p:outputLabel value="Roles:"/>
             <p:outputLabel id="roles" value="#{sessionInfoBean.getCurrentUser().getRoles()}"/>
+
         </h:panelGrid>
 
+        <h:form id="userForm">
+
+        <p:commandButton  value="Edit" oncomplete="PF('userEditDialog').show()" icon="ui-icon-note">
+            <f:setPropertyActionListener value="#{user}" target="#{sessionInfoBean.getCurrentUser}" />
+        </p:commandButton>
+        </h:form>
 
 
 
 
     </ui:define>
 
-    
-    
-    
+
+
+
 
 
 
