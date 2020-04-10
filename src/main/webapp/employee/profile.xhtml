@@ -26,11 +26,11 @@
                         <p:outputLabel value="E-Mail:"/>
                         <p:outputLabel id="email" value="#{sessionInfoBean.getCurrentUser().getEmail()}"/>
                         <p:outputLabel value="Password:"/>
-                        <p:outputLabel id="password" value="#{sessionInfoBean.getCurrentUser().getPassword()}"/>
+                        <p:outputLabel id="password" value="**********"/>
                         <p:outputLabel value="Roles:"/>
                         <p:outputLabel id="roles" value="#{sessionInfoBean.getCurrentUser().getRoles()}"/>
 
-                        <a href="/secured/settings.xhtml"><button>Edit</button></a>
+                        <p:commandButton action="/secured/settings.xhtml" value="Edit"/>
                     </p:panelGrid>
                 </div>
             </div>
