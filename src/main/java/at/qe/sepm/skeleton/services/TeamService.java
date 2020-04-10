@@ -43,6 +43,8 @@ public class TeamService {
         Team newTeam = new Team();
 
         newTeam.setTeamName(team.getTeamName());
+        newTeam.setEmployees(team.getEmployees());
+        newTeam.setLeader(team.getLeader());
 
         saveTeam(newTeam);
 

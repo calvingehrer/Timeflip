@@ -17,7 +17,7 @@ public class Team implements Persistable<String>, Serializable {
     @Column(length = 100)
     private String teamName;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<User> employees;
     @OneToOne
     private User leader;
@@ -29,6 +29,10 @@ public class Team implements Persistable<String>, Serializable {
 
     public void setEmployees(Set<User> employees) {
         this.employees = employees;
+    }
+
+    public void addEmployees(User employee){
+        this.employees.add(employee);
     }
 
     public User getLeader() {
