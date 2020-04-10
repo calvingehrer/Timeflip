@@ -1,5 +1,6 @@
 package at.qe.sepm.skeleton.ui.controllers;
 
+import at.qe.sepm.skeleton.model.Interval;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.ui.beans.SessionInfoBean;
@@ -8,6 +9,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @Scope("view")
@@ -49,6 +52,10 @@ public class ManageCurrentUserController {
         return currentUser.getFirstName() + " " + currentUser.getLastName();
     }
 
+    public List<String> completeIntervall(String query) {
+        String upperQuery = query.toUpperCase();
+        return Interval.getAllIntervals().stream().filter(a -> a.contains(upperQuery)).collect(Collectors.toList());
+    }
     /**
      * Saves changed information
      */

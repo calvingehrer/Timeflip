@@ -28,8 +28,10 @@
                             <p:inputText id="firstname" value="#{manageCurrentUserController.currentUser.firstName}"/>
                             <p:outputLabel for="lastname" value="Last Name: "/>
                             <p:inputText id="lastname" value="#{manageCurrentUserController.currentUser.lastName}"/>
+                            <p:outputLabel for="email" value="E-Mail: "/>
+                            <p:inputText id="email" value="#{manageCurrentUserController.currentUser.email}"/>
                             <p:outputLabel for="interval" value="Interval for mails: "/>
-                            <p:inputText id="interval" value="#{manageCurrentUserController.currentUser.intervall}"/>
+                            <p:autoComplete id="interval" dropdown="true" value="#{manageCurrentUserController.currentUser.intervall}" completeMethod="#{manageCurrentUserController.completeIntervall}"/>
 
                             <p:panelGrid layout="grid" columns="1">
                                 <p:commandButton id="saveDetails" value="Save"
