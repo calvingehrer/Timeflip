@@ -15,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.convert.DateTimeConverter;
 import java.io.Serializable;
 import java.time.ZoneId;
 import java.util.Date;
@@ -97,7 +96,7 @@ public class VacationController implements Serializable {
     @PostConstruct
     public void init(){
         this.setThisUser(userUserService.getAuthenticatedUser());
-        this.setVacations(this.vacationService.getVAcationsFromUser(thisUser));
+        this.setVacations(this.vacationService.getVacationFromUser(thisUser));
     }
 
     public TimeZone utcTimeZone(){

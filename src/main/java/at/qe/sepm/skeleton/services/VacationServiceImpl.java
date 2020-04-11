@@ -7,6 +7,7 @@ import at.qe.sepm.skeleton.model.Vacation;
 import at.qe.sepm.skeleton.utils.TimeConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -58,9 +59,10 @@ public class VacationServiceImpl implements VacationService {
         managedUser.addVacation(vacation);
     }
 
+    @PreAuthorize("@customPermissionEvaluator.hasPermission(EMPLOYEE) or principal.username eq user.username")
     @Override
     @Transactional
-    public Set<Vacation> getVAcationsFromUser(User user) {
+    public Set<Vacation> getVacationFromUser(User user) {
         User managedUser = this.userService.getManagedUser(user);
         if (!managedUser.getVacations().isEmpty()) {
             return managedUser.getVacations();
