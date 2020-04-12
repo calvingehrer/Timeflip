@@ -1,0 +1,53 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                                                   xmlns:h="http://java.sun.com/jsf/html"
+                                                   xmlns:f="http://java.sun.com/jsf/core"
+                                                   xmlns:ui="http://java.sun.com/jsf/facelets"
+                                                   xmlns:p="http://primefaces.org/ui"
+                                                   template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Profile Settings</ui:define>
+    <ui:define name="viewname">
+        <li>Pages</li>
+        <li>/</li>
+        <li><p:link outcome="/secured/settings">Profile Settings</p:link></li>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card">
+                    <h1>User Details</h1>
+
+                    <h:form id="changeDetailsForm" prependId="false">
+
+                        <p:panelGrid id="changeDetailsGrid" columns="2" cellpadding="5" layout="grid"
+                                     columnClasses="ui-g-1 ui-md-2 ui-lg-2 ui-xl-2, ui-g-4 ui-md-4 ui-lg-4 ui-xl-2">
+                            <p:outputLabel for="username" value="Username: "/>
+                            <p:inputText id="username" value="#{manageCurrentUserController.currentUser.username}" disabled="true"/>
+                            <p:outputLabel for="firstname" value="First Name: "/>
+                            <p:inputText id="firstname" value="#{manageCurrentUserController.currentUser.firstName}"/>
+                            <p:outputLabel for="lastname" value="Last Name: "/>
+                            <p:inputText id="lastname" value="#{manageCurrentUserController.currentUser.lastName}"/>
+                            <p:outputLabel for="email" value="E-Mail: "/>
+                            <p:inputText id="email" value="#{manageCurrentUserController.currentUser.email}"/>
+                            <p:outputLabel for="interval" value="Interval for mails: "/>
+                            <p:autoComplete id="interval" dropdown="true" value="#{manageCurrentUserController.currentUser.intervall}" completeMethod="#{manageCurrentUserController.completeIntervall}"/>
+
+                            <p:panelGrid layout="grid" columns="1">
+                                <p:commandButton id="saveDetails" value="Save"
+                                                 action="#{manageCurrentUserController.saveUserDetails}"
+                                                 update="changeDetailsForm"/>
+
+                            </p:panelGrid>
+                        </p:panelGrid>
+                    </h:form>
+
+
+                </div>
+            </div>
+        </div>
+
+
+    </ui:define>
+
+</ui:composition>
