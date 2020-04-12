@@ -21,10 +21,16 @@
                         <h:outputText value="#{team.teamName}"/>
                     </p:column>
                     <p:column headerText="Employees">
-                        <h:outputText value="#{team.employees}"/>
+                        <h:outputText value="#{team.employees   }"/>
                     </p:column>
                     <p:column headerText="Leader">
                         <h:outputText value="#{team.leader.firstName}"/>
+                    </p:column>
+                    <p:column style="width:200px;text-align: center">
+                        <p:commandButton action="#{teamDetailController.doDeleteTeam}" value="Delete" icon="ui-icon-trash" title="Delete" update=":teamForm:TeamTable">
+                            <f:setPropertyActionListener value="#{team}" target="#{teamDetailController.team}" />
+                            <p:confirm header="Confirmation" message="Are you sure that you want to delete this Team? You cannot undo this operation." icon="ui-icon-alert" />
+                        </p:commandButton>
                     </p:column>
 
                 </p:dataTable>
@@ -65,16 +71,18 @@
 
 
                     <p:column style="width:100px;text-align: center">
-                        <p:commandButton action="#{addTeamController.addEmployee}" oncomplete="PF('selectEmployeesDialog').hide()" icon="ui-icon-check" title="Select">
-                            <f:setPropertyActionListener value="#{employee}" target="#{addTeamController.employees}" />
+                        <p:commandButton actionListener="#{addTeamController.addEmployee}" icon="ui-icon-check" title="Select">
+                            <f:setPropertyActionListener value="#{employee}" target="#{addTeamController.employee}" />
                         </p:commandButton>
                     </p:column>
                 </p:dataTable>
                 <h:panelGrid columns="2">
+                    <p:commandButton update="@form :teamForm:TeamTable" value="Add" action="#{addTeamController.setEmployees}" oncomplete="PF('selectEmployeesDialog').hide()" />
                     <p:commandButton value="Abort" type="submit" onclick="PF('selectEmployeesDialog').hide()"/>
                 </h:panelGrid>
 
             </h:form>
+
         </p:dialog>
 
         <p:dialog header="Select Leader" id="selectLeaderDialog" widgetVar="selectLeaderDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">

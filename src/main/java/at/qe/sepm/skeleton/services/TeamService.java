@@ -1,6 +1,7 @@
 package at.qe.sepm.skeleton.services;
 
 import at.qe.sepm.skeleton.model.Team;
+import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -48,6 +49,16 @@ public class TeamService {
 
         saveTeam(newTeam);
 
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN') or principal.username eq #username")
+    public Team loadTeam(String teamName) {
+        return teamRepository.findByTeamName(teamName);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public void deleteTeam(Team team){
+        teamRepository.delete(team);
     }
 
 

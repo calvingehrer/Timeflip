@@ -1,9 +1,11 @@
 package at.qe.sepm.skeleton.model;
 
+import org.hibernate.annotations.Cascade;
 import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -17,7 +19,10 @@ public class Team implements Persistable<String>, Serializable {
     @Column(length = 100)
     private String teamName;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+
+    //@Cascade({CascadeType.SAVE_UPDATE})
+    //@JoinTable
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     private Set<User> employees;
     @OneToOne
     private User leader;
@@ -31,9 +36,10 @@ public class Team implements Persistable<String>, Serializable {
         this.employees = employees;
     }
 
-    public void addEmployees(User employee){
+    public void setEmployees(User employee){
         this.employees.add(employee);
     }
+
 
     public User getLeader() {
         return leader;

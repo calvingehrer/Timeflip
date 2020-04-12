@@ -4,17 +4,9 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
+
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.domain.Persistable;
 import javax.validation.constraints.Email;
 
@@ -30,7 +22,9 @@ public class User implements Persistable<String>, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
+
+    @Id @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name="system-uuid", strategy = "uuid")
     @Column(length = 100)
     private String username;
 
@@ -146,6 +140,13 @@ public class User implements Persistable<String>, Serializable {
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
     }
+
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+
 
     @Override
     public int hashCode() {
