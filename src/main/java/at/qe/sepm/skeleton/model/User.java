@@ -53,6 +53,10 @@ public class User implements Persistable<String>, Serializable {
     @Enumerated(EnumType.STRING)
     private Set<UserRole> roles;
 
+    @Enumerated(EnumType.STRING)
+    private Interval intervall;
+
+
     public String getUsername() {
         return username;
     }
@@ -178,6 +182,15 @@ public class User implements Persistable<String>, Serializable {
     @Override
     public String getId() {
         return getUsername();
+    }
+
+
+    public Interval getIntervall() {
+        return intervall;
+    }
+
+    public void setIntervall(Interval intervall) {
+        this.intervall = intervall;
     }
 
     public void setId(String id) {
