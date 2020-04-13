@@ -1548,14 +1548,20 @@ body .layout-wrapper .layout-main {
         vertical-align: middle;
         border: 0 none; }
   .login-body .login-panel {
-    padding: 70px 36px;
+    padding: 25px 40px;
     position: relative;
     margin: 0 auto;
     width: 350px;
-    height: 400px;
+    height: 200px;
     text-align: center;
     background-color: white;
     top: 30%; }
+    .login-body .login-header {
+      font-family: normal, serif;
+      font-size: xx-large;
+      font-weight: bold;
+      font-variant: all-small-caps;
+    }
     .login-body .login-panel img {
       height: 28px;
       width: auto;
