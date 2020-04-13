@@ -12,11 +12,16 @@
         <li><p:link outcome="/secured/settings">Profile Settings</p:link></li>
     </ui:define>
 
+
+
     <ui:define name="content">
+
         <div class="ui-g">
             <div class="ui-g-12">
                 <div class="card">
                     <h1>User Details</h1>
+
+                    <var id="oldPassword" class="ManageCurrentUserConrtoller.passwords.oldPassword"/>
 
                     <h:form id="changeDetailsForm" prependId="false">
 
@@ -32,10 +37,37 @@
                             <p:inputText id="email" value="#{manageCurrentUserController.currentUser.email}"/>
                             <p:outputLabel for="interval" value="Interval for mails: "/>
                             <p:autoComplete id="interval" dropdown="true" value="#{manageCurrentUserController.currentUser.intervall}" completeMethod="#{manageCurrentUserController.completeIntervall}"/>
+                            <p:outputLabel value="Passsword: "/>
+
+                            <p:commandButton update=":changeDetailsForm:editPassword" value="Change Password" oncomplete="PF('editPassword').show()" icon="ui-icon-note">
+                            </p:commandButton>
+
+
+
+
+                            <p:dialog header="Change Password" id="editPassword" widgetVar="editPassword" modal="true"
+                                      showEffect="fade"
+                                      hideEffect="fade" resizable="false">
+                                <p:outputPanel>
+                                    <h:panelGrid columns="2">
+                                        <p:outputLabel for="oldP" value="Old Password: " />
+                                        <p:inputText id="oldP" value="#{manageCurrentUserController.passwords.oldPassword}" />
+                                        <p:outputLabel for="newP" value="New Password: " />
+                                        <p:inputText id="newP" value="#{manageCurrentUserController.passwords.newPassword}" />
+                                    </h:panelGrid>
+                                    <p:separator />
+
+                                    <h:panelGrid columns="2">
+                                        <p:commandButton value="Save" action="#{manageCurrentUserController.changePassword()}" oncomplete="PF('editPassword').hide()"/>
+                                        <p:commandButton value="Abort" onclick="PF('editPassword').hide()"/>
+                                    </h:panelGrid>
+                                </p:outputPanel>
+                            </p:dialog>
+
 
                             <p:panelGrid layout="grid" columns="1">
                                 <p:commandButton id="saveDetails" value="Save"
-                                                 action="#{manageCurrentUserController.saveUserDetails}"
+                                                 action="#{manageCurrentUserController.saveUserDetails()}"
                                                  update="changeDetailsForm"/>
 
                             </p:panelGrid>
