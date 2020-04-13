@@ -16,10 +16,8 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
-import java.time.ZoneId;
 import java.util.Date;
 import java.util.Set;
-import java.util.TimeZone;
 
 @Controller
 @Scope("view")
@@ -99,9 +97,6 @@ public class VacationController implements Serializable {
         this.setVacations(this.vacationService.getVacationFromUser(thisUser));
     }
 
-    public TimeZone utcTimeZone(){
-        return TimeZone.getTimeZone(ZoneId.of("UTC"));
-    }
 
     public void addVacation(){
         FacesMessage message;

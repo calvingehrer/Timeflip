@@ -41,7 +41,7 @@
 
                     <h:form id="vacationListForm" prependId="false">
                         <p:dataTable id="vacationsTable" var="vacation" value="#{vacationController.vacations}">
-                            <p:column headerText="Begin" sortBy="#{vacation.start}">
+                            <p:column headerText="Begin"> <!--sortBy="#{vacation.start}"-->
                                 <h:outputText value="#{vacation.start}"/>
                             </p:column>
                             <p:column headerText="End">
@@ -64,10 +64,10 @@
                     <h:outputText value="Select the end of the vacation"/>
 
                     <p:calendar id="start" mode="inline" value="#{vacationController.beginVacation}"
-                                timeZone="#{vacationController.utcTimeZone()}"/>
+                    />
 
                     <p:calendar id="end" mode="inline" value="#{vacationController.endOfVacation}"
-                                timeZone="#{vacationController.utcTimeZone()}"/>
+                    />
 
                     <p:commandButton value="Save" action="#{vacationController.addVacation}"
                                      oncomplete="PF('addVacationDialog').hide()"
