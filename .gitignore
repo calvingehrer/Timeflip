@@ -1,4 +1,4 @@
 /target/
 /src/main/webapp/WEB-INF/classes/
-/sepm-start.iml
-/.idea/*
+sepm-start.iml
+.idea
