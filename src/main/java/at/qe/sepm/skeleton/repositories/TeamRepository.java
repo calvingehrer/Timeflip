@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface TeamRepository {
+public interface TeamRepository extends AbstractRepository<Team, String>  {
 
 
     Team findByTeamName(String teamName);

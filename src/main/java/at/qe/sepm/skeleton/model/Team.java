@@ -1,12 +1,11 @@
 package at.qe.sepm.skeleton.model;
 
+import org.hibernate.annotations.Cascade;
 import org.springframework.data.domain.Persistable;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -17,9 +16,13 @@ public class Team implements Persistable<String>, Serializable {
     private static final long serialVersionTID = 1L;
 
     @Id
+    @Column(length = 100)
     private String teamName;
 
-    @ManyToMany
+
+    //@Cascade({CascadeType.SAVE_UPDATE})
+    //@JoinTable
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     private Set<User> employees;
     @OneToOne
     private User leader;
@@ -32,6 +35,11 @@ public class Team implements Persistable<String>, Serializable {
     public void setEmployees(Set<User> employees) {
         this.employees = employees;
     }
+
+    public void setEmployees(User employee){
+        this.employees.add(employee);
+    }
+
 
     public User getLeader() {
         return leader;
