@@ -1,12 +1,8 @@
 package at.qe.sepm.skeleton.services;
 
-import at.qe.sepm.skeleton.configs.WebSecurityConfig;
-import at.qe.sepm.skeleton.model.Interval;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.model.UserRole;
 import at.qe.sepm.skeleton.repositories.UserRepository;
-import java.util.Collection;
-import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,7 +10,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
+
+import javax.transaction.Transactional;
+import java.util.Collection;
+import java.util.Date;
 
 /**
  * Service for accessing and manipulating user data.
@@ -85,10 +84,10 @@ public class UserService {
     }
 
     /**
-     * Saves the user. This method will also set {@link User#createDate} for new
-     * entities or {@link User#updateDate} for updated entities. The user
-     * requesting this operation will also be stored as {@link User#createDate}
-     * or {@link User#updateUser} respectively.
+     * Saves the user. This method will also set {@link User# createDate} for new
+     * entities or {@link User# updateDate} for updated entities. The user
+     * requesting this operation will also be stored as {@link User# createDate}
+     * or {@link User# updateUser} respectively.
      *
      * @param user the user to save
      * @return the updated user
@@ -115,7 +114,6 @@ public class UserService {
         newUser.setEmail(user.getEmail());
         newUser.setEnabled(user.isEnabled());
         newUser.setRoles(user.getRoles());
-        newUser.setIntervall(Interval.NONE);
         mailService.sendEmailTo(newUser, "New user added", "You've been added as a new user");
         saveUser(newUser);
     }
@@ -136,23 +134,9 @@ public class UserService {
         return userRepository.findFirstByUsername(auth.getName());
     }
 
-    protected User setUpdatingFieldsBeforePersist(User toSave) {
-        if (toSave.isNew()) {
-            if (toSave.getPassword() != null) {
-                toSave.getPassword();
-                toSave.setPassword(WebSecurityConfig.passwordEncoder().encode(toSave.getPassword()));
-            }
-            toSave.setCreateUser(getAuthenticatedUser());
-        } else {
-            toSave.setUpdateUser(getAuthenticatedUser());
-        }
-        return toSave;
-    }
-
     @Transactional
-    public User updateUser(User toSave) {
-        return userRepository.save(setUpdatingFieldsBeforePersist(toSave));
+    public User getManagedUser(User user) {
+        return this.userRepository.findFirstByUsername(user.getUsername());
     }
-
 
 }

@@ -25,6 +25,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
  * University of Innsbruck.
  */
 @SpringBootApplication
+
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableScheduling
 public class Main extends SpringBootServletInitializer {
