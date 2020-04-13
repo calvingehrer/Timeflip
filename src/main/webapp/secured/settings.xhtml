@@ -37,32 +37,34 @@
                             <p:inputText id="email" value="#{manageCurrentUserController.currentUser.email}"/>
                             <p:outputLabel for="interval" value="Interval for mails: "/>
                             <p:autoComplete id="interval" dropdown="true" value="#{manageCurrentUserController.currentUser.intervall}" completeMethod="#{manageCurrentUserController.completeIntervall}"/>
+
                             <p:outputLabel value="Passsword: "/>
 
-                            <p:commandButton update=":changeDetailsForm:editPassword" value="Change Password" oncomplete="PF('editPassword').show()" icon="ui-icon-note">
-                            </p:commandButton>
+                                                       <p:commandButton update=":changeDetailsForm:editPassword" value="Change Password" oncomplete="PF('editPassword').show()" icon="ui-icon-note">
+                                                       </p:commandButton>
 
 
 
 
-                            <p:dialog header="Change Password" id="editPassword" widgetVar="editPassword" modal="true"
-                                      showEffect="fade"
-                                      hideEffect="fade" resizable="false">
-                                <p:outputPanel>
-                                    <h:panelGrid columns="2">
-                                        <p:outputLabel for="oldP" value="Old Password: " />
-                                        <p:inputText id="oldP" value="#{manageCurrentUserController.passwords.oldPassword}" />
-                                        <p:outputLabel for="newP" value="New Password: " />
-                                        <p:inputText id="newP" value="#{manageCurrentUserController.passwords.newPassword}" />
-                                    </h:panelGrid>
-                                    <p:separator />
+                                                                                   <p:dialog header="Change Password" id="editPassword" widgetVar="editPassword" modal="true"
+                                                                                             showEffect="fade"
+                                                                                             hideEffect="fade" resizable="false">
+                                                                                       <p:outputPanel>
+                                                                                           <h:panelGrid columns="2">
+                                                                                               <p:outputLabel for="oldP" value="Old Password: " />
+                                                                                               <p:inputText id="oldP" value="#{manageCurrentUserController.passwords.oldPassword}" />
+                                                                                               <p:outputLabel for="newP" value="New Password: " />
+                                                                                               <p:inputText id="newP" value="#{manageCurrentUserController.passwords.newPassword}" />
+                                                                                           </h:panelGrid>
+                                                                                           <p:separator />
 
-                                    <h:panelGrid columns="2">
-                                        <p:commandButton value="Save" action="#{manageCurrentUserController.changePassword()}" oncomplete="PF('editPassword').hide()"/>
-                                        <p:commandButton value="Abort" onclick="PF('editPassword').hide()"/>
-                                    </h:panelGrid>
-                                </p:outputPanel>
-                            </p:dialog>
+                                                                                           <h:panelGrid columns="2">
+                                                                                               <p:commandButton value="Save" action="#{manageCurrentUserController.changePassword()}" oncomplete="PF('editPassword').hide()"/>
+                                                                                               <p:commandButton value="Abort" onclick="PF('editPassword').hide()"/>
+                                                                                           </h:panelGrid>
+
+                                                                                       </p:outputPanel>
+                                                                                   </p:dialog>
 
 
                             <p:panelGrid layout="grid" columns="1">

@@ -70,7 +70,6 @@ public class ManageCurrentUserController {
         return Interval.getAllIntervals().stream().filter(a -> a.contains(upperQuery)).collect(Collectors.toList());
     }
 
-
     public boolean checkOldPassword(){
         if(passwordEncoder.encode(passwords.getOldPassword()) == currentUser.getPassword()){
             return true;
@@ -79,6 +78,7 @@ public class ManageCurrentUserController {
             return false;
         }
     }
+
 
     public void changePassword(){
         if(checkOldPassword()){
@@ -95,9 +95,7 @@ public class ManageCurrentUserController {
         }
     }
 
-    /**
-     * Saves changed information
-     */
+
     public void saveUserDetails() {
         try {
             this.userService.updateUser(currentUser);

@@ -1,5 +1,6 @@
 package at.qe.sepm.skeleton.services;
 
+import at.qe.sepm.skeleton.configs.WebSecurityConfig;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.model.UserRole;
 import at.qe.sepm.skeleton.repositories.UserRepository;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Service for accessing and manipulating user data.
@@ -41,7 +43,7 @@ public class UserService {
      * @return
      */
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Collection<User> getAllUsers() {
+    public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
@@ -52,7 +54,7 @@ public class UserService {
      * @return
      */
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Collection<User> getAllUsersByRole(String role){
+    public List<User> getAllUsersByRole(String role){
         if (role.equals("Admin")){
             return userRepository.findByRole(UserRole.ADMIN);
         } else if (role.equals("Departmentleader")){
@@ -68,7 +70,7 @@ public class UserService {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Collection<User> getAllUsersByUsername(String username){
+    public List<User> getAllUsersByUsername(String username){
         return userRepository.findByUsernamePrefix(username);
     }
 
@@ -139,9 +141,23 @@ public class UserService {
         return this.userRepository.findFirstByUsername(user.getUsername());
     }
 
-    @Transactional
-    public User getManagedUser(User user) {
-        return this.userRepository.findFirstByUsername(user.getUsername());
+    protected User setUpdatingFieldsBeforePersist(User toSave) {
+        if (toSave.isNew()) {
+            if (toSave.getPassword() != null) {
+                toSave.getPassword();
+                toSave.setPassword(WebSecurityConfig.passwordEncoder().encode(toSave.getPassword()));
+            }
+            toSave.setCreateUser(getAuthenticatedUser());
+        } else {
+            toSave.setUpdateUser(getAuthenticatedUser());
+        }
+        return toSave;
     }
+
+    @Transactional
+    public User updateUser(User toSave) {
+        return userRepository.save(setUpdatingFieldsBeforePersist(toSave));
+    }
+
 
 }
