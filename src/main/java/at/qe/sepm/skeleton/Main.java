@@ -1,6 +1,7 @@
 package at.qe.sepm.skeleton;
 
 import at.qe.sepm.skeleton.configs.CustomServletContextInitializer;
+import at.qe.sepm.skeleton.configs.MailConfig;
 import at.qe.sepm.skeleton.configs.WebSecurityConfig;
 import at.qe.sepm.skeleton.utils.ViewScope;
 import java.util.HashMap;
@@ -12,6 +13,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 
 /**
@@ -24,6 +26,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
  */
 @SpringBootApplication
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableScheduling
 public class Main extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
@@ -32,7 +35,7 @@ public class Main extends SpringBootServletInitializer {
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(new Class[]{Main.class, CustomServletContextInitializer.class, WebSecurityConfig.class});
+        return application.sources(Main.class, CustomServletContextInitializer.class, WebSecurityConfig.class, MailConfig.class);
     }
 
     @Bean

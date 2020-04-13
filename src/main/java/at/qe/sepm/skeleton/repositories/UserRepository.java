@@ -25,4 +25,7 @@ public interface UserRepository extends AbstractRepository<User, String> {
     @Query("SELECT u FROM User u WHERE :role MEMBER OF u.roles")
     List<User> findByRole(@Param("role") UserRole role);
 
+    @Query("SELECT u FROM User u WHERE u.username LIKE CONCAT(:usernamePrefix, '%')")
+    List<User> findByUsernamePrefix(@Param("usernamePrefix") String usernamePrefix);
+
 }

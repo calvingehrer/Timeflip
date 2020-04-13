@@ -8,15 +8,12 @@
         <ui:composition>
             <h:form>
                 <p:menubar>
-                    <p:submenu label="Employee Submenu 1" rendered="#{sessionInfoBean.hasRole('EMPLOYEE')}">
-                        <p:menuitem value="Employee Action 1 - 1"/>
-                        <p:menuitem value="Employee Action 1 - 2"/>
+                    <p:menuitem label="Overview" url="/employee/overview.xhtml" rendered="#{sessionInfoBean.hasRole('EMPLOYEE')}"/>
+                    <p:submenu label="Statistics" rendered="#{sessionInfoBean.hasRole('EMPLOYEE')}">
+                        <p:menuitem value="Personal Statistics" url="/employee/personal-statistics.xhtml"/>
+                        <p:menuitem value="Collected Timedata" url="/employee/timelist.xhtml"/>
                     </p:submenu>
-                    <p:submenu label="Employee Submenu 2" rendered="#{sessionInfoBean.hasRole('EMPLOYEE')}">
-                        <p:menuitem value="Employee Action 2 - 1"/>
-                        <p:menuitem value="Employee Action 2 - 2"/>
-                    </p:submenu>
-                    <p:submenu label="Manager Submenu" rendered="#{sessionInfoBean.hasRole('MANAGER')}">
+                    <p:submenu label="Manager Submenu" rendered="#{sessionInfoBean.hasRole('DEPARTMENTLEADER')}">
                         <p:menuitem value="Manager Action 1"/>
                         <p:menuitem value="Manager Action 2"/>
                     </p:submenu>

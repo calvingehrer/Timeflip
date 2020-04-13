@@ -21,13 +21,39 @@ public class UserListController {
     @Autowired
     private UserService userService;
 
+    private String userrole = "";
+    private String username = "";
+
     /**
      * Returns a list of all users.
      *
      * @return
      */
-    public Collection<User> getUsers() {
-        return userService.getAllUsers();
+    public Collection<User> getUsers(){
+        if(!username.equals("")){
+            return userService.getAllUsersByUsername(username);
+        }
+        return userService.getAllUsersByRole(userrole);
     }
 
+    public void resetFilter(){
+        this.username = "";
+        this.userrole = "";
+    }
+
+    public String getUserrole() {
+        return userrole;
+    }
+
+    public void setUserrole(String userrole) {
+        this.userrole = userrole;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 }

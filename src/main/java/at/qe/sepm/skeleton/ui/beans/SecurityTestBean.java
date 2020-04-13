@@ -32,9 +32,9 @@ public class SecurityTestBean {
         showOkDialog = true;
     }
 
-    @PreAuthorize("hasAuthority('MANAGER')")
+    @PreAuthorize("hasAuthority('DEPARTMENTLEADER')")
     public void doManagerAction() {
-        performedAction = "MANAGER";
+        performedAction = "DEPARTMENTLEADER";
         showOkDialog = true;
     }
 

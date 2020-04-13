@@ -1,0 +1,55 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Profile</ui:define>
+
+    <ui:define name="content">
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card">
+                    <h1>Profile</h1>
+                    <p:panelGrid id="changeDetailsGrid" columns="2" cellpadding="5" layout="grid"
+                                 columnClasses="ui-g-1 ui-md-2 ui-lg-2 ui-xl-2, ui-g-4 ui-md-4 ui-lg-4 ui-xl-2">
+
+                        <p:outputLabel value="Username:"/>
+                        <p:outputLabel id="username" value="#{sessionInfoBean.getCurrentUser().getUsername()}"/>
+                        <p:outputLabel value="ID:"/>
+                        <p:outputLabel id="id" value="#{sessionInfoBean.getCurrentUser().getId()}"/>
+                        <p:outputLabel value="Firstname:"/>
+                        <p:outputLabel id="firstname" value="#{sessionInfoBean.getCurrentUser().getFirstName()}"/>
+                        <p:outputLabel value="Lastname:"/>
+                        <p:outputLabel id="lastname" value="#{sessionInfoBean.getCurrentUser().getLastName()}"/>
+                        <p:outputLabel value="E-Mail:"/>
+                        <p:outputLabel id="email" value="#{sessionInfoBean.getCurrentUser().getEmail()}"/>
+                        <p:outputLabel value="Password:"/>
+                        <p:outputLabel id="password" value="**********"/>
+                        <p:outputLabel value="Roles:"/>
+                        <p:outputLabel id="roles" value="#{sessionInfoBean.getCurrentUser().getRoles()}"/>
+
+                        <p:commandButton action="/secured/settings.xhtml" value="Edit"/>
+                    </p:panelGrid>
+                </div>
+            </div>
+        </div>
+
+        <h:form id="userForm">
+
+
+        </h:form>
+
+
+
+
+    </ui:define>
+
+
+
+
+
+
+
+</ui:composition>

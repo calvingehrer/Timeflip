@@ -4,18 +4,11 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
+
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.domain.Persistable;
+import javax.validation.constraints.Email;
 
 /**
  * Entity representing users.
@@ -29,7 +22,9 @@ public class User implements Persistable<String>, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
+
+    @Id @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name="system-uuid", strategy = "uuid")
     @Column(length = 100)
     private String username;
 
@@ -47,8 +42,9 @@ public class User implements Persistable<String>, Serializable {
 
     private String firstName;
     private String lastName;
+    @Email
     private String email;
-    private String phone;
+
 
     boolean enabled;
 
@@ -56,6 +52,10 @@ public class User implements Persistable<String>, Serializable {
     @CollectionTable(name = "User_UserRole")
     @Enumerated(EnumType.STRING)
     private Set<UserRole> roles;
+
+    @Enumerated(EnumType.STRING)
+    private Interval intervall;
+
 
     public String getUsername() {
         return username;
@@ -95,14 +95,6 @@ public class User implements Persistable<String>, Serializable {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
     }
 
     public boolean isEnabled() {
@@ -153,6 +145,13 @@ public class User implements Persistable<String>, Serializable {
         this.updateDate = updateDate;
     }
 
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -183,6 +182,15 @@ public class User implements Persistable<String>, Serializable {
     @Override
     public String getId() {
         return getUsername();
+    }
+
+
+    public Interval getIntervall() {
+        return intervall;
+    }
+
+    public void setIntervall(Interval intervall) {
+        this.intervall = intervall;
     }
 
     public void setId(String id) {

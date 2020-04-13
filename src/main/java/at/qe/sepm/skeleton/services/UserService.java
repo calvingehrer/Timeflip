@@ -1,6 +1,9 @@
 package at.qe.sepm.skeleton.services;
 
+import at.qe.sepm.skeleton.configs.WebSecurityConfig;
+import at.qe.sepm.skeleton.model.Interval;
 import at.qe.sepm.skeleton.model.User;
+import at.qe.sepm.skeleton.model.UserRole;
 import at.qe.sepm.skeleton.repositories.UserRepository;
 import java.util.Collection;
 import java.util.Date;
@@ -9,7 +12,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service for accessing and manipulating user data.
@@ -23,7 +28,13 @@ import org.springframework.stereotype.Component;
 public class UserService {
 
     @Autowired
+    private MailService mailService;
+
+    @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     /**
      * Returns a collection of all users.
@@ -33,6 +44,33 @@ public class UserService {
     @PreAuthorize("hasAuthority('ADMIN')")
     public Collection<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    /**
+     * Returns a list of all users with the given role
+     *
+     * @param role
+     * @return
+     */
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Collection<User> getAllUsersByRole(String role){
+        if (role.equals("Admin")){
+            return userRepository.findByRole(UserRole.ADMIN);
+        } else if (role.equals("Departmentleader")){
+            return userRepository.findByRole(UserRole.DEPARTMENTLEADER);
+        }
+        else if(role.equals("Teamleader")){
+            return userRepository.findByRole(UserRole.TEAMLEADER);
+        } else if (role.equals("Employee")){
+            return userRepository.findByRole(UserRole.EMPLOYEE);
+        }else {
+            return userRepository.findAll();
+        }
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Collection<User> getAllUsersByUsername(String username){
+        return userRepository.findByUsernamePrefix(username);
     }
 
     /**
@@ -67,6 +105,21 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DEPARTMENTLEADER')")
+    public void addNewUser(User user) {
+        User newUser = new User();
+        newUser.setUsername(user.getUsername());
+        newUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        newUser.setFirstName(user.getFirstName());
+        newUser.setLastName(user.getLastName());
+        newUser.setEmail(user.getEmail());
+        newUser.setEnabled(user.isEnabled());
+        newUser.setRoles(user.getRoles());
+        newUser.setIntervall(Interval.NONE);
+        mailService.sendEmailTo(newUser, "New user added", "You've been added as a new user");
+        saveUser(newUser);
+    }
+
     /**
      * Deletes the user.
      *
@@ -78,9 +131,28 @@ public class UserService {
         // :TODO: write some audit log stating who and when this user was permanently deleted.
     }
 
-    private User getAuthenticatedUser() {
+    public User getAuthenticatedUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return userRepository.findFirstByUsername(auth.getName());
     }
+
+    protected User setUpdatingFieldsBeforePersist(User toSave) {
+        if (toSave.isNew()) {
+            if (toSave.getPassword() != null) {
+                toSave.getPassword();
+                toSave.setPassword(WebSecurityConfig.passwordEncoder().encode(toSave.getPassword()));
+            }
+            toSave.setCreateUser(getAuthenticatedUser());
+        } else {
+            toSave.setUpdateUser(getAuthenticatedUser());
+        }
+        return toSave;
+    }
+
+    @Transactional
+    public User updateUser(User toSave) {
+        return userRepository.save(setUpdatingFieldsBeforePersist(toSave));
+    }
+
 
 }
