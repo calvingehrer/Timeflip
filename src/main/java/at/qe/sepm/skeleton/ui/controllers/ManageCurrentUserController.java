@@ -1,7 +1,6 @@
 package at.qe.sepm.skeleton.ui.controllers;
 
 import at.qe.sepm.skeleton.model.Interval;
-import at.qe.sepm.skeleton.model.PasswordChange;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.ui.beans.SessionInfoBean;
@@ -29,8 +28,26 @@ public class ManageCurrentUserController {
 
     private String intervall;
 
-    private PasswordChange passwords;
+    private String oldPassword;
 
+    private String newPassword;
+
+
+    public String getOldPassword() {
+        return oldPassword;
+    }
+
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
+    }
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
 
 
     @Autowired
@@ -52,9 +69,6 @@ public class ManageCurrentUserController {
         this.setCurrentUser(this.userService.loadUser(currentUser.getUsername()));
     }
 
-    public PasswordChange getPasswords() {
-        return passwords;
-    }
 
     @PostConstruct
     public void init() {
@@ -71,27 +85,22 @@ public class ManageCurrentUserController {
     }
 
     public boolean checkOldPassword(){
-        if(passwordEncoder.encode(passwords.getOldPassword()) == currentUser.getPassword()){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return passwordEncoder.matches(oldPassword, currentUser.getPassword());
     }
 
 
     public void changePassword(){
         if(checkOldPassword()){
+            // System.out.println("SUCCESS: Old Password is correct");
             try {
-                this.currentUser.setPassword(passwordEncoder.encode(passwords.getNewPassword()));
-                this.userService.updateUser(currentUser);
+                this.currentUser.setPassword(passwordEncoder.encode(newPassword));
                 reloadUser();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         else{
-            System.out.println("Error: Old Password is not correct");
+            // System.out.println("Error: Old Password is not correct");
         }
     }
 
