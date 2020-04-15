@@ -18,9 +18,9 @@ public class TeamListController {
     private String teamName = "";
 
     public Collection<Team> getTeams(){
-        //if(!teamName.equals("")){
-          //  return teamService.getAllTeamsByTeamName(teamName);
-       // }
+        if(!teamName.equals("")){
+          return teamService.getAllTeamsByTeamName(teamName);
+       }
         return teamService.getAllTeams();
     }
 }

@@ -5,11 +5,15 @@ import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.repositories.DepartmentRepository;
 import at.qe.sepm.skeleton.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
+@Component
+@Scope("application")
 public class DepartmentService {
     @Autowired
     private DepartmentRepository departmentRepository;

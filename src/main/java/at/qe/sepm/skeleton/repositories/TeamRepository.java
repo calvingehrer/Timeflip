@@ -5,6 +5,7 @@ import at.qe.sepm.skeleton.model.User;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface TeamRepository extends AbstractRepository<Team, String>  {
@@ -16,5 +17,7 @@ public interface TeamRepository extends AbstractRepository<Team, String>  {
     @Query("SELECT t FROM Team t WHERE t.leader = :leader")
     List<Team> findByTeamLeader(@Param("leader") User leader);
 
+    @Query("SELECT t FROM Team t WHERE t.teamName LIKE CONCAT(:teamPrefix, '%')")
+    Collection<Team> getAllTeamsByTeamPrefix(@Param("teamPrefix") String teamPrefix);
 
 }

@@ -6,4 +6,104 @@
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="title">Overview</ui:define>
+    <ui:define name="viewname">
+        <li>Pages</li>
+        <li>/</li>
+        <li><p:link outcome="/admin/departments">Manage Departments</p:link></li>
+    </ui:define>
+
+
+    <ui:define name="content">
+        <h:form id="departmentForm">
+            <p:dataTable id="DepartmentTable" var="department" value="#{departmentListController.departments}">
+                <p:column headerText="Department Name">
+                    <h:outputText value="#{department.departmentName}"/>
+                </p:column>
+                <p:column headerText="Teams">
+                    <h:outputText value="#{department.teams}"/>
+                </p:column>
+                <p:column headerText="Head Of Department">
+                    <h:outputText value="#{department.headOfDepartment.firstName}"/>
+                </p:column>
+                <p:column style="width:200px;text-align: center">
+                    <p:commandButton action="#{departmentDetailController.doDeleteDepartment}" value="Delete" icon="ui-icon-trash" title="Delete" update=":departmentForm:DepartmentTable">
+                        <f:setPropertyActionListener value="#{department}" target="#{departmentDetailController.department}" />
+                        <p:confirm header="Confirmation" message="Are you sure that you want to delete this Department? You cannot undo this operation." icon="ui-icon-alert" />
+                    </p:commandButton>
+                </p:column>
+
+            </p:dataTable>
+
+            <p:commandButton value="Add Department" styleClass="addButton" oncomplete="PF('addDepartmentDialog').show()" />
+        </h:form>
+
+
+
+        <p:dialog header="Add Department" id="addDepartmentDialog" widgetVar="addDepartmentDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+            <p:outputPanel>
+                <h:form>
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="Departmentname: " />
+                        <p:inputText value="#{addDepartmentController.department.departmentName}" />
+                    </h:panelGrid>
+                    <p:separator />
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="Select Teams: "/>
+                        <p:commandButton value="Select" update=":teamForm" oncomplete="PF('selectTeamsDialog').show()" />
+                        <p:outputLabel value="Select Head of Department: "/>
+                        <p:commandButton value="Select" update=":headOfDepartmentForm" oncomplete="PF('selectHeadOfDepartmentDialog').show()" />
+                    </h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <p:commandButton update="@form :departmentForm:DepartmentTable" value="Add" action="#{addDepartmentController.add}" oncomplete="PF('addDepartmentDialog').hide()" />
+                        <p:commandButton value="Abort" type="reset" onclick="PF('addDepartmentDialog').hide()"/>
+                    </h:panelGrid>
+                </h:form>
+            </p:outputPanel>
+        </p:dialog>
+
+        <p:dialog header="Select Teams" id="selectTeamsDialog" widgetVar="selectTeamsDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+            <h:form id="teamForm">
+                <p:dataTable id="TeamTable" var="team" value="#{teamListController.getTeams()}">
+                    <p:column headerText="Team ID">
+                        <h:outputText value="#{team.teamName}"/>
+                    </p:column>
+
+
+                    <p:column style="width:100px;text-align: center">
+                        <p:commandButton actionListener="#{addDepartmentController.addTeam}" icon="ui-icon-check" title="Select">
+                            <f:setPropertyActionListener value="#{team}" target="#{addDepartmentController.team}" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+                <h:panelGrid columns="2">
+                    <p:commandButton update="@form :departmentForm:DepartmentTable" value="Add" action="#{addDepartmentController.setTeams()}" oncomplete="PF('selectTeamsDialog').hide()" />
+                    <p:commandButton value="Abort" type="submit" onclick="PF('selectTeamsDialog').hide()"/>
+                </h:panelGrid>
+
+            </h:form>
+
+        </p:dialog>
+
+        <p:dialog header="Select Head of Department" id="selectHeadOfDepartmentDialog" widgetVar="selectHeadOfDepartmentDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+            <h:form id="headOfDepartmentForm">
+                <p:dataTable id="headOfDepartmentTable" var="headOfDepartment" value="#{userListController.getUsers()}">
+                    <p:column headerText="Employee ID">
+                        <h:outputText value="#{headOfDepartment.username}"/>
+                    </p:column>
+
+                    <p:column style="width:100px;text-align: center">
+                        <p:commandButton action="#{addDepartmentController.addHeadOfDepartment}" oncomplete="PF('selectHeadOfDepartmentDialog').hide()" icon="ui-icon-check" title="Select">
+                            <f:setPropertyActionListener value="#{headOfDepartment}" target="#{addDepartmentController.headOfDepartment}" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+                <h:panelGrid columns="2">
+                    <p:commandButton value="Abort" type="submit" onclick="PF('selectHeadOfDepartmentDialog').hide()"/>
+                </h:panelGrid>
+
+            </h:form>
+        </p:dialog>
+
+
+    </ui:define>
 </ui:composition>

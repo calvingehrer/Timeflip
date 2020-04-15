@@ -18,7 +18,7 @@ public class Department implements Persistable<String>, Serializable {
     private String departmentName;
 
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     private Set<Team> teams;
 
     @OneToOne
