@@ -10,6 +10,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,6 +34,8 @@ public class ManageCurrentUserController {
 
     private String newPassword;
 
+    private String confirmNew;
+
 
     public String getOldPassword() {
         return oldPassword;
@@ -47,6 +51,14 @@ public class ManageCurrentUserController {
 
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
+    }
+
+    public String getConfirmNew() {
+        return confirmNew;
+    }
+
+    public void setConfirmNew(String confirmNew) {
+        this.confirmNew = confirmNew;
     }
 
 
@@ -88,19 +100,30 @@ public class ManageCurrentUserController {
         return passwordEncoder.matches(oldPassword, currentUser.getPassword());
     }
 
+    public boolean checkConfirmedPassword(){
+        newPassword = passwordEncoder.encode(newPassword);
+        return passwordEncoder.matches(confirmNew, newPassword);
+    }
+
 
     public void changePassword(){
-        if(checkOldPassword()){
-            // System.out.println("SUCCESS: Old Password is correct");
-            try {
-                this.currentUser.setPassword(passwordEncoder.encode(newPassword));
-                reloadUser();
-            } catch (Exception e) {
-                e.printStackTrace();
+        if(checkOldPassword()) {
+            if (checkConfirmedPassword()){
+                    successMessage("passwordControl", "The new password will be saved");
+                try {
+                    this.currentUser.setPassword(newPassword);
+                    this.userService.updateUser(currentUser);
+                    reloadUser();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            else{
+                warnMessage("passwordControl", "The new passwords don't match");
             }
         }
         else{
-            // System.out.println("Error: Old Password is not correct");
+            warnMessage("passwordControl", "Old Password is incorrect");
         }
     }
 
@@ -109,8 +132,25 @@ public class ManageCurrentUserController {
         try {
             this.userService.updateUser(currentUser);
             reloadUser();
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/employee/profile.xhtml");
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void warnMessage(String target, String message) {
+        addMessage(target, new FacesMessage(FacesMessage.SEVERITY_WARN, "Warning!", message));
+    }
+
+    public static void successMessage(String target, String message) {
+        addMessage(target, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success!", message));
+    }
+
+    private static void addMessage(FacesMessage message) {
+        addMessage("template_growl", message);
+    }
+
+    private static void addMessage(String target, FacesMessage message) {
+        FacesContext.getCurrentInstance().addMessage(target, message);
     }
 }
