@@ -24,18 +24,17 @@ public class AddTeamController {
 
     private Team team = new Team();
 
-    private User employee = new User();
+    private User employee;
 
-    //private User leader = new User();
+    private User leader;
 
-    private Set<User> employees = new HashSet<>();
+
+    private Set<User> employees = new HashSet<>();;
 
     boolean check;
 
 
     public void add(){
-
-       //team.setEmployees(employees);
 
         teamService.addNewTeam(team);
 
@@ -47,37 +46,8 @@ public class AddTeamController {
         this.employees = new HashSet<>();
     }
 
-    public void addLeader(){
-        this.team.setLeader(employee);
-    }
-
     public Team getTeam(){return team;}
 
-
-    public void addEmployee(){
-        //employee = new User();
-        if(this.employee.getUsername() == null){
-            return;
-        }
-        this.employees.add(employee);
-    }
-
-   /* public void setEmployees(Set<User> employees){
-        team.setEmployees(this.employees);
-    }
-
-    public void setEmployees(User employees){
-        team.setEmployees(this.employees);
-    }
-*/
-    public void setEmployees(){
-        team.setEmployees(this.employees);
-    }
-
-
-    public Set<User> getEmployees(){
-        return employees;
-    }
 
     public TeamService getTeamService() {
         return teamService;
@@ -91,34 +61,52 @@ public class AddTeamController {
         this.team = team;
     }
 
-    public boolean isIn(){
-        //employee = new User();
-        return employees.contains(employee);
-    }
 
-    public void setIn(boolean check){
-        //employee = new User();
-        //this.employees.add(employee);
-    }
 
     public User getLeader() {
-        return employee;
+        return leader;
     }
 
     public void setLeader(User leader) {
-        //this.employee = new User();
-        this.employee = leader;
+        this.leader = leader;
     }
+
+    public void addLeader(){
+        this.team.setLeader(leader);
+    }
+
+
+
 
     public User getEmployee() {
         return employee;
     }
 
     public void setEmployee(User employee){
-        //this.employee = new User();
-        //this.employee = employee;
+        this.employee = employee;
         this.employees.add(employee);
+
+        //this.employees.add(employee);
     }
 
+    public void addEmployee(){
+        //this.employees.add(employee);
+        //this.employees.add(employee);
+        //this.employees.add(employee);
+    }
+
+    public Set<User> getEmployees(){
+        return employees;
+    }
+    public void setEmployees(){
+        //this.employees = new HashSet<>();
+        //this.employees = employees;
+
+        team.setEmployees(this.employees);
+    }
+
+    public void addEmployees(){
+        this.team.setEmployees(employees);
+    }
 
 }

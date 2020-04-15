@@ -33,6 +33,11 @@ public class AddUserController {
      * Action to add the user to the system
      */
     public void add(){
+
+        if(user.getUsername() == null){
+            return;
+        }
+
         this.roles = new HashSet<>();
         if(admin){
             roles.add(UserRole.ADMIN);
@@ -48,6 +53,9 @@ public class AddUserController {
         }
 
         user.setRoles(roles);
+
+
+
         userService.addNewUser(user);
 
         resetUser();

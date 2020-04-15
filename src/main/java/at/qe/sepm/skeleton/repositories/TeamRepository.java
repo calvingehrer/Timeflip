@@ -16,5 +16,8 @@ public interface TeamRepository extends AbstractRepository<Team, String>  {
     @Query("SELECT t FROM Team t WHERE t.leader = :leader")
     List<Team> findByTeamLeader(@Param("leader") User leader);
 
+    @Query("SELECT t FROM Team t WHERE t.teamName = :teamName")
+    List<User> findByTeamName2(@Param("teamName") String teamName);
+
 
 }

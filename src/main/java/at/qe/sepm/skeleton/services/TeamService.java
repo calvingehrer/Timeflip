@@ -61,5 +61,10 @@ public class TeamService {
         teamRepository.delete(team);
     }
 
+    /*@PreAuthorize("hasAuthority('ADMIN')")
+    public Collection<Team> getAllTeamsByTeamName(String teamName){
+        return teamRepository.findByTeamName2(teamName);
+    }*/
+
 
 }
