@@ -26,6 +26,9 @@
                     <p:column headerText="Leader">
                         <h:outputText value="#{team.leader.fullName}"/>
                     </p:column>
+                    <p:column headerText="Department">
+                        <h:outputText value="#{team.department.departmentName}"/>
+                    </p:column>
                     <p:column style="width:200px;text-align: center">
 
                         <p:commandButton action="#{teamDetailController.doDeleteTeam}" value="Delete" icon="ui-icon-trash" title="Delete" update=":teamForm:TeamTable">

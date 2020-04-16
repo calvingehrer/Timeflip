@@ -21,7 +21,7 @@ public class AddDepartmentController {
 
     private Team team;
 
-    private User headOfDepartment = new User();
+    private User headOfDepartment;
 
     private Set<Team> teams = new HashSet<>();
 
@@ -48,6 +48,8 @@ public class AddDepartmentController {
 
     public void setTeam(Team team) {
         this.team = team;
+        this.team.setDepartment(department);
+        this.teams.add(this.getTeam());
     }
 
     public User getHeadOfDepartment() {
@@ -67,7 +69,7 @@ public class AddDepartmentController {
     }
 
     public void setTeams(){
-        department.setTeams(this.teams);
+        this.department.setTeams(this.teams);
     }
 
     public void add(){
@@ -89,17 +91,7 @@ public class AddDepartmentController {
     }
 
     public void addTeam(){
-        this.teams.add(team);
     }
-
-    /* public void setEmployees(Set<User> employees){
-         team.setEmployees(this.employees);
-     }
-
-     public void setEmployees(User employees){
-         team.setEmployees(this.employees);
-     }
- */
 
 
     public boolean isIn(){

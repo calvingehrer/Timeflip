@@ -7,10 +7,7 @@ import javax.transaction.Transactional;
 import javax.validation.constraints.Email;
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import javax.persistence.*;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -25,6 +22,7 @@ import javax.validation.constraints.Email;
  * University of Innsbruck.
  */
 @Entity
+@Table(name="user")
 public class User implements Persistable<String>, Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -64,6 +62,16 @@ public class User implements Persistable<String>, Serializable {
     @ElementCollection
     @CollectionTable(name = "user_vacation")
     Set<Vacation> vacations = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(name = "user_team",
+            joinColumns = {@JoinColumn(name="user_username", referencedColumnName = "username")},
+            inverseJoinColumns = {@JoinColumn(name="team_team_name",referencedColumnName = "team_name")}
+    )
+    private Set<Team> teams = new HashSet<>();
+
+    @ManyToOne
+    private Department department;
 
     public Set<Vacation> getVacations() {
         return vacations;
@@ -174,7 +182,21 @@ public class User implements Persistable<String>, Serializable {
         return serialVersionUID;
     }
 
+    public Set<Team> getTeams() {
+        return teams;
+    }
 
+    public void setTeams(Set<Team> teams) {
+        this.teams = teams;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
 
     @Override
     public int hashCode() {
@@ -220,6 +242,7 @@ public class User implements Persistable<String>, Serializable {
     public void setId(String id) {
         setUsername(id);
     }
+
 
     @Override
     public boolean isNew() {

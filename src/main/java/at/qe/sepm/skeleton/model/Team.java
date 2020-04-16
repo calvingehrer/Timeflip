@@ -11,21 +11,25 @@ import java.util.Set;
 
 
 @Entity
+@Table(name = "team")
 public class Team implements Persistable<String>, Serializable {
 
     private static final long serialVersionTID = 1L;
 
     @Id
-    @Column(length = 100)
+    @Column(name="team_name",length = 100)
     private String teamName;
 
 
     //@Cascade({CascadeType.SAVE_UPDATE})
     //@JoinTable
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    @ManyToMany(mappedBy = "teams", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     private Set<User> employees = new HashSet<>();
     @OneToOne
     private User leader;
+
+    @ManyToOne
+    private Department department;
 
 
     public Set<User> getEmployees() {
@@ -65,6 +69,14 @@ public class Team implements Persistable<String>, Serializable {
         this.teamName = teamName;
     }
 
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+
     @Override
     public String toString() {
         return this.getTeamName();
@@ -74,7 +86,6 @@ public class Team implements Persistable<String>, Serializable {
     public String getId() {
         return getTeamName();
     }
-
 
     @Override
     public boolean isNew() {
