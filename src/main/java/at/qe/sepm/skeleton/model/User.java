@@ -56,12 +56,12 @@ public class User implements Persistable<String>, Serializable {
     boolean enabled;
 
     @ElementCollection(targetClass = UserRole.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "User_UserRole")
+    @CollectionTable(name = "User_user_role")
     @Enumerated(EnumType.STRING)
     private Set<UserRole> roles;
 
     @ElementCollection
-    @CollectionTable(name = "userVacation")
+    @CollectionTable(name = "user_vacation")
     Set<Vacation> vacations = new HashSet<>();
 
     public Set<Vacation> getVacations() {
