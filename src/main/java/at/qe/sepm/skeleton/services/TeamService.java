@@ -67,4 +67,6 @@ public class TeamService {
     }*/
 
 
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Collection<Team> getAllTeamsByTeamName (String teamName) { return this.teamRepository.getAllTeamsByTeamPrefix(teamName); }
 }

@@ -63,7 +63,7 @@ public class Team implements Persistable<String>, Serializable {
 
     @Override
     public String toString() {
-        return "at.qe.sepm.skeleton.model.Team[ id=" + teamName + " ]";
+        return this.getTeamName();
     }
 
     @Override

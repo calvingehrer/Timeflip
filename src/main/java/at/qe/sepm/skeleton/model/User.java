@@ -49,6 +49,7 @@ public class User implements Persistable<String>, Serializable {
 
     private String firstName;
     private String lastName;
+    private String fullName;
     @Email
     private String email;
 
@@ -228,6 +229,10 @@ public class User implements Persistable<String>, Serializable {
     @Transactional
     public boolean hasVacationInTime(Instant begin, Instant end) {
         return this.getVacations().stream().anyMatch(x -> x.getStart().compareTo(begin) <= 0 && x.getEnd().compareTo(begin) >= 0 || x.getStart().compareTo(end) <= 0 && x.getEnd().compareTo(end) >= 0 || x.getStart().compareTo(begin) >= 0 && x.getEnd().compareTo(end) <= 0);
+    }
+
+    public String getFullName() {
+        return this.getFirstName() + " " +  this.getLastName();
     }
 
 }
