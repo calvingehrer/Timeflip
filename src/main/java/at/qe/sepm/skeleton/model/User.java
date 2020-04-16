@@ -61,7 +61,7 @@ public class User implements Persistable<String>, Serializable {
     private Set<UserRole> roles;
 
     @ElementCollection
-    @CollectionTable(name = "userVacation")
+    @CollectionTable(name = "user_Vacation")
     Set<Vacation> vacations = new HashSet<>();
 
     public Set<Vacation> getVacations() {
