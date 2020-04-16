@@ -1,7 +1,14 @@
 package at.qe.sepm.skeleton.model;
 
+import org.springframework.data.domain.Persistable;
+
+import javax.persistence.*;
+import javax.transaction.Transactional;
+import javax.validation.constraints.Email;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.*;
@@ -52,6 +59,22 @@ public class User implements Persistable<String>, Serializable {
     @CollectionTable(name = "User_UserRole")
     @Enumerated(EnumType.STRING)
     private Set<UserRole> roles;
+
+    @ElementCollection
+    @CollectionTable(name = "user_Vacation")
+    Set<Vacation> vacations = new HashSet<>();
+
+    public Set<Vacation> getVacations() {
+        return vacations;
+    }
+
+    public void setVacations(Set<Vacation> vacations) {
+        this.vacations = vacations;
+    }
+
+    public void addVacation(Vacation vacation) {
+        this.vacations.add(vacation);
+    }
 
     @Enumerated(EnumType.STRING)
     private Interval intervall;
@@ -200,6 +223,11 @@ public class User implements Persistable<String>, Serializable {
     @Override
     public boolean isNew() {
         return (null == createDate);
+    }
+
+    @Transactional
+    public boolean hasVacationInTime(Instant begin, Instant end) {
+        return this.getVacations().stream().anyMatch(x -> x.getStart().compareTo(begin) <= 0 && x.getEnd().compareTo(begin) >= 0 || x.getStart().compareTo(end) <= 0 && x.getEnd().compareTo(end) >= 0 || x.getStart().compareTo(begin) >= 0 && x.getEnd().compareTo(end) <= 0);
     }
 
 }

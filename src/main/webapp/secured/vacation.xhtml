@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">My Vacations</ui:define>
+    <ui:define name="viewname">
+        <li>Pages</li>
+        <li>/</li>
+        <li>
+            <p:link outcome="/secured/vacation.xhtml">Vacations</p:link>
+        </li>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card">
+                    <h1>Vacations</h1>
+
+                    <p:growl id="growl" rendered="#{not facesContext.validationFailed}" severity="info"/>
+
+                    <h:form id="addVacationButton" prependId="false">
+                        <p:messages id="addVacationMessages" severity="error">
+                            <p:autoUpdate/>
+                        </p:messages>
+                        <p:commandButton value="Add a Vacaction" update="vacationListForm growl"
+                                         oncomplete="PF('addVacationDialog').show()"/>
+                    </h:form>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card">
+                    <h2>My vacations</h2>
+
+                    <h:form id="vacationListForm" prependId="false">
+                        <p:dataTable id="vacationsTable" var="vacation" value="#{vacationController.vacations}">
+                            <p:column headerText="Begin"> <!--sortBy="#{vacation.start}"-->
+                                <h:outputText value="#{vacation.start}"/>
+                            </p:column>
+                            <p:column headerText="End">
+                                <h:outputText value="#{vacation.end}"/>
+                            </p:column>
+
+                        </p:dataTable>
+
+                    </h:form>
+                </div>
+            </div>
+        </div>
+
+        <p:dialog header="Add vacation" id="addVacationDialog" widgetVar="addVacationDialog"
+                  showEffect="fade"
+                  hideEffect="fade" resizable="false">
+            <h:form id="addVacationForm">
+                <p:panelGrid layout="grid" columns="2">
+                    <h:outputText value="Select the start of the vacation"/>
+                    <h:outputText value="Select the end of the vacation"/>
+
+                    <p:calendar id="start" mode="inline" value="#{vacationController.beginVacation}"
+                    />
+
+                    <p:calendar id="end" mode="inline" value="#{vacationController.endOfVacation}"
+                    />
+
+                    <p:commandButton value="Save" action="#{vacationController.addVacation}"
+                                     oncomplete="PF('addVacationDialog').hide()"
+                                     update="vacationListForm growl addVacationMessages"/>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+
+
+    </ui:define>
+
+</ui:composition>
+

@@ -1,52 +1,56 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
-                xmlns:h="http://java.sun.com/jsf/html" 
-                xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:ui="http://java.sun.com/jsf/facelets" 
+<ui:composition xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:pe="http://primefaces.org/ecuador">
-
-<div class="layout-sidebar">
+    <h:outputStylesheet library="webjars" name="font-awesome/4.6.3/css/font-awesome-jsf.css" />
+    <div class="layout-sidebar">
         <div class="nano">
             <div class="nano-content menu-scroll-content">
                 <h:form id="menuform">
                     <div class="layout-menu-title">MAIN MENU</div>
                     <pe:menu widgetVar="me">
 
-                        <p:menuitem value="Overview" url="/employee/overview.xhtml" rendered="#{sessionInfoBean.hasRole('EMPLOYEE')}" icon="fa fa-fw fa-file-code-o"/>
+                        <p:menuitem value="Overview" url="/employee/overview.xhtml"
+                                    rendered="#{sessionInfoBean.hasRole('EMPLOYEE')}"/>
 
-                        <p:submenu label="Statistics" rendered="#{sessionInfoBean.hasRole('EMPLOYEE')}" icon="fa fa-fw fa-file-code-o">
+                        <p:submenu label="Statistics" rendered="#{sessionInfoBean.hasRole('EMPLOYEE')}"
+                                   icon="fa fa-fw fa-file-code-o">
                             <p:menuitem value="My Statistics" url="/employee/personal-statistics.xhtml"/>
                             <p:menuitem value="Team Statistics" url="/teamleader/team-statistics.xhtml" rendered="#{sessionInfoBean.hasRole('TEAMLEADER') or sessionInfoBean.hasRole('DEPARTMENTLEADER')}"/>
                             <p:menuitem value="Department Statistics" url="/departmentleader/department-statistics.xhtml" rendered="#{sessionInfoBean.hasRole('DEPARTMENTLEADER')}"/>
                             <p:menuitem value="Collected Timedata" url="/employee/timelist.xhtml"/>
                         </p:submenu>
-                        <p:submenu label="Manage Team" rendered="#{sessionInfoBean.hasRole('TEAMLEADER')}" icon="fa fa-fw fa-file-code-o">
+                        <p:submenu label="Manage Team" rendered="#{sessionInfoBean.hasRole('TEAMLEADER')}">
                             <p:menuitem value="My Team" url="/teamleader/team.xhtml"/>
                             <p:menuitem value="Time Changes" url="/teamleader/change-requests.xhtml"/>
                         </p:submenu>
-                        <p:submenu label="Manage Department" rendered="#{sessionInfoBean.hasRole('DEPARTMENTLEADER')}" icon="fa fa-fw fa-file-code-o">
+                        <p:submenu label="Manage Department" rendered="#{sessionInfoBean.hasRole('DEPARTMENTLEADER')}">
                             <p:menuitem value="My Department" url="/departmentleader/department.xhtml"/>
                             <p:menuitem value="Time Changes" url="/teamleader/change-requests.xhtml"/>
                         </p:submenu>
-                        <p:menuitem value="Vacation" url="/employee/vacation.xhtml" rendered="#{sessionInfoBean.hasRole('EMPLOYEE')}" icon="fa fa-fw fa-file-code-o"/>
-                        <p:submenu label="Badges" rendered="#{sessionInfoBean.hasRole('EMPLOYEE')}" icon="fa fa-fw fa-file-code-o">
+                        <p:menuitem value="Vacation" url="/secured/vacation.xhtml"
+                                    rendered="#{sessionInfoBean.hasRole('ADMIN')}"/>
+                        <p:submenu label="Badges" rendered="#{sessionInfoBean.hasRole('EMPLOYEE')}">
                             <p:menuitem value="My Badges" url="/employee/badges.xhtml"/>
-                            <p:menuitem value="Team" url="/teamleader/team-badges.xhtml" rendered="#{sessionInfoBean.hasRole('TEAMLEADER') or sessionInfoBean.hasRole('DEPARTMENTLEADER')}"/>
-                            <p:menuitem value="Department" url="/departmentleader/department-badges.xhtml" rendered="#{sessionInfoBean.hasRole('DEPARTMENTLEADER')}"/>
+                            <p:menuitem value="Team" url="/teamleader/team-badges.xhtml"
+                                        rendered="#{sessionInfoBean.hasRole('TEAMLEADER') or sessionInfoBean.hasRole('DEPARTMENTLEADER')}"/>
+                            <p:menuitem value="Department" url="/departmentleader/department-badges.xhtml"
+                                        rendered="#{sessionInfoBean.hasRole('DEPARTMENTLEADER')}"/>
                             <p:menuitem value="Leaderboard" url="/employee/leaderboard.xhtml"/>
                         </p:submenu>
-                        <p:submenu label="Manage User" rendered="#{sessionInfoBean.hasRole('ADMIN')}" icon="fa fa-fw fa-file-code-o">
+                        <p:submenu label="Manage User" rendered="#{sessionInfoBean.hasRole('ADMIN')}">
                             <p:menuitem value="User" url="/admin/users.xhtml"/>
                             <p:menuitem value="Teams" url="/admin/teams.xhtml"/>
                             <p:menuitem value="Departments" url="/admin/departments.xhtml"/>
                         </p:submenu>
-                        <p:submenu label="Manage Hardware" rendered="#{sessionInfoBean.hasRole('ADMIN')}" icon="fa fa-fw fa-file-code-o">
+                        <p:submenu label="Manage Hardware" rendered="#{sessionInfoBean.hasRole('ADMIN')}">
                             <p:menuitem value="TimeFlip" url="/admin/timeflip.xhtml"/>
                             <p:menuitem value="Raspberry Pi" url="/admin/raspberry-pi.xhtml"/>
                         </p:submenu>
 
 
-                        <p:menuitem id="logout" value="Logout" icon="fa fa-fw fa-file-code-o" rendered="#{sessionInfoBean.loggedIn}" outcome="/login"/>
+                        <p:menuitem id="logout" value="Logout" rendered="#{sessionInfoBean.loggedIn}" outcome="/login"/>
                     </pe:menu>
                 </h:form>
             </div>

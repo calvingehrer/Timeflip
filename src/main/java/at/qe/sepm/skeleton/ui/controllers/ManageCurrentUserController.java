@@ -6,9 +6,12 @@ import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.ui.beans.SessionInfoBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +30,41 @@ public class ManageCurrentUserController {
 
     private String intervall;
 
+    private String oldPassword;
+
+    private String newPassword;
+
+    private String confirmNew;
+
+
+    public String getOldPassword() {
+        return oldPassword;
+    }
+
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
+    }
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
+
+    public String getConfirmNew() {
+        return confirmNew;
+    }
+
+    public void setConfirmNew(String confirmNew) {
+        this.confirmNew = confirmNew;
+    }
+
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public String getIntervall() { return intervall; }
 
     public void setIntervall(String intervall) { this.intervall = intervall; }
@@ -43,6 +81,7 @@ public class ManageCurrentUserController {
         this.setCurrentUser(this.userService.loadUser(currentUser.getUsername()));
     }
 
+
     @PostConstruct
     public void init() {
         this.setCurrentUser(userService.getAuthenticatedUser());
@@ -56,15 +95,62 @@ public class ManageCurrentUserController {
         String upperQuery = query.toUpperCase();
         return Interval.getAllIntervals().stream().filter(a -> a.contains(upperQuery)).collect(Collectors.toList());
     }
-    /**
-     * Saves changed information
-     */
+
+    public boolean checkOldPassword(){
+        return passwordEncoder.matches(oldPassword, currentUser.getPassword());
+    }
+
+    public boolean checkConfirmedPassword(){
+        newPassword = passwordEncoder.encode(newPassword);
+        return passwordEncoder.matches(confirmNew, newPassword);
+    }
+
+
+    public void changePassword(){
+        if(checkOldPassword()) {
+            if (checkConfirmedPassword()){
+                    successMessage("passwordControl", "The new password will be saved");
+                try {
+                    this.currentUser.setPassword(newPassword);
+                    this.userService.updateUser(currentUser);
+                    reloadUser();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            else{
+                warnMessage("passwordControl", "The new passwords don't match");
+            }
+        }
+        else{
+            warnMessage("passwordControl", "Old Password is incorrect");
+        }
+    }
+
+
     public void saveUserDetails() {
         try {
             this.userService.updateUser(currentUser);
             reloadUser();
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/employee/profile.xhtml");
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void warnMessage(String target, String message) {
+        addMessage(target, new FacesMessage(FacesMessage.SEVERITY_WARN, "Warning!", message));
+    }
+
+    public static void successMessage(String target, String message) {
+        addMessage(target, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success!", message));
+    }
+
+    private static void addMessage(FacesMessage message) {
+        addMessage("template_growl", message);
+    }
+
+    private static void addMessage(String target, FacesMessage message) {
+        FacesContext.getCurrentInstance().addMessage(target, message);
     }
 }

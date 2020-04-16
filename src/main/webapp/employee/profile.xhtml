@@ -16,19 +16,20 @@
                                  columnClasses="ui-g-1 ui-md-2 ui-lg-2 ui-xl-2, ui-g-4 ui-md-4 ui-lg-4 ui-xl-2">
 
                         <p:outputLabel value="Username:"/>
-                        <p:outputLabel id="username" value="#{sessionInfoBean.getCurrentUser().getUsername()}"/>
-                        <p:outputLabel value="ID:"/>
-                        <p:outputLabel id="id" value="#{sessionInfoBean.getCurrentUser().getId()}"/>
+                        <p:outputLabel id="username" value="#{manageCurrentUserController.currentUser.username}"/>
                         <p:outputLabel value="Firstname:"/>
-                        <p:outputLabel id="firstname" value="#{sessionInfoBean.getCurrentUser().getFirstName()}"/>
+                        <p:outputLabel id="firstname" value="#{manageCurrentUserController.currentUser.firstName}"/>
                         <p:outputLabel value="Lastname:"/>
-                        <p:outputLabel id="lastname" value="#{sessionInfoBean.getCurrentUser().getLastName()}"/>
+                        <p:outputLabel id="lastname" value="#{manageCurrentUserController.currentUser.lastName}"/>
                         <p:outputLabel value="E-Mail:"/>
-                        <p:outputLabel id="email" value="#{sessionInfoBean.getCurrentUser().getEmail()}"/>
+                        <p:outputLabel id="email" value="#{manageCurrentUserController.currentUser.email}"/>
+                        <p:outputLabel for="interval" value="Interval for mails: "/>
+                        <p:outputLabel id="interval" value="#{manageCurrentUserController.currentUser.intervall}"/>
                         <p:outputLabel value="Password:"/>
-                        <p:outputLabel id="password" value="**********"/>
+                        <p:outputLabel id="password" value="********"/>
                         <p:outputLabel value="Roles:"/>
-                        <p:outputLabel id="roles" value="#{sessionInfoBean.getCurrentUser().getRoles()}"/>
+                        <p:outputLabel id="roles" value="#{manageCurrentUserController.currentUser.roles}"/>
+
 
                         <p:commandButton action="/secured/settings.xhtml" value="Edit"/>
                     </p:panelGrid>
