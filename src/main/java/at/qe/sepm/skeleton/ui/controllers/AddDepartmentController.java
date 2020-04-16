@@ -19,7 +19,7 @@ public class AddDepartmentController {
 
     private Department department = new Department();
 
-    private Team team = new Team();
+    private Team team;
 
     private User headOfDepartment = new User();
 
@@ -89,10 +89,6 @@ public class AddDepartmentController {
     }
 
     public void addTeam(){
-        //employee = new User();
-        if(this.team.getTeamName() == null){
-            return;
-        }
         this.teams.add(team);
     }
 

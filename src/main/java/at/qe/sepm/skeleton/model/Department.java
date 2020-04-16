@@ -21,6 +21,7 @@ public class Department implements Persistable<String>, Serializable {
     @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     private Set<Team> teams;
 
+
     @OneToOne
     private User headOfDepartment;
 
@@ -55,7 +56,7 @@ public class Department implements Persistable<String>, Serializable {
 
     @Override
     public String toString() {
-        return "at.qe.sepm.skeleton.model.User[ id=" + departmentName + " ]";
+        return this.getDepartmentName();
     }
 
     @Override

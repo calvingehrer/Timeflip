@@ -49,6 +49,7 @@ public class User implements Persistable<String>, Serializable {
 
     private String firstName;
     private String lastName;
+    private String fullName;
     @Email
     private String email;
 
@@ -199,7 +200,7 @@ public class User implements Persistable<String>, Serializable {
 
     @Override
     public String toString() {
-        return "at.qe.sepm.skeleton.model.User[ id=" + username + " ]";
+        return username;
     }
 
     @Override
@@ -231,7 +232,7 @@ public class User implements Persistable<String>, Serializable {
     }
 
     public String getFullName() {
-        return this.getFirstName() + this.getLastName();
+        return this.getFirstName() + " " +  this.getLastName();
     }
 
 }
