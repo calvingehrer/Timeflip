@@ -97,7 +97,7 @@
                     </p:column>
                 </p:dataTable>
                 <h:panelGrid columns="2">
-                    <p:commandButton update="@form :teamForm:TeamTable" value="Add" action="#{addTeamController.setEmployees}" oncomplete="PF('selectEmployeesDialog').hide()" />
+                    <p:commandButton update="@form :teamForm:TeamTable" value="Add" oncomplete="PF('selectEmployeesDialog').hide()" />
                     <p:commandButton value="Abort" type="submit" onclick="PF('selectEmployeesDialog').hide()"/>
                 </h:panelGrid>
 

@@ -28,14 +28,14 @@ public class AddTeamController {
 
     private User leader;
 
-
-    private Set<User> employees = new HashSet<>();;
+   // private Set<User> employees = new HashSet<>();
 
     boolean check;
 
 
     public void add(){
 
+       // team.setEmployees();
         teamService.addNewTeam(team);
 
         resetTeam();
@@ -43,7 +43,7 @@ public class AddTeamController {
 
     public void resetTeam(){
         this.team = new Team();
-        this.employees = new HashSet<>();
+        //this.employees = new HashSet<>();
     }
 
     public Team getTeam(){return team;}
@@ -84,7 +84,8 @@ public class AddTeamController {
 
     public void setEmployee(User employee){
         this.employee = employee;
-        this.employees.add(employee);
+        //this.employees.add(employee);
+        this.team.setEmployees(employee);
 
         //this.employees.add(employee);
     }
@@ -95,7 +96,7 @@ public class AddTeamController {
         //this.employees.add(employee);
     }
 
-    public Set<User> getEmployees(){
+    /*public Set<User> getEmployees(){
         return employees;
     }
     public void setEmployees(){
@@ -107,6 +108,6 @@ public class AddTeamController {
 
     public void addEmployees(){
         this.team.setEmployees(employees);
-    }
+    }*/
 
 }

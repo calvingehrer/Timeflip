@@ -23,7 +23,7 @@ public class Team implements Persistable<String>, Serializable {
     //@Cascade({CascadeType.SAVE_UPDATE})
     //@JoinTable
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
-    private Set<User> employees;
+    private Set<User> employees = new HashSet<>();
     @OneToOne
     private User leader;
 
@@ -33,6 +33,10 @@ public class Team implements Persistable<String>, Serializable {
     }
 
     public void setEmployees(Set<User> employees) {
+        this.employees = employees;
+    }
+
+    public void setEmployees() {
         this.employees = employees;
     }
 
