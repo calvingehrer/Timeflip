@@ -8,11 +8,8 @@ import javax.validation.constraints.Email;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.*;
-import javax.persistence.*;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.domain.Persistable;
-import javax.validation.constraints.Email;
 
 /**
  * Entity representing users.
@@ -63,11 +60,7 @@ public class User implements Persistable<String>, Serializable {
     @CollectionTable(name = "user_vacation")
     Set<Vacation> vacations = new HashSet<>();
 
-    @ManyToMany
-    @JoinTable(name = "user_team",
-            joinColumns = {@JoinColumn(name="user_username", referencedColumnName = "username")},
-            inverseJoinColumns = {@JoinColumn(name="team_team_name",referencedColumnName = "team_name")}
-    )
+    @ManyToMany(mappedBy = "employees", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     private Set<Team> teams = new HashSet<>();
 
     @OneToOne(mappedBy = "leader")

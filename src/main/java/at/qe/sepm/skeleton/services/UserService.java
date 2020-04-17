@@ -5,7 +5,6 @@ import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.model.UserRole;
 import at.qe.sepm.skeleton.repositories.UserRepository;
-import org.hibernate.mapping.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,6 +16,7 @@ import org.springframework.stereotype.Component;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Service for accessing and manipulating user data.
@@ -168,5 +168,19 @@ public class UserService {
         return userRepository.save(setUpdatingFieldsBeforePersist(toSave));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public void removeTeamFromLeader (Team team) {
+        User user = team.getLeader();
+        user.setLeaderOf(null);
+        team.setLeader(null);
+    }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public void removeEmployeesFromTeam (Team team) {
+        Set<User> employees = team.getEmployees();
+        for(User u:employees) {
+            u.getTeams().remove(team);
+        }
+        team.getEmployees().clear();
+    }
 }

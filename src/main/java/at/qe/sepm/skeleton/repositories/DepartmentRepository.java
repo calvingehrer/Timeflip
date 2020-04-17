@@ -2,10 +2,9 @@ package at.qe.sepm.skeleton.repositories;
 
 
 import at.qe.sepm.skeleton.model.Department;
-import at.qe.sepm.skeleton.model.Team;
+
 import java.util.List;
 
-import at.qe.sepm.skeleton.model.User;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 

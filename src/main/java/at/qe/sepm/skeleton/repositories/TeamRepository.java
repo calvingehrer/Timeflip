@@ -5,9 +5,7 @@ import at.qe.sepm.skeleton.model.User;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import javax.persistence.CollectionTable;
 import java.util.Collection;
-import java.util.List;
 
 public interface TeamRepository extends AbstractRepository<Team, String>  {
 

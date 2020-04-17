@@ -1,15 +1,12 @@
 package at.qe.sepm.skeleton.model;
 
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -27,7 +24,10 @@ public class Team implements Persistable<String>, Serializable {
 
     //@Cascade({CascadeType.SAVE_UPDATE})
     //@JoinTable
-    @ManyToMany(mappedBy = "teams", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    @ManyToMany(fetch=FetchType.EAGER)
+    @JoinTable(name = "team_user",
+            joinColumns = {@JoinColumn(name="team_team_name",referencedColumnName = "team_name")},
+            inverseJoinColumns = {@JoinColumn(name="user_username", referencedColumnName = "username")})
     private Set<User> employees = new HashSet<>();
 
     @OneToOne
