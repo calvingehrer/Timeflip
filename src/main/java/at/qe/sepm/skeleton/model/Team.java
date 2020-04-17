@@ -26,7 +26,10 @@ public class Team implements Persistable<String>, Serializable {
 
     //@Cascade({CascadeType.SAVE_UPDATE})
     //@JoinTable
-    @ManyToMany(mappedBy = "teams", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    @ManyToMany(fetch=FetchType.EAGER)
+    @JoinTable(name = "team_user",
+            joinColumns = {@JoinColumn(name="team_team_name",referencedColumnName = "team_name")},
+            inverseJoinColumns = {@JoinColumn(name="user_username", referencedColumnName = "username")})
     private Set<User> employees = new HashSet<>();
 
     @OneToOne

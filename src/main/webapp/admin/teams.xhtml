@@ -31,7 +31,7 @@
                     </p:column>
                     <p:column style="width:200px;text-align: center">
 
-                        <p:commandButton action="#{teamDetailController.doDeleteTeam}" value="Delete" icon="ui-icon-trash" title="Delete" update=":teamForm:TeamTable">
+                        <p:commandButton action="#{teamDetailController.doDeleteTeam()}" value="Delete" icon="ui-icon-trash" title="Delete" update=":teamForm:TeamTable">
                             <f:setPropertyActionListener value="#{team}" target="#{teamDetailController.team}" />
                         </p:commandButton>
                     </p:column>

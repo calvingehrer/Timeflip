@@ -59,7 +59,6 @@ public class TeamService {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteTeam(Team team){
-
         team.getEmployees().clear();
         teamRepository.delete(team);
     }
