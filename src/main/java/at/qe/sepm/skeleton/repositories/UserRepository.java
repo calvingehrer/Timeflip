@@ -1,6 +1,5 @@
 package at.qe.sepm.skeleton.repositories;
 
-import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.model.UserRole;
 import java.util.List;

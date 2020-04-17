@@ -1,18 +1,14 @@
 package at.qe.sepm.skeleton.services;
 
 import at.qe.sepm.skeleton.model.Team;
-import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.CollectionTable;
 import java.util.Collection;
-import java.util.Date;
 
 
 @Component
@@ -21,6 +17,12 @@ public class TeamService {
 
     @Autowired
     private MailService mailService;
+
+    @Autowired
+    private DepartmentService departmentService;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private TeamRepository teamRepository;
@@ -66,8 +68,11 @@ public class TeamService {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteTeam(Team team){
-        team.getEmployees().clear();
+        if (team.getDepartment() != null) { departmentService.removeTeamfromDepartment(team, team.getDepartment()); }
+        userService.removeEmployeesFromTeam(team);
+        userService.removeTeamFromLeader(team);
         teamRepository.delete(team);
+        System.out.println("");
     }
 
     /*@PreAuthorize("hasAuthority('ADMIN')")

@@ -1,14 +1,9 @@
 package at.qe.sepm.skeleton.ui.controllers;
 
 import at.qe.sepm.skeleton.model.Department;
-import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.services.DepartmentService;
-import at.qe.sepm.skeleton.services.TeamService;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 
 @Component
 @Scope("view")
@@ -36,6 +31,7 @@ public class DepartmentDetailController {
     }
 
     public void doDeleteDepartment(){
+        System.out.println("hey");
         this.departmentService.deleteDepartment(department);
         department = null;
     }

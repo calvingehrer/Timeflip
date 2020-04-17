@@ -8,11 +8,8 @@ import javax.validation.constraints.Email;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.*;
-import javax.persistence.*;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.domain.Persistable;
-import javax.validation.constraints.Email;
 
 /**
  * Entity representing users.
