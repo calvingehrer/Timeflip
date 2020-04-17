@@ -28,7 +28,7 @@
                     <h:outputText value="#{department.headOfDepartment.fullName}"/>
                 </p:column>
                 <p:column style="width:200px;text-align: center">
-                    <p:commandButton action="#{departmentDetailController.doDeleteDepartment()}" value="Delete" title="Delete" update=":departmentForm:DepartmentTable">
+                    <p:commandButton action="#{departmentDetailController.doDeleteDepartment()}" value="Delete" icon="ui-icon-trash" title="Delete" update=":teamForm:TeamTable">
                         <f:setPropertyActionListener value="#{department}" target="#{departmentDetailController.department}" />
                     </p:commandButton>
                 </p:column>
