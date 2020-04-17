@@ -30,8 +30,10 @@
                         <h:outputText value="#{team.department.departmentName}"/>
                     </p:column>
                     <p:column style="width:200px;text-align: center">
-
-                        <p:commandButton action="#{teamDetailController.doDeleteTeam()}" value="Delete" icon="ui-icon-trash" title="Delete" update=":teamForm:TeamTable">
+                        <p:commandButton update=":teamForm:teamEditDialog" value="Edit" oncomplete="PF('teamEditDialog').show()" icon="ui-icon-note">
+                            <f:setPropertyActionListener value="#{team}" target="#{teamDetailController.team}" />
+                        </p:commandButton>
+                        <p:commandButton action="#{teamDetailController.doDeleteTeam}" value="Delete" icon="ui-icon-trash" title="Delete" update=":teamForm:TeamTable">
                             <f:setPropertyActionListener value="#{team}" target="#{teamDetailController.team}" />
                         </p:commandButton>
                     </p:column>
@@ -44,10 +46,11 @@
                         <h:panelGrid columns="2">
                             <p:outputLabel for="teamname" value="Teamname: " />
                             <p:inputText id="teamname" value="#{teamDetailController.team.teamName}" disabled="true"/>
-                            <p:outputLabel for="employees" value="Employees: " />
-                            <p:inputText id="employees" value="#{teamDetailController.team.employees}" disabled="true"/>
-                            <p:outputLabel for="leader" value="Leader: " />
-                            <p:inputText id="leader" value="#{teamDetailController.team.leader}" disabled="true"/>
+
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="Edit employees: "/>
+                                <p:commandButton value="Select" update=":teamForm" oncomplete="PF('editEmployeesTeamDialog').show()" />
+                            </h:panelGrid>
                         </h:panelGrid>
                         <p:separator />
                         <h:panelGrid columns="3">
@@ -56,6 +59,24 @@
                             <p:commandButton value="Abort" onclick="PF('teamEditDialog').hide()"/>
                         </h:panelGrid>
                     </p:outputPanel>
+                </p:dialog>
+
+                <p:dialog header="Select Employees" id="editEmployeesTeamDialog" widgetVar="editEmployeesTeamDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                    <h:form id="employeeTeamForm">
+                        <p:dataTable id="employeeTeamTable" var="employee" value="#{userListController.users}">
+                            <p:column headerText="Employee ID">
+                                <h:outputText value="#{employee.username}"/>
+                            </p:column>
+
+
+                        </p:dataTable>
+                        <h:panelGrid columns="2">
+                            <p:commandButton update="@form :teamForm:TeamTable" value="Add" oncomplete="PF('selectEmployeesDialog').hide()" />
+                            <p:commandButton value="Abort" type="submit" onclick="PF('selectEmployeesDialog').hide()"/>
+                        </h:panelGrid>
+
+                    </h:form>
+
                 </p:dialog>
 
             <p:commandButton value="Add Team" styleClass="addButton" oncomplete="PF('addTeamDialog').show()" />

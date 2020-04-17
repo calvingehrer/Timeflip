@@ -1,5 +1,6 @@
 package at.qe.sepm.skeleton.ui.controllers;
 
+import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.UserService;
 import java.util.Collection;
@@ -23,7 +24,6 @@ public class UserListController {
 
     private String userrole = "";
     private String username = "";
-
     /**
      * Returns a list of all users.
      *
@@ -56,4 +56,5 @@ public class UserListController {
     public void setUsername(String username) {
         this.username = username;
     }
+
 }

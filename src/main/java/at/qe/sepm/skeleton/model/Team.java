@@ -7,6 +7,7 @@ import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -44,6 +45,7 @@ public class Team implements Persistable<String>, Serializable {
 
 
 
+
     public Set<User> getEmployees() {
         return employees;
     }
@@ -59,6 +61,7 @@ public class Team implements Persistable<String>, Serializable {
     public void setEmployees(User employee){
         this.employees.add(employee);
     }
+
 
 
     public User getLeader() {
