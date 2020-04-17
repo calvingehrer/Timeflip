@@ -26,6 +26,9 @@
                     <p:column headerText="Leader">
                         <h:outputText value="#{team.leader.fullName}"/>
                     </p:column>
+                    <p:column headerText="Department">
+                        <h:outputText value="#{team.department.departmentName}"/>
+                    </p:column>
                     <p:column style="width:200px;text-align: center">
                         <p:commandButton update=":teamForm:teamEditDialog" value="Edit" oncomplete="PF('teamEditDialog').show()" icon="ui-icon-note">
                             <f:setPropertyActionListener value="#{team}" target="#{teamDetailController.team}" />

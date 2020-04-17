@@ -19,20 +19,16 @@ public class DepartmentService {
     private DepartmentRepository departmentRepository;
 
 
+
     @PreAuthorize("hasAuthority('ADMIN')")
     public Collection<Department> getAllDepartments(){return departmentRepository.findAll();}
 
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Department saveDepartment(Department department) {
-
-
-        return departmentRepository.save(department);
-    }
+    public Department saveDepartment(Department department) { return departmentRepository.save(department); }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public void addNewDepartment(Department department) {
-
         Department newDepartment = new Department();
 
         newDepartment.setDepartmentName(department.getDepartmentName());

@@ -7,6 +7,9 @@ import at.qe.sepm.skeleton.services.TeamService;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+
 @Component
 @Scope("view")
 public class DepartmentDetailController {
@@ -31,6 +34,7 @@ public class DepartmentDetailController {
     public void doSaveDepartment(){
         department = this.departmentService.saveDepartment(department);
     }
+
     public void doDeleteDepartment(){
         this.departmentService.deleteDepartment(department);
         department = null;
