@@ -70,6 +70,12 @@ public class User implements Persistable<String>, Serializable {
     )
     private Set<Team> teams = new HashSet<>();
 
+    @OneToOne(mappedBy = "leader")
+    private Team leaderOf;
+
+    @OneToOne(mappedBy = "headOfDepartment")
+    private Department headOf;
+
     public Set<Vacation> getVacations() {
         return vacations;
     }
@@ -185,6 +191,22 @@ public class User implements Persistable<String>, Serializable {
 
     public void setTeams(Set<Team> teams) {
         this.teams = teams;
+    }
+
+    public Team getLeaderOf() {
+        return leaderOf;
+    }
+
+    public void setLeaderOf(Team leaderOf) {
+        this.leaderOf = leaderOf;
+    }
+
+    public Department getHeadOf() {
+        return headOf;
+    }
+
+    public void setHeadOf(Department headOf) {
+        this.headOf = headOf;
     }
 
     @Override

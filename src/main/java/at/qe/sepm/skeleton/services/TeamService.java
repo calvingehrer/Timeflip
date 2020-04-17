@@ -10,6 +10,7 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.CollectionTable;
 import java.util.Collection;
 import java.util.Date;
 
@@ -71,4 +72,7 @@ public class TeamService {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public Collection<Team> getAllTeamsByTeamName (String teamName) { return this.teamRepository.getAllTeamsByTeamPrefix(teamName); }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Collection<Team> getTeamsWithoutDepartment() { return this.teamRepository.getTeamsWithoutDepartment();}
 }

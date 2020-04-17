@@ -30,12 +30,15 @@ public class Team implements Persistable<String>, Serializable {
     private Set<User> employees = new HashSet<>();
 
     @OneToOne
+    @JoinColumn(name="leader_username")
     private User leader;
 
     @ManyToOne(fetch=FetchType.LAZY)
     @Fetch(FetchMode.JOIN)
     @JoinColumn(name="department_id")
     private Department department;
+
+
 
 
     public Set<User> getEmployees() {

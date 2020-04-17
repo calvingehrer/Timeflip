@@ -5,6 +5,8 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/template.xhtml">
 
+
+
     <ui:define name="title">Overview</ui:define>
     <ui:define name="viewname">
         <li>Pages</li>
@@ -26,7 +28,7 @@
                     <h:outputText value="#{department.headOfDepartment.fullName}"/>
                 </p:column>
                 <p:column style="width:200px;text-align: center">
-                    <p:commandButton action="#{departmentDetailController.doDeleteDepartment}" value="Delete" icon="ui-icon-trash" title="Delete" update=":departmentForm:DepartmentTable">
+                    <p:commandButton action="#{departmentDetailController.doDeleteDepartment()}" value="Delete" title="Delete" update=":departmentForm:DepartmentTable">
                         <f:setPropertyActionListener value="#{department}" target="#{departmentDetailController.department}" />
                         <p:confirm header="Confirmation" message="Are you sure that you want to delete this Department? You cannot undo this operation." icon="ui-icon-alert" />
                     </p:commandButton>
@@ -63,7 +65,7 @@
 
         <p:dialog header="Select Teams" id="selectTeamsDialog" widgetVar="selectTeamsDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
             <h:form id="teamForm">
-                <p:dataTable id="TeamTable" var="team" value="#{teamListController.getTeams()}">
+                <p:dataTable id="TeamTable" var="team" value="#{teamListController.getTeamsWithoutDepartment()}">
                     <p:column headerText="Team ID">
                         <h:outputText value="#{team.teamName}"/>
                     </p:column>

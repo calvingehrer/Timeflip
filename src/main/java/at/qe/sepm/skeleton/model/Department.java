@@ -25,6 +25,7 @@ public class Department implements Persistable<String>, Serializable {
 
 
     @OneToOne
+    @JoinColumn(name="head_of_department_username")
     private User headOfDepartment;
 
 
