@@ -63,17 +63,33 @@
 
                 <p:dialog header="Edit Employees" id="editEmployeesTeamDialog" widgetVar="editEmployeesTeamDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
                     <h:form id="employeeTeamForm">
-                        <p:dataTable id="employeeTeamTable" var="employee" value="#{userListController.getUsersOfTeam(addTeamController.team)}">
+                        Employees in team
+                        <p:dataTable id="employeeTeamTable" var="employee" value="#{teamDetailController.team.employees}">
                             <p:column headerText="Employee ID">
                                 <h:outputText value="#{employee.username}"/>
                             </p:column>
-
+                            <p:column headerText="Firstname">
+                                <h:outputText value="#{employee.firstName}"/>
+                            </p:column>
+                            <p:column headerText="Lastname">
+                                <h:outputText value="#{employee.lastName}"/>
+                            </p:column>
 
                         </p:dataTable>
-                        <h:panelGrid columns="2">
-                            <p:commandButton update="@form :teamForm:TeamTable" value="Add" oncomplete="PF('selectEmployeesDialog').hide()" />
-                            <p:commandButton value="Abort" type="submit" onclick="PF('selectEmployeesDialog').hide()"/>
-                        </h:panelGrid>
+
+                        Employees not in team
+                        <p:dataTable id="employeeTeamTable1" var="employee" value="#{userListController.getUsersNotInTeam(teamDetailController.team.employees)}">
+                            <p:column headerText="Employee ID">
+                                <h:outputText value="#{employee.username}"/>
+                            </p:column>
+                            <p:column headerText="Firstname">
+                                <h:outputText value="#{employee.firstName}"/>
+                            </p:column>
+                            <p:column headerText="Lastname">
+                                <h:outputText value="#{employee.lastName}"/>
+                            </p:column>
+
+                        </p:dataTable>
 
                     </h:form>
 

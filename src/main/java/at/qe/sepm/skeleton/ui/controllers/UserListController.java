@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
+import java.util.Set;
 
 /**
  * Controller for the user list view.
@@ -21,39 +22,40 @@ import java.util.Collection;
 public class UserListController {
 
 
-    private Team team;
-
     @Autowired
     private UserService userService;
 
-    private TeamDetailController teamDetailController;
 
     private String userrole = "";
     private String username = "";
     private String teamname = "";
+
     /**
      * Returns a list of all users.
      *
      * @return
      */
-    public Collection<User> getUsers(){
-        if(!username.equals("")){
+    public Collection<User> getUsers() {
+        if (!username.equals("")) {
             return userService.getAllUsersByUsername(username);
         }
         return userService.getAllUsersByRole(userrole);
     }
 
+    public Collection<User> getUsersNotInTeam(Set<User> userInTeam) {
 
-    public Collection<User> getUsersOfTeam(Team team) {
+        Collection<User> allUsers= userService.getAllUsers();
 
-        //if(!teamname.equals("")){
-            return userService.getAllUsersOfTeam(team.getTeamName());
-        //}
-        //else{
-        //    return userService.getAllUsers();
-        //}
-
+        for(User user : userInTeam){
+           // if(allUsers.contains(user)){
+                allUsers.remove(user);
+            //}
+        }
+        return allUsers;
     }
+
+
+
 
     public String getTeamname() {
         return teamname;
@@ -63,7 +65,7 @@ public class UserListController {
         this.teamname = teamname;
     }
 
-    public void resetFilter(){
+    public void resetFilter() {
         this.username = "";
         this.userrole = "";
     }
@@ -82,14 +84,5 @@ public class UserListController {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-
-    public Team getTeam() {
-        return team;
-    }
-
-    public void setTeam(Team team) {
-        this.team = team;
     }
 }

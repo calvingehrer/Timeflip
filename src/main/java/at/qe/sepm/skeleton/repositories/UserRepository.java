@@ -1,5 +1,6 @@
 package at.qe.sepm.skeleton.repositories;
 
+import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.model.UserRole;
 import java.util.List;
@@ -28,8 +29,10 @@ public interface UserRepository extends AbstractRepository<User, String> {
     @Query("SELECT u FROM User u WHERE u.username LIKE CONCAT(:usernamePrefix, '%')")
     List<User> findByUsernamePrefix(@Param("usernamePrefix") String usernamePrefix);
 
-    @Query("SELECT u FROM User u WHERE :teamName MEMBER OF u.teams")
-    List<User> findUserOfTeam(@Param("teamName") String teamName);
 
+    /*
+    @Query("SELECT u FROM User u WHERE :team MEMBER OF u.teams")
+    List<User> findUserOfTeam(@Param("team") Team team);
 
+*/
 }
