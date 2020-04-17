@@ -35,8 +35,15 @@ public class TeamService {
     public Team saveTeam(Team team) {
 
 
-       return teamRepository.save(team);
+        return teamRepository.save(team);
+
+
     }
+
+    //@PreAuthorize("hasAuthority('ADMIN')")
+    //public Collection<User> getAllEmployees (String teamName) { return this.teamRepository.g; }
+
+
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DEPARTMENTLEADER')")
     public void addNewTeam(Team team) {

@@ -23,4 +23,7 @@ public interface TeamRepository extends AbstractRepository<Team, String>  {
     @Query("SELECT t FROM Team t WHERE t.teamName LIKE CONCAT(:teamPrefix, '%')")
     Collection<Team> getAllTeamsByTeamPrefix(@Param("teamPrefix") String teamPrefix);
 
+
+   // @Query("SELECT e FROM Team.employees e WHERE Team.teamName = :teamName")
+    //Collection<User> getAllEmployees(@Param("teamName") String teamName);
 }

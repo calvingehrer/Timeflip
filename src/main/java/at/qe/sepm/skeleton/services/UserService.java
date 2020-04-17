@@ -1,6 +1,7 @@
 package at.qe.sepm.skeleton.services;
 
 import at.qe.sepm.skeleton.configs.WebSecurityConfig;
+import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.model.UserRole;
 import at.qe.sepm.skeleton.repositories.UserRepository;
@@ -73,6 +74,8 @@ public class UserService {
     public List<User> getAllUsersByUsername(String username){
         return userRepository.findByUsernamePrefix(username);
     }
+
+
 
     /**
      * Loads a single user identified by its username.
