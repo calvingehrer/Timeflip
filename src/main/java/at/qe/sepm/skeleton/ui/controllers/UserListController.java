@@ -19,11 +19,17 @@ import org.springframework.stereotype.Component;
 @Scope("view")
 public class UserListController {
 
+
+    private Team team;
+
     @Autowired
     private UserService userService;
 
+    private TeamDetailController teamDetailController;
+
     private String userrole = "";
     private String username = "";
+    private String teamname = "";
     /**
      * Returns a list of all users.
      *
@@ -34,6 +40,26 @@ public class UserListController {
             return userService.getAllUsersByUsername(username);
         }
         return userService.getAllUsersByRole(userrole);
+    }
+
+
+    public Collection<User> getUsersOfTeam(Team team) {
+
+        //if(!teamname.equals("")){
+            return userService.getAllUsersOfTeam(team.getTeamName());
+        //}
+        //else{
+        //    return userService.getAllUsers();
+        //}
+
+    }
+
+    public String getTeamname() {
+        return teamname;
+    }
+
+    public void setTeamname(String teamname) {
+        this.teamname = teamname;
     }
 
     public void resetFilter(){
@@ -57,4 +83,12 @@ public class UserListController {
         this.username = username;
     }
 
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
 }

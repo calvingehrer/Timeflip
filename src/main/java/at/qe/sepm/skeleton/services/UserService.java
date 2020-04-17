@@ -75,6 +75,11 @@ public class UserService {
         return userRepository.findByUsernamePrefix(username);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<User> getAllUsersOfTeam(String teamname){
+        return userRepository.findUserOfTeam(teamname);
+    }
+
 
 
     /**
