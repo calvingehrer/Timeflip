@@ -1,12 +1,15 @@
 package at.qe.sepm.skeleton.model;
 
 import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 
@@ -25,10 +28,13 @@ public class Team implements Persistable<String>, Serializable {
     //@JoinTable
     @ManyToMany(mappedBy = "teams", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     private Set<User> employees = new HashSet<>();
+
     @OneToOne
     private User leader;
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY)
+    @Fetch(FetchMode.JOIN)
+    @JoinColumn(name="department_id")
     private Department department;
 
 
@@ -90,5 +96,21 @@ public class Team implements Persistable<String>, Serializable {
     @Override
     public boolean isNew() {
         return false;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Team)) return false;
+        Team team = (Team) o;
+        return getTeamName().equals(team.getTeamName()) &&
+                Objects.equals(getEmployees(), team.getEmployees()) &&
+                Objects.equals(getLeader(), team.getLeader()) &&
+                Objects.equals(getDepartment(), team.getDepartment());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getTeamName(), getEmployees(), getLeader(), getDepartment());
     }
 }

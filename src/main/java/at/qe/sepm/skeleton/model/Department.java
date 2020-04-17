@@ -4,11 +4,13 @@ import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 
 @Entity
+@Table(name="department")
 public class Department implements Persistable<String>, Serializable {
 
     private static final long serialVersionDID = 1L;
@@ -18,8 +20,8 @@ public class Department implements Persistable<String>, Serializable {
     private String departmentName;
 
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
-    private Set<Team> teams;
+    @OneToMany(mappedBy = "department", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    private Set<Team> teams  = new HashSet<>();
 
 
     @OneToOne
@@ -68,5 +70,15 @@ public class Department implements Persistable<String>, Serializable {
     @Override
     public boolean isNew() {
         return false;
+    }
+
+    public void addTeam(Team team) {
+        this.teams.add(team);
+        team.setDepartment(this);
+    }
+
+    public void removeTeam(Team team) {
+        teams.remove(team);
+        team.setDepartment(null);
     }
 }

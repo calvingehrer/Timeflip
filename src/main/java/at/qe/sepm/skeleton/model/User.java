@@ -70,9 +70,6 @@ public class User implements Persistable<String>, Serializable {
     )
     private Set<Team> teams = new HashSet<>();
 
-    @ManyToOne
-    private Department department;
-
     public Set<Vacation> getVacations() {
         return vacations;
     }
@@ -188,14 +185,6 @@ public class User implements Persistable<String>, Serializable {
 
     public void setTeams(Set<Team> teams) {
         this.teams = teams;
-    }
-
-    public Department getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(Department department) {
-        this.department = department;
     }
 
     @Override
