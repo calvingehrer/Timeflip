@@ -1,6 +1,7 @@
 package at.qe.sepm.skeleton.services;
 
 import at.qe.sepm.skeleton.model.Team;
+import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -9,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
+import java.util.List;
 
 
 @Component
@@ -31,7 +33,7 @@ public class TeamService {
     private PasswordEncoder passwordEncoder;
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Collection<Team> getAllTeams(){return teamRepository.findAll();}
+    public List<Team> getAllTeams(){return teamRepository.findAll();}
 
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -42,11 +44,6 @@ public class TeamService {
 
 
     }
-
-    //@PreAuthorize("hasAuthority('ADMIN')")
-    //public Collection<User> getAllEmployees (String teamName) { return this.teamRepository.g; }
-
-
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DEPARTMENTLEADER')")
     public void addNewTeam(Team team) {
@@ -76,15 +73,14 @@ public class TeamService {
 
     }
 
-    /*@PreAuthorize("hasAuthority('ADMIN')")
-    public Collection<Team> getAllTeamsByTeamName(String teamName){
-        return teamRepository.findByTeamName2(teamName);
-    }*/
 
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Collection<Team> getAllTeamsByTeamName (String teamName) { return this.teamRepository.getAllTeamsByTeamPrefix(teamName); }
+    public List<Team> getAllTeamsByTeamName (String teamName) { return this.teamRepository.getAllTeamsByTeamPrefix(teamName); }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Collection<Team> getTeamsWithoutDepartment() { return this.teamRepository.getTeamsWithoutDepartment();}
+    public List<Team> getUsersNotInTeam (String teamname) { return this.teamRepository.getUsersNotInTeam(teamname); }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<Team> getTeamsWithoutDepartment() { return this.teamRepository.getTeamsWithoutDepartment();}
 }

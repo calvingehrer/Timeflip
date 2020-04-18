@@ -1,31 +1,28 @@
 package at.qe.sepm.skeleton.repositories;
 
 import at.qe.sepm.skeleton.model.Team;
-import at.qe.sepm.skeleton.model.User;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.parameters.P;
 
 import java.util.Collection;
+import java.util.List;
 
 public interface TeamRepository extends AbstractRepository<Team, String>  {
 
 
     Team findByTeamName(String teamName);
 
-
-    @Query("SELECT t FROM Team t WHERE t.leader = :leader")
-    Collection<Team> findByTeamLeader(@Param("leader") User leader);
-
-    @Query("SELECT t FROM Team t WHERE t.teamName = :teamName")
-    Collection<User> findByTeamName2(@Param("teamName") String teamName);
-
     @Query("SELECT t FROM Team t WHERE t.teamName LIKE CONCAT(:teamPrefix, '%')")
-    Collection<Team> getAllTeamsByTeamPrefix(@Param("teamPrefix") String teamPrefix);
+    List<Team> getAllTeamsByTeamPrefix(@Param("teamPrefix") String teamPrefix);
 
-
-   // @Query("SELECT e FROM Team.employees e WHERE Team.teamName = :teamName")
-    //Collection<User> getAllEmployees(@Param("teamName") String teamName);
     @Query("SELECT t FROM Team t WHERE t.department IS NULL")
-    Collection<Team> getTeamsWithoutDepartment();
+    List<Team> getTeamsWithoutDepartment();
+
+    @Query("SELECT t FROM Team t WHERE t.teamName != :teamname")
+    List<Team> getUsersNotInTeam(@Param ("teamname") String teamname);
+
+
 
 }

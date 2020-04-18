@@ -67,13 +67,49 @@
                             <p:column headerText="Employee ID">
                                 <h:outputText value="#{employee.username}"/>
                             </p:column>
+                            <p:column headerText="Firstname">
+                                <h:outputText value="#{employee.firstName}"/>
+                            </p:column>
+                            <p:column headerText="Lastname">
+                                <h:outputText value="#{employee.lastName}"/>
+                            </p:column>
+
+
+                            <p:column style="width:100px;text-align: center">
+                                <p:commandButton actionListener="#{teamDetailController.removeEmployee}" update=":teamForm:TeamTable" icon="ui-icon-check" title="Select">
+                                    <f:setPropertyActionListener value="#{employee}" target="#{teamDetailController.employee}" />
+                                </p:commandButton>
+                            </p:column>
+
 
 
                         </p:dataTable>
-                        <h:panelGrid columns="2">
-                            <p:commandButton update="@form :teamForm:TeamTable" value="Add" oncomplete="PF('selectEmployeesDialog').hide()" />
-                            <p:commandButton value="Abort" type="submit" onclick="PF('selectEmployeesDialog').hide()"/>
-                        </h:panelGrid>
+
+                        Employees not in team
+
+                        <p:dataTable id="employeeTeamTable1" var="employee" value="#{userListController.getUsersNotInTeam(teamDetailController.team.employees)}">
+                            <p:column headerText="Employee ID">
+                                <h:outputText value="#{employee.username}"/>
+                            </p:column>
+                            <p:column headerText="Firstname">
+                                <h:outputText value="#{employee.firstName}"/>
+                            </p:column>
+                            <p:column headerText="Lastname">
+                                <h:outputText value="#{employee.lastName}"/>
+                            </p:column>
+
+
+                            <p:column style="width:100px;text-align: center">
+                                <p:commandButton actionListener="#{teamDetailController.addEmployee}" update=":teamForm:TeamTable" icon="ui-icon-check" title="Select">
+                                    <f:setPropertyActionListener value="#{employee}" target="#{teamDetailController.employee}" />
+                                </p:commandButton>
+                            </p:column>
+
+
+                        </p:dataTable>
+
+                        <p:commandButton action="#{teamDetailController.doSaveTeam}" update="@form :teamForm:TeamTable" value="Add" oncomplete="PF('editEmployeesTeamDialog').hide()" />
+                        <p:commandButton value="Abort" type="submit" onclick="PF('editEmployeesTeamDialog').hide()"/>
 
                     </h:form>
 
@@ -108,6 +144,7 @@
 
         <p:dialog header="Select Employees" id="selectEmployeesDialog" widgetVar="selectEmployeesDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
             <h:form id="employeeForm">
+                <p:dataTable id="employeeTable" var="employee" value="#{userListController.getUsers()}" scrollable="true" >
                 <p:dataTable styleClass="project-table" id="employeeTable" var="employee" value="#{userListController.getUsers()}" scrollable="true" scrollHeight="300">
                     <p:column headerText="Employee ID">
                         <h:outputText value="#{employee.username}"/>
