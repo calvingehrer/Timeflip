@@ -16,7 +16,7 @@
 
     <ui:define name="content">
             <h:form id="teamForm">
-                <p:dataTable id="TeamTable" var="team" value="#{teamListController.teams}">
+                <p:dataTable id="TeamTable" var="team" value="#{teamListController.teams}" scrollable="true" scrollHeight="420">
                     <p:column headerText="Teamname">
                         <h:outputText value="#{team.teamName}"/>
                     </p:column>
@@ -42,8 +42,8 @@
                 <p:dialog header="Edit Team" id="teamEditDialog" widgetVar="teamEditDialog" modal="true"
                           showEffect="fade"
                           hideEffect="fade" resizable="false">
-                    <p:outputPanel id="teamData" rendered="#{not empty teamDetailController.team}">
-                        <h:panelGrid columns="2">
+                    <p:outputPanel id="teamData" rendered="#{not empty teamDetailController.team}" >
+                        <h:panelGrid columns="2" >
                             <p:outputLabel for="teamname" value="Teamname: " />
                             <p:inputText id="teamname" value="#{teamDetailController.team.teamName}" disabled="true"/>
 
@@ -63,7 +63,7 @@
 
                 <p:dialog header="Select Employees" id="editEmployeesTeamDialog" widgetVar="editEmployeesTeamDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
                     <h:form id="employeeTeamForm">
-                        <p:dataTable id="employeeTeamTable" var="employee" value="#{userListController.users}">
+                        <p:dataTable styleClass="project-table" id="employeeTeamTable" var="employee" value="#{userListController.users}" scrollable="true" scrollHeight="300">
                             <p:column headerText="Employee ID">
                                 <h:outputText value="#{employee.username}"/>
                             </p:column>
@@ -108,7 +108,7 @@
 
         <p:dialog header="Select Employees" id="selectEmployeesDialog" widgetVar="selectEmployeesDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
             <h:form id="employeeForm">
-                <p:dataTable id="employeeTable" var="employee" value="#{userListController.getUsers()}">
+                <p:dataTable styleClass="project-table" id="employeeTable" var="employee" value="#{userListController.getUsers()}" scrollable="true" scrollHeight="300">
                     <p:column headerText="Employee ID">
                         <h:outputText value="#{employee.username}"/>
                     </p:column>
@@ -131,7 +131,7 @@
 
         <p:dialog header="Select Leader" id="selectLeaderDialog" widgetVar="selectLeaderDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
             <h:form id="leaderForm">
-                <p:dataTable id="leaderTable" var="leader" value="#{userListController.getUsers()}">
+                <p:dataTable id="leaderTable" var="leader" styleClass="project-table" value="#{userListController.getUsers()}" scrollable="true" scrollHeight="300">
                     <p:column headerText="Employee ID">
                         <h:outputText value="#{leader.username}"/>
                     </p:column>

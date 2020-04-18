@@ -42,7 +42,7 @@
                     </h:form>
 
                     <h:form id="userForm">
-                        <p:dataTable id="usersTable" var="user" value="#{userListController.users}">
+                        <p:dataTable id="usersTable" var="user" value="#{userListController.users}" scrollable="true" scrollHeight="300">
                             <p:column headerText="Username">
                                 <h:outputText value="#{user.username}"/>
                             </p:column>
