@@ -17,7 +17,7 @@
 
     <ui:define name="content">
         <h:form id="departmentForm">
-            <p:dataTable id="DepartmentTable" var="department" value="#{departmentListController.departments}">
+            <p:dataTable id="DepartmentTable" var="department" value="#{departmentListController.departments}" scrollable="true" scrollHeight="420">
                 <p:column headerText="Department Name">
                     <h:outputText value="#{department.departmentName}"/>
                 </p:column>
@@ -64,7 +64,7 @@
 
         <p:dialog header="Select Teams" id="selectTeamsDialog" widgetVar="selectTeamsDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
             <h:form id="teamForm">
-                <p:dataTable id="TeamTable" var="team" value="#{teamListController.getTeamsWithoutDepartment()}">
+                <p:dataTable styleClass="project-table" id="TeamTable" var="team" value="#{teamListController.getTeamsWithoutDepartment()}" scrollable="true" scrollHeight="300">
                     <p:column headerText="Team ID">
                         <h:outputText value="#{team.teamName}"/>
                     </p:column>
@@ -87,7 +87,7 @@
 
         <p:dialog header="Select Head of Department" id="selectHeadOfDepartmentDialog" widgetVar="selectHeadOfDepartmentDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
             <h:form id="headOfDepartmentForm">
-                <p:dataTable id="headOfDepartmentTable" var="headOfDepartment" value="#{userListController.getUsers()}">
+                <p:dataTable styleClass="project-table" id="headOfDepartmentTable" var="headOfDepartment" value="#{userListController.getUsers()}" scrollable="true" scrollHeight="300">
                     <p:column headerText="Employee ID">
                         <h:outputText value="#{headOfDepartment.username}"/>
                     </p:column>
