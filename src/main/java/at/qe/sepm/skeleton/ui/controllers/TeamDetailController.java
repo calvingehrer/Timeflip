@@ -22,6 +22,8 @@ public class TeamDetailController {
 
     private User emloyee;
 
+    private User employee2;
+
 
     public void setTeam(Team team){
 
@@ -59,6 +61,16 @@ public class TeamDetailController {
         this.team.setEmployees(employee);
 
         //this.employees.add(employee);
+    }
+
+    public User getEmployee2() {
+        return employee2;
+    }
+
+    public void setEmployee2(User employee2) {
+        this.employee2 = employee2;
+        this.team.getEmployees().remove(employee2);
+        this.team.setEmployees(this.team.getEmployees());
     }
 
     public void addEmployee(){

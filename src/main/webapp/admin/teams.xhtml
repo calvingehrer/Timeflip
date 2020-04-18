@@ -79,8 +79,8 @@
 
 
                             <p:column style="width:100px;text-align: center">
-                                <p:commandButton actionListener="#{teamDetailController.removeEmployee}" update=":teamForm:TeamTable" icon="ui-icon-check" title="Select">
-                                    <f:setPropertyActionListener value="#{employee}" target="#{teamDetailController.employee}" />
+                                <p:commandButton actionListener="#{teamDetailController.addEmployee}" update=":teamForm:TeamTable" icon="ui-icon-check" title="Select">
+                                    <f:setPropertyActionListener value="#{employee}" target="#{teamDetailController.employee2}" />
                                 </p:commandButton>
                             </p:column>
 
