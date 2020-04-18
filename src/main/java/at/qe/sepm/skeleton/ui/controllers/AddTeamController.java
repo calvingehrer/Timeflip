@@ -75,30 +75,11 @@ public class AddTeamController {
 
     public void setEmployee(User employee){
         this.employee = employee;
-        //this.employees.add(employee);
         this.team.setEmployees(employee);
 
-        //this.employees.add(employee);
     }
 
     public void addEmployee(){
-        //this.employees.add(employee);
-        //this.employees.add(employee);
-        //this.employees.add(employee);
+
     }
-
-    /*public Set<User> getEmployees(){
-        return employees;
-    }
-    public void setEmployees(){
-        //this.employees = new HashSet<>();
-        //this.employees = employees;
-
-        team.setEmployees(this.employees);
-    }
-
-    public void addEmployees(){
-        this.team.setEmployees(employees);
-    }*/
-
 }

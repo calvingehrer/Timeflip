@@ -3,6 +3,7 @@ package at.qe.sepm.skeleton.model;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
@@ -17,6 +18,7 @@ import java.util.Set;
 public class Team implements Persistable<String>, Serializable {
 
     private static final long serialVersionTID = 1L;
+
 
     @Id
     @Column(name="team_name",length = 100)
