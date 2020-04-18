@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
-
 @Component
 @Scope("view")
 public class TeamDetailController {
@@ -20,9 +18,9 @@ public class TeamDetailController {
 
     private Team team = new Team();
 
-    private User emloyee;
+    private User employeeAdd;
 
-    private User employee2;
+    private User employeeRemove;
 
 
     public void setTeam(Team team){
@@ -52,24 +50,24 @@ public class TeamDetailController {
 
 
     public User getEmployee() {
-        return emloyee;
+        return employeeAdd;
     }
 
     public void setEmployee(User employee){
-        this.emloyee = employee;
+        this.employeeAdd = employee;
         //this.employees.add(employee);
         this.team.setEmployees(employee);
 
         //this.employees.add(employee);
     }
 
-    public User getEmployee2() {
-        return employee2;
+    public User getEmployeeRemove() {
+        return employeeRemove;
     }
 
-    public void setEmployee2(User employee2) {
-        this.employee2 = employee2;
-        this.team.getEmployees().remove(employee2);
+    public void setEmployeeRemove(User employeeRemove) {
+        this.employeeRemove = employeeRemove;
+        this.team.getEmployees().remove(employeeRemove);
         this.team.setEmployees(this.team.getEmployees());
     }
 
@@ -81,7 +79,7 @@ public class TeamDetailController {
     }
 
     public void removeEmployee(){
-        team.getEmployees().remove(emloyee);
+        team.getEmployees().remove(employeeAdd);
     }
 
 }
