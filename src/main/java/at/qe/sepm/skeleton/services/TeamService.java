@@ -66,7 +66,6 @@ public class TeamService {
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteTeam(Team team){
         if (team.getDepartment() != null) { departmentService.removeTeamfromDepartment(team, team.getDepartment()); }
-        if (team.getEmployees() != null) {  userService.removeEmployeesFromTeam(team); }
         if (team.getLeader() != null) { userService.removeTeamFromLeader(team); }
         teamRepository.delete(team);
         teamRepository.delete(team);

@@ -170,13 +170,4 @@ public class UserService {
         user.setLeaderOf(null);
         team.setLeader(null);
     }
-
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public void removeEmployeesFromTeam (Team team) {
-        Set<User> employees = team.getEmployees();
-        for(User u:employees) {
-            u.getTeams().remove(team);
-        }
-        team.getEmployees().clear();
-    }
 }

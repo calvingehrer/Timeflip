@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Set;
 
@@ -19,7 +20,7 @@ import java.util.Set;
  */
 @Component
 @Scope("view")
-public class UserListController {
+public class UserListController implements Serializable {
 
 
     @Autowired

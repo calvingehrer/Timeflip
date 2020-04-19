@@ -5,9 +5,11 @@ import at.qe.sepm.skeleton.services.DepartmentService;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
+
 @Component
 @Scope("view")
-public class DepartmentDetailController {
+public class DepartmentDetailController implements Serializable {
 
     private DepartmentService departmentService;
 
