@@ -61,6 +61,12 @@
                     </p:outputPanel>
                 </p:dialog>
 
+
+
+
+
+
+
                 <p:dialog header="Select Employees" id="editEmployeesTeamDialog" widgetVar="editEmployeesTeamDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
                     <h:form id="employeeTeamForm">
                         <p:dataTable styleClass="project-table" id="employeeTeamTable" var="employee" value="#{teamDetailController.team.employees}" scrollable="true" scrollHeight="300">
@@ -76,14 +82,16 @@
 
 
                             <p:column style="width:100px;text-align: center">
-                                <p:commandButton actionListener="#{teamDetailController.addEmployee}" update=":teamForm:TeamTable" icon="ui-icon-check" title="Select">
+                                <p:commandButton update=":teamForm:TeamTable" icon="ui-icon-check" title="Select">
                                     <f:setPropertyActionListener value="#{employee}" target="#{teamDetailController.employeeRemove}" />
                                 </p:commandButton>
                             </p:column>
-
-
-
                         </p:dataTable>
+
+
+
+
+
 
                         Employees not in team
 
@@ -100,7 +108,7 @@
 
 
                             <p:column style="width:100px;text-align: center">
-                                <p:commandButton actionListener="#{teamDetailController.addEmployee}" update=":teamForm:TeamTable" icon="ui-icon-check" title="Select">
+                                <p:commandButton update=":teamForm:TeamTable" icon="ui-icon-check" title="Select">
                                     <f:setPropertyActionListener value="#{employee}" target="#{teamDetailController.employee}" />
                                 </p:commandButton>
                             </p:column>

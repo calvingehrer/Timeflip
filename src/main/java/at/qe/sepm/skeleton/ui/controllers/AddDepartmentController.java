@@ -23,7 +23,7 @@ public class AddDepartmentController {
 
     private User headOfDepartment;
 
-    private Set<Team> teams = new HashSet<>();
+    //private Set<Team> teams = new HashSet<>();
 
 
     public DepartmentService getDepartmentService() {
@@ -49,7 +49,8 @@ public class AddDepartmentController {
     public void setTeam(Team team) {
         this.team = team;
         this.team.setDepartment(department);
-        this.teams.add(this.getTeam());
+        //this.teams.add(this.getTeam());
+        this.department.setTeams(team);
     }
 
     public User getHeadOfDepartment() {
@@ -60,7 +61,7 @@ public class AddDepartmentController {
         this.headOfDepartment = headOfDepartment;
     }
 
-    public Set<Team> getTeams() {
+    /*public Set<Team> getTeams() {
         return teams;
     }
 
@@ -71,7 +72,7 @@ public class AddDepartmentController {
     public void setTeams(){
         this.department.setTeams(this.teams);
     }
-
+*/
     public void add(){
 
 
@@ -83,7 +84,7 @@ public class AddDepartmentController {
 
     public void resetDepartment(){
         this.department = new Department();
-        this.teams = new HashSet<>();
+        //this.teams = new HashSet<>();
     }
 
     public void addHeadOfDepartment(){
@@ -91,16 +92,6 @@ public class AddDepartmentController {
     }
 
     public void addTeam(){
-    }
-
-
-    public boolean isIn(){
-        return teams.contains(team);
-    }
-
-    public void setIn(boolean check){
-        //employee = new User();
-        //this.employees.add(employee);
     }
 
 

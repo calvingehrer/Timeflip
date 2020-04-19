@@ -29,12 +29,21 @@ public class Department implements Persistable<String>, Serializable {
     private User headOfDepartment;
 
 
+    public void setTeams(Team team){
+        this.teams.add(team);
+    }
+
     public Set<Team> getTeams() {
         return teams;
     }
 
     public void setTeams(Set<Team> teams) {
+        this.teams = new HashSet<>();
         this.teams = teams;
+    }
+
+    public void removeTeam(Team team){
+        this.teams.remove(team);
     }
 
     public User getHeadOfDepartment() {
@@ -78,8 +87,9 @@ public class Department implements Persistable<String>, Serializable {
         team.setDepartment(this);
     }
 
+    /*
     public void removeTeam(Team team) {
         teams.remove(team);
         team.setDepartment(null);
-    }
+    }*/
 }

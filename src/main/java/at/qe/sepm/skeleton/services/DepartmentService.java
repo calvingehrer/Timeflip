@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 @Component
@@ -20,7 +21,7 @@ public class DepartmentService {
 
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Collection<Department> getAllDepartments(){return departmentRepository.findAll();}
+    public List<Department> getAllDepartments(){return departmentRepository.findAll();}
 
 
     @PreAuthorize("hasAuthority('ADMIN')")

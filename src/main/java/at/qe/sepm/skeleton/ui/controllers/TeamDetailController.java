@@ -71,12 +71,6 @@ public class TeamDetailController {
         this.team.setEmployees(this.team.getEmployees());
     }
 
-    public void addEmployee(){
-        //this.employees.add(employee);
-        //this.employees.add(employee);
-        //this.employees.add(employee);
-
-    }
 
     public void removeEmployee(){
         team.getEmployees().remove(employeeAdd);

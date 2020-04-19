@@ -47,6 +47,19 @@ public class TeamListController {
     }
 
 
+    public Collection<Team> getTeamsNotInDepartment(Set<Team> teamsInDepartment) {
+
+        Collection<Team> allTeams= teamService.getAllTeams();
+
+        for(Team team : teamsInDepartment){
+            // if(allUsers.contains(user)){
+            allTeams.remove(team);
+            //}
+        }
+        return allTeams;
+    }
+
+
     public Team getTeam() {
         return team;
     }
