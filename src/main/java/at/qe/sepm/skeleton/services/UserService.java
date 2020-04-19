@@ -1,10 +1,11 @@
 package at.qe.sepm.skeleton.services;
 
 import at.qe.sepm.skeleton.configs.WebSecurityConfig;
+import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.model.UserRole;
+import at.qe.sepm.skeleton.repositories.TeamRepository;
 import at.qe.sepm.skeleton.repositories.UserRepository;
-import org.hibernate.mapping.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Service for accessing and manipulating user data.
@@ -74,6 +76,8 @@ public class UserService {
         return userRepository.findByUsernamePrefix(username);
     }
 
+
+
     /**
      * Loads a single user identified by its username.
      *
@@ -108,6 +112,7 @@ public class UserService {
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DEPARTMENTLEADER')")
     public void addNewUser(User user) {
+
         User newUser = new User();
         newUser.setUsername(user.getUsername());
         newUser.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -159,5 +164,10 @@ public class UserService {
         return userRepository.save(setUpdatingFieldsBeforePersist(toSave));
     }
 
-
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public void removeTeamFromLeader (Team team) {
+        User user = team.getLeader();
+        user.setLeaderOf(null);
+        team.setLeader(null);
+    }
 }

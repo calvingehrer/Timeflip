@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
+
 /**
  * Controller for the user detail view.
  *
@@ -15,7 +17,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope("view")
-public class UserDetailController {
+public class UserDetailController implements Serializable {
 
     @Autowired
     private UserService userService;

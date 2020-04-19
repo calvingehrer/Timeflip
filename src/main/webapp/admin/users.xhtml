@@ -42,7 +42,7 @@
                     </h:form>
 
                     <h:form id="userForm">
-                        <p:dataTable id="usersTable" var="user" value="#{userListController.users}">
+                        <p:dataTable id="usersTable" var="user" value="#{userListController.users}" scrollable="true" scrollHeight="300">
                             <p:column headerText="Username">
                                 <h:outputText value="#{user.username}"/>
                             </p:column>
@@ -54,6 +54,9 @@
                             </p:column>
                             <p:column headerText="Roles">
                                 <h:outputText value="#{user.roles}" />
+                            </p:column>
+                            <p:column headerText="Teams">
+                                <h:outputText value="#{user.teams}" />
                             </p:column>
                             <p:column headerText="Enabled">
                                 <h:selectBooleanCheckbox value="#{user.enabled}" disabled="true"/>

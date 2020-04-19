@@ -14,8 +14,6 @@ import java.util.Set;
 import javax.persistence.*;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.domain.Persistable;
-import javax.validation.constraints.Email;
 
 /**
  * Entity representing users.
@@ -25,6 +23,7 @@ import javax.validation.constraints.Email;
  * University of Innsbruck.
  */
 @Entity
+@Table(name="user")
 public class User implements Persistable<String>, Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -49,6 +48,7 @@ public class User implements Persistable<String>, Serializable {
 
     private String firstName;
     private String lastName;
+    private String fullName;
     @Email
     private String email;
 
@@ -56,13 +56,39 @@ public class User implements Persistable<String>, Serializable {
     boolean enabled;
 
     @ElementCollection(targetClass = UserRole.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "User_user_role")
+    @CollectionTable(name = "user_user_role")
     @Enumerated(EnumType.STRING)
     private Set<UserRole> roles;
 
     @ElementCollection
     @CollectionTable(name = "user_vacation")
     Set<Vacation> vacations = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.EAGER,
+            cascade =
+                    {
+                            CascadeType.DETACH,
+                            CascadeType.MERGE,
+                            CascadeType.REFRESH,
+                            CascadeType.PERSIST
+                    },
+            targetEntity = Team.class)
+    @JoinTable(name = "team_user",
+            inverseJoinColumns = @JoinColumn(name = "team_name",
+                    nullable = false,
+                    updatable = false),
+            joinColumns = @JoinColumn(name = "username",
+                    nullable = false,
+                    updatable = false),
+            foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT),
+            inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT))
+    private Set<Team> teams = new HashSet<>();
+
+    @OneToOne(mappedBy = "leader")
+    private Team leaderOf;
+
+    @OneToOne(mappedBy = "headOfDepartment")
+    private Department headOf;
 
     public Set<Vacation> getVacations() {
         return vacations;
@@ -173,7 +199,29 @@ public class User implements Persistable<String>, Serializable {
         return serialVersionUID;
     }
 
+    public Set<Team> getTeams() {
+        return teams;
+    }
 
+    public void setTeams(Set<Team> teams) {
+        this.teams = teams;
+    }
+
+    public Team getLeaderOf() {
+        return leaderOf;
+    }
+
+    public void setLeaderOf(Team leaderOf) {
+        this.leaderOf = leaderOf;
+    }
+
+    public Department getHeadOf() {
+        return headOf;
+    }
+
+    public void setHeadOf(Department headOf) {
+        this.headOf = headOf;
+    }
 
     @Override
     public int hashCode() {
@@ -199,7 +247,7 @@ public class User implements Persistable<String>, Serializable {
 
     @Override
     public String toString() {
-        return "at.qe.sepm.skeleton.model.User[ id=" + username + " ]";
+        return firstName + " " + lastName ;
     }
 
     @Override
@@ -220,6 +268,7 @@ public class User implements Persistable<String>, Serializable {
         setUsername(id);
     }
 
+
     @Override
     public boolean isNew() {
         return (null == createDate);
@@ -228,6 +277,10 @@ public class User implements Persistable<String>, Serializable {
     @Transactional
     public boolean hasVacationInTime(Instant begin, Instant end) {
         return this.getVacations().stream().anyMatch(x -> x.getStart().compareTo(begin) <= 0 && x.getEnd().compareTo(begin) >= 0 || x.getStart().compareTo(end) <= 0 && x.getEnd().compareTo(end) >= 0 || x.getStart().compareTo(begin) >= 0 && x.getEnd().compareTo(end) <= 0);
+    }
+
+    public String getFullName() {
+        return this.getFirstName() + " " +  this.getLastName();
     }
 
 }

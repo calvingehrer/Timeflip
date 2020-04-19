@@ -4,11 +4,13 @@ import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 
 @Entity
+@Table(name="department")
 public class Department implements Persistable<String>, Serializable {
 
     private static final long serialVersionDID = 1L;
@@ -18,19 +20,30 @@ public class Department implements Persistable<String>, Serializable {
     private String departmentName;
 
 
-    @OneToMany
-    private Set<Team> teams;
+    @OneToMany(mappedBy = "department", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    private Set<Team> teams  = new HashSet<>();
+
 
     @OneToOne
+    @JoinColumn(name="head_of_department_username")
     private User headOfDepartment;
 
+
+    public void setTeams(Team team){
+        this.teams.add(team);
+    }
 
     public Set<Team> getTeams() {
         return teams;
     }
 
     public void setTeams(Set<Team> teams) {
+        this.teams = new HashSet<>();
         this.teams = teams;
+    }
+
+    public void removeTeam(Team team){
+        this.teams.remove(team);
     }
 
     public User getHeadOfDepartment() {
@@ -55,7 +68,7 @@ public class Department implements Persistable<String>, Serializable {
 
     @Override
     public String toString() {
-        return "at.qe.sepm.skeleton.model.User[ id=" + departmentName + " ]";
+        return this.getDepartmentName();
     }
 
     @Override
@@ -68,4 +81,15 @@ public class Department implements Persistable<String>, Serializable {
     public boolean isNew() {
         return false;
     }
+
+    public void addTeam(Team team) {
+        this.teams.add(team);
+        team.setDepartment(this);
+    }
+
+    /*
+    public void removeTeam(Team team) {
+        teams.remove(team);
+        team.setDepartment(null);
+    }*/
 }

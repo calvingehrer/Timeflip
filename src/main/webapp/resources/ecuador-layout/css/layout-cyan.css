@@ -14,6 +14,9 @@ body {
 
 a {
   text-decoration: none; }
+.project-table {
+  width:500px;
+}
 
 .layout-wrapper .layout-topbar {
   position: fixed;
