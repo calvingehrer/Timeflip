@@ -7,13 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 
 @Component
 @Scope("view")
-public class AddUserController {
+public class AddUserController implements Serializable {
 
     @Autowired
     private UserService userService;
@@ -33,6 +34,11 @@ public class AddUserController {
      * Action to add the user to the system
      */
     public void add(){
+
+        if(user.getUsername() == null){
+            return;
+        }
+
         this.roles = new HashSet<>();
         if(admin){
             roles.add(UserRole.ADMIN);
@@ -48,6 +54,9 @@ public class AddUserController {
         }
 
         user.setRoles(roles);
+
+
+
         userService.addNewUser(user);
 
         resetUser();
