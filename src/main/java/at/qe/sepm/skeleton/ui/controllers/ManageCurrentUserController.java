@@ -12,12 +12,13 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
 @Scope("view")
-public class ManageCurrentUserController {
+public class ManageCurrentUserController implements Serializable {
     private static final long serialVersionUID = -5637562154142043652L;
 
     @Autowired

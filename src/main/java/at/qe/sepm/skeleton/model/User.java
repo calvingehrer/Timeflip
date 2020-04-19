@@ -60,7 +60,24 @@ public class User implements Persistable<String>, Serializable {
     @CollectionTable(name = "user_vacation")
     Set<Vacation> vacations = new HashSet<>();
 
-    @ManyToMany(mappedBy = "employees", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    @ManyToMany(fetch = FetchType.EAGER,
+            cascade =
+                    {
+                            CascadeType.DETACH,
+                            CascadeType.MERGE,
+                            CascadeType.REFRESH,
+                            CascadeType.PERSIST
+                    },
+            targetEntity = Team.class)
+    @JoinTable(name = "team_user",
+            inverseJoinColumns = @JoinColumn(name = "team_name",
+                    nullable = false,
+                    updatable = false),
+            joinColumns = @JoinColumn(name = "username",
+                    nullable = false,
+                    updatable = false),
+            foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT),
+            inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT))
     private Set<Team> teams = new HashSet<>();
 
     @OneToOne(mappedBy = "leader")

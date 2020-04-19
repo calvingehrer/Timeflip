@@ -27,10 +27,24 @@ public class Team implements Persistable<String>, Serializable {
 
     //@Cascade({CascadeType.SAVE_UPDATE})
     //@JoinTable
-    @ManyToMany(fetch=FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER,
+            cascade =
+                    {
+                            CascadeType.DETACH,
+                            CascadeType.MERGE,
+                            CascadeType.REFRESH,
+                            CascadeType.PERSIST
+                    },
+            targetEntity = User.class)
     @JoinTable(name = "team_user",
-            joinColumns = {@JoinColumn(name="team_team_name",referencedColumnName = "team_name")},
-            inverseJoinColumns = {@JoinColumn(name="user_username", referencedColumnName = "username")})
+            inverseJoinColumns = @JoinColumn(name = "username",
+                    nullable = false,
+                    updatable = false),
+            joinColumns = @JoinColumn(name = "team_name",
+                    nullable = false,
+                    updatable = false),
+            foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT),
+            inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT))
     private Set<User> employees = new HashSet<>();
 
     @OneToOne

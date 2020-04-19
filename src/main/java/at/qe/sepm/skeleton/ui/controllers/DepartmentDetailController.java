@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
+
 @Component
 @Scope("view")
-public class DepartmentDetailController {
+public class DepartmentDetailController implements Serializable {
 
     @Autowired
     private DepartmentService departmentService;
