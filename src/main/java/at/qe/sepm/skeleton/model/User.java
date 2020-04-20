@@ -1,5 +1,7 @@
 package at.qe.sepm.skeleton.model;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
@@ -60,30 +62,17 @@ public class User implements Persistable<String>, Serializable {
     @CollectionTable(name = "user_vacation")
     Set<Vacation> vacations = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER,
-            cascade =
-                    {
-                            CascadeType.DETACH,
-                            CascadeType.MERGE,
-                            CascadeType.REFRESH,
-                            CascadeType.PERSIST
-                    },
-            targetEntity = Team.class)
-    @JoinTable(name = "team_user",
-            inverseJoinColumns = @JoinColumn(name = "team_name",
-                    nullable = false,
-                    updatable = false),
-            joinColumns = @JoinColumn(name = "username",
-                    nullable = false,
-                    updatable = false),
-            foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT),
-            inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT))
-    private Set<Team> teams = new HashSet<>();
+    @ManyToOne(fetch=FetchType.LAZY)
+    @Fetch(FetchMode.JOIN)
+    @JoinColumn(name="team_id")
+    private Team team;
 
-    @OneToOne(mappedBy = "leader")
+    @OneToOne
+    @JoinColumn(name="leader_of")
     private Team leaderOf;
 
-    @OneToOne(mappedBy = "headOfDepartment")
+    @OneToOne
+    @JoinColumn(name="head_of")
     private Department headOf;
 
     public Set<Vacation> getVacations() {
@@ -190,17 +179,16 @@ public class User implements Persistable<String>, Serializable {
         this.updateDate = updateDate;
     }
 
-
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
 
-    public Set<Team> getTeams() {
-        return teams;
+    public Team getTeam() {
+        return team;
     }
 
-    public void setTeams(Set<Team> teams) {
-        this.teams = teams;
+    public void setTeam(Team team) {
+        this.team = team;
     }
 
     public Team getLeaderOf() {

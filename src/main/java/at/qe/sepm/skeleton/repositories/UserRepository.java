@@ -30,6 +30,8 @@ public interface UserRepository extends AbstractRepository<User, String> {
     List<User> findByUsernamePrefix(@Param("usernamePrefix") String usernamePrefix);
 
 
+    @Query("SELECT u from User u WHERE u.team IS NULL")
+    List<User> findUserWithoutTeam();
     /*
     @Query("SELECT u FROM User u WHERE :team MEMBER OF u.teams")
     List<User> findUserOfTeam(@Param("team") Team team);

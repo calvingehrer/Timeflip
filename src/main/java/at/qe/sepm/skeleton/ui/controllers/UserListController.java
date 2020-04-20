@@ -43,16 +43,8 @@ public class UserListController implements Serializable {
         return userService.getAllUsersByRole(userrole);
     }
 
-    public Collection<User> getUsersNotInTeam(Set<User> userInTeam) {
-
-        Collection<User> allUsers= userService.getAllUsers();
-
-        for(User user : userInTeam){
-           // if(allUsers.contains(user)){
-                allUsers.remove(user);
-            //}
-        }
-        return allUsers;
+    public Collection<User> getUsersNotInTeam() {
+        return userService.getAllUsersWithoutTeam();
     }
 
 

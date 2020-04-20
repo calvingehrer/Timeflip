@@ -24,8 +24,7 @@ public class Department implements Persistable<String>, Serializable {
     private Set<Team> teams  = new HashSet<>();
 
 
-    @OneToOne
-    @JoinColumn(name="head_of_department_username")
+    @OneToOne(mappedBy = "headOf")
     private User headOfDepartment;
 
 

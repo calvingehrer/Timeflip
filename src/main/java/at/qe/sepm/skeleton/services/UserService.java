@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -169,5 +170,10 @@ public class UserService {
         User user = team.getLeader();
         user.setLeaderOf(null);
         team.setLeader(null);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Collection<User> getAllUsersWithoutTeam() {
+        return userRepository.findUserWithoutTeam();
     }
 }

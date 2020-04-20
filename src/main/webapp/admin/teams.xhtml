@@ -95,7 +95,7 @@
 
                         Employees not in team
 
-                        <p:dataTable styleClass="project-table" id="employeeTeamTable1" var="employee" value="#{userListController.getUsersNotInTeam(teamDetailController.team.employees)}" scrollable="true" scrollHeight="200">
+                        <p:dataTable styleClass="project-table" id="employeeTeamTable1" var="employee" value="#{userListController.getUsersNotInTeam()}" scrollable="true" scrollHeight="200">
                             <p:column headerText="Employee ID">
                                 <h:outputText value="#{employee.username}"/>
                             </p:column>
