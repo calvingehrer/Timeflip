@@ -1,7 +1,9 @@
 package at.qe.sepm.skeleton.services;
 
+import at.qe.sepm.skeleton.model.Department;
 import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
+import at.qe.sepm.skeleton.repositories.DepartmentRepository;
 import at.qe.sepm.skeleton.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -19,8 +21,6 @@ public class TeamService {
     @Autowired
     private MailService mailService;
 
-    @Autowired
-    private DepartmentService departmentService;
 
     @Autowired
     private UserService userService;
@@ -83,4 +83,7 @@ public class TeamService {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<User> getUsersOfTeam(Team team) { return userService.getUsersOfTeam(team); }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<Team> getTeamsOfDepartment(Department department) { return teamRepository.findByDepartment(department); }
 }

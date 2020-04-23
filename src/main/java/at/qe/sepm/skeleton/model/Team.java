@@ -21,16 +21,9 @@ public class Team implements Persistable<String>, Serializable {
     @Column(name="team_name",length = 100)
     private String teamName;
 
-
-
-    @ManyToOne(fetch=FetchType.LAZY)
-    @Fetch(FetchMode.JOIN)
-    @JoinColumn(name="department_id")
+    @ManyToOne(optional = false, fetch = FetchType.EAGER, targetEntity = Department.class)
+    @JoinColumn(name = "department_id")
     private Department department;
-
-
-
-
 
 
     public static long getSerialVersionTID() {

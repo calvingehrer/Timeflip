@@ -48,8 +48,6 @@ public class AddDepartmentController implements Serializable {
     public void setTeam(Team team) {
         this.team = team;
         this.team.setDepartment(department);
-        //this.teams.add(this.getTeam());
-        this.department.setTeams(team);
     }
 
     public User getHeadOfDepartment() {
@@ -84,10 +82,6 @@ public class AddDepartmentController implements Serializable {
     public void resetDepartment(){
         this.department = new Department();
         //this.teams = new HashSet<>();
-    }
-
-    public void addHeadOfDepartment(){
-        this.department.setHeadOfDepartment(headOfDepartment);
     }
 
     public void addTeam(){

@@ -1,5 +1,6 @@
 package at.qe.sepm.skeleton.repositories;
 
+import at.qe.sepm.skeleton.model.Department;
 import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.model.UserRole;
@@ -45,4 +46,6 @@ public interface UserRepository extends AbstractRepository<User, String> {
     List<User> findUserOfTeam(@Param("team") Team team);
 
 */
+    @Query("SELECT u FROM User u WHERE :role MEMBER OF u.roles AND u.department = :department")
+    User findDepartmentLeader (@Param("role") UserRole role, @Param("department") Department department);
 }

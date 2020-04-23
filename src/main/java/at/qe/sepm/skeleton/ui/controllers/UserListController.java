@@ -1,5 +1,6 @@
 package at.qe.sepm.skeleton.ui.controllers;
 
+import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Controller for the user list view.
@@ -75,6 +77,10 @@ public class UserListController implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public List<User> getEmployees(Team team) {
+        return userService.getUsersOfTeam(team);
     }
 
 }

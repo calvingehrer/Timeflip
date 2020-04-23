@@ -65,9 +65,9 @@ public class User implements Persistable<String>, Serializable {
     @JoinColumn(name="team_id")
     private Team team;
 
-    @OneToOne
-    @JoinColumn(name="head_of")
-    private Department headOf;
+    @ManyToOne
+    @JoinColumn(name="department_id")
+    private Department department;
 
     public Set<Vacation> getVacations() {
         return vacations;
@@ -185,12 +185,12 @@ public class User implements Persistable<String>, Serializable {
         this.team = team;
     }
 
-    public Department getHeadOf() {
-        return headOf;
+    public Department department() {
+        return department;
     }
 
-    public void setHeadOf(Department headOf) {
-        this.headOf = headOf;
+    public void setHeadOf(Department department) {
+        this.department = department;
     }
 
     @Override

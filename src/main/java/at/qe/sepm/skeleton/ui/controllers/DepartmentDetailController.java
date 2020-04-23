@@ -29,7 +29,6 @@ public class DepartmentDetailController implements Serializable {
     public void setTeamAdd(Team teamAdd) {
         this.teamAdd = teamAdd;
         this.teamAdd.setDepartment(department);
-        this.department.setTeams(teamAdd);
     }
 
     public Team getTeamRemove() {
@@ -38,11 +37,7 @@ public class DepartmentDetailController implements Serializable {
 
     public void setTeamRemove(Team teamRemove) {
         this.teamRemove = teamRemove;
-        this.teamRemove.setDepartment(department);
-
-        this.department.getTeams().remove(teamRemove);
-
-        this.department.setTeams(this.department.getTeams());
+        this.teamRemove.setDepartment(null);
     }
 
     public void setDepartment(Department department){

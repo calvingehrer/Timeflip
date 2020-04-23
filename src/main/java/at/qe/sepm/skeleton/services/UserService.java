@@ -1,6 +1,7 @@
 package at.qe.sepm.skeleton.services;
 
 import at.qe.sepm.skeleton.configs.WebSecurityConfig;
+import at.qe.sepm.skeleton.model.Department;
 import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.model.UserRole;
@@ -173,4 +174,7 @@ public class UserService {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<User> getUsersOfTeam(Team team) { return userRepository.findUsersOfTeam(team);  }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public User getDepartmentLeader (Department department) { return userRepository.findDepartmentLeader(UserRole.DEPARTMENTLEADER, department); }
 }

@@ -18,18 +18,16 @@ public class TeamDetailController implements Serializable {
     @Autowired
     private TeamService teamService;
 
-
-    private Team team = new Team();
+    private Team team;
 
     private User employeeAdd;
 
     private User employeeRemove;
 
-    private List<User> employee;
+    private List<User> employees;
 
 
-    public void setTeam(Team team){
-
+    public void setTeam(Team team) {
         this.team = team;
         doReloadTeam();
     }
@@ -74,5 +72,7 @@ public class TeamDetailController implements Serializable {
         this.employeeRemove.setTeam(null);
     }
 
-
+    public List<User> getEmployees() {
+        return teamService.getUsersOfTeam(this.team);
+    }
 }

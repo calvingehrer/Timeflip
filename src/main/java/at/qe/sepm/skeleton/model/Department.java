@@ -17,40 +17,6 @@ public class Department implements Persistable<String>, Serializable {
     @Column(length = 100)
     private String departmentName;
 
-
-    @OneToMany(mappedBy = "department", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
-    private Set<Team> teams  = new HashSet<>();
-
-
-    @OneToOne(mappedBy = "headOf")
-    private User headOfDepartment;
-
-
-    public void setTeams(Team team){
-        this.teams.add(team);
-    }
-
-    public Set<Team> getTeams() {
-        return teams;
-    }
-
-    public void setTeams(Set<Team> teams) {
-        this.teams = new HashSet<>();
-        this.teams = teams;
-    }
-
-    public void removeTeam(Team team){
-        this.teams.remove(team);
-    }
-
-    public User getHeadOfDepartment() {
-        return headOfDepartment;
-    }
-
-    public void setHeadOfDepartment(User headOfDepartment) {
-        this.headOfDepartment = headOfDepartment;
-    }
-
     public String getDepartmentName() {
         return departmentName;
     }
@@ -79,14 +45,4 @@ public class Department implements Persistable<String>, Serializable {
         return false;
     }
 
-    public void addTeam(Team team) {
-        this.teams.add(team);
-        team.setDepartment(this);
-    }
-
-    /*
-    public void removeTeam(Team team) {
-        teams.remove(team);
-        team.setDepartment(null);
-    }*/
 }
