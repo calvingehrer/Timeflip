@@ -57,19 +57,6 @@ public class AddTeamController implements Serializable {
 
 
 
-    public User getLeader() {
-        return leader;
-    }
-
-    public void setLeader(User leader) {
-        this.leader = leader;
-    }
-
-    public void addLeader(){
-        this.team.setLeader(leader);
-    }
-
-
 
     public User getEmployee() {
         return employee;
@@ -77,7 +64,7 @@ public class AddTeamController implements Serializable {
 
     public void setEmployee(User employee){
         this.employee = employee;
-        this.team.setEmployees(employee);
+        this.employee.setTeam(null);
 
     }
 

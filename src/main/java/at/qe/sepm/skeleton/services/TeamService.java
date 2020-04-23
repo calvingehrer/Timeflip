@@ -9,7 +9,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
 import java.util.List;
 
 
@@ -47,13 +46,8 @@ public class TeamService {
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DEPARTMENTLEADER')")
     public void addNewTeam(Team team) {
-
         Team newTeam = new Team();
-
         newTeam.setTeamName(team.getTeamName());
-        newTeam.setEmployees(team.getEmployees());
-        newTeam.setLeader(team.getLeader());
-
         saveTeam(newTeam);
 
     }
@@ -80,4 +74,13 @@ public class TeamService {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<Team> getTeamsWithoutDepartment() { return this.teamRepository.getTeamsWithoutDepartment();}
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public User getTeamLeader(Team team) { return userService.getTeamLeader(team); }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<User> getAllUsersWithoutTeam() { return userService.getAllUsersWithoutTeam(); }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<User> getUsersOfTeam(Team team) { return userService.getUsersOfTeam(team); }
 }

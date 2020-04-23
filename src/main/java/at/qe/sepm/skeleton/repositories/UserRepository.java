@@ -4,6 +4,8 @@ import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.model.UserRole;
 import java.util.List;
+
+import at.qe.sepm.skeleton.repositories.AbstractRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -32,6 +34,12 @@ public interface UserRepository extends AbstractRepository<User, String> {
 
     @Query("SELECT u from User u WHERE u.team IS NULL")
     List<User> findUserWithoutTeam();
+
+    @Query("SELECT u FROM User u WHERE :role MEMBER OF u.roles AND u.team = :team")
+    User findTeamLeader(@Param("role") UserRole role, @Param("team") Team team);
+
+    @Query("SELECT u  FROM User u WHERE u.team = :team")
+    List<User> findUsersOfTeam(@Param("team") Team team);
     /*
     @Query("SELECT u FROM User u WHERE :team MEMBER OF u.teams")
     List<User> findUserOfTeam(@Param("team") Team team);

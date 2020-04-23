@@ -2,14 +2,13 @@ package at.qe.sepm.skeleton.repositories;
 
 import at.qe.sepm.skeleton.model.Team;
 
+import at.qe.sepm.skeleton.repositories.AbstractRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.security.core.parameters.P;
 
-import java.util.Collection;
 import java.util.List;
 
-public interface TeamRepository extends AbstractRepository<Team, String>  {
+public interface TeamRepository extends AbstractRepository<Team, String> {
 
 
     Team findByTeamName(String teamName);

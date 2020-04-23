@@ -21,7 +21,6 @@ import org.hibernate.annotations.GenericGenerator;
  * University of Innsbruck.
  */
 @Entity
-@Table(name="user")
 public class User implements Persistable<String>, Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -62,14 +61,9 @@ public class User implements Persistable<String>, Serializable {
     @CollectionTable(name = "user_vacation")
     Set<Vacation> vacations = new HashSet<>();
 
-    @ManyToOne(fetch=FetchType.LAZY)
-    @Fetch(FetchMode.JOIN)
+    @ManyToOne(targetEntity = Team.class, fetch = FetchType.EAGER, optional = true)
     @JoinColumn(name="team_id")
     private Team team;
-
-    @OneToOne
-    @JoinColumn(name="leader_of")
-    private Team leaderOf;
 
     @OneToOne
     @JoinColumn(name="head_of")
@@ -189,14 +183,6 @@ public class User implements Persistable<String>, Serializable {
 
     public void setTeam(Team team) {
         this.team = team;
-    }
-
-    public Team getLeaderOf() {
-        return leaderOf;
-    }
-
-    public void setLeaderOf(Team leaderOf) {
-        this.leaderOf = leaderOf;
     }
 
     public Department getHeadOf() {

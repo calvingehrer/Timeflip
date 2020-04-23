@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Component
 @Scope("view")
@@ -23,6 +24,8 @@ public class TeamDetailController implements Serializable {
     private User employeeAdd;
 
     private User employeeRemove;
+
+    private List<User> employee;
 
 
     public void setTeam(Team team){
@@ -58,7 +61,6 @@ public class TeamDetailController implements Serializable {
     public void setEmployee(User employee){
         this.employeeAdd = employee;
         //this.employees.add(employee);
-        this.team.setEmployees(employee);
 
         //this.employees.add(employee);
     }
@@ -69,13 +71,8 @@ public class TeamDetailController implements Serializable {
 
     public void setEmployeeRemove(User employeeRemove) {
         this.employeeRemove = employeeRemove;
-        this.team.getEmployees().remove(employeeRemove);
-        this.team.setEmployees(this.team.getEmployees());
+        this.employeeRemove.setTeam(null);
     }
 
-
-    public void removeEmployee(){
-        team.getEmployees().remove(employeeAdd);
-    }
 
 }

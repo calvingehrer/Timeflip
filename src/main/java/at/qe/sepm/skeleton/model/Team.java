@@ -1,9 +1,7 @@
 package at.qe.sepm.skeleton.model;
 
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
@@ -14,7 +12,6 @@ import java.util.Set;
 
 
 @Entity
-@Table(name = "team")
 public class Team implements Persistable<String>, Serializable {
 
     private static final long serialVersionTID = 1L;
@@ -25,44 +22,16 @@ public class Team implements Persistable<String>, Serializable {
     private String teamName;
 
 
-    //@Cascade({CascadeType.SAVE_UPDATE})
-    //@JoinTable
-    @OneToMany(mappedBy = "team", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
-    private Set<User> employees = new HashSet<>();
-
-    @OneToOne(mappedBy = "leaderOf")
-    private User leader;
 
     @ManyToOne(fetch=FetchType.LAZY)
     @Fetch(FetchMode.JOIN)
     @JoinColumn(name="department_id")
     private Department department;
 
-    public Set<User> getEmployees() {
-        return employees;
-    }
-
-    public void setEmployees(Set<User> employees) {
-        this.employees = employees;
-    }
-
-    public void setEmployees() {
-        this.employees = employees;
-    }
-
-    public void setEmployees(User employee){
-        this.employees.add(employee);
-    }
 
 
 
-    public User getLeader() {
-        return leader;
-    }
 
-    public void setLeader(User leader) {
-        this.leader = leader;
-    }
 
     public static long getSerialVersionTID() {
         return serialVersionTID;
@@ -105,13 +74,11 @@ public class Team implements Persistable<String>, Serializable {
         if (!(o instanceof Team)) return false;
         Team team = (Team) o;
         return getTeamName().equals(team.getTeamName()) &&
-                Objects.equals(getEmployees(), team.getEmployees()) &&
-                Objects.equals(getLeader(), team.getLeader()) &&
                 Objects.equals(getDepartment(), team.getDepartment());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getTeamName(), getEmployees(), getLeader(), getDepartment());
+        return Objects.hash(getTeamName(), getDepartment());
     }
 }

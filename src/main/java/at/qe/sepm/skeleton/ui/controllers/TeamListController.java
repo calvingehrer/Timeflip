@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 @Component
@@ -18,6 +18,10 @@ import java.util.Set;
 public class TeamListController implements Serializable {
 
     private Team team;
+
+    private User teamLeader;
+
+    private List<User> employees;
 
     @Autowired
     private TeamService teamService;
@@ -35,17 +39,10 @@ public class TeamListController implements Serializable {
         return teamService.getTeamsWithoutDepartment();
     }
 
-    public Set<User> getUsersNotInTeam(String teamName){
-
-
-       Collection<Team> collectionTeam = teamService.getUsersNotInTeam(teamName);
-        Set<User> setUser = new HashSet<>();
-
-        for(Team team : collectionTeam){
-            setUser.addAll(team.getEmployees());
-        }
-        return setUser;
+    public Collection<User> getUsersNotInTeam() {
+        return teamService.getAllUsersWithoutTeam();
     }
+
 
 
     public Collection<Team> getTeamsNotInDepartment(Set<Team> teamsInDepartment) {
@@ -75,5 +72,13 @@ public class TeamListController implements Serializable {
 
     public void setTeamName(String teamName) {
         this.teamName = teamName;
+    }
+
+    public User getTeamLeader(Team team) {
+        return teamService.getTeamLeader(team);
+    }
+
+    public List<User> getEmployees(Team team) {
+        return teamService.getUsersOfTeam(team);
     }
 }

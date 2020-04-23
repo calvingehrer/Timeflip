@@ -4,7 +4,6 @@ import at.qe.sepm.skeleton.configs.WebSecurityConfig;
 import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.model.UserRole;
-import at.qe.sepm.skeleton.repositories.TeamRepository;
 import at.qe.sepm.skeleton.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -18,7 +17,6 @@ import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Service for accessing and manipulating user data.
@@ -166,14 +164,13 @@ public class UserService {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public void removeTeamFromLeader (Team team) {
-        User user = team.getLeader();
-        user.setLeaderOf(null);
-        team.setLeader(null);
+    public User getTeamLeader(Team team) { return userRepository.findTeamLeader(UserRole.TEAMLEADER, team); }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<User> getAllUsersWithoutTeam() {
+        return userRepository.findUserWithoutTeam();
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Collection<User> getAllUsersWithoutTeam() {
-        return userRepository.findUserWithoutTeam();
-    }
+    public List<User> getUsersOfTeam(Team team) { return userRepository.findUsersOfTeam(team);  }
 }
