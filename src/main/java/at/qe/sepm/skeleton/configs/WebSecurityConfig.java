@@ -38,6 +38,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
                 .logoutSuccessUrl("/login.xhtml");
 
+        http.authorizeRequests().antMatchers("/messages**").authenticated().and().httpBasic();
+
         http.authorizeRequests()
                 //Permit access to the H2 console
                 //Permit access for all to error pages
