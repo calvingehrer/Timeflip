@@ -32,20 +32,18 @@ public interface UserRepository extends AbstractRepository<User, String> {
     @Query("SELECT u FROM User u WHERE u.username LIKE CONCAT(:usernamePrefix, '%')")
     List<User> findByUsernamePrefix(@Param("usernamePrefix") String usernamePrefix);
 
+    @Query("SELECT u from User u WHERE u.team IS NULL AND 'TEAMLEADER' NOT MEMBER OF u.roles AND 'DEPARTMENTLEADER' NOT MEMBER OF u.roles AND 'ADMIN' NOT MEMBER OF u.roles" )
+    List<User> findEmployeesWithoutTeam();
 
-    @Query("SELECT u from User u WHERE u.team IS NULL")
-    List<User> findUserWithoutTeam();
-
-    @Query("SELECT u FROM User u WHERE :role MEMBER OF u.roles AND u.team = :team")
-    User findTeamLeader(@Param("role") UserRole role, @Param("team") Team team);
+    @Query("SELECT u FROM User u WHERE 'TEAMLEADER' MEMBER OF u.roles AND u.team = :team")
+    User findTeamLeader(@Param("team") Team team);
 
     @Query("SELECT u  FROM User u WHERE u.team = :team")
     List<User> findUsersOfTeam(@Param("team") Team team);
-    /*
-    @Query("SELECT u FROM User u WHERE :team MEMBER OF u.teams")
-    List<User> findUserOfTeam(@Param("team") Team team);
 
-*/
-    @Query("SELECT u FROM User u WHERE :role MEMBER OF u.roles AND u.department = :department")
-    User findDepartmentLeader (@Param("role") UserRole role, @Param("department") Department department);
+    @Query("SELECT u FROM User u WHERE 'DEPARTMENTLEADER' MEMBER OF u.roles AND u.department = :department")
+    User findDepartmentLeader (@Param("department") Department department);
+
+   @Query("SELECT u FROM User u WHERE u.team IS NULL AND 'TEAMLEADER' MEMBER  OF u.roles")
+    List<User> findTeamLeadersWithoutTeam();
 }

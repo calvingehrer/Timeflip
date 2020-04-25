@@ -21,7 +21,7 @@ public class Team implements Persistable<String>, Serializable {
     @Column(name="team_name",length = 100)
     private String teamName;
 
-    @ManyToOne(optional = false, fetch = FetchType.EAGER, targetEntity = Department.class)
+    @ManyToOne(optional = true, fetch = FetchType.EAGER, targetEntity = Department.class)
     @JoinColumn(name = "department_id")
     private Department department;
 

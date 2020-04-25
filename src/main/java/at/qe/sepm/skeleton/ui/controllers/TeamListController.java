@@ -78,7 +78,4 @@ public class TeamListController implements Serializable {
         return teamService.getTeamLeader(team);
     }
 
-    public List<User> getEmployees(Team team) {
-        return teamService.getUsersOfTeam(team);
-    }
 }

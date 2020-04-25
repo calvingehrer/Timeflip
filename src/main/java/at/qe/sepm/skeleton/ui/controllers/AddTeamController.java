@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Component
@@ -22,16 +24,13 @@ public class AddTeamController implements Serializable {
 
     private User leader;
 
-   // private Set<User> employees = new HashSet<>();
+   private Set<User> employees = new HashSet<>();
 
     boolean check;
 
 
     public void add(){
-
-       // team.setEmployees();
-        teamService.addNewTeam(team);
-
+        teamService.addNewTeam(employees,team);
         resetTeam();
     }
 
@@ -55,8 +54,13 @@ public class AddTeamController implements Serializable {
         this.team = team;
     }
 
+    public User getLeader() {
+        return leader;
+    }
 
-
+    public void setLeader(User leader) {
+        this.leader = leader;
+    }
 
     public User getEmployee() {
         return employee;
@@ -64,11 +68,13 @@ public class AddTeamController implements Serializable {
 
     public void setEmployee(User employee){
         this.employee = employee;
-        this.employee.setTeam(null);
-
     }
 
     public void addEmployee(){
+        this.employees.add(this.employee);
+    }
 
+    public void addLeader() {
+        this.employees.add(this.leader);
     }
 }

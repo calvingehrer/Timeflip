@@ -47,6 +47,7 @@ public class UserListController implements Serializable {
         return userService.getAllUsersWithoutTeam();
     }
 
+    public Collection<User> getTeamLeadersWithoutTeam() { return userService.getTeamLeaderWithoutTeam(); }
 
 
 
@@ -82,5 +83,7 @@ public class UserListController implements Serializable {
     public List<User> getEmployees(Team team) {
         return userService.getUsersOfTeam(team);
     }
+
+
 
 }

@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 
 
 @Component
@@ -45,11 +46,14 @@ public class TeamService {
     }
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DEPARTMENTLEADER')")
-    public void addNewTeam(Team team) {
+    public void addNewTeam(Set<User> employees, Team team) {
         Team newTeam = new Team();
         newTeam.setTeamName(team.getTeamName());
         saveTeam(newTeam);
-
+        for(User u: employees) {
+            u.setTeam(team);
+            userService.saveUser(u);
+        }
     }
 
     @PreAuthorize("hasAuthority('ADMIN') or principal.username eq #username")
@@ -86,4 +90,6 @@ public class TeamService {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<Team> getTeamsOfDepartment(Department department) { return teamRepository.findByDepartment(department); }
+
+
 }

@@ -165,16 +165,19 @@ public class UserService {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public User getTeamLeader(Team team) { return userRepository.findTeamLeader(UserRole.TEAMLEADER, team); }
+    public User getTeamLeader(Team team) { return userRepository.findTeamLeader(team); }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<User> getAllUsersWithoutTeam() {
-        return userRepository.findUserWithoutTeam();
+        return userRepository.findEmployeesWithoutTeam();
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<User> getUsersOfTeam(Team team) { return userRepository.findUsersOfTeam(team);  }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public User getDepartmentLeader (Department department) { return userRepository.findDepartmentLeader(UserRole.DEPARTMENTLEADER, department); }
+    public User getDepartmentLeader (Department department) { return userRepository.findDepartmentLeader(department); }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<User> getTeamLeaderWithoutTeam() { return userRepository.findTeamLeadersWithoutTeam(); }
 }
