@@ -182,5 +182,5 @@ public class UserService {
     public List<User> getTeamLeaderWithoutTeam() { return userRepository.findTeamLeadersWithoutTeam(); }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public List<User> getDepartmentLeaderWithoutTeam() { return userRepository.findDepartmentLeadersWithoutTeam(); }
+    public List<User> getDepartmentLeaderWithoutDepartment() { return userRepository.findDepartmentLeadersWithoutDepartment(); }
 }

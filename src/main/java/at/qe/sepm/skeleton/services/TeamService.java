@@ -53,6 +53,7 @@ public class TeamService {
         saveTeam(newTeam);
         for(User u: employees) {
             u.setTeam(team);
+            u.setDepartment(team.getDepartment());
             userService.saveUser(u);
         }
     }

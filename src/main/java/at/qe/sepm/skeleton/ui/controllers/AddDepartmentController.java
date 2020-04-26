@@ -22,8 +22,6 @@ public class AddDepartmentController implements Serializable {
 
     private User headOfDepartment;
 
-    //private Set<Team> teams = new HashSet<>();
-
 
     public DepartmentService getDepartmentService() {
         return departmentService;
@@ -58,33 +56,14 @@ public class AddDepartmentController implements Serializable {
         this.headOfDepartment = headOfDepartment;
     }
 
-    /*public Set<Team> getTeams() {
-        return teams;
-    }
-
-    public void setTeams(Set<Team> teams) {
-        this.teams = teams;
-    }
-
-    public void setTeams(){
-        this.department.setTeams(this.teams);
-    }
-*/
     public void add(){
-
-
-        departmentService.addNewDepartment(department);
-
+        departmentService.addNewDepartment(headOfDepartment,department);
         resetDepartment();
     }
 
 
     public void resetDepartment(){
         this.department = new Department();
-        //this.teams = new HashSet<>();
-    }
-
-    public void addTeam(){
     }
 
 

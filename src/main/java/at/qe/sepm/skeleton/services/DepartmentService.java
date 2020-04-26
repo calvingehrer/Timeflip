@@ -36,12 +36,14 @@ public class DepartmentService {
     public Department saveDepartment(Department department) { return departmentRepository.save(department); }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public void addNewDepartment(Department department) {
+    public void addNewDepartment(User headOfDepartment, Department department) {
         Department newDepartment = new Department();
 
         newDepartment.setDepartmentName(department.getDepartmentName());
 
         saveDepartment(newDepartment);
+
+        userService.saveUser(headOfDepartment);
 
     }
 

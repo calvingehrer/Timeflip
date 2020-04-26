@@ -49,7 +49,7 @@ public class UserListController implements Serializable {
 
     public Collection<User> getTeamLeadersWithoutTeam() { return userService.getTeamLeaderWithoutTeam(); }
 
-    public Collection<User> getDepartmentLeadersWithoutTeam() { return userService.getDepartmentLeaderWithoutTeam(); }
+    public Collection<User> getDepartmentLeadersWithoutDepartment() { return userService.getDepartmentLeaderWithoutDepartment(); }
 
     public String getTeamname() {
         return teamname;

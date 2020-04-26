@@ -70,6 +70,7 @@ public class TeamDetailController implements Serializable {
 
     public void addEmployee() {
         employeeAdd.setTeam(team);
+        employeeAdd.setDepartment(team.getDepartment());
         userService.saveUser(employeeAdd);
     }
 
@@ -91,6 +92,7 @@ public class TeamDetailController implements Serializable {
 
     public void removeEmployee() {
         this.employeeRemove.setTeam(null);
+        this.employeeRemove.setDepartment(null);
         userService.saveUser(employeeRemove);
     }
 
