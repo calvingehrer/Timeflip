@@ -74,8 +74,6 @@ public class TeamListController implements Serializable {
         this.teamName = teamName;
     }
 
-    public User getTeamLeader(Team team) {
-        return teamService.getTeamLeader(team);
-    }
+
 
 }

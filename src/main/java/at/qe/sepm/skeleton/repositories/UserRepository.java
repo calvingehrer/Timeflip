@@ -38,12 +38,15 @@ public interface UserRepository extends AbstractRepository<User, String> {
     @Query("SELECT u FROM User u WHERE 'TEAMLEADER' MEMBER OF u.roles AND u.team = :team")
     User findTeamLeader(@Param("team") Team team);
 
-    @Query("SELECT u  FROM User u WHERE u.team = :team")
+    @Query("SELECT u  FROM User u WHERE u.team = :team AND 'TEAMLEADER' NOT MEMBER OF u.roles AND 'DEPARTMENTLEADER' NOT MEMBER OF u.roles AND 'ADMIN' NOT MEMBER OF u.roles")
     List<User> findUsersOfTeam(@Param("team") Team team);
 
     @Query("SELECT u FROM User u WHERE 'DEPARTMENTLEADER' MEMBER OF u.roles AND u.department = :department")
     User findDepartmentLeader (@Param("department") Department department);
 
-   @Query("SELECT u FROM User u WHERE u.team IS NULL AND 'TEAMLEADER' MEMBER  OF u.roles")
+    @Query("SELECT u FROM User u WHERE u.team IS NULL AND 'TEAMLEADER' MEMBER  OF u.roles")
     List<User> findTeamLeadersWithoutTeam();
+
+    @Query("SELECT u FROM User u WHERE u.department IS NULL AND 'DEPARTMENTLEADER' MEMBER  OF u.roles")
+    List<User> findDepartmentLeadersWithoutTeam();
 }

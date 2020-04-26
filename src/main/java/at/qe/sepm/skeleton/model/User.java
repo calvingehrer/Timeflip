@@ -189,7 +189,7 @@ public class User implements Persistable<String>, Serializable {
         return department;
     }
 
-    public void setHeadOf(Department department) {
+    public void setDepartment(Department department) {
         this.department = department;
     }
 

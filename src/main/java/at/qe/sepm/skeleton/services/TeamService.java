@@ -49,6 +49,7 @@ public class TeamService {
     public void addNewTeam(Set<User> employees, Team team) {
         Team newTeam = new Team();
         newTeam.setTeamName(team.getTeamName());
+        newTeam.setDepartment(team.getDepartment());
         saveTeam(newTeam);
         for(User u: employees) {
             u.setTeam(team);
@@ -74,13 +75,7 @@ public class TeamService {
     public List<Team> getAllTeamsByTeamName (String teamName) { return this.teamRepository.getAllTeamsByTeamPrefix(teamName); }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public List<Team> getUsersNotInTeam (String teamname) { return this.teamRepository.getUsersNotInTeam(teamname); }
-
-    @PreAuthorize("hasAuthority('ADMIN')")
     public List<Team> getTeamsWithoutDepartment() { return this.teamRepository.getTeamsWithoutDepartment();}
-
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public User getTeamLeader(Team team) { return userService.getTeamLeader(team); }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<User> getAllUsersWithoutTeam() { return userService.getAllUsersWithoutTeam(); }

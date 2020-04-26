@@ -1,5 +1,6 @@
 package at.qe.sepm.skeleton.ui.controllers;
 
+import at.qe.sepm.skeleton.model.Department;
 import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.TeamService;
@@ -22,9 +23,9 @@ public class AddTeamController implements Serializable {
 
     private User employee;
 
-    private User leader;
+    private Set<User> employees = new HashSet<>();
 
-   private Set<User> employees = new HashSet<>();
+    private Department department;
 
     boolean check;
 
@@ -41,9 +42,21 @@ public class AddTeamController implements Serializable {
 
     public Team getTeam(){return team;}
 
-
     public TeamService getTeamService() {
         return teamService;
+    }
+
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+
+    public void addDepartment() {
+        this.team.setDepartment(this.department);
     }
 
     public void setTeamService(TeamService teamService) {
@@ -52,14 +65,6 @@ public class AddTeamController implements Serializable {
 
     public void setTeam(Team team) {
         this.team = team;
-    }
-
-    public User getLeader() {
-        return leader;
-    }
-
-    public void setLeader(User leader) {
-        this.leader = leader;
     }
 
     public User getEmployee() {
@@ -74,7 +79,4 @@ public class AddTeamController implements Serializable {
         this.employees.add(this.employee);
     }
 
-    public void addLeader() {
-        this.employees.add(this.leader);
-    }
 }
