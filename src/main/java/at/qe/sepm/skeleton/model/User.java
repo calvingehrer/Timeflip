@@ -185,7 +185,7 @@ public class User implements Persistable<String>, Serializable {
         this.team = team;
     }
 
-    public Department department() {
+    public Department getDepartment() {
         return department;
     }
 
