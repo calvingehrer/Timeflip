@@ -38,7 +38,7 @@
                             <p:outputLabel for="interval" value="Interval for mails: "/>
                             <p:autoComplete id="interval" dropdown="true" value="#{manageCurrentUserController.currentUser.intervall}" completeMethod="#{manageCurrentUserController.completeIntervall}"/>
                             <p:outputLabel value="Password: "/>
-                            <p:commandButton id="passwordChange" update=":changeDetailsForm:editPassword" value="Change Password" oncomplete="PF('editPassword').show()" icon="ui-icon-note">
+                            <p:commandButton id="passwordChange" update=":changeDetailsForm:editPassword" value="Change Password" oncomplete="PF('editPassword').show()">
                             </p:commandButton>
                         </p:panelGrid>
 

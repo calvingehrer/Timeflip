@@ -140,9 +140,12 @@ public class TeamDetailController implements Serializable {
     }
 
     public void replaceLeader() {
+
         User oldLeader = userService.getTeamLeader(team);
-        oldLeader.setTeam(null);
-        userService.saveUser(oldLeader);
+        if (oldLeader != null) {
+            oldLeader.setTeam(null);
+            userService.saveUser(oldLeader);
+        }
         User newLeader = this.getNewLeader();
         newLeader.setTeam(team);
         userService.saveUser(newLeader);

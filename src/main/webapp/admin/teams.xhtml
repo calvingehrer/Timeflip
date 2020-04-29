@@ -5,6 +5,9 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/template.xhtml">
 
+    <h:outputStylesheet library="webjars" name="font-awesome/4.6.3/css/font-awesome-jsf.css" />
+
+
     <ui:define name="title">Overview</ui:define>
 
     <ui:define name="viewname">
@@ -33,10 +36,10 @@
                         <h:outputText value="#{team.department.departmentName}"/>
                     </p:column>
                     <p:column style="width:200px;text-align: center">
-                        <p:commandButton update=":teamForm:teamEditDialog" value="Edit" oncomplete="PF('teamEditDialog').show()" icon="ui-icon-note">
+                        <p:commandButton update=":teamForm:teamEditDialog" value="Edit" oncomplete="PF('teamEditDialog').show()" icon="fa fa-fw fa-edit">
                             <f:setPropertyActionListener value="#{team}" target="#{teamDetailController.team}" />
                         </p:commandButton>
-                        <p:commandButton action="#{teamDetailController.doDeleteTeam()}" value="Delete" icon="ui-icon-trash" title="Delete" update=":teamForm:TeamTable">
+                        <p:commandButton action="#{teamDetailController.doDeleteTeam()}" value="Delete" icon="fa fa-trash" title="Delete" update=":teamForm:TeamTable">
                             <f:setPropertyActionListener value="#{team}" target="#{teamDetailController.team}" />
                         </p:commandButton>
 
@@ -47,7 +50,7 @@
 
 
 
-                <p:dialog header="Edit Team" id="teamEditDialog" widgetVar="teamEditDialog" modal="true"
+            <p:dialog header="Edit Team" id="teamEditDialog" widgetVar="teamEditDialog" modal="true"
                           showEffect="fade"
                           hideEffect="fade" resizable="false">
                     <p:outputPanel id="teamData" rendered="#{not empty teamDetailController.team}" >
@@ -57,14 +60,18 @@
 
 
                             <h:panelGrid columns="2">
-                                <p:outputLabel value="Edit employees: "/>
-                                <p:commandButton value="Select" update=":teamForm" oncomplete="PF('editEmployeesTeamDialog').show()"/>
+                                <p:outputLabel value="Remove employees: "/>
+                                <p:commandButton value="Select" update=":teamForm:removeEmployeeForm:employeeTeamTable" oncomplete="PF('editEmployeesTeamDialog').show()"/>
+                                <p:outputLabel value="Add employees: "/>
+                                <p:commandButton value="Select" update=":teamForm:addEmployeeForm:employeeTeamTable1" oncomplete="PF('addEmployeesTeamDialog').show()"/>
+                                <p:outputLabel value="Replace Team Leader: "/>
+                                <p:commandButton value="Select" update=":teamForm:replaceLeaderForm:teamLeaderTable" oncomplete="PF('replaceLeaderDialog').show()"/>
                             </h:panelGrid>
 
                         </h:panelGrid>
                         <p:separator />
                         <h:panelGrid columns="3">
-                            <p:commandButton value="Save" action="#{teamDetailController.doSaveTeam}" oncomplete="PF('teamEditDialog').hide()" update=":teamForm:TeamTable"/>
+                            <p:commandButton value="Done" action="#{teamDetailController.doSaveTeam}" oncomplete="PF('teamEditDialog').hide()" update=":teamForm:TeamTable"/>
                             <p:commandButton value="Reload" action="#{teamDetailController.doReloadTeam}" update="teamForm:teamData"/>
                             <p:commandButton value="Abort" onclick="PF('teamEditDialog').hide()"/>
                         </h:panelGrid>
@@ -74,9 +81,9 @@
 
 
                 <p:dialog header="Select Employees" id="editEmployeesTeamDialog" widgetVar="editEmployeesTeamDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-                    <h:form id="employeeTeamForm">
+                    <h:form id="removeEmployeeForm">
                         <p:dataTable styleClass="project-table" id="employeeTeamTable" var="employee" value="#{userListController.getEmployees(teamDetailController.team)}" scrollable="true" scrollHeight="100%">
-                            <p:column headerText="Employee ID">
+                            <p:column headerText="Team Employees">
                                 <h:outputText value="#{employee.username}"/>
                             </p:column>
                             <p:column headerText="Firstname">
@@ -88,21 +95,20 @@
 
 
                             <p:column style="width:100px;text-align: center">
-                                <p:commandButton update=":teamForm:TeamTable" icon="ui-icon-check" title="Select">
+                                <p:commandButton update=":teamForm:removeEmployeeForm:employeeTeamTable" icon="fa fa-fw fa-minus" title="Select" action="#{teamDetailController.removeEmployee}">
                                     <f:setPropertyActionListener value="#{employee}" target="#{teamDetailController.employeeRemove}" />
                                 </p:commandButton>
                             </p:column>
                         </p:dataTable>
+                        <p:commandButton update="@form :teamForm:TeamTable" value="Done" type="submit" onclick="PF('editEmployeesTeamDialog').hide()"/>
+                        <p:commandButton value="Abort" type="submit" onclick="PF('editEmployeesTeamDialog').hide()"/>
 
+                    </h:form>
 
+                </p:dialog>
 
-                        <p:commandButton action="#{teamDetailController.removeEmployee}" update="@form :teamForm:TeamTable" value="Remove" oncomplete="PF('editEmployeesTeamDialog').hide()" />
-                        <div class="seperator"></div>
-
-
-
-                        Employees not in team
-
+                <p:dialog header="Select Employees" id="addEmployeesTeamDialog" widgetVar="addEmployeesTeamDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                    <h:form id="addEmployeeForm">
                         <p:dataTable styleClass="project-table" id="employeeTeamTable1" var="employee" value="#{userListController.getUsersNotInTeam()}" scrollable="true" scrollHeight="100%">
                             <p:column headerText="Employee ID">
                                 <h:outputText value="#{employee.username}"/>
@@ -116,15 +122,20 @@
 
 
                             <p:column style="width:100px;text-align: center">
-                                <p:commandButton update=":teamForm:TeamTable" icon="ui-icon-check" title="Select">
+                                <p:commandButton update=":teamForm:addEmployeeForm:employeeTeamTable1" icon="fa fa-plus" title="Select" action="#{teamDetailController.addEmployee}" oncomplete="PF('editEmployeesTeamDialog').hide()">
                                     <f:setPropertyActionListener value="#{employee}" target="#{teamDetailController.employee}" />
                                 </p:commandButton>
                             </p:column>
                         </p:dataTable>
+                        <p:commandButton update="@form :teamForm:TeamTable" value="Done" type="submit" onclick="PF('editEmployeesTeamDialog').hide()"/>
+                        <p:commandButton value="Abort" type="submit" onclick="PF('editEmployeesTeamDialog').hide()"/>
 
-                        <p:commandButton action="#{teamDetailController.addEmployee}" update="@form :teamForm:TeamTable" value="Add" oncomplete="PF('editEmployeesTeamDialog').hide()" />
-                        <div class="seperator"></div>
-                            Leaders without team
+                </h:form>
+            </p:dialog>
+
+            <p:dialog header="Select Employees" id="replaceLeaderDialog" widgetVar="replaceLeaderDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                <h:form id="replaceLeaderForm">
+
 
                             <p:dataTable styleClass="project-table" id="teamLeaderTable" var="newLeader" value="#{userListController.getTeamLeadersWithoutTeam()}" scrollable="true" scrollHeight="100%">
                                 <p:column headerText="Employee ID">
@@ -139,7 +150,7 @@
 
 
                                 <p:column style="width:100px;text-align: center">
-                                    <p:commandButton update=":teamForm:TeamTable" icon="ui-icon-check" title="Select">
+                                    <p:commandButton update=":teamForm:replaceLeaderForm:teamLeaderTable" icon="fa fa-arrows-h" title="Select" action="#{teamDetailController.replaceLeader}" oncomplete="PF('editEmployeesTeamDialog').hide()">
                                         <f:setPropertyActionListener value="#{newLeader}" target="#{teamDetailController.newLeader}" />
                                     </p:commandButton>
                                 </p:column>
@@ -149,14 +160,14 @@
 
 
                         </p:dataTable>
-
-                        <p:commandButton action="#{teamDetailController.replaceLeader}" update="@form :teamForm:TeamTable" value="Replace Leader" oncomplete="PF('editEmployeesTeamDialog').hide()"/>
-                        <div class="seperator"></div>
-                        <p:commandButton value="Abort" type="submit" onclick="PF('editEmployeesTeamDialog').hide()"/>
+                    <p:commandButton update=":teamForm:TeamTable" value="Done" type="submit" onclick="PF('editEmployeesTeamDialog').hide()"/>
+                    <p:commandButton value="Abort" type="submit" onclick="PF('editEmployeesTeamDialog').hide()"/>
 
                     </h:form>
-
                 </p:dialog>
+
+
+
 
 
 
@@ -198,7 +209,7 @@
 
 
                     <p:column style="width:100px;text-align: center">
-                        <p:commandButton action="#{addTeamController.addEmployee}" icon="ui-icon-check" title="Select">
+                        <p:commandButton action="#{addTeamController.addEmployee}" icon="fa fa-plus" title="Select">
                             <f:setPropertyActionListener value="#{employee}" target="#{addTeamController.employee}" />
                         </p:commandButton>
                     </p:column>
@@ -220,7 +231,7 @@
                     </p:column>
 
                     <p:column style="width:100px;text-align: center">
-                        <p:commandButton action="#{addTeamController.addEmployee}" oncomplete="PF('selectLeaderDialog').hide()" icon="ui-icon-check" title="Select">
+                        <p:commandButton action="#{addTeamController.addEmployee}" oncomplete="PF('selectLeaderDialog').hide()" icon="fa fa-plus" title="Select">
                             <f:setPropertyActionListener value="#{leader}" target="#{addTeamController.employee}" />
                         </p:commandButton>
                     </p:column>
@@ -240,7 +251,7 @@
                     </p:column>
 
                     <p:column style="width:100px;text-align: center">
-                        <p:commandButton action="#{addTeamController.addDepartment}" oncomplete="PF('selectDepartmentDialog').hide()" icon="ui-icon-check" title="Select">
+                        <p:commandButton action="#{addTeamController.addDepartment}" oncomplete="PF('selectDepartmentDialog').hide()" icon="fa fa-plus" title="Select">
                             <f:setPropertyActionListener value="#{department}" target="#{addTeamController.department}" />
                         </p:commandButton>
                     </p:column>
