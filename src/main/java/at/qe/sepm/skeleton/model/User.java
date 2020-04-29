@@ -26,8 +26,7 @@ public class User implements Persistable<String>, Serializable {
     private static final long serialVersionUID = 1L;
 
 
-    @Id @GeneratedValue(generator="system-uuid")
-    @GenericGenerator(name="system-uuid", strategy = "uuid")
+    @Id
     @Column(length = 100)
     private String username;
 
