@@ -16,18 +16,20 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.List;
+import java.sql.Timestamp;
 
 public class RestClient implements Runnable {
 
-    private final String username;
+    private final String macAddress;
     private final JSONArray historyArray;
+    private final Timestamp historyReadTime;
     private final CredentialsProvider credentialsProvider;
     private final String messagingServiceUri;
 
-    public RestClient(String username, String password, JSONArray historyArray, String messagingServiceUri) {
-        this.username = username;
+    public RestClient(String username, String password, String macAddress, JSONArray historyArray, Timestamp historyReadTime, String messagingServiceUri) {
+        this.macAddress = macAddress;
         this.historyArray = historyArray;
+        this.historyReadTime = historyReadTime;
         this.messagingServiceUri = messagingServiceUri;
 
         credentialsProvider = new BasicCredentialsProvider();
@@ -39,14 +41,14 @@ public class RestClient implements Runnable {
     public void run() {
         try {
 
-            transmitMessage(historyArray.toString());
+            transmitMessage(macAddress, historyReadTime.toString(), historyArray.toString());
 
         } catch (IOException e) {
             // ignore
         }
     }
 
-    public boolean transmitMessage(String message) throws IOException {
+    public boolean transmitMessage(String address, String historyReadTime, String history) throws IOException {
         HttpClient httpClient = HttpClientBuilder.create()
                 .setDefaultCredentialsProvider(credentialsProvider)
                 .build();
@@ -56,8 +58,9 @@ public class RestClient implements Runnable {
         httpPost.setHeader("Content-type", "application/json");
 
         JSONObject requestJson = new JSONObject();
-        requestJson.put("content", message);
-        //requestJson.put("sender", username);
+        requestJson.put("macAddress", address);
+        requestJson.put("history", history);
+        requestJson.put("historyReadTime", historyReadTime);
 
         httpPost.setEntity(new StringEntity(requestJson.toString()));
 
@@ -70,10 +73,11 @@ public class RestClient implements Runnable {
             JSONObject responseJson = new JSONObject(responseString);
 
             Long id = responseJson.getLong("id");
-            String content = responseJson.getString("content");
-            String sender = responseJson.getString("sender");
+            String macAddress = responseJson.getString("macAddress");
+            String hist = responseJson.getString("history");
+            String histReadTime = responseJson.getString("historyReadTime");
 
-            System.out.printf("Posted message #%d from %s: %s\n", id, sender, content);
+            System.out.printf("Id: #%d, MAC-Address: %s, ReadTime: %s, History: %s\n", id, macAddress, histReadTime, hist);
             return true;
         } else {
             System.err.printf("Error posting message, service returned status code %d\n", response.getStatusLine().getStatusCode());
