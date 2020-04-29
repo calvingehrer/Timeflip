@@ -17,7 +17,10 @@
 
     <ui:define name="content">
         <h:form id="departmentForm">
-            <p:dataTable id="DepartmentTable" var="department" value="#{departmentListController.departments}" scrollable="true" scrollHeight="420">
+            <p:messages id="messages" showDetail="true" closable="true">
+                <p:autoUpdate />
+            </p:messages>
+            <p:dataTable id="DepartmentTable" var="department" value="#{departmentListController.departments}" scrollable="true">
                 <p:column headerText="Department Name">
                     <h:outputText value="#{department.departmentName}"/>
                 </p:column>

@@ -64,10 +64,8 @@ public class TeamService {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public void deleteTeam(Team team){
-
+    public void deleteTeam(Team team) {
         teamRepository.delete(team);
-
     }
 
 
@@ -86,6 +84,8 @@ public class TeamService {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<Team> getTeamsOfDepartment(Department department) { return teamRepository.findByDepartment(department); }
+
+
 
 
 }

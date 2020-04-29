@@ -16,7 +16,10 @@
 
     <ui:define name="content">
             <h:form id="teamForm">
-                <p:dataTable id="TeamTable" var="team" value="#{teamListController.teams}" scrollable="true" scrollHeight="420">
+                <p:messages id="messages" showDetail="true" closable="true">
+                    <p:autoUpdate />
+                </p:messages>
+                <p:dataTable id="TeamTable" var="team" value="#{teamListController.teams}" scrollable="true">
                     <p:column headerText="Teamname">
                         <h:outputText value="#{team.teamName}"/>
                     </p:column>
@@ -36,8 +39,13 @@
                         <p:commandButton action="#{teamDetailController.doDeleteTeam()}" value="Delete" icon="ui-icon-trash" title="Delete" update=":teamForm:TeamTable">
                             <f:setPropertyActionListener value="#{team}" target="#{teamDetailController.team}" />
                         </p:commandButton>
+
                     </p:column>
+
+
                 </p:dataTable>
+
+
 
                 <p:dialog header="Edit Team" id="teamEditDialog" widgetVar="teamEditDialog" modal="true"
                           showEffect="fade"

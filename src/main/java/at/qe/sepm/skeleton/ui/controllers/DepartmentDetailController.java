@@ -4,11 +4,14 @@ import at.qe.sepm.skeleton.model.Department;
 import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.DepartmentService;
+import at.qe.sepm.skeleton.services.TeamService;
 import at.qe.sepm.skeleton.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import java.io.Serializable;
 
 @Component
@@ -20,6 +23,9 @@ public class DepartmentDetailController implements Serializable {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private TeamService teamService;
 
     private Department department = new Department();
 
@@ -55,8 +61,45 @@ public class DepartmentDetailController implements Serializable {
     }
 
     public void doDeleteDepartment(){
-        this.departmentService.deleteDepartment(department);
-        department = null;
+        if (checkIfDeletionIsAllowed(department)) {
+            try {
+                this.departmentService.deleteDepartment(department);
+                department = null;
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            System.out.println("hello");
+            warnMessage("department deletion", "You can't delete this department");
+            return;
+        }
+
+        successMessage("department deletion", "Department deleted");
+    }
+
+
+    public static void warnMessage(String target, String message) {
+        addMessage(target, new FacesMessage(FacesMessage.SEVERITY_WARN, "Warning!", message));
+    }
+
+    public static void successMessage(String target, String message) {
+        addMessage(target, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success!", message));
+    }
+
+    private static void addMessage(String target, FacesMessage message) {
+        FacesContext.getCurrentInstance().addMessage(target, message);
+    }
+
+    public boolean checkIfDeletionIsAllowed (Department department){
+        if (!teamService.getTeamsOfDepartment(department).isEmpty()) {
+            return false;
+        }
+        else if (userService.getDepartmentLeader(department) != null) {
+            return false;
+        }
+        return true;
     }
 
     public void replaceLeader() {

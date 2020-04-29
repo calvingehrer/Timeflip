@@ -741,8 +741,7 @@ body .layout-wrapper .layout-main {
     background-color: ##dededeb8;
     padding: 16px 38px;
     color: #1F1F1F;
-    bottom: 0;
-    position: absolute; bottom:0px; }
+    bottom: 0;}
     .layout-wrapper .layout-main .layout-footer .logo-container {
       text-decoration: none; }
       .layout-wrapper .layout-main .layout-footer .logo-container img {
