@@ -1,15 +1,15 @@
 package at.qe.sepm.skeleton.repositories;
 
+import at.qe.sepm.skeleton.model.Department;
 import at.qe.sepm.skeleton.model.Team;
 
+import at.qe.sepm.skeleton.repositories.AbstractRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.security.core.parameters.P;
 
-import java.util.Collection;
 import java.util.List;
 
-public interface TeamRepository extends AbstractRepository<Team, String>  {
+public interface TeamRepository extends AbstractRepository<Team, String> {
 
 
     Team findByTeamName(String teamName);
@@ -23,6 +23,7 @@ public interface TeamRepository extends AbstractRepository<Team, String>  {
     @Query("SELECT t FROM Team t WHERE t.teamName != :teamname")
     List<Team> getUsersNotInTeam(@Param ("teamname") String teamname);
 
-
+    @Query("SELECT t FROM Team t WHERE t.department = :department")
+    List<Team> findByDepartment(@Param("department") Department department);
 
 }

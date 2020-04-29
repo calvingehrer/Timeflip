@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Controller for the user list view.
@@ -43,20 +43,13 @@ public class UserListController implements Serializable {
         return userService.getAllUsersByRole(userrole);
     }
 
-    public Collection<User> getUsersNotInTeam(Set<User> userInTeam) {
-
-        Collection<User> allUsers= userService.getAllUsers();
-
-        for(User user : userInTeam){
-           // if(allUsers.contains(user)){
-                allUsers.remove(user);
-            //}
-        }
-        return allUsers;
+    public Collection<User> getUsersNotInTeam() {
+        return userService.getAllUsersWithoutTeam();
     }
 
+    public Collection<User> getTeamLeadersWithoutTeam() { return userService.getTeamLeaderWithoutTeam(); }
 
-
+    public Collection<User> getDepartmentLeadersWithoutDepartment() { return userService.getDepartmentLeaderWithoutDepartment(); }
 
     public String getTeamname() {
         return teamname;
@@ -85,6 +78,14 @@ public class UserListController implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public List<User> getEmployees(Team team) {
+        return userService.getUsersOfTeam(team);
+    }
+
+    public User getTeamLeader(Team team) {
+        return userService.getTeamLeader(team);
     }
 
 }

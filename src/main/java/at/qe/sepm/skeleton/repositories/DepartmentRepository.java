@@ -17,9 +17,6 @@ public interface DepartmentRepository extends AbstractRepository<Department, Str
     @Query("SELECT d FROM Department d WHERE d.departmentName = :departmentName ")
     Department findByDepartmentName1(@Param("departmentName") String departmentName);
 
-    @Query("SELECT d FROM Department d WHERE d.headOfDepartment = :headOfDepartment ")
-    List<Department> findByHeadOfDepartment(@Param("headOfDepartment") String headOfDepartment);
-
 
 
 

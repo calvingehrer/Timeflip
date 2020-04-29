@@ -1,10 +1,10 @@
 package at.qe.sepm.skeleton.services;
 
 import at.qe.sepm.skeleton.configs.WebSecurityConfig;
+import at.qe.sepm.skeleton.model.Department;
 import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.model.UserRole;
-import at.qe.sepm.skeleton.repositories.TeamRepository;
 import at.qe.sepm.skeleton.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -15,9 +15,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Service for accessing and manipulating user data.
@@ -165,9 +165,22 @@ public class UserService {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public void removeTeamFromLeader (Team team) {
-        User user = team.getLeader();
-        user.setLeaderOf(null);
-        team.setLeader(null);
+    public User getTeamLeader(Team team) { return userRepository.findTeamLeader(team); }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<User> getAllUsersWithoutTeam() {
+        return userRepository.findEmployeesWithoutTeam();
     }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<User> getUsersOfTeam(Team team) { return userRepository.findUsersOfTeam(team);  }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public User getDepartmentLeader (Department department) { return userRepository.findDepartmentLeader(department); }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<User> getTeamLeaderWithoutTeam() { return userRepository.findTeamLeadersWithoutTeam(); }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<User> getDepartmentLeaderWithoutDepartment() { return userRepository.findDepartmentLeadersWithoutDepartment(); }
 }

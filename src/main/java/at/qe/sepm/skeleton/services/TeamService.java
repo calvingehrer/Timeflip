@@ -1,7 +1,9 @@
 package at.qe.sepm.skeleton.services;
 
+import at.qe.sepm.skeleton.model.Department;
 import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
+import at.qe.sepm.skeleton.repositories.DepartmentRepository;
 import at.qe.sepm.skeleton.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -9,8 +11,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 
 @Component
@@ -20,8 +22,6 @@ public class TeamService {
     @Autowired
     private MailService mailService;
 
-    @Autowired
-    private DepartmentService departmentService;
 
     @Autowired
     private UserService userService;
@@ -46,16 +46,16 @@ public class TeamService {
     }
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DEPARTMENTLEADER')")
-    public void addNewTeam(Team team) {
-
+    public void addNewTeam(Set<User> employees, Team team) {
         Team newTeam = new Team();
-
         newTeam.setTeamName(team.getTeamName());
-        newTeam.setEmployees(team.getEmployees());
-        newTeam.setLeader(team.getLeader());
-
+        newTeam.setDepartment(team.getDepartment());
         saveTeam(newTeam);
-
+        for(User u: employees) {
+            u.setTeam(team);
+            u.setDepartment(team.getDepartment());
+            userService.saveUser(u);
+        }
     }
 
     @PreAuthorize("hasAuthority('ADMIN') or principal.username eq #username")
@@ -64,12 +64,8 @@ public class TeamService {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public void deleteTeam(Team team){
-        if (team.getDepartment() != null) { departmentService.removeTeamfromDepartment(team, team.getDepartment()); }
-        if (team.getLeader() != null) { userService.removeTeamFromLeader(team); }
+    public void deleteTeam(Team team) {
         teamRepository.delete(team);
-        teamRepository.delete(team);
-
     }
 
 
@@ -78,8 +74,18 @@ public class TeamService {
     public List<Team> getAllTeamsByTeamName (String teamName) { return this.teamRepository.getAllTeamsByTeamPrefix(teamName); }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public List<Team> getUsersNotInTeam (String teamname) { return this.teamRepository.getUsersNotInTeam(teamname); }
+    public List<Team> getTeamsWithoutDepartment() { return this.teamRepository.getTeamsWithoutDepartment();}
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public List<Team> getTeamsWithoutDepartment() { return this.teamRepository.getTeamsWithoutDepartment();}
+    public List<User> getAllUsersWithoutTeam() { return userService.getAllUsersWithoutTeam(); }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<User> getUsersOfTeam(Team team) { return userService.getUsersOfTeam(team); }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<Team> getTeamsOfDepartment(Department department) { return teamRepository.findByDepartment(department); }
+
+
+
+
 }

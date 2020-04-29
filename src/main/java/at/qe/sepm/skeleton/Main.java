@@ -1,11 +1,12 @@
 package at.qe.sepm.skeleton;
 
+import java.util.HashMap;
+import javax.faces.webapp.FacesServlet;
+
 import at.qe.sepm.skeleton.configs.CustomServletContextInitializer;
 import at.qe.sepm.skeleton.configs.MailConfig;
 import at.qe.sepm.skeleton.configs.WebSecurityConfig;
 import at.qe.sepm.skeleton.utils.ViewScope;
-import java.util.HashMap;
-import javax.faces.webapp.FacesServlet;
 import org.springframework.beans.factory.config.CustomScopeConfigurer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

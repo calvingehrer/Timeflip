@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
 @Component
 @Scope("view")
@@ -27,4 +27,11 @@ public class DepartmentListController implements Serializable {
         return departmentService.getAllDepartments();
     }
 
+    public List<Team> getTeamsOfDepartment (Department department) {
+        return departmentService.getTeamsOfDepartment(department);
+    }
+
+    public User getDepartmentLeader(Department department) {
+        return departmentService.getDepartmentLeader(department);
+    }
 }
