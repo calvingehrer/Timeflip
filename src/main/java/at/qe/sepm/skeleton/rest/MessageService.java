@@ -16,9 +16,6 @@ import org.springframework.util.StringUtils;
 @Service
 public class MessageService {
 
-    @Autowired
-    private UserService userService;
-
     private static final AtomicLong ID_COUNTER = new AtomicLong(1);
 
     private static final ConcurrentLinkedQueue<Message> MESSAGE_QUEUE = new ConcurrentLinkedQueue<>();
@@ -27,32 +24,12 @@ public class MessageService {
         return ID_COUNTER.getAndIncrement();
     }
 
-    public Message postMessage(String content) {
-        if (!StringUtils.hasText(content)) {
+    public Message postMessage(String macAddress, String historyReadTime, String history) {
+        if (!StringUtils.hasText(macAddress) || !StringUtils.hasText(historyReadTime) || !StringUtils.hasText(history)) {
             throw new IllegalArgumentException("content must not be null or empty");
         }
 
-        User user = userService.loadUser(getUserName());
-        String userName = String.format("%s %s", user.getFirstName(), user.getLastName());
-
-        Message newMessage = new Message(content, userName);
-        MESSAGE_QUEUE.add(newMessage);
-        return newMessage;
-    }
-
-    public Message appendMessage(String content, Long responseTo) {
-        if (!StringUtils.hasText(content)) {
-            throw new IllegalArgumentException("content must not be null or empty");
-        }
-
-        User user = userService.loadUser(getUserName());
-        String userName = String.format("%s %s", user.getFirstName(), user.getLastName());
-
-        Message respondMessage = findMessage(responseTo);
-        if (respondMessage == null) {
-            throw new IllegalArgumentException("message is not known");
-        }
-        Message newMessage = new Message(content, userName, respondMessage.getId());
+        Message newMessage = new Message(macAddress, historyReadTime, history);
         MESSAGE_QUEUE.add(newMessage);
         return newMessage;
     }
