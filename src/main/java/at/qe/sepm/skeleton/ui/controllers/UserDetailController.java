@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import java.io.Serializable;
 
 /**
@@ -69,6 +71,16 @@ public class UserDetailController implements Serializable {
     public void doDeleteUser() {
         this.userService.deleteUser(user);
         user = null;
+        successMessage("user deletion","successfully deleted");
+
+    }
+
+    public static void successMessage(String target, String message) {
+        addMessage(target, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success!", message));
+    }
+
+    private static void addMessage(String target, FacesMessage message) {
+        FacesContext.getCurrentInstance().addMessage(target, message);
     }
 
 }

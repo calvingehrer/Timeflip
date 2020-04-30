@@ -9,8 +9,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 @Component
 @Scope("view")
@@ -23,8 +21,6 @@ public class AddDepartmentController implements Serializable {
     private Team team;
 
     private User headOfDepartment;
-
-    //private Set<Team> teams = new HashSet<>();
 
 
     public DepartmentService getDepartmentService() {
@@ -50,8 +46,6 @@ public class AddDepartmentController implements Serializable {
     public void setTeam(Team team) {
         this.team = team;
         this.team.setDepartment(department);
-        //this.teams.add(this.getTeam());
-        this.department.setTeams(team);
     }
 
     public User getHeadOfDepartment() {
@@ -62,37 +56,14 @@ public class AddDepartmentController implements Serializable {
         this.headOfDepartment = headOfDepartment;
     }
 
-    /*public Set<Team> getTeams() {
-        return teams;
-    }
-
-    public void setTeams(Set<Team> teams) {
-        this.teams = teams;
-    }
-
-    public void setTeams(){
-        this.department.setTeams(this.teams);
-    }
-*/
     public void add(){
-
-
-        departmentService.addNewDepartment(department);
-
+        departmentService.addNewDepartment(headOfDepartment,department);
         resetDepartment();
     }
 
 
     public void resetDepartment(){
         this.department = new Department();
-        //this.teams = new HashSet<>();
-    }
-
-    public void addHeadOfDepartment(){
-        this.department.setHeadOfDepartment(headOfDepartment);
-    }
-
-    public void addTeam(){
     }
 
 

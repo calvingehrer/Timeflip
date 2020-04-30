@@ -1,9 +1,7 @@
 package at.qe.sepm.skeleton.model;
 
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
@@ -14,7 +12,6 @@ import java.util.Set;
 
 
 @Entity
-@Table(name = "team")
 public class Team implements Persistable<String>, Serializable {
 
     private static final long serialVersionTID = 1L;
@@ -24,67 +21,10 @@ public class Team implements Persistable<String>, Serializable {
     @Column(name="team_name",length = 100)
     private String teamName;
 
-
-    //@Cascade({CascadeType.SAVE_UPDATE})
-    //@JoinTable
-    @ManyToMany(fetch = FetchType.EAGER,
-            cascade =
-                    {
-                            CascadeType.DETACH,
-                            CascadeType.MERGE,
-                            CascadeType.REFRESH,
-                            CascadeType.PERSIST
-                    },
-            targetEntity = User.class)
-    @JoinTable(name = "team_user",
-            inverseJoinColumns = @JoinColumn(name = "username",
-                    nullable = false,
-                    updatable = false),
-            joinColumns = @JoinColumn(name = "team_name",
-                    nullable = false,
-                    updatable = false),
-            foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT),
-            inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT))
-    private Set<User> employees = new HashSet<>();
-
-    @OneToOne
-    @JoinColumn(name="leader_username")
-    private User leader;
-
-    @ManyToOne(fetch=FetchType.LAZY)
-    @Fetch(FetchMode.JOIN)
-    @JoinColumn(name="department_id")
+    @ManyToOne(optional = true, fetch = FetchType.EAGER, targetEntity = Department.class)
+    @JoinColumn(name = "department_id")
     private Department department;
 
-
-
-
-
-    public Set<User> getEmployees() {
-        return employees;
-    }
-
-    public void setEmployees(Set<User> employees) {
-        this.employees = employees;
-    }
-
-    public void setEmployees() {
-        this.employees = employees;
-    }
-
-    public void setEmployees(User employee){
-        this.employees.add(employee);
-    }
-
-
-
-    public User getLeader() {
-        return leader;
-    }
-
-    public void setLeader(User leader) {
-        this.leader = leader;
-    }
 
     public static long getSerialVersionTID() {
         return serialVersionTID;
@@ -127,13 +67,11 @@ public class Team implements Persistable<String>, Serializable {
         if (!(o instanceof Team)) return false;
         Team team = (Team) o;
         return getTeamName().equals(team.getTeamName()) &&
-                Objects.equals(getEmployees(), team.getEmployees()) &&
-                Objects.equals(getLeader(), team.getLeader()) &&
                 Objects.equals(getDepartment(), team.getDepartment());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getTeamName(), getEmployees(), getLeader(), getDepartment());
+        return Objects.hash(getTeamName(), getDepartment());
     }
 }

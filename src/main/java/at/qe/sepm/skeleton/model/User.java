@@ -1,5 +1,7 @@
 package at.qe.sepm.skeleton.model;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
@@ -23,14 +25,12 @@ import org.hibernate.annotations.GenericGenerator;
  * University of Innsbruck.
  */
 @Entity
-@Table(name="user")
 public class User implements Persistable<String>, Serializable {
 
     private static final long serialVersionUID = 1L;
 
 
-    @Id @GeneratedValue(generator="system-uuid")
-    @GenericGenerator(name="system-uuid", strategy = "uuid")
+    @Id
     @Column(length = 100)
     private String username;
 
@@ -64,31 +64,13 @@ public class User implements Persistable<String>, Serializable {
     @CollectionTable(name = "user_vacation")
     Set<Vacation> vacations = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER,
-            cascade =
-                    {
-                            CascadeType.DETACH,
-                            CascadeType.MERGE,
-                            CascadeType.REFRESH,
-                            CascadeType.PERSIST
-                    },
-            targetEntity = Team.class)
-    @JoinTable(name = "team_user",
-            inverseJoinColumns = @JoinColumn(name = "team_name",
-                    nullable = false,
-                    updatable = false),
-            joinColumns = @JoinColumn(name = "username",
-                    nullable = false,
-                    updatable = false),
-            foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT),
-            inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT))
-    private Set<Team> teams = new HashSet<>();
+    @ManyToOne(targetEntity = Team.class, fetch = FetchType.EAGER, optional = true)
+    @JoinColumn(name="team_id")
+    private Team team;
 
-    @OneToOne(mappedBy = "leader")
-    private Team leaderOf;
-
-    @OneToOne(mappedBy = "headOfDepartment")
-    private Department headOf;
+    @ManyToOne
+    @JoinColumn(name="department_id")
+    private Department department;
 
     public Set<Vacation> getVacations() {
         return vacations;
@@ -194,33 +176,24 @@ public class User implements Persistable<String>, Serializable {
         this.updateDate = updateDate;
     }
 
-
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
 
-    public Set<Team> getTeams() {
-        return teams;
+    public Team getTeam() {
+        return team;
     }
 
-    public void setTeams(Set<Team> teams) {
-        this.teams = teams;
+    public void setTeam(Team team) {
+        this.team = team;
     }
 
-    public Team getLeaderOf() {
-        return leaderOf;
+    public Department getDepartment() {
+        return department;
     }
 
-    public void setLeaderOf(Team leaderOf) {
-        this.leaderOf = leaderOf;
-    }
-
-    public Department getHeadOf() {
-        return headOf;
-    }
-
-    public void setHeadOf(Department headOf) {
-        this.headOf = headOf;
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 
     @Override
