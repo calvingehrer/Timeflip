@@ -1,0 +1,115 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Dashboard • Timeflippers</ui:define>
+    <ui:define name="breadcrumbs">
+        <li><p:link outcome="/secured/dashboard">Dashboard</p:link></li>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="layout-dashboard">
+            <div class="ui-g">
+                <div class="ui-g-12 ui-md-6 ui-lg-3">
+                    <div class="overview-box sales">
+                        <p:graphicImage name="images/icon-takeoff.png" library="ecuador-layout"
+                                        styleClass="image-icon"/>
+                        <div class="overview-numbers">
+                            <b><p:outputLabel value="#{dashboardController.totalDepartureCount}"/></b>
+                        </div>
+                        <div class="overview-title">TOTAL TAKEOFFS</div>
+                    </div>
+                </div>
+                <div class="ui-g-12 ui-md-6 ui-lg-3">
+                    <div class="overview-box views">
+                        <p:graphicImage name="images/icon-distance.png" library="ecuador-layout"
+                                        style="height:50px; width:auto"/>
+                        <div class="overview-numbers">
+                            <b><p:outputLabel value="#{dashboardController.totalMilesFlown}"/></b>
+                        </div>
+                        <div class="overview-title">TOTAL MILES FLOWN</div>
+                    </div>
+                </div>
+                <div class="ui-g-12 ui-md-6 ui-lg-3">
+                    <div class="overview-box users">
+                        <p:graphicImage name="images/icon-airplane.png" library="ecuador-layout"
+                                        style="height:50px; width:auto"/>
+                        <div class="overview-numbers">
+                            <b><p:outputLabel value="#{dashboardController.planeCount}"/></b>
+                        </div>
+                        <div class="overview-title">PLANES</div>
+                    </div>
+                </div>
+                <div class="ui-g-12 ui-md-6 ui-lg-3">
+                    <div class="overview-box checkins">
+                        <p:graphicImage name="images/icon-airport.png" library="ecuador-layout" styleClass="image-icon"
+                                        style="height:53px; width:auto"/>
+                        <div class="overview-numbers">
+                            <b><p:outputLabel value="#{dashboardController.airportCount}"/></b>
+                        </div>
+                        <div class="overview-title">AIRPORTS</div>
+                    </div>
+                </div>
+
+                <div class="ui-g-12 ui-xl-7">
+                    <div class="card">
+                        <p:growl>
+                            <p:autoUpdate/>
+                        </p:growl>
+
+                        <h1>Dashboard</h1>
+
+                        <h:form id="schedule">
+                            <p:outputPanel rendered="#{sessionInfoBean.hasPermissionOn('EMPLOYEE')}">
+
+                                <p:schedule id="calendar" value="#{dashboardController.lazyEventModel}"
+                                            widgetVar="calendar" timeZone="#{dashboardController.utcTimeZone()}">
+
+                                    <p:ajax event="eventSelect" listener="#{dashboardController.onFlightSelect}"
+                                            update="flightTable" oncomplete="PF('calendarDialog').show()"/>
+
+                                </p:schedule>
+
+
+                            </p:outputPanel>
+
+                            <p:dialog id="calendarDialog" widgetVar="calendarDialog" header="Flight Details"
+                                      showEffect="clip" hideEffect="clip">
+                                <p:panelGrid id="flightTable" columns="2">
+                                    <p:outputLabel value="Flight Number"/>
+                                    <h:outputText value="#{dashboardController.selectedFlight.flightNumber}"/>
+                                    <p:outputLabel value="Departure Time"/>
+                                    <h:outputText value="#{dashboardController.selectedFlight.departureTime}"/>
+                                    <p:outputLabel value="Departure Place"/>
+                                    <h:outputText value="#{dashboardController.selectedFlight.departurePlace}"/>
+                                    <h:outputLabel value="Arrival Time"/>
+                                    <h:outputText value="#{dashboardController.selectedFlight.arrivalTime}"/>
+                                    <p:outputLabel value="Arrival Place"/>
+                                    <h:outputText value="#{dashboardController.selectedFlight.arrivalPlace}"/>
+                                    <p:outputLabel value="Plane"/>
+                                    <h:outputText value="#{dashboardController.selectedFlight.plane}"/>
+                                    <p:outputLabel value="Pilots"/>
+                                    <p:repeat value="#{dashboardController.selectedFlight.pilots}" var="pilot">
+                                        <h:outputText value="#{pilot.firstName} #{pilot.lastName}"/><br/>
+                                    </p:repeat>
+                                    <p:outputLabel value="Cabin Crew"/>
+                                    <p:repeat value="#{dashboardController.selectedFlight.cabinCrewEmployees}"
+                                              var="cabinCrewEmployee">
+                                        <h:outputText
+                                                value="#{cabinCrewEmployee.firstName} #{cabinCrewEmployee.lastName}"/><br/>
+                                    </p:repeat>
+                                </p:panelGrid>
+
+
+                            </p:dialog>
+
+                        </h:form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>
