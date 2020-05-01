@@ -1,6 +1,6 @@
 package at.qe.sepm.skeleton.model;
 
-import javax.persistence.*;
+import javax.persistence.Embeddable;
 import java.time.Instant;
 import java.util.Objects;
 
