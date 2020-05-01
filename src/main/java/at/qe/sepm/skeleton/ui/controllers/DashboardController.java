@@ -7,10 +7,7 @@ import at.qe.sepm.skeleton.ui.beans.SessionInfoBean;
 import org.primefaces.event.ScheduleEntryMoveEvent;
 import org.primefaces.event.ScheduleEntryResizeEvent;
 import org.primefaces.event.SelectEvent;
-import org.primefaces.model.DefaultScheduleEvent;
-import org.primefaces.model.LazyScheduleModel;
-import org.primefaces.model.ScheduleEvent;
-import org.primefaces.model.ScheduleModel;
+import org.primefaces.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -21,7 +18,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.NamedEvent;
 import java.io.Serializable;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.Date;
@@ -47,6 +43,11 @@ public class DashboardController implements Serializable {
     private SessionInfoBean sessionInfoBean;
     private ScheduleModel model;
     private ScheduleModel lazyEventModel;
+
+
+    public void ScheduleBean() {
+        model = new DefaultScheduleModel();
+    }
 
     public ScheduleModel getLazyEventModel() {
         return lazyEventModel;
@@ -93,6 +94,7 @@ public class DashboardController implements Serializable {
 
                     addEvent(new DefaultScheduleEvent("Vacation", vacatoionStart, vacationEnd));
                 });
+
             }
         };
     }
@@ -107,28 +109,26 @@ public class DashboardController implements Serializable {
 
     public void onEventSelect(SelectEvent selectEvent) {
         event = (ScheduleEvent) selectEvent.getObject();
+
     }
 
     //public void onDateSelect(SelectEvent<LocalDateTime> selectEvent) {
     //  event = DefaultScheduleEvent.builder().startDate(selectEvent.getObject()).endDate(selectEvent.getObject().plusHours(1)).build();
     //}
 
-    public void onEventSelect(SelectEvent<ScheduleEvent> selectEvent) {
-        event = (ScheduleEvent) selectEvent.getObject();
-    }
 
-    public void onDateSelect(SelectEvent<LocalDateTime> selectEvent) {
-        event = DefaultScheduleEvent.builder().startDate(selectEvent.getObject()).endDate(selectEvent.getObject().plusHours(1)).build();
+    public void onDateSelect(SelectEvent selectEvent) {
+        //event = DefaultScheduleEvent.builder().startDate(selectEvent.getObject()).endDate(selectEvent.getObject().plusHours(1)).build();
     }
 
     public void onEventMove(ScheduleEntryMoveEvent event) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event moved", "Delta:" + event.getDeltaAsDuration());
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event moved", "Delta");
 
         addMessage(message);
     }
 
     public void onEventResize(ScheduleEntryResizeEvent event) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event resized", "Start-Delta:" + event.getDeltaStartAsDuration() + ", End-Delta: " + event.getDeltaEndAsDuration());
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event resized", "Start-Delta:, End-Delta: ");
 
         addMessage(message);
     }
