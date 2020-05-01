@@ -43,6 +43,10 @@ public class UserListController implements Serializable {
         return userService.getAllUsersByRole(userrole);
     }
 
+    public Collection<User> getTestUser() {
+        return userService.getTestUser();
+    }
+
     public Collection<User> getUsersNotInTeam() {
         return userService.getAllUsersWithoutTeam();
     }

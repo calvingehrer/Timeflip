@@ -23,6 +23,11 @@ public interface UserRepository extends AbstractRepository<User, String> {
 
     List<User> findByUsernameContaining(String username);
 
+
+    @Query("SELECT u FROM User u WHERE 'Admin' = u.firstName or 'Miranda' = u.firstName")
+    List<User> findTestUser();
+
+
     @Query("SELECT u FROM User u WHERE CONCAT(u.firstName, ' ', u.lastName) = :wholeName")
     List<User> findByWholeNameConcat(@Param("wholeName") String wholeName);
 
