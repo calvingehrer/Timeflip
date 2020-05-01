@@ -4,6 +4,8 @@ package at.qe.sepm.skeleton.ui.controllers;
 import at.qe.sepm.skeleton.model.Vacation;
 import at.qe.sepm.skeleton.services.*;
 import at.qe.sepm.skeleton.ui.beans.SessionInfoBean;
+import org.primefaces.event.ScheduleEntryMoveEvent;
+import org.primefaces.event.ScheduleEntryResizeEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.LazyScheduleModel;
@@ -14,9 +16,12 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.event.NamedEvent;
 import java.io.Serializable;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.Date;
@@ -40,7 +45,7 @@ public class DashboardController implements Serializable {
     private DepartmentService departmentService;
     @Autowired
     private SessionInfoBean sessionInfoBean;
-    private ScheduleModel eventModel;
+    private ScheduleModel model;
     private ScheduleModel lazyEventModel;
 
     public ScheduleModel getLazyEventModel() {
@@ -60,11 +65,11 @@ public class DashboardController implements Serializable {
     }
 
     public ScheduleModel getEventModel() {
-        return eventModel;
+        return model;
     }
 
     public void setEventModel(ScheduleModel eventModel) {
-        this.eventModel = eventModel;
+        this.model = eventModel;
     }
 
     @PostConstruct
@@ -93,24 +98,43 @@ public class DashboardController implements Serializable {
     }
 
     public void addEvent() {
-        if (event.isAllDay()) {
-            //see https://github.com/primefaces/primefaces/issues/1164
-            if (event.getStartDate().toInstant().equals(event.getEndDate().toInstant())) {
-                //event.setEndDate(event.getEndDate().plusDays(1));
-            }
-        }
-
-
         if (event.getId() == null)
-            eventModel.addEvent(event);
+            model.addEvent(event);
         else
-            eventModel.updateEvent(event);
-
-        event = new DefaultScheduleEvent();
+            model.updateEvent(event);
+        event = new DefaultScheduleEvent(); //reset dialog form
     }
 
     public void onEventSelect(SelectEvent selectEvent) {
         event = (ScheduleEvent) selectEvent.getObject();
+    }
+
+    //public void onDateSelect(SelectEvent<LocalDateTime> selectEvent) {
+    //  event = DefaultScheduleEvent.builder().startDate(selectEvent.getObject()).endDate(selectEvent.getObject().plusHours(1)).build();
+    //}
+
+    public void onEventSelect(SelectEvent<ScheduleEvent> selectEvent) {
+        event = (ScheduleEvent) selectEvent.getObject();
+    }
+
+    public void onDateSelect(SelectEvent<LocalDateTime> selectEvent) {
+        event = DefaultScheduleEvent.builder().startDate(selectEvent.getObject()).endDate(selectEvent.getObject().plusHours(1)).build();
+    }
+
+    public void onEventMove(ScheduleEntryMoveEvent event) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event moved", "Delta:" + event.getDeltaAsDuration());
+
+        addMessage(message);
+    }
+
+    public void onEventResize(ScheduleEntryResizeEvent event) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event resized", "Start-Delta:" + event.getDeltaStartAsDuration() + ", End-Delta: " + event.getDeltaEndAsDuration());
+
+        addMessage(message);
+    }
+
+    private void addMessage(FacesMessage message) {
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
 }

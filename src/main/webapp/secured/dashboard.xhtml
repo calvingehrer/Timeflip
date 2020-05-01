@@ -13,105 +13,65 @@
         <div class="layout-dashboard">
             <div class="ui-g">
                 <div class="ui-g-12">
-                    <p:graphicImage name="images/timeflip.jpg" library="ecuador-layout" style="height:50%"/>
+                    <p:graphicImage name="images/timeflip.jpg" library="ecuador-layout" style="width:100%"/>
+                </div>
+                <div class="card">
+                    <h1>Hello</h1>
+                    <p>Your in team: </p>
+                    <p>Department: </p>
+
                 </div>
 
-                <!--<div class="ui-g-12 ui-md-6 ui-lg-3">
-                    <div class="overview-box sales">
+            </div>
+            <div class="ui-g-12 ui-xl-7">
+                <div class="card">
+                    <p:growl>
+                        <p:autoUpdate/>
+                    </p:growl>
 
-                        <div class="overview-numbers">
-                            <b><p:outputLabel value="#{dashboardController.totalDepartureCount}"/></b>
-                        </div>
-                        <div class="overview-title">TOTAL TAKEOFFS</div>
-                    </div>
-                </div>
-                <div class="ui-g-12 ui-md-6 ui-lg-3">
-                    <div class="overview-box views">
-                        <p:graphicImage name="images/timeflip.png" library="ecuador-layout"
-                                        style="height:50px; width:auto"/>
-                        <div class="overview-numbers">
-                            <b><p:outputLabel value="#{dashboardController.totalMilesFlown}"/></b>
-                        </div>
-                        <div class="overview-title">TOTAL MILES FLOWN</div>
-                    </div>
-                </div>
-                <div class="ui-g-12 ui-md-6 ui-lg-3">
-                    <div class="overview-box users">
-                        <p:graphicImage name="images/icon-airplane.png" library="ecuador-layout"
-                                        style="height:50px; width:auto"/>
-                        <div class="overview-numbers">
-                            <b><p:outputLabel value="#{dashboardController.planeCount}"/></b>
-                        </div>
-                        <div class="overview-title">PLANES</div>
-                    </div>
-                </div>
-                <div class="ui-g-12 ui-md-6 ui-lg-3">
-                    <div class="overview-box checkins">
-                        <p:graphicImage name="images/timeflip.png" library="ecuador-layout" styleClass="image-icon"
-                                        style="height:53px; width:auto"/>
-                        <div class="overview-numbers">
-                            <b><p:outputLabel value="#{dashboardController.airportCount}"/></b>
-                        </div>
-                        <div class="overview-title">AIRPORTS</div>
-                    </div>
-                </div>-->
-
-                <div class="ui-g-12 ui-xl-7">
-                    <div class="card">
-                        <p:growl>
-                            <p:autoUpdate/>
-                        </p:growl>
-
-                        <h1>Dashboard</h1>
-
-                        <h:form id="schedule">
-                            <p:outputPanel rendered="#{sessionInfoBean.hasPermissionOn('EMPLOYEE')}">
-
-                                <p:schedule id="calendar" value="#{dashboardController.lazyEventModel}"
-                                            widgetVar="calendar" timeZone="#{dashboardController.utcTimeZone()}">
-
-                                    <p:ajax event="eventSelect" listener="#{dashboardController.onFlightSelect}"
-                                            update="flightTable" oncomplete="PF('calendarDialog').show()"/>
-
-                                </p:schedule>
+                    <h1>Calendar</h1>
 
 
-                            </p:outputPanel>
-<!--
-                            <p:dialog id="calendarDialog" widgetVar="calendarDialog" header="Flight Details"
-                                      showEffect="clip" hideEffect="clip">
-                                <p:panelGrid id="flightTable" columns="2">
-                                    <p:outputLabel value="Flight Number"/>
-                                    <h:outputText value="#{dashboardController.selectedFlight.flightNumber}"/>
-                                    <p:outputLabel value="Departure Time"/>
-                                    <h:outputText value="#{dashboardController.selectedFlight.departureTime}"/>
-                                    <p:outputLabel value="Departure Place"/>
-                                    <h:outputText value="#{dashboardController.selectedFlight.departurePlace}"/>
-                                    <h:outputLabel value="Arrival Time"/>
-                                    <h:outputText value="#{dashboardController.selectedFlight.arrivalTime}"/>
-                                    <p:outputLabel value="Arrival Place"/>
-                                    <h:outputText value="#{dashboardController.selectedFlight.arrivalPlace}"/>
-                                    <p:outputLabel value="Plane"/>
-                                    <h:outputText value="#{dashboardController.selectedFlight.plane}"/>
-                                    <p:outputLabel value="Pilots"/>
-                                    <p:repeat value="#{dashboardController.selectedFlight.pilots}" var="pilot">
-                                        <h:outputText value="#{pilot.firstName} #{pilot.lastName}"/><br/>
-                                    </p:repeat>
-                                    <p:outputLabel value="Cabin Crew"/>
-                                    <p:repeat value="#{dashboardController.selectedFlight.cabinCrewEmployees}"
-                                              var="cabinCrewEmployee">
-                                        <h:outputText
-                                                value="#{cabinCrewEmployee.firstName} #{cabinCrewEmployee.lastName}"/><br/>
-                                    </p:repeat>
-                                </p:panelGrid>
+                    <h:form id="schedule">
+                        <p:growl id="messages" showDetail="true"/>
 
+                        <h:panelGrid columnClasses="value">
+                            <p:schedule id="schedule" value="#{scheduleJava8View.eventModel}" widgetVar="myschedule">
 
-                            </p:dialog>
--->
-                        </h:form>
-                    </div>
+                                <!--<p:ajax event="dateSelect" listener="#{DashboardController.onDateSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
+                                <p:ajax event="eventSelect" listener="#{DashboardController.onEventSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
+                                <p:ajax event="eventMove" listener="#{DashboardController.onEventMove}" update="messages" />
+                                <p:ajax event="eventResize" listener="#{DashboardController.onEventResize}" update="messages" />-->
+
+                            </p:schedule>
+                        </h:panelGrid>
+
+                        <p:dialog widgetVar="eventDialog" header="Event Details" showEffect="clip" hideEffect="clip">
+                            <h:panelGrid id="eventDetails" columns="2">
+                                <p:outputLabel for="title" value="Titles:"/>
+                                <p:inputText id="title" value="#{scheduleJava8View.event.title}" required="true"/>
+
+                                <p:outputLabel for="from" value="From:"/>
+                                <p:datePicker id="from" value="#{scheduleJava8View.event.startDate}"
+                                              pattern="dd/MM/yyyy" showTime="true" appendTo="@(body)"/>
+
+                                <p:outputLabel for="to" value="To:"/>
+                                <p:datePicker id="to" value="#{scheduleJava8View.event.endDate}" pattern="dd/MM/yyyy"
+                                              showTime="true" appendTo="@(body)"/>
+
+                                <p:outputLabel for="allDay" value="All Day (see #1164):"/>
+                                <h:selectBooleanCheckbox id="allDay" value="#{scheduleJava8View.event.allDay}"/>
+
+                                <p:commandButton type="reset" value="Reset"/>
+                                <p:commandButton id="addButton" value="Save" action="#{scheduleJava8View.addEvent}"
+                                                 oncomplete="PF('myschedule').update();PF('eventDialog').hide();"/>
+                            </h:panelGrid>
+                        </p:dialog>
+                    </h:form>
+
                 </div>
             </div>
+
         </div>
     </ui:define>
 
