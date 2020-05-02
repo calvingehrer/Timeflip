@@ -1,30 +1,21 @@
 package at.qe.sepm.skeleton.model;
 
 import javax.persistence.*;
-import java.util.Set;
-import javax.persistence.Entity;
+
+/**
+ * Entity representing Badges.
+ *
+ */
 
 
-
-@Entity
+@Embeddable
 public class Badge {
 
-
-    @Id
     private String badgeId;
 
-    @ElementCollection(targetClass = BadgeEnum.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "Badge_BadgeType")
-    @Enumerated(EnumType.STRING)
-    private Set<BadgeEnum> badgeType;
+    private BadgeEnum badgeType;
 
-    public Set<BadgeEnum> getBadgeType() {
-        return badgeType;
-    }
-
-    public void setBadgeType(Set<BadgeEnum> badgeType) {
-        this.badgeType = badgeType;
-    }
+    private String badgeDescription;
 
     public String getBadgeId() {
         return badgeId;
@@ -33,6 +24,23 @@ public class Badge {
     public void setBadgeId(String badgeId) {
         this.badgeId = badgeId;
     }
+
+    public BadgeEnum getBadgeType() {
+        return badgeType;
+    }
+
+    public void setBadgeType(BadgeEnum badgeType) {
+        this.badgeType = badgeType;
+    }
+
+    public String getBadgeDescription() {
+        return badgeDescription;
+    }
+
+    public void setBadgeDescription(String badgeDescription) {
+        this.badgeDescription = badgeDescription;
+    }
+
 
     @Override
     public String toString() {
