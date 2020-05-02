@@ -2,6 +2,7 @@ package at.qe.sepm.skeleton.ui.controllers;
 
 import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
+import at.qe.sepm.skeleton.services.TimeflipService;
 import at.qe.sepm.skeleton.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -43,8 +44,9 @@ public class UserListController implements Serializable {
         return userService.getAllUsersByRole(userrole);
     }
 
-    public Collection<User> getTestUser() {
-        return userService.getTestUser();
+
+    public Collection<User> getUsersWithoutTimeflip() {
+        return userService.getUsersWithoutTimeflip();
     }
 
     public Collection<User> getUsersNotInTeam() {

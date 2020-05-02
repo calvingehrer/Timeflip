@@ -35,6 +35,7 @@ public class TimeflipService {
         return timeflipRepository.findAll();
     }
 
+
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<Timeflip> getAllTimeflipsByMacAddress(String macAddress){
         return timeflipRepository.findAllTimeflipsByMacAddress(macAddress);

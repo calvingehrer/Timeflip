@@ -63,19 +63,18 @@
 
         <p:dialog header="Select User" id="selectTimeflipUserDialog" widgetVar="selectTimeflipUserDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
             <h:form id="timeflipUserForm">
-                <p:dataTable styleClass="project-table" id="timeflipUserTable" var="user" value="#{userListController.getTestUser()}" scrollable="true" scrollHeight="100%">
+                <p:dataTable styleClass="project-table" id="timeflipUserTable" var="user" value="#{userListController.usersWithoutTimeflip}" scrollable="true" scrollHeight="100">
                     <p:column headerText="User ID">
                         <h:outputText value="#{user.username}"/>
                     </p:column>
 
                     <p:column style="width:100px;text-align: center">
-                        <p:commandButton icon="fa fa-plus" title="Select">
+                        <p:commandButton update="@form :timeflipForm:TimeflipTable" icon="fa fa-plus" title="Select" oncomplete="PF('selectTimeflipUserDialog').hide()">
                             <f:setPropertyActionListener value="#{user}" target="#{addTimeflipController.user}" />
                         </p:commandButton>
                     </p:column>
                 </p:dataTable>
                 <h:panelGrid columns="2">
-                    <p:commandButton update="@form :timeflipForm:TimeflipTable" value="Add" oncomplete="PF('selectTimeflipUserDialog').hide()" />
                     <p:commandButton value="Abort" type="submit" onclick="PF('selectEmployeesDialog').hide()"/>
                 </h:panelGrid>
 

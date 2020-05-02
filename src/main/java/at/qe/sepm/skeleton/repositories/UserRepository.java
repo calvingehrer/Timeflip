@@ -54,4 +54,7 @@ public interface UserRepository extends AbstractRepository<User, String> {
 
     @Query("SELECT u FROM User u WHERE u.department IS NULL AND 'DEPARTMENTLEADER' MEMBER  OF u.roles")
     List<User> findDepartmentLeadersWithoutDepartment();
+
+    @Query("SELECT u FROM User u")
+    List<User> getAllUsers();
 }
