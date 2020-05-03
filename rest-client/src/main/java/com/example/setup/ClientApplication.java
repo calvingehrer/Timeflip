@@ -2,6 +2,8 @@ package com.example.setup;
 
 import org.json.JSONArray;
 import tinyb.*;
+
+import java.sql.Timestamp;
 import java.util.*;
 import java.util.concurrent.locks.*;
 
@@ -106,6 +108,14 @@ public class ClientApplication {
     static int getTimeInSeconds(String binary){
         String timeBinary = binary.substring(6);
         return Integer.parseInt(timeBinary, 2);
+    }
+
+    static Timestamp getCurrentTimestamp(){
+        Date date = new Date();
+        long time = date.getTime();
+        Timestamp current = new Timestamp(time);
+
+        return current;
     }
 
 
@@ -231,8 +241,15 @@ public class ClientApplication {
             }
         }
 
-        sensor.disconnect();
+        Timestamp historyReadTime = getCurrentTimestamp();
 
+        // write command 0X02 to delete entire history
+        byte[] deleteHistory = {0x02};
+        command.writeValue(deleteHistory);
+
+        String macAddress = sensor.getAddress();
+
+        sensor.disconnect();
 
         /*
          * Connect to the given URI and send Data to the Server using the RestClient
@@ -250,7 +267,7 @@ public class ClientApplication {
             uri = args[2];
         }
 
-        Thread t = new Thread(new RestClient(username, psswd, historyList, uri));
+        Thread t = new Thread(new RestClient(username, psswd, macAddress, historyList, historyReadTime, uri));
         t.start();
 
 

@@ -1,16 +1,23 @@
 package at.qe.sepm.skeleton.model;
 
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+
+import javax.persistence.Embeddable;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import java.time.Instant;
 import java.util.Objects;
 
 /**
  * Entity representing Vacation.
- *
  */
 
 @Embeddable
-public class Vacation {
+public class Vacation implements Comparable<Vacation> {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     public final static long MAX_VACATION_DAYS_PER_YEAR = 25;
 

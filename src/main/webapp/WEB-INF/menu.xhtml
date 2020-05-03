@@ -38,7 +38,9 @@
                             <p:menuitem value="Department" url="/departmentleader/department-badges.xhtml"
                                         rendered="#{sessionInfoBean.hasRole('DEPARTMENTLEADER')}"/>
                             <p:menuitem value="Leaderboard" url="/employee/leaderboard.xhtml"/>
+                            <p:menuitem value="Possible Badges" url="/employee/possible-badges.xhtml"/>
                         </p:submenu>
+
                         <p:submenu label="User" rendered="#{sessionInfoBean.hasRole('ADMIN')}"
                             icon="fa fa-user">
                             <p:menuitem value="User" url="/admin/users.xhtml"/>
@@ -50,6 +52,9 @@
                             <p:menuitem value="TimeFlip" url="/admin/timeflip.xhtml"/>
                             <p:menuitem value="Raspberry Pi" url="/admin/raspberry-pi.xhtml"/>
                         </p:submenu>
+                        <p:menuitem value="Rooms" url="/admin/rooms.xhtml"
+                                    rendered="#{sessionInfoBean.hasRole('ADMIN')}"
+                                    icon="fa fa-list-alt"/>
 
 
                         <p:menuitem id="logout" value="Logout" rendered="#{sessionInfoBean.loggedIn}" outcome="/login" icon="fa fa-road"/>

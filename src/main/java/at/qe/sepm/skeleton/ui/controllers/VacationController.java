@@ -6,6 +6,7 @@ import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.model.Vacation;
 import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.services.VacationService;
+import at.qe.sepm.skeleton.ui.beans.SessionInfoBean;
 import at.qe.sepm.skeleton.utils.TimeConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -32,6 +33,8 @@ public class VacationController implements Serializable {
 
     @Autowired
     private UserService userUserService;
+    @Autowired
+    private SessionInfoBean sessionInfoBean;
 
     private User thisUser;
     private Date beginVacation;

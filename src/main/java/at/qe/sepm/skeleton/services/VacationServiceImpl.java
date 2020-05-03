@@ -59,7 +59,7 @@ public class VacationServiceImpl implements VacationService {
         managedUser.addVacation(vacation);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
     @Override
     @Transactional
     public Set<Vacation> getVacationFromUser(User user) {
@@ -70,4 +70,5 @@ public class VacationServiceImpl implements VacationService {
             return Collections.emptySet();
         }
     }
+
 }

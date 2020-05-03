@@ -1,0 +1,65 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Badges</ui:define>
+
+    <ui:define name="content">
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card">
+                    <h1>Possible Badges</h1>
+
+
+                    <p:panelGrid id="possibleBadgesGrid" columns="2" cellpadding="10" layout="grid"
+                                 columnClasses="ui-g-4 ui-md-4 ui-lg-4 ui-xl-2">
+
+                        <p:outputLabel value="Weekly Code Monkey:" style="vertical-align: middle"/>
+                        <p:outputLabel value="For working the most time on Implementation in a week"/>
+                        <h:graphicImage value="/resources/badges/weekly_code_monkey.png" width="200x" height="200px" />
+                        <p:outputLabel value=""/>
+
+                        <p:outputLabel value="Creative Mind:"/>
+                        <p:outputLabel value="For working the most time on Design in a week:"/>
+                        <h:graphicImage value="/resources/badges/creative_mind.png" width="200x" height="200px" />
+                        <p:outputLabel value=""/>
+
+                        <p:outputLabel value="Friend and Helper:"/>
+                        <p:outputLabel value="For spending the most time on Customer Service in a week"/>
+                        <h:graphicImage value="/resources/badges/friend_and_helper.png" width="200x" height="200px" />
+                        <p:outputLabel value=""/>
+
+                        <p:outputLabel value="All-Rounder:"/>
+                        <p:outputLabel value="For having the most variaty of tasks in a week"/>
+                        <h:graphicImage value="/resources/badges/all_rounder.png" width="200x" height="200px" />
+                        <p:outputLabel value=""/>
+
+                        <p:outputLabel value="Night Owl:"/>
+                        <p:outputLabel value="For working the most time between 8pm and 6am"/>
+                        <h:graphicImage value="/resources/badges/night_owl.png" width="200x" height="200px" />
+                        <p:outputLabel value=""/>
+
+                        <p:outputLabel value="Wisdom Seeker:"/>
+                        <p:outputLabel value="For spending the most time on further education in a week"/>
+                        <h:graphicImage value="/resources/badges/wisdom_seeker.png" width="200x" height="200px" />
+                        <p:outputLabel value=""/>
+
+
+
+
+                    </p:panelGrid>
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </ui:define>
+
+
+</ui:composition>
