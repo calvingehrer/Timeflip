@@ -39,6 +39,7 @@
                                         rendered="#{sessionInfoBean.hasRole('DEPARTMENTLEADER')}"/>
                             <p:menuitem value="Leaderboard" url="/employee/leaderboard.xhtml"/>
                         </p:submenu>
+
                         <p:submenu label="User" rendered="#{sessionInfoBean.hasRole('ADMIN')}"
                             icon="fa fa-user">
                             <p:menuitem value="User" url="/admin/users.xhtml"/>
