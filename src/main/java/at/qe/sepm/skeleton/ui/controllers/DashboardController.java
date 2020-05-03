@@ -137,4 +137,5 @@ public class DashboardController implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
+
 }
