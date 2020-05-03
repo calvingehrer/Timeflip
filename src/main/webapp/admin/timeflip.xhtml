@@ -6,4 +6,29 @@
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="title">Overview</ui:define>
+
+    <ui:define name="content">
+
+        <h:form id="userForm">
+            <p:messages id="messages" showDetail="true" closable="true">
+                <p:autoUpdate />
+            </p:messages>
+            <p:dataTable id="messageTable" var="message" value="#{messageController.messages}" scrollable="true">
+                <p:column headerText="ID">
+                    <h:outputText value="#{message.id}"/>
+                </p:column>
+                <p:column headerText="MAC-Address">
+                    <h:outputText value="#{message.macAddress}"/>
+                </p:column>
+                <p:column headerText="Read Time">
+                    <h:outputText value="#{message.historyReadTime}"/>
+                </p:column>
+                <p:column headerText="History">
+                    <h:outputText value="#{message.history}"/>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+
+    </ui:define>
+
 </ui:composition>
