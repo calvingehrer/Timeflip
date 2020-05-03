@@ -7,4 +7,35 @@
 
     <ui:define name="title">Badges</ui:define>
 
+    <ui:define name="content">
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card">
+                    <h1>My Badges</h1>
+
+                    <p:dataTable id="myBadges" var="badge" value="#{badgeController.allBadges}">
+                        <p:column headerText="Badge Type">
+                            <h:outputText value="#{badge.badgeType}"/>
+                        </p:column>
+                        <p:column headerText="Description">
+                            <h:outputText value="#{badge.badgeDescription}"/>
+                        </p:column>
+e
+                    </p:dataTable>
+                </div>
+            </div>
+        </div>
+
+        <h:form id="userForm">
+
+
+        </h:form>
+
+
+
+
+    </ui:define>
+
+
+
 </ui:composition>
