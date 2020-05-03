@@ -33,5 +33,10 @@ public class DashboardController implements Serializable {
     private SessionInfoBean sessionInfoBean;
 
 
+    public String getUsername() {
+        return sessionInfoBean.getCurrentUserName();
+    }
+    //public int getTeam(){return teamService.getUsersOfTeam(sessionInfoBean.)}
+
 
 }
