@@ -18,6 +18,21 @@
     </ui:define>
 
     <ui:define name="content">
+        <div class="ui-g">
+        <div class="ui-g-12">
+        <div class="card">
+                <h1>TimeFlip</h1>
+    <h:form id="timeflipForm">
+    <p:messages id="messages" showDetail="true" closable="true">
+        <p:autoUpdate />
+    </p:messages>
+    <p:dataTable id="TimeflipTable" var="timeflips" value="#{timeflipListController.timeflips}" scrollable="true">
+    <p:column headerText="MacAddress">
+        <h:outputText value="#{timeflips.macAddress}"/>
+    </p:column>
+    <p:column headerText="User">
+        <h:outputText value="#{timeflips.user.username}"/>
+    </p:column>
         <h:form id="timeflipForm">
             <p:messages id="messages" showDetail="true" closable="true">
                 <p:autoUpdate />
@@ -78,6 +93,11 @@
             </h:form>
 
         </p:dialog>
+
+
+        </div>
+        </div>
+        </div>
 
     </ui:define>
 
