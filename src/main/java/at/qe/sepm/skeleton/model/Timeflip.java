@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-public class Timeflip implements Persistable<String>, Serializable{
+public class Timeflip implements Persistable<String>, Serializable {
 
 
     private static final long serialVersionUID = 1L;
@@ -28,7 +28,8 @@ public class Timeflip implements Persistable<String>, Serializable{
     @OneToOne
     private User createdUser;
 
-    //private RaspberryPi raspberryPi;
+    @ManyToOne
+    private Raspberry raspberry;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date historyTime;
@@ -68,13 +69,13 @@ public class Timeflip implements Persistable<String>, Serializable{
         this.createdUser = createdUser;
     }
 
-/*public RaspberryPi getRaspberryPi() {
-    return raspberryPi;
-}
+    public Raspberry getRaspberry() {
+        return raspberry;
+    }
 
-public void setRaspberryPi(RaspberryPi raspberryPi) {
-    this.raspberryPi = raspberryPi;
-}*/
+    public void setRaspberry(Raspberry raspberry) {
+        this.raspberry = raspberry;
+    }
 
     public Date getHistoryTime() {
         return historyTime;
@@ -87,7 +88,7 @@ public void setRaspberryPi(RaspberryPi raspberryPi) {
 
     @Override
     public String getId() {
-        return null;
+        return getMacAddress();
     }
 
     @Override

@@ -22,17 +22,6 @@
         <div class="ui-g-12">
         <div class="card">
                 <h1>TimeFlip</h1>
-    <h:form id="timeflipForm">
-    <p:messages id="messages" showDetail="true" closable="true">
-        <p:autoUpdate />
-    </p:messages>
-    <p:dataTable id="TimeflipTable" var="timeflips" value="#{timeflipListController.timeflips}" scrollable="true">
-    <p:column headerText="MacAddress">
-        <h:outputText value="#{timeflips.macAddress}"/>
-    </p:column>
-    <p:column headerText="User">
-        <h:outputText value="#{timeflips.user.username}"/>
-    </p:column>
         <h:form id="timeflipForm">
             <p:messages id="messages" showDetail="true" closable="true">
                 <p:autoUpdate />
@@ -44,9 +33,8 @@
                 <p:column headerText="User">
                     <h:outputText value="#{timeflips.user.username}"/>
                 </p:column>
-
-
             </p:dataTable>
+
 
             <p:commandButton value="Add Timeflip" styleClass="addButton" oncomplete="PF('addTimeflipDialog').show()" />
 
@@ -59,7 +47,6 @@
                         <p:outputLabel value="MacAddress: " />
                         <p:inputText value="#{addTimeflipController.timeflip.macAddress}" />
                     </h:panelGrid>
-
                     <p:separator />
                     <h:panelGrid columns="2">
                         <p:outputLabel value="Select user: "/>

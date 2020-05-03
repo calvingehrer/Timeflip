@@ -50,6 +50,9 @@
                             <p:menuitem value="TimeFlip" url="/admin/timeflip.xhtml"/>
                             <p:menuitem value="Raspberry Pi" url="/admin/raspberry-pi.xhtml"/>
                         </p:submenu>
+                        <p:menuitem value="Rooms" url="/admin/rooms.xhtml"
+                                    rendered="#{sessionInfoBean.hasRole('ADMIN')}"
+                                    icon="fa fa-list-alt"/>
 
 
                         <p:menuitem id="logout" value="Logout" rendered="#{sessionInfoBean.loggedIn}" outcome="/login" icon="fa fa-road"/>
