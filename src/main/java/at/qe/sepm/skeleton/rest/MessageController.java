@@ -16,7 +16,7 @@ public class MessageController {
     private MessageService service;
 
     @GetMapping("/messages")
-    private List<Message> getMessages() {
+    public List<Message> getMessages() {
         return service.getMessages();
     }
 
