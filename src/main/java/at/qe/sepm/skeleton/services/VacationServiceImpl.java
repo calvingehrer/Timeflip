@@ -70,4 +70,5 @@ public class VacationServiceImpl implements VacationService {
             return Collections.emptySet();
         }
     }
+
 }
