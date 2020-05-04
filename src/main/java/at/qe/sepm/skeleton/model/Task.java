@@ -1,6 +1,7 @@
 package at.qe.sepm.skeleton.model;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.util.Set;
 
 /**
@@ -12,37 +13,58 @@ import java.util.Set;
 public class Task {
 
     @Id
-    private String taskID;
+    private Integer taskID;
 
-    private Integer duration;
+    private Instant startTime;
 
-    @ElementCollection(targetClass = TaskEnum.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "Task_TaskType")
+    private Instant endTime;
+
     @Enumerated(EnumType.STRING)
-    private Set<TaskEnum> tasks;
+    private TaskEnum task;
 
-    public String getTaskID() {
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER, optional = true)
+    @JoinColumn(name="user_id")
+    private User user;
+
+    public Integer getTaskID() {
         return taskID;
     }
 
-    public void setTaskID(String taskID) {
+    public void setTaskID(Integer taskID) {
         this.taskID = taskID;
     }
 
-    public Set<TaskEnum> getTasks() {
-        return tasks;
+    public TaskEnum getTask() {
+        return task;
     }
 
-    public void setTasks(Set<TaskEnum> tasks) {
-        this.tasks = tasks;
+    public void setTask(TaskEnum task) {
+        this.task = task;
     }
 
-    public Integer getDuration() {
-        return duration;
+
+    public User getUser() {
+        return user;
     }
 
-    public void setDuration(Integer duration) {
-        this.duration = duration;
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Instant getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Instant startTime) {
+        this.startTime = startTime;
+    }
+
+    public Instant getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Instant endTime) {
+        this.endTime = endTime;
     }
 
     @Override
