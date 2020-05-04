@@ -18,7 +18,7 @@
             <div class="ui-g-12">
                 <div class="card">
                     <h1>My Tasks</h1>
-                    <p:dataTable id="Tasks" var="task" value="#{taskController.task}" scrollable="true">
+                    <p:dataTable id="Tasks" var="task" value="#{taskController.getTasksFromUser()}" scrollable="true">
                         <p:column headerText="Task">
                             <h:outputText value="#{task.task}"/>
                         </p:column>
@@ -29,7 +29,7 @@
                             <h:outputText value="#{task.endTime}"/>
                         </p:column>
                         <p:column headerText="Duration">
-                            <h:outputText value="#{taskController.duration}"/>
+                            <h:outputText value="#{taskController.duration(task)}"/>
                         </p:column>
 
                     </p:dataTable>

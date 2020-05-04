@@ -15,7 +15,6 @@ import java.util.List;
 @Scope("application")
 public class TaskService {
 
-
     @Autowired
     private TaskRepository taskRepository;
 

@@ -2,15 +2,18 @@ package at.qe.sepm.skeleton.ui.controllers;
 
 import at.qe.sepm.skeleton.model.Task;
 import at.qe.sepm.skeleton.services.TaskService;
+import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.ui.beans.SessionInfoBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+
+@Component
+@Scope("view")
 public class TaskController {
-
-    private Task task;
-
 
     @Autowired
     private TaskService taskService;
@@ -18,20 +21,12 @@ public class TaskController {
     @Autowired
     private SessionInfoBean sessionInfoBean;
 
-    public long duration() {
-        return taskService.getDuration(this.task);
+    public long duration(Task task) {
+        return taskService.getDuration(task);
     }
 
     public List<Task> getTasksFromUser() {
         return taskService.getAllTasksFromUser(sessionInfoBean.getCurrentUser());
-    }
-
-    public Task getTask() {
-        return task;
-    }
-
-    public void setTask(Task task) {
-        this.task = task;
     }
 
 

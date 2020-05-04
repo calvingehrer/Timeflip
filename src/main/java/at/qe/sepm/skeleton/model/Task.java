@@ -2,6 +2,7 @@ package at.qe.sepm.skeleton.model;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -13,25 +14,30 @@ import java.util.Set;
 public class Task {
 
     @Id
-    private Integer taskID;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "task_id")
+    private Integer taskId;
 
+    @Column(name = "start_time")
     private Instant startTime;
 
+    @Column(name = "end_time")
     private Instant endTime;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "task")
     private TaskEnum task;
 
     @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER, optional = true)
     @JoinColumn(name="user_id")
     private User user;
 
-    public Integer getTaskID() {
-        return taskID;
+    public Integer getTaskId() {
+        return taskId;
     }
 
-    public void setTaskID(Integer taskID) {
-        this.taskID = taskID;
+    public void setTaskId(Integer taskId) {
+        this.taskId = taskId;
     }
 
     public TaskEnum getTask() {
@@ -69,6 +75,6 @@ public class Task {
 
     @Override
     public String toString() {
-        return "at.qe.sepm.skeleton.model.Task[ id=" + taskID + " ]";
+        return "at.qe.sepm.skeleton.model.Task[ id=" + taskId + " ]";
     }
 }
