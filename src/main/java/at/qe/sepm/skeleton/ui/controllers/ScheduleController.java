@@ -5,44 +5,77 @@ import at.qe.sepm.skeleton.services.VacationServiceImpl;
 import at.qe.sepm.skeleton.ui.beans.SessionInfoBean;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultScheduleEvent;
-import org.primefaces.model.DefaultScheduleModel;
+import org.primefaces.model.LazyScheduleModel;
 import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.Serializable;
-import java.sql.Date;
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.Collection;
+import java.util.Date;
 
 @Component
 @Scope("view")
 public class ScheduleController implements Serializable {
-    private final ScheduleModel eventModel;
+    private ScheduleModel eventModel;
     private ScheduleEvent event = new DefaultScheduleEvent();
     private String locale = "de";
     @Autowired
     private SessionInfoBean sessionInfoBean;
+    private LazyScheduleModel lazyEventModel;
+    @Autowired
+    private VacationServiceImpl vacationService;
 
-    public ScheduleController(VacationServiceImpl vacationService) {
+    /*public ScheduleController(VacationServiceImpl vacationService) {
 
         eventModel = new DefaultScheduleModel();
 
         Collection<Vacation> vacations = vacationService.getVacationFromUser(sessionInfoBean.getCurrentUser());
 
-        vacations.forEach(x ->
-        {
 
-            Instant endInstant = x.getEnd();
-            Date newEnd = (Date) Date.from(endInstant.plus(1, ChronoUnit.MINUTES));
+        if (!vacations.isEmpty()) {
 
-            DefaultScheduleEvent vacation = new DefaultScheduleEvent("Vacation", java.util.Date.from(x.getStart()), newEnd, true);
-            vacation.setData(x);
-            eventModel.addEvent(vacation);
-        });
+            vacations.forEach(x ->
+            {
+
+                Instant endInstant = x.getEnd();
+
+                Date newEnd = (Date) Date.from(endInstant.plus(1, ChronoUnit.MINUTES));
+
+                DefaultScheduleEvent vacation = new DefaultScheduleEvent("Vacation", java.util.Date.from(x.getStart()), newEnd, true);
+                vacation.setData(x);
+                eventModel.addEvent(vacation);
+            });
+        }
+    }*/
+
+    @PostConstruct
+    public void init() {
+        this.lazyEventModel = new LazyScheduleModel() {
+            private static final long serialVersionUID = 3580478297132439482L;
+
+            @Override
+            public void loadEvents(java.util.Date start, java.util.Date end) {
+
+                Instant startInstant = start.toInstant();
+                Instant endInstant = end.toInstant();
+
+
+                Collection<Vacation> vacations = vacationService.getVacationFromUser(sessionInfoBean.getCurrentUser());
+
+                vacations.forEach(f -> {
+
+                    java.util.Date startVacation = java.util.Date.from(f.getStart());
+                    java.util.Date endVacation = Date.from(f.getEnd());
+
+                    addEvent(new DefaultScheduleEvent("Vacation", startVacation, endVacation, f));
+                });
+            }
+        };
     }
 
     /**
