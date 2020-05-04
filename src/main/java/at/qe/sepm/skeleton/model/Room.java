@@ -1,11 +1,15 @@
 package at.qe.sepm.skeleton.model;
 
+import at.qe.sepm.skeleton.services.RaspberryService;
 import org.eclipse.jdt.internal.compiler.ast.NullLiteral;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -14,6 +18,7 @@ public class Room implements Persistable<String>, Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @Column(length = 100)
     private String roomNumber;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -22,8 +27,11 @@ public class Room implements Persistable<String>, Serializable {
     @ManyToOne(optional = true)
     private User createUser;
 
-    @OneToOne
-    private Raspberry raspberry;
+    //@OneToOne
+    //private Raspberry raspberry;
+
+    //@Autowired
+    //private RaspberryService raspberryService = new RaspberryService();
 
     private boolean equipped;
 
@@ -51,6 +59,7 @@ public class Room implements Persistable<String>, Serializable {
         this.createUser = createUser;
     }
 
+/*
     public Raspberry getRaspberry() {
         return raspberry;
     }
@@ -59,9 +68,19 @@ public class Room implements Persistable<String>, Serializable {
         this.raspberry = raspberry;
     }
 
-    public boolean isEquipped() {
-        return !(raspberry == null);
+
+*/
+    public boolean getEquipped() {
+       /* List<String> rooms = new ArrayList<>();
+        for(Raspberry raspberry : raspberryService.getAllRaspberries()){
+            if(!rooms.contains(raspberry.getRoom())){
+                rooms.add(raspberry.getRoom().getRoomNumber());
+            }
+        }
+        return rooms.contains(this.roomNumber);*/
+       return false;
     }
+
 
     public void setEquipped(boolean equipped) {
         this.equipped = equipped;

@@ -64,6 +64,7 @@ public class Raspberry implements Persistable<String>, Serializable {
         this.createUser = createUser;
     }
 
+
     public Room getRoom() {
         return room;
     }
@@ -71,6 +72,7 @@ public class Raspberry implements Persistable<String>, Serializable {
     public void setRoom(Room room) {
         this.room = room;
     }
+
 
     public Collection<Timeflip> getTimeflips() {
         return timeflips;

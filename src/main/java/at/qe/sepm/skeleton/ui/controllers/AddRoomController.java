@@ -26,6 +26,12 @@ public class AddRoomController {
 
     public void add(){
         roomService.addNewRoom(room);
+        resetRoom();
+    }
+
+
+    public void resetRoom(){
+        this.room = new Room();
     }
 
     public Room getRoom() {
