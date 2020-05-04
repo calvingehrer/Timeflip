@@ -24,9 +24,20 @@ public class ScheduleController implements Serializable {
     private ScheduleModel eventModel;
     private ScheduleEvent event = new DefaultScheduleEvent();
     private String locale = "de";
+    private LazyScheduleModel lazyEventModel;
+
+    public LazyScheduleModel getLazyEventModel() {
+        return lazyEventModel;
+    }
+
+    public void setLazyEventModel(LazyScheduleModel lazyEventModel) {
+        this.lazyEventModel = lazyEventModel;
+    }
+
     @Autowired
     private SessionInfoBean sessionInfoBean;
-    private LazyScheduleModel lazyEventModel;
+
+
     @Autowired
     private VacationServiceImpl vacationService;
 
