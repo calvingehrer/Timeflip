@@ -64,10 +64,6 @@ public class User implements Persistable<String>, Serializable {
     @CollectionTable(name = "user_vacation")
     Set<Vacation> vacations = new HashSet<>();
 
-    @ElementCollection
-    @CollectionTable(name = "user_badges")
-    private Set<Badge> badges = new HashSet<>();
-
     @ManyToOne(targetEntity = Team.class, fetch = FetchType.EAGER, optional = true)
     @JoinColumn(name="team_id")
     private Team team;
@@ -92,18 +88,6 @@ public class User implements Persistable<String>, Serializable {
 
     @Enumerated(EnumType.STRING)
     private Interval intervall;
-
-    public Set<Badge> getBadges() {
-        return badges;
-    }
-
-    public void setBadges(Set<Badge> badges) {
-        this.badges = badges;
-    }
-
-    public void addBade(Badge badge){
-        this.badges.add(badge);
-    }
 
     public String getUsername() {
         return username;
