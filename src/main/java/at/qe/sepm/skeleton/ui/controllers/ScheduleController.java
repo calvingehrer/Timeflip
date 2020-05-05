@@ -3,6 +3,9 @@ package at.qe.sepm.skeleton.ui.controllers;
 import at.qe.sepm.skeleton.model.Vacation;
 import at.qe.sepm.skeleton.services.VacationServiceImpl;
 import at.qe.sepm.skeleton.ui.beans.SessionInfoBean;
+import de.jollyday.Holiday;
+import de.jollyday.HolidayCalendar;
+import de.jollyday.HolidayManager;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.LazyScheduleModel;
@@ -15,8 +18,10 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Set;
 
 @Component
 @Scope("view")
@@ -77,6 +82,8 @@ public class ScheduleController implements Serializable {
 
 
                 Collection<Vacation> vacations = vacationService.getVacationFromUser(sessionInfoBean.getCurrentUser());
+                HolidayManager m = HolidayManager.getInstance(HolidayCalendar.AUSTRIA);
+                Collection<Holiday> holidays = m.getHolidays(Calendar.getInstance().get(Calendar.YEAR), "Austria");
 
                 vacations.forEach(f -> {
 
@@ -85,6 +92,12 @@ public class ScheduleController implements Serializable {
 
                     addEvent(new DefaultScheduleEvent("Vacation", startVacation, endVacation, f));
                 });
+
+                holidays.forEach(h ->{
+                    java.util.Date holiday  = h.getDate().toDate();
+                    addEvent(new DefaultScheduleEvent(h.getDescription(), holiday, holiday));
+                });
+
             }
         };
     }
