@@ -10,7 +10,7 @@ import javax.annotation.PostConstruct;
 
 @Component
 @Scope("view")
-public class StatisitcsController {
+public class StatisticsController {
 
     private PieChartModel pieModel1;
 
