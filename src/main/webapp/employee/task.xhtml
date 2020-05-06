@@ -34,6 +34,13 @@
 
                     </p:dataTable>
 
+                    <p:dataTable id="Tasks" var="task" value="#{taskController.findDateTasks()}" scrollable="true">
+                        <p:column headerText="Task">
+                            <h:outputText value="#{task.task}"/>
+                        </p:column>
+
+                    </p:dataTable>
+
                 </div>
             </div>
         </div>
