@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -31,8 +33,29 @@ public class TaskService {
         return duration;
     }
 
-    public Set<TaskEnum> findDateTasks(User user, Instant star_time, Instant end_time) {
-        return taskRepository.findDateTasks(user, star_time, end_time);
+    public HashMap<TaskEnum, Long> findTodayTasks(User user) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        Instant start = calendar.toInstant();
+        calendar.add(Calendar.DATE,1);
+        Instant end = calendar.toInstant();
+        HashMap<TaskEnum, Long> dailyTasks = new HashMap<>();
+        List<Task> tasks = taskRepository.findDailyTasks(user, start, end);
+        tasks.forEach(t -> {
+                    long d = getDuration(t);
+                    if (dailyTasks.containsKey(t.getTask())) {
+                        dailyTasks.put(t.getTask(), dailyTasks.get(t.getTask()) + d);
+                    } else {
+                        dailyTasks.put(t.getTask(), d);
+                    }
+                }
+        );
+
+        return dailyTasks;
     }
 
 

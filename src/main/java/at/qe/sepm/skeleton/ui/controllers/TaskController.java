@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.sql.Date;
 import java.time.Instant;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 
@@ -33,14 +34,6 @@ public class TaskController {
         return taskService.getAllTasksFromUser(sessionInfoBean.getCurrentUser());
     }
 
-    public Set<TaskEnum> findDateTasks() {
-
-        Instant start = new java.util.Date().toInstant();
-        Date end = (Date) new java.util.Date();
-        end = (Date) DateUtils.addDays(end, 1);
-
-        return taskService.findDateTasks(sessionInfoBean.getCurrentUser(), start, end.toInstant());
-    }
 
 
 }

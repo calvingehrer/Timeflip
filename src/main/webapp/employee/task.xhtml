@@ -28,15 +28,8 @@
                         <p:column headerText="End">
                             <h:outputText value="#{task.endTime}"/>
                         </p:column>
-                        <p:column headerText="Duration">
+                        <p:column headerText="Duration[min]">
                             <h:outputText value="#{taskController.duration(task)}"/>
-                        </p:column>
-
-                    </p:dataTable>
-
-                    <p:dataTable id="Tasks" var="task" value="#{taskController.findDateTasks()}" scrollable="true">
-                        <p:column headerText="Task">
-                            <h:outputText value="#{task.task}"/>
                         </p:column>
 
                     </p:dataTable>
