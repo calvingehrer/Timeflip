@@ -1,6 +1,8 @@
 package at.qe.sepm.skeleton.model;
 
 import javax.persistence.*;
+import java.time.Instant;
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -12,41 +14,75 @@ import java.util.Set;
 public class Task {
 
     @Id
-    private String taskID;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "task_id")
+    private Integer taskId;
 
-    private Integer duration;
+    @Column(name = "start_time")
+    private Instant startTime;
 
-    @ElementCollection(targetClass = TaskEnum.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "Task_TaskType")
+    @Column(name = "end_time")
+    private Instant endTime;
+
     @Enumerated(EnumType.STRING)
-    private Set<TaskEnum> tasks;
+    @Column(name = "task")
+    private TaskEnum task;
 
-    public String getTaskID() {
-        return taskID;
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER, optional = true)
+    @JoinColumn(name="user_id")
+    private User user;
+
+    @ManyToOne(targetEntity = Team.class, fetch = FetchType.EAGER, optional = true)
+    @JoinColumn(name="team_id")
+    private Team team;
+
+    @ManyToOne(targetEntity = Department.class, fetch = FetchType.EAGER, optional = true)
+    @JoinColumn(name="department_id")
+    private Department department;
+
+    public Integer getTaskId() {
+        return taskId;
     }
 
-    public void setTaskID(String taskID) {
-        this.taskID = taskID;
+    public void setTaskId(Integer taskId) {
+        this.taskId = taskId;
     }
 
-    public Set<TaskEnum> getTasks() {
-        return tasks;
+    public TaskEnum getTask() {
+        return task;
     }
 
-    public void setTasks(Set<TaskEnum> tasks) {
-        this.tasks = tasks;
+    public void setTask(TaskEnum task) {
+        this.task = task;
     }
 
-    public Integer getDuration() {
-        return duration;
+
+    public User getUser() {
+        return user;
     }
 
-    public void setDuration(Integer duration) {
-        this.duration = duration;
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Instant getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Instant startTime) {
+        this.startTime = startTime;
+    }
+
+    public Instant getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Instant endTime) {
+        this.endTime = endTime;
     }
 
     @Override
     public String toString() {
-        return "at.qe.sepm.skeleton.model.Task[ id=" + taskID + " ]";
+        return "at.qe.sepm.skeleton.model.Task[ id=" + taskId + " ]";
     }
 }

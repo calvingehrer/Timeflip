@@ -1,0 +1,43 @@
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Tasks</ui:define>
+    <ui:define name="viewname">
+        <li>Pages</li>
+        <li>/</li>
+        <li>
+            <p:link outcome="/employee/task.xhtml">Welcome</p:link>
+        </li>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card">
+                    <h1>My Tasks</h1>
+                    <p:dataTable id="Tasks" var="task" value="#{taskController.getTasksFromUser()}" scrollable="true">
+                        <p:column headerText="Task">
+                            <h:outputText value="#{task.task}"/>
+                        </p:column>
+                        <p:column headerText="Start">
+                            <h:outputText value="#{task.startTime}"/>
+                        </p:column>
+                        <p:column headerText="End">
+                            <h:outputText value="#{task.endTime}"/>
+                        </p:column>
+                        <p:column headerText="Duration[min]">
+                            <h:outputText value="#{taskController.duration(task)}"/>
+                        </p:column>
+
+                    </p:dataTable>
+
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

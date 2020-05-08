@@ -11,7 +11,7 @@
                     <div class="layout-menu-title">MAIN MENU</div>
                     <pe:menu widgetVar="me">
 
-                        <p:menuitem value="Overview" url="/employee/overview.xhtml"
+                        <p:menuitem value="Dashboard" url="/secured/dashboard.xhtml"
                                     rendered="#{sessionInfoBean.hasRole('EMPLOYEE')}"
                                     icon="fa fa-list-alt"/>
 
@@ -20,7 +20,7 @@
                             <p:menuitem value="My Statistics" url="/employee/personal-statistics.xhtml"/>
                             <p:menuitem value="Team Statistics" url="/teamleader/team-statistics.xhtml" rendered="#{sessionInfoBean.hasRole('TEAMLEADER') or sessionInfoBean.hasRole('DEPARTMENTLEADER')}"/>
                             <p:menuitem value="Department Statistics" url="/departmentleader/department-statistics.xhtml" rendered="#{sessionInfoBean.hasRole('DEPARTMENTLEADER')}"/>
-                            <p:menuitem value="Collected Timedata" url="/employee/timelist.xhtml"/>
+                            <p:menuitem value="Collected Timedata" url="/employee/task.xhtml"/>
                         </p:submenu>
                         <p:submenu label="Team" rendered="#{sessionInfoBean.hasRole('TEAMLEADER')}" icon="fa fa-users">
                             <p:menuitem value="My Team" url="/teamleader/team.xhtml"/>
