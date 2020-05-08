@@ -25,33 +25,15 @@ public class StatisticsController {
     @Autowired
     private SessionInfoBean sessionInfoBean;
 
-    private PieChartModel pieModel1;
     private PieChartModel todayModel;
+    private PieChartModel weekModel;
 
     @PostConstruct
     public void init() {
-        createPieModel1();
         tasksDaily();
+        tasksWeekly();
     }
 
-    private void createPieModels() {
-        createPieModel1();
-        //createPieModel2();
-        //createLivePieModel();
-    }
-
-    private void createPieModel1() {
-        pieModel1 = new PieChartModel();
-
-        pieModel1.set("Brand 1", 540);
-        pieModel1.set("Brand 2", 325);
-        pieModel1.set("Brand 3", 702);
-        pieModel1.set("Brand 4", 421);
-
-        pieModel1.setTitle("Simple Pie");
-        pieModel1.setLegendPosition("w");
-        pieModel1.setShadow(false);
-    }
 
     public PieChartModel getTodayModel() {
         return todayModel;
@@ -61,25 +43,64 @@ public class StatisticsController {
         this.todayModel = todayModel;
     }
 
+    public PieChartModel getWeekModel() {
+        return weekModel;
+    }
+
+    public void setWeekModel(PieChartModel weekModel) {
+        this.weekModel = weekModel;
+    }
+
     public void tasksDaily() {
         todayModel = new PieChartModel();
+        Calendar calendar = getToday();
 
-        HashMap<TaskEnum, Long> dailyTasks = taskService.findTodayTasks(sessionInfoBean.getCurrentUser());
-        for (Map.Entry<TaskEnum, Long> pair: dailyTasks.entrySet()) {
-            todayModel.set(pair.getKey().toString(), pair.getValue());
-        }
+        Instant start = calendar.toInstant();
+        calendar.add(Calendar.DATE,1);
+        Instant end = calendar.toInstant();
 
-        todayModel.setTitle("Simple Pie");
-        todayModel.setLegendPosition("w");
-        todayModel.setShadow(false);
+        todayModel = initModel(todayModel, "Daily Stats", start, end);
 
     }
 
     public void tasksWeekly() {
+        Calendar calendar = getToday();
+        Instant end = calendar.toInstant();
+        calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
+        Instant start = calendar.toInstant();
 
+        weekModel = initModel(weekModel, "Weekly Stats", start, end);
     }
+
 
     public void tasksMonthly() {
 
+    }
+
+    public Calendar getToday() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar;
+    }
+
+    public PieChartModel initModel(PieChartModel model, String title, Instant start, Instant end) {
+        model = new PieChartModel();
+        HashMap<TaskEnum, Long> tasks = taskService.getTasksBetweenDates(sessionInfoBean.getCurrentUser(), start, end);
+        if (tasks.isEmpty()) {
+            model.set("Keine Angaben", 100);
+        }
+        else {
+            for (Map.Entry<TaskEnum, Long> pair : tasks.entrySet()) {
+                model.set(pair.getKey().toString(), pair.getValue());
+            }
+        }
+
+        model.setTitle(title);
+        model.setLegendPosition("w");
+        model.setShadow(false);
+        return model;
     }
 }

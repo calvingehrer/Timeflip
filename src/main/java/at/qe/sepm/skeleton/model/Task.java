@@ -32,6 +32,14 @@ public class Task {
     @JoinColumn(name="user_id")
     private User user;
 
+    @ManyToOne(targetEntity = Team.class, fetch = FetchType.EAGER, optional = true)
+    @JoinColumn(name="team_id")
+    private Team team;
+
+    @ManyToOne(targetEntity = Department.class, fetch = FetchType.EAGER, optional = true)
+    @JoinColumn(name="department_id")
+    private Department department;
+
     public Integer getTaskId() {
         return taskId;
     }
