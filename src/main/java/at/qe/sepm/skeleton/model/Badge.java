@@ -13,12 +13,14 @@ import java.time.Instant;
 public class Badge {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "badge_id")
     private String badgeId;
 
+    @Column(name = "badge_type")
     private BadgeEnum badgeType;
 
-    private String badgeDescription;
-
+    @Column(name = "badge_date")
     private Instant dateOfBadge;
 
     @ManyToOne
@@ -39,14 +41,6 @@ public class Badge {
 
     public void setBadgeType(BadgeEnum badgeType) {
         this.badgeType = badgeType;
-    }
-
-    public String getBadgeDescription() {
-        return badgeDescription;
-    }
-
-    public void setBadgeDescription(String badgeDescription) {
-        this.badgeDescription = badgeDescription;
     }
 
     public Instant getDateOfBadge() {

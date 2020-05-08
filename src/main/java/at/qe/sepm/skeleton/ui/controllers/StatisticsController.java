@@ -65,7 +65,9 @@ public class StatisticsController {
 
     public void tasksWeekly() {
         Calendar calendar = getToday();
+        calendar.add(Calendar.DATE,1);
         Instant end = calendar.toInstant();
+
         calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
         Instant start = calendar.toInstant();
 
@@ -74,6 +76,7 @@ public class StatisticsController {
 
 
     public void tasksMonthly() {
+        Calendar calendar = getToday();
 
     }
 
