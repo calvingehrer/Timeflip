@@ -27,11 +27,13 @@ public class StatisticsController {
 
     private PieChartModel todayModel;
     private PieChartModel weekModel;
+    private PieChartModel monthModel;
 
     @PostConstruct
     public void init() {
         tasksDaily();
         tasksWeekly();
+        tasksMonthly();
     }
 
 
@@ -49,6 +51,14 @@ public class StatisticsController {
 
     public void setWeekModel(PieChartModel weekModel) {
         this.weekModel = weekModel;
+    }
+
+    public PieChartModel getMonthModel() {
+        return monthModel;
+    }
+
+    public void setMonthModel(PieChartModel monthModel) {
+        this.monthModel = monthModel;
     }
 
     public void tasksDaily() {
@@ -77,6 +87,14 @@ public class StatisticsController {
 
     public void tasksMonthly() {
         Calendar calendar = getToday();
+        calendar.add(Calendar.DATE,1);
+        Instant end = calendar.toInstant();
+
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        Instant start = calendar.toInstant();
+
+        monthModel = initModel(monthModel, "Monthly Stats", start, end);
+
 
     }
 
