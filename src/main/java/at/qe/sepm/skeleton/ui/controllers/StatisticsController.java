@@ -25,55 +25,77 @@ public class StatisticsController {
     @Autowired
     private SessionInfoBean sessionInfoBean;
 
-    private PieChartModel todayModel;
-    private PieChartModel weekModel;
-    private PieChartModel monthModel;
+    private PieChartModel todayUserModel;
+    private PieChartModel weekUserModel;
+    private PieChartModel monthUserModel;
+
+    private PieChartModel weekTeamModel;
+    private PieChartModel monthTeamModel;
 
     @PostConstruct
     public void init() {
-        tasksDaily();
-        tasksWeekly();
-        tasksMonthly();
+        userTasksDaily();
+        userTasksWeekly();
+        userTasksMonthly();
+
+        teamTasksLastWeek();
+        teamTasksLastMonth();
     }
 
 
-    public PieChartModel getTodayModel() {
-        return todayModel;
+    public PieChartModel getTodayUserModel() {
+        return todayUserModel;
     }
 
-    public void setTodayModel(PieChartModel todayModel) {
-        this.todayModel = todayModel;
+    public void setTodayUserModel(PieChartModel todayUserModel) {
+        this.todayUserModel = todayUserModel;
     }
 
-    public PieChartModel getWeekModel() {
-        return weekModel;
+    public PieChartModel getWeekUserModel() {
+        return weekUserModel;
     }
 
-    public void setWeekModel(PieChartModel weekModel) {
-        this.weekModel = weekModel;
+    public void setWeekUserModel(PieChartModel weekUserModel) {
+        this.weekUserModel = weekUserModel;
     }
 
-    public PieChartModel getMonthModel() {
-        return monthModel;
+    public PieChartModel getMonthUserModel() {
+        return monthUserModel;
     }
 
-    public void setMonthModel(PieChartModel monthModel) {
-        this.monthModel = monthModel;
+    public void setMonthUserModel(PieChartModel monthUserModel) {
+        this.monthUserModel = monthUserModel;
     }
 
-    public void tasksDaily() {
-        todayModel = new PieChartModel();
+    public PieChartModel getWeekTeamModel() {
+        return weekTeamModel;
+    }
+
+    public void setWeekTeamModel(PieChartModel weekTeamModel) {
+        this.weekTeamModel = weekTeamModel;
+    }
+
+    public PieChartModel getMonthTeamModel() {
+        return monthTeamModel;
+    }
+
+    public void setMonthTeamModel(PieChartModel monthTeamModel) {
+        this.monthTeamModel = monthTeamModel;
+    }
+
+    public void userTasksDaily() {
+        todayUserModel = new PieChartModel();
         Calendar calendar = getToday();
 
         Instant start = calendar.toInstant();
         calendar.add(Calendar.DATE,1);
         Instant end = calendar.toInstant();
 
-        todayModel = initModel(todayModel, "Daily Stats", start, end);
+        todayUserModel = initUserModel(todayUserModel, "Daily Stats", start, end);
 
     }
 
-    public void tasksWeekly() {
+    public void userTasksWeekly() {
         Calendar calendar = getToday();
         calendar.add(Calendar.DATE,1);
         Instant end = calendar.toInstant();
@@ -81,11 +103,11 @@ public class StatisticsController {
         calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
         Instant start = calendar.toInstant();
 
-        weekModel = initModel(weekModel, "Weekly Stats", start, end);
+        weekUserModel = initUserModel(weekUserModel, "Weekly Stats", start, end);
     }
 
 
-    public void tasksMonthly() {
+    public void userTasksMonthly() {
         Calendar calendar = getToday();
         calendar.add(Calendar.DATE,1);
         Instant end = calendar.toInstant();
@@ -93,9 +115,31 @@ public class StatisticsController {
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         Instant start = calendar.toInstant();
 
-        monthModel = initModel(monthModel, "Monthly Stats", start, end);
+        monthUserModel = initUserModel(monthUserModel, "Monthly Stats", start, end);
+    }
 
+    public void teamTasksLastWeek() {
+        Calendar calendar = getToday();
+        calendar.getFirstDayOfWeek();
+        calendar.before(calendar);
+        Instant end = calendar.toInstant();
 
+        calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
+        Instant start = calendar.toInstant();
+
+        weekTeamModel = initTeamModel(weekTeamModel, "Weekly Stats", start, end);
+    }
+
+    public void teamTasksLastMonth() {
+        Calendar calendar = getToday();
+        calendar.add(Calendar.DATE,1);
+        calendar.before(calendar);
+        Instant end = calendar.toInstant();
+
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        Instant start = calendar.toInstant();
+
+        monthTeamModel = initTeamModel(monthTeamModel, "Monthly Stats", start, end);
     }
 
     public Calendar getToday() {
@@ -107,9 +151,19 @@ public class StatisticsController {
         return calendar;
     }
 
-    public PieChartModel initModel(PieChartModel model, String title, Instant start, Instant end) {
+    public PieChartModel initUserModel(PieChartModel model, String title, Instant start, Instant end) {
         model = new PieChartModel();
-        HashMap<TaskEnum, Long> tasks = taskService.getTasksBetweenDates(sessionInfoBean.getCurrentUser(), start, end);
+        HashMap<TaskEnum, Long> tasks = taskService.getUserTasksBetweenDates(sessionInfoBean.getCurrentUser(), start, end);
+        return getPieChartModel(model, title, tasks);
+    }
+
+    public PieChartModel initTeamModel(PieChartModel model, String title, Instant start, Instant end) {
+        model = new PieChartModel();
+        HashMap<TaskEnum, Long> tasks = taskService.getTeamTasksBetweenDates(sessionInfoBean.getCurrentUser().getTeam(), start, end);
+        return getPieChartModel(model, title, tasks);
+    }
+
+    private PieChartModel getPieChartModel(PieChartModel model, String title, HashMap<TaskEnum, Long> tasks) {
         if (tasks.isEmpty()) {
             model.set("Keine Angaben", 100);
         }
@@ -124,4 +178,6 @@ public class StatisticsController {
         model.setShadow(false);
         return model;
     }
+
+
 }
