@@ -4,6 +4,7 @@ import at.qe.sepm.skeleton.model.Interval;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.ui.beans.SessionInfoBean;
+import at.qe.sepm.skeleton.utils.MessagesView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -110,7 +111,7 @@ public class ManageCurrentUserController implements Serializable {
     public void changePassword(){
         if(checkOldPassword()) {
             if (checkConfirmedPassword()){
-                    successMessage("passwordControl", "The new password will be saved");
+                    MessagesView.successMessage("passwordControl", "The new password will be saved");
                 try {
                     this.currentUser.setPassword(newPassword);
                     this.userService.updateUser(currentUser);
@@ -120,11 +121,11 @@ public class ManageCurrentUserController implements Serializable {
                 }
             }
             else{
-                warnMessage("passwordControl", "The new passwords don't match");
+                MessagesView.warnMessage("passwordControl", "The new passwords don't match");
             }
         }
         else{
-            warnMessage("passwordControl", "Old Password is incorrect");
+            MessagesView.warnMessage("passwordControl", "Old Password is incorrect");
         }
     }
 
@@ -139,19 +140,4 @@ public class ManageCurrentUserController implements Serializable {
         }
     }
 
-    public static void warnMessage(String target, String message) {
-        addMessage(target, new FacesMessage(FacesMessage.SEVERITY_WARN, "Warning!", message));
-    }
-
-    public static void successMessage(String target, String message) {
-        addMessage(target, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success!", message));
-    }
-
-    private static void addMessage(FacesMessage message) {
-        addMessage("template_growl", message);
-    }
-
-    private static void addMessage(String target, FacesMessage message) {
-        FacesContext.getCurrentInstance().addMessage(target, message);
-    }
 }
