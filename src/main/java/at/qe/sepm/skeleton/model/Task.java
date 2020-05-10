@@ -56,7 +56,6 @@ public class Task {
         this.task = task;
     }
 
-
     public User getUser() {
         return user;
     }
@@ -79,6 +78,22 @@ public class Task {
 
     public void setEndTime(Instant endTime) {
         this.endTime = endTime;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 
     @Override

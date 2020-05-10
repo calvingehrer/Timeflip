@@ -52,7 +52,6 @@ public class StatisticsController {
     }
 
     public void tasksDaily() {
-        todayModel = new PieChartModel();
         Calendar calendar = getToday();
 
         Instant start = calendar.toInstant();
