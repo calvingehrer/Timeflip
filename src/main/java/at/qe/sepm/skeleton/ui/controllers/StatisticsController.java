@@ -87,6 +87,14 @@ public class StatisticsController {
         this.monthTeamModel = monthTeamModel;
     }
 
+    public PieChartModel getMonthDepartmentModel() {
+        return monthDepartmentModel;
+    }
+
+    public void setMonthDepartmentModel(PieChartModel monthDepartmentModel) {
+        this.monthDepartmentModel = monthDepartmentModel;
+    }
+
     public void userTasksDaily() {
         todayUserModel = new PieChartModel();
         Calendar calendar = getToday();
