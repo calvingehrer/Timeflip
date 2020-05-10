@@ -32,6 +32,8 @@ public class StatisticsController {
     private PieChartModel weekTeamModel;
     private PieChartModel monthTeamModel;
 
+    private PieChartModel monthDepartmentModel;
+
     @PostConstruct
     public void init() {
         userTasksDaily();
@@ -40,6 +42,8 @@ public class StatisticsController {
 
         teamTasksLastWeek();
         teamTasksLastMonth();
+
+        departmentTasksLastMonth();
     }
 
 
@@ -96,6 +100,7 @@ public class StatisticsController {
     }
 
     public void userTasksWeekly() {
+        weekUserModel = new PieChartModel();
         Calendar calendar = getToday();
         calendar.add(Calendar.DATE,1);
         Instant end = calendar.toInstant();
@@ -108,6 +113,7 @@ public class StatisticsController {
 
 
     public void userTasksMonthly() {
+        monthUserModel = new PieChartModel();
         Calendar calendar = getToday();
         calendar.add(Calendar.DATE,1);
         Instant end = calendar.toInstant();
@@ -119,9 +125,10 @@ public class StatisticsController {
     }
 
     public void teamTasksLastWeek() {
+        weekTeamModel = new PieChartModel();
         Calendar calendar = getToday();
         calendar.getFirstDayOfWeek();
-        calendar.before(calendar);
+        calendar.add(Calendar.DATE,-1);
         Instant end = calendar.toInstant();
 
         calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
@@ -131,15 +138,31 @@ public class StatisticsController {
     }
 
     public void teamTasksLastMonth() {
+        monthTeamModel = new PieChartModel();
+
         Calendar calendar = getToday();
-        calendar.add(Calendar.DATE,1);
-        calendar.before(calendar);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.add(Calendar.DATE,-1);
         Instant end = calendar.toInstant();
 
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         Instant start = calendar.toInstant();
 
         monthTeamModel = initTeamModel(monthTeamModel, "Monthly Stats", start, end);
+    }
+
+    public void departmentTasksLastMonth() {
+        monthDepartmentModel = new PieChartModel();
+
+        Calendar calendar = getToday();
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.add(Calendar.DATE,-1);
+        Instant end = calendar.toInstant();
+
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        Instant start = calendar.toInstant();
+
+        monthDepartmentModel = initDepartmentModel(monthDepartmentModel, "Monthly Stats", start, end);
     }
 
     public Calendar getToday() {
@@ -162,6 +185,13 @@ public class StatisticsController {
         HashMap<TaskEnum, Long> tasks = taskService.getTeamTasksBetweenDates(sessionInfoBean.getCurrentUser().getTeam(), start, end);
         return getPieChartModel(model, title, tasks);
     }
+
+    public PieChartModel initDepartmentModel(PieChartModel model, String title, Instant start, Instant end) {
+        model = new PieChartModel();
+        HashMap<TaskEnum, Long> tasks = taskService.getDepartmentTasksBetweenDates(sessionInfoBean.getCurrentUser().getDepartment(), start, end);
+        return getPieChartModel(model, title, tasks);
+    }
+
 
     private PieChartModel getPieChartModel(PieChartModel model, String title, HashMap<TaskEnum, Long> tasks) {
         if (tasks.isEmpty()) {

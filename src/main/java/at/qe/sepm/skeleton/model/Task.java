@@ -81,6 +81,22 @@ public class Task {
         this.endTime = endTime;
     }
 
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+
     @Override
     public String toString() {
         return "at.qe.sepm.skeleton.model.Task[ id=" + taskId + " ]";
