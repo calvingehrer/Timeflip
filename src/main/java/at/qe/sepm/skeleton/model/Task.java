@@ -1,8 +1,13 @@
 package at.qe.sepm.skeleton.model;
 
+import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.domain.Persistable;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -11,12 +16,13 @@ import java.util.Set;
  */
 
 @Entity
-public class Task {
+public class Task implements Persistable<String>, Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
     @Column(name = "task_id")
-    private Integer taskId;
+    private String taskId;
 
     @Column(name = "start_time")
     private Instant startTime;
@@ -40,11 +46,14 @@ public class Task {
     @JoinColumn(name="department_id")
     private Department department;
 
-    public Integer getTaskId() {
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createDate;
+
+    public String getId() {
         return taskId;
     }
 
-    public void setTaskId(Integer taskId) {
+    public void setId(String taskId) {
         this.taskId = taskId;
     }
 
@@ -96,8 +105,39 @@ public class Task {
         this.department = department;
     }
 
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
     @Override
     public String toString() {
         return "at.qe.sepm.skeleton.model.Task[ id=" + taskId + " ]";
+    }
+
+    @Override
+    public boolean isNew() { return null == createDate; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Task)) return false;
+        Task task1 = (Task) o;
+        return taskId.equals(task1.taskId) &&
+                Objects.equals(getStartTime(), task1.getStartTime()) &&
+                Objects.equals(getEndTime(), task1.getEndTime()) &&
+                getTask() == task1.getTask() &&
+                Objects.equals(getUser(), task1.getUser()) &&
+                Objects.equals(getTeam(), task1.getTeam()) &&
+                Objects.equals(getDepartment(), task1.getDepartment()) &&
+                Objects.equals(getCreateDate(), task1.getCreateDate());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(taskId, getStartTime(), getEndTime(), getTask(), getUser(), getTeam(), getDepartment(), getCreateDate());
     }
 }

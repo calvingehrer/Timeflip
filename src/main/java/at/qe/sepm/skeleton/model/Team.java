@@ -10,6 +10,9 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * Entity representing a Team
+ */
 
 @Entity
 public class Team implements Persistable<String>, Serializable {

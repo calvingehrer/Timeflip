@@ -1,7 +1,7 @@
 <ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:h="http://java.sun.com/jsf/html"
-                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://xmlns.jcp.org/jsf/core"
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="title">Tasks</ui:define>
@@ -18,7 +18,7 @@
             <div class="ui-g-12">
                 <div class="card">
                     <h1>My Tasks</h1>
-                    <p:dataTable id="Tasks" var="task" value="#{taskController.getTasksFromUser()}" scrollable="true">
+                    <p:dataTable id="Tasks" var="task" value="#{taskController.tasksFromUser}" scrollable="true">
                         <p:column headerText="Task">
                             <h:outputText value="#{task.task}"/>
                         </p:column>
@@ -33,7 +33,27 @@
                         </p:column>
 
                     </p:dataTable>
+                    <p:commandButton  value="Edit Tasks" styleClass="addButton" oncomplete="PF('editTasksDialog').show()"/>
 
+                    <p:dialog header="Edit Tasks" id="editTasksDialog" widgetVar="editTasksDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                        <p:outputPanel>
+                            <h:form>
+                                <h:panelGrid columns="2">
+                                    <p:outputLabel value="Task Name: " />
+                                    <p:autoComplete id="interval" dropdown="true" value="#{taskController.task}" completeMethod="#{taskController.completeTask}" required="true"/>
+                                    <h:outputText value="Select the start of the task"/>
+                                    <h:outputText value="Select the end of the task"/>
+                                    <p:calendar id="start" mode="inline" value="#{taskController.startTime}" timeZone="#{taskController.utcTimeZone}" pattern="dd.MM.yyyy hh:mm"/>
+                                    <p:calendar id="end" mode="inline" value="#{taskController.endTime}" timeZone="#{taskController.utcTimeZone}" pattern="dd.MM.yyyy hh:mm"/>
+
+                                </h:panelGrid>
+                                <h:panelGrid columns="2">
+                                    <p:commandButton update="@form :Tasks" value="Add" action="#{taskController.editTasks()}" oncomplete="PF('editTasksDialog').hide()" />
+                                    <p:commandButton value="Abort" type="reset" onclick="PF('editTasksDialog').hide()"/>
+                                </h:panelGrid>
+                            </h:form>
+                        </p:outputPanel>
+                    </p:dialog>
                 </div>
             </div>
         </div>

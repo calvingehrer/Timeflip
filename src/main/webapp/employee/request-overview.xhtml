@@ -1,0 +1,57 @@
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Requests</ui:define>
+    <ui:define name="viewname">
+        <li>Pages</li>
+        <li>/</li>
+        <li>
+            <p:link outcome="/employee/request-overview.xhtml">Request</p:link>
+        </li>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card">
+                    <h1>My Requests</h1>
+                    <h2>Open Requests</h2>
+                    <p:dataTable id="OpenRequestsTable" var="openRequest" value="#{requestController.openRequestsEmployee}" scrollable="true">
+                        <p:column headerText="Description">
+                            <h:outputText value="#{openRequest.description}"/>
+                        </p:column>
+                        <p:column headerText="Status">
+                            <h:outputText value="#{openRequest.status}"/>
+                        </p:column>
+                    </p:dataTable>
+                    <h2>Accepted Requests</h2>
+                    <p:dataTable id="AcceptedRequestsTable" var="acceptedRequest" value="#{requestController.acceptedRequestsEmployee}" scrollable="true">
+                        <p:column headerText="Description">
+                            <h:outputText value="#{acceptedRequest.description}"/>
+                        </p:column>
+                        <p:column headerText="Status">
+                            <h:outputText value="#{acceptedRequest.status}"/>
+                        </p:column>
+                    </p:dataTable>
+                    <h2>Declined Requests</h2>
+                    <p:dataTable id="DeclinedRequestsTable" var="declinedRequest" value="#{requestController.declinedRequestsEmployee}" scrollable="true">
+                        <p:column headerText="Description">
+                            <h:outputText value="#{declinedRequest.description}"/>
+                        </p:column>
+                        <p:column headerText="Status">
+                            <h:outputText value="#{declinedRequest.status}"/>
+                        </p:column>
+                        <p:column>
+                            <p:commandButton update=":DeclinedRequestsTable" action="#{requestController.deleteRequest(declinedRequest)}" value="Delete" icon="fa fa-trash" title="Delete"/>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>
