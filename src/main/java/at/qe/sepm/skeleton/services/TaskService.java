@@ -1,10 +1,7 @@
 package at.qe.sepm.skeleton.services;
 
 
-import at.qe.sepm.skeleton.model.Task;
-import at.qe.sepm.skeleton.model.TaskEnum;
-import at.qe.sepm.skeleton.model.Team;
-import at.qe.sepm.skeleton.model.User;
+import at.qe.sepm.skeleton.model.*;
 import at.qe.sepm.skeleton.repositories.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -49,6 +46,12 @@ public class TaskService {
     public HashMap<TaskEnum, Long> getTeamTasksBetweenDates(Team team, Instant start, Instant end) {
         HashMap<TaskEnum, Long> dailyTasks = new HashMap<>();
         List<Task> tasks = taskRepository.findTeamTasksBetweenDates(team, start, end);
+        return fillTaskList(dailyTasks, tasks);
+    }
+
+    public HashMap<TaskEnum, Long> getDepartmentTasksBetweenDates(Department department, Instant start, Instant end) {
+        HashMap<TaskEnum, Long> dailyTasks = new HashMap<>();
+        List<Task> tasks = taskRepository.findDepartmentTasksBetweenDates(department, start, end);
         return fillTaskList(dailyTasks, tasks);
     }
 
