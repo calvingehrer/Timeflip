@@ -96,7 +96,7 @@ public class StatisticsController {
     }
 
     public void userTasksDaily() {
-        todayUserModel = new PieChartModel();
+
         Calendar calendar = getToday();
 
         Instant start = calendar.toInstant();
@@ -108,7 +108,7 @@ public class StatisticsController {
     }
 
     public void userTasksWeekly() {
-        weekUserModel = new PieChartModel();
+
         Calendar calendar = getToday();
         calendar.add(Calendar.DATE,1);
         Instant end = calendar.toInstant();
@@ -121,7 +121,7 @@ public class StatisticsController {
 
 
     public void userTasksMonthly() {
-        monthUserModel = new PieChartModel();
+
         Calendar calendar = getToday();
         calendar.add(Calendar.DATE,1);
         Instant end = calendar.toInstant();
@@ -133,7 +133,7 @@ public class StatisticsController {
     }
 
     public void teamTasksLastWeek() {
-        weekTeamModel = new PieChartModel();
+
         Calendar calendar = getToday();
         calendar.getFirstDayOfWeek();
         calendar.add(Calendar.DATE,-1);
@@ -146,11 +146,8 @@ public class StatisticsController {
     }
 
     public void teamTasksLastMonth() {
-        monthTeamModel = new PieChartModel();
 
-        Calendar calendar = getToday();
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-        calendar.add(Calendar.DATE,-1);
+        Calendar calendar = getLastMonthEnd();
         Instant end = calendar.toInstant();
 
         calendar.set(Calendar.DAY_OF_MONTH, 1);
@@ -160,17 +157,21 @@ public class StatisticsController {
     }
 
     public void departmentTasksLastMonth() {
-        monthDepartmentModel = new PieChartModel();
 
-        Calendar calendar = getToday();
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-        calendar.add(Calendar.DATE,-1);
+        Calendar calendar = getLastMonthEnd();
         Instant end = calendar.toInstant();
 
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         Instant start = calendar.toInstant();
 
         monthDepartmentModel = initDepartmentModel(monthDepartmentModel, "Monthly Stats", start, end);
+    }
+
+    public Calendar getLastMonthEnd(){
+        Calendar calendar = getToday();
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.add(Calendar.DATE,-1);
+        return calendar;
     }
 
     public Calendar getToday() {
