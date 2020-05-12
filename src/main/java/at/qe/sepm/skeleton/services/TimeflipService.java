@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -29,6 +30,10 @@ public class TimeflipService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Timeflip getTimeFlipByAddress(String macAddress){
+        return timeflipRepository.findByMacAddress(macAddress);
+    }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<Timeflip> getAllTimeflips(){
@@ -52,7 +57,11 @@ public class TimeflipService {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public Timeflip saveTimeflip(Timeflip timeflip) {
-
+        if (timeflip.isNew()) {
+            timeflip.setCreateDate(new Date());
+        } else {
+            timeflip.setHistoryTime(new Date());
+        }
         return timeflipRepository.save(timeflip);
 
 
