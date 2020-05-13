@@ -2,7 +2,9 @@ package at.qe.sepm.skeleton.ui.controllers;
 
 
 import at.qe.sepm.skeleton.model.TaskEnum;
+import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.TaskService;
+import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.ui.beans.SessionInfoBean;
 import org.primefaces.model.chart.PieChartModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,17 +24,27 @@ public class StatisticsController implements Serializable {
     private TaskService taskService;
 
     @Autowired
-    private SessionInfoBean sessionInfoBean;
+    private UserService userService;
 
     private PieChartModel todayModel;
     private PieChartModel weekModel;
 
+    private User currentUser;
+
     @PostConstruct
     public void init() {
+        this.setCurrentUser(userService.getAuthenticatedUser());
         tasksDaily();
         tasksWeekly();
     }
 
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
 
     public PieChartModel getTodayModel() {
         return todayModel;
@@ -86,7 +98,7 @@ public class StatisticsController implements Serializable {
 
     public PieChartModel initModel(PieChartModel model, String title, Instant start, Instant end) {
         model = new PieChartModel();
-        HashMap<TaskEnum, Long> tasks = taskService.getTasksBetweenDates(sessionInfoBean.getCurrentUser(), start, end);
+        HashMap<TaskEnum, Long> tasks = taskService.getTasksBetweenDates(getCurrentUser(), start, end);
         if (tasks.isEmpty()) {
             model.set("Keine Angaben", 100);
         }
