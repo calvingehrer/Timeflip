@@ -1,6 +1,7 @@
 package at.qe.sepm.skeleton.rest;
 
-import at.qe.sepm.skeleton.services.TimeflipService;
+import at.qe.sepm.skeleton.model.HistoryItem;
+import at.qe.sepm.skeleton.repositories.HistoryRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,35 +19,43 @@ import org.springframework.util.StringUtils;
 public class HistoryService {
 
     @Autowired
-    private TimeflipService timeflipService;
+    public HistoryRepository historyRepository;
 
     private static final AtomicLong ID_COUNTER = new AtomicLong(1);
 
-    private static final ConcurrentLinkedQueue<HistoryEntry> HISTORY_QUEUE = new ConcurrentLinkedQueue<>();
+    private static final ConcurrentLinkedQueue<HistoryItem> HISTORY_QUEUE = new ConcurrentLinkedQueue<>();
 
     static Long getNextId() {
         return ID_COUNTER.getAndIncrement();
     }
 
-    public HistoryEntry postHistoryObject(String macAddress, int facet, int seconds) {
+    public HistoryItem postHistoryObject(String macAddress, int facet, int seconds) {
         if (!StringUtils.hasText(macAddress)){
             throw new IllegalArgumentException("content must not be null or empty");
         }
 
-        HistoryEntry newHistoryEntry = new HistoryEntry();
-        newHistoryEntry.setMacAddress(macAddress);
-        newHistoryEntry.setFacet(facet);
-        newHistoryEntry.setSeconds(seconds);
-        HISTORY_QUEUE.add(newHistoryEntry);
-        return newHistoryEntry;
+        //HistoryEntry newHistoryEntry = new HistoryEntry();
+        //newHistoryEntry.setMacAddress(macAddress);
+        //newHistoryEntry.setFacet(facet);
+        //newHistoryEntry.setSeconds(seconds);
+
+        HistoryItem historyItem = new HistoryItem();
+        historyItem.setId(getNextId());
+        historyItem.setMacAddress(macAddress);
+        historyItem.setFacet(facet);
+        historyItem.setSeconds(seconds);
+        addHistoryItem(historyItem);
+        HISTORY_QUEUE.add(historyItem);
+
+        return historyItem;
     }
 
-    public List<HistoryEntry> getHistoryEntries() {
+    public List<HistoryItem> getHistoryItems() {
         return new ArrayList<>(HISTORY_QUEUE);
     }
 
-    public HistoryEntry findHistoryEntries(Long id) {
-        HistoryEntry retval = null;
+    public HistoryItem findHistoryItems(Long id) {
+        HistoryItem retval = null;
         try {
             retval = HISTORY_QUEUE.stream().filter(msg -> msg.getId().equals(id)).findFirst().get();
         } catch (NoSuchElementException nsee) {
@@ -55,9 +64,25 @@ public class HistoryService {
         return retval;
     }
 
+    public HistoryItem addHistoryItem(HistoryItem historyItem){
+        HistoryItem newHistoryItem = new HistoryItem();
+        newHistoryItem.setId(getNextId());
+        newHistoryItem.setMacAddress(historyItem.getMacAddress());
+        newHistoryItem.setFacet(historyItem.getFacet());
+        newHistoryItem.setSeconds(historyItem.getSeconds());
+
+        saveHistoryItem(newHistoryItem);
+
+        return newHistoryItem;
+    }
+
+    public HistoryItem saveHistoryItem(HistoryItem historyItem){
+        return historyRepository.save(historyItem);
+    }
+
     public void deleteHistory(Long id) {
-        HistoryEntry entry = findHistoryEntries(id);
-        if (entry != null) {
+        HistoryItem item = findHistoryItems(id);
+        if (item != null) {
             HISTORY_QUEUE.removeIf(msg -> msg.getId().equals(id));
         }
     }

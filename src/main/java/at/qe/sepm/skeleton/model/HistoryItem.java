@@ -1,14 +1,19 @@
-package at.qe.sepm.skeleton.rest;
+package at.qe.sepm.skeleton.model;
 
-public class HistoryEntry {
+import org.springframework.data.domain.Persistable;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import java.io.Serializable;
+
+@Entity
+public class HistoryItem implements Persistable<Long>, Serializable {
+
+    @Id
     private Long id;
     private String macAddress;
     private int facet;
     private int seconds;
-
-    public HistoryEntry(){
-        id = HistoryService.getNextId();
-    }
 
     public Long getId() {
         return id;
@@ -40,6 +45,11 @@ public class HistoryEntry {
 
     public void setSeconds(int seconds) {
         this.seconds = seconds;
+    }
+
+    @Override
+    public boolean isNew(){
+        return false;
     }
 
 }
