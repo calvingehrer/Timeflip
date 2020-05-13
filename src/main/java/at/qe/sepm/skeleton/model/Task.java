@@ -99,22 +99,6 @@ public class Task implements Persistable<Long>, Serializable {
         this.department = department;
     }
 
-    public Team getTeam() {
-        return team;
-    }
-
-    public void setTeam(Team team) {
-        this.team = team;
-    }
-
-    public Department getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(Department department) {
-        this.department = department;
-    }
-
     public Date getCreateDate() {
         return createDate;
     }
