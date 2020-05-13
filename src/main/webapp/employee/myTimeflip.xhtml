@@ -1,0 +1,41 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">MyTimeflip</ui:define>
+
+    <ui:define name="content">
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card">
+                    <h1>My Timeflip</h1>
+
+
+                    <p:dataTable id="TimeflipTable" var="timeflip" value="#{timeflipListController.timeflipOfUser}">
+                        <p:column headerText="TimeflipId">
+                            <h:outputText value="#{timeflip.macAddress}"/>
+                        </p:column>
+                        <p:column headerText="Raspberry">
+                            <h:outputText value="#{timeflip.raspberry.raspberryId}"/>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </div>
+        </div>
+
+        <h:form id="userForm">
+
+
+        </h:form>
+
+
+
+
+    </ui:define>
+
+
+
+</ui:composition>

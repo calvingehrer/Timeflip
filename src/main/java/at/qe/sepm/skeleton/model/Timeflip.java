@@ -34,6 +34,8 @@ public class Timeflip implements Persistable<String>, Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date historyTime;
 
+    private Task task;
+
 
 
 
@@ -85,6 +87,14 @@ public class Timeflip implements Persistable<String>, Serializable {
         this.historyTime = historyTime;
     }
 
+
+    public Task getTask() {
+        return task;
+    }
+
+    public void setTask(Task task) {
+        this.task = task;
+    }
 
     @Override
     public String getId() {

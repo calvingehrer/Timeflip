@@ -2,18 +2,21 @@ package at.qe.sepm.skeleton.ui.controllers;
 
 
 import at.qe.sepm.skeleton.model.Timeflip;
+import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.TimeflipService;
+import at.qe.sepm.skeleton.ui.beans.SessionInfoBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 
 
 @Component
 @Scope("view")
-public class TimeflipListController {
+public class TimeflipListController implements Serializable {
 
     private Timeflip timeflip;
 
@@ -21,6 +24,15 @@ public class TimeflipListController {
     private TimeflipService timeflipService;
 
     private String macAddress = "";
+
+    @Autowired
+    private SessionInfoBean sessionInfoBean;
+
+
+    public Collection<Timeflip> getTimeflipOfUser() {
+        User currentUser = sessionInfoBean.getCurrentUser();
+        return timeflipService.getTimeflipOfUser(currentUser);
+    }
 
 
 
