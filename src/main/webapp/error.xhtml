@@ -2,7 +2,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
 
     <h:head>
@@ -34,7 +33,8 @@
                 <span class="exception-panel-header">Error Occured</span>
                 <span class="exception-panel-subheader">Something went wrong.</span>
                 <h:form>
-                    <p:commandButton ajax="false" value="TURN TO HOME PAGE" styleClass="raised-btn" action="/empty.xhtml?faces-redirect=true"/>
+                    <p:commandButton ajax="false" value="TURN TO HOME PAGE" styleClass="raised-btn"
+                                     action="/secured/dashboard.xhtml?faces-redirect=true"/>
                 </h:form>
             </div>
         </div>

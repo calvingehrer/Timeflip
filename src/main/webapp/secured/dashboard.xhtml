@@ -1,0 +1,131 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Dashboard • Timeflippers</ui:define>
+    <ui:define name="breadcrumbs">
+        <li><p:link outcome="/secured/dashboard">Dashboard</p:link></li>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="layout-dashboard">
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <p:graphicImage name="images/timeflip.jpg" library="ecuador-layout" style="width:100%"/>
+                </div>
+                <div class="ui-g-12 ui-md-12 ui-lg-4">
+
+                    <h1>Hello</h1>
+
+                    <p>You're in team: </p>
+                    <p>Department: </p>
+
+                </div>
+                <div class="ui-g-12 ui-md-12 ui-lg-4">
+                    <p:panel header="Contacts" styleClass="contacts">
+                        <ul>
+                            <li>
+                                <div class="team-box">
+                                    <span class="team-member">Brooke Wright</span>
+                                    <div>
+                                        <i class="fa fa-envelope"></i>
+                                        <span class="team-member-mail">brooke@test.com</span>
+                                    </div>
+                                    <div>
+                                        <i class="fa fa-map-pin"></i>
+                                        <span class="team-member-address">153 Cold Valley Road</span>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="team-box">
+                                    <span class="team-member">Maggie Walker</span>
+                                    <div>
+                                        <i class="fa fa-envelope"></i>
+                                        <span class="team-member-mail">maggie@test.com</span>
+                                    </div>
+                                    <div>
+                                        <i class="fa fa-map-pin"></i>
+                                        <span class="team-member-address">5698 Anderson Street</span>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+
+                                <div class="team-box">
+                                    <span class="team-member">Tom Baker</span>
+                                    <div>
+                                        <i class="fa fa-envelope"></i>
+                                        <span class="team-member-mail">tom@example.com</span>
+                                    </div>
+                                    <div>
+                                        <i class="fa fa-map-pin"></i>
+                                        <span class="team-member-address">2304 Billy Bill Lane</span>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </p:panel>
+                </div>
+                <div class="ui-g-12 ui-md-12 ui-lg-4">
+                    <p:panel header="Tasks" styleClass="tasks">
+                        <ul>
+                            <li>
+                                <p:selectBooleanCheckbox/>
+                                <span>Sales Reports</span>
+                                <div class="time-badge">
+                                    <span>TODAY</span>
+                                </div>
+                            </li>
+                            <li>
+                                <p:selectBooleanCheckbox/>
+                                <span>Pay Invoices</span>
+                                <div class="time-badge">
+                                    <span>1 D</span>
+                                </div>
+                            </li>
+                            <li>
+                                <p:selectBooleanCheckbox/>
+                                <span>Jenny's Birthday</span>
+                                <div class="time-badge">
+                                    <span>1 D</span>
+                                </div>
+                            </li>
+                            <li>
+                                <p:selectBooleanCheckbox/>
+                                <span>Client Meeting</span>
+                                <div class="time-badge">
+                                    <span>2 D</span>
+                                </div>
+                            </li>
+                            <li>
+                                <p:selectBooleanCheckbox/>
+                                <span>Flight Ticket</span>
+                                <div class="time-badge">
+                                    <span>5 D</span>
+                                </div>
+                            </li>
+                            <li>
+                                <p:selectBooleanCheckbox/>
+                                <span>New Themes</span>
+                                <div class="time-badge">
+                                    <span>LATER</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </p:panel>
+                </div>
+
+
+                <div class="ui-g-12 ui-md-12 ui-lg-12">
+                    <p:panel header="Upcoming Events" style="height:100%">
+                        <p:schedule id="calendar" value="#{scheduleController.lazyEventModel}" widgetVar="calendar"/>
+                    </p:panel>
+                </div>
+            </div>
+
+        </div>
+    </ui:define>
+
+</ui:composition>

@@ -3,7 +3,6 @@ package at.qe.sepm.skeleton.services;
 import at.qe.sepm.skeleton.model.Department;
 import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
-import at.qe.sepm.skeleton.repositories.DepartmentRepository;
 import at.qe.sepm.skeleton.repositories.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;

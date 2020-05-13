@@ -1,15 +1,10 @@
 package at.qe.sepm.skeleton.model;
 
-import at.qe.sepm.skeleton.rest.HistoryEntry;
 import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 public class Timeflip implements Persistable<String>, Serializable {
@@ -25,18 +20,16 @@ public class Timeflip implements Persistable<String>, Serializable {
     @OneToOne
     private User user;
 
-    @OneToOne
-    private User createUser;
+    //List<int[]> history = new ArrayList<int[]>();
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createDate;
+    @OneToOne
+    private User createdUser;
 
     @ManyToOne
     private Raspberry raspberry;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date historyTime;
-
 
     public String getMacAddress() {
         return macAddress;
@@ -54,20 +47,20 @@ public class Timeflip implements Persistable<String>, Serializable {
         this.user = user;
     }
 
-    public User getCreateUser() {
-        return createUser;
+    /*public List<int[]> getHistory() {
+        return history;
     }
 
-    public void setCreateUser(User createdUser) {
-        this.createUser = createdUser;
+    public void setHistory(List<int[]> history) {
+        this.history = history;
+    }*/
+
+    public User getCreatedUser() {
+        return createdUser;
     }
 
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setCreatedUser(User createdUser) {
+        this.createdUser = createdUser;
     }
 
     public Raspberry getRaspberry() {

@@ -6,7 +6,6 @@ import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.model.UserRole;
 import java.util.List;
 
-import at.qe.sepm.skeleton.repositories.AbstractRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 

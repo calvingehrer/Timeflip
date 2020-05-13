@@ -1,7 +1,11 @@
 package at.qe.sepm.skeleton.services;
 
+import at.qe.sepm.skeleton.model.Department;
+import at.qe.sepm.skeleton.model.Team;
+import at.qe.sepm.skeleton.model.Timeflip;
+import at.qe.sepm.skeleton.model.User;
+import at.qe.sepm.skeleton.model.UserRole;
 import at.qe.sepm.skeleton.configs.WebSecurityConfig;
-import at.qe.sepm.skeleton.model.*;
 import at.qe.sepm.skeleton.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -12,9 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
-import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -171,7 +173,7 @@ public class UserService {
         return userRepository.save(setUpdatingFieldsBeforePersist(toSave));
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+
     public User getTeamLeader(Team team) {
         return userRepository.findTeamLeader(team);
     }
@@ -181,12 +183,12 @@ public class UserService {
         return userRepository.findEmployeesWithoutTeam();
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+
     public List<User> getUsersOfTeam(Team team) {
         return userRepository.findUsersOfTeam(team);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+
     public User getDepartmentLeader(Department department) {
         return userRepository.findDepartmentLeader(department);
     }

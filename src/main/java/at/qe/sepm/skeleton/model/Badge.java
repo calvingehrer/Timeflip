@@ -1,30 +1,31 @@
 package at.qe.sepm.skeleton.model;
 
 import javax.persistence.*;
-import java.util.Set;
-import javax.persistence.Entity;
+import java.time.Instant;
 
+/**
+ * Entity representing Badges.
+ *
+ */
 
 
 @Entity
 public class Badge {
 
-
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "badge_id")
     private String badgeId;
 
-    @ElementCollection(targetClass = BadgeEnum.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "Badge_BadgeType")
-    @Enumerated(EnumType.STRING)
-    private Set<BadgeEnum> badgeType;
+    @Column(name = "badge_type")
+    private BadgeEnum badgeType;
 
-    public Set<BadgeEnum> getBadgeType() {
-        return badgeType;
-    }
+    @Column(name = "badge_date")
+    private Instant dateOfBadge;
 
-    public void setBadgeType(Set<BadgeEnum> badgeType) {
-        this.badgeType = badgeType;
-    }
+    @ManyToOne
+    @JoinColumn(name="user_username")
+    private User user;
 
     public String getBadgeId() {
         return badgeId;
@@ -32,6 +33,30 @@ public class Badge {
 
     public void setBadgeId(String badgeId) {
         this.badgeId = badgeId;
+    }
+
+    public BadgeEnum getBadgeType() {
+        return badgeType;
+    }
+
+    public void setBadgeType(BadgeEnum badgeType) {
+        this.badgeType = badgeType;
+    }
+
+    public Instant getDateOfBadge() {
+        return dateOfBadge;
+    }
+
+    public void setDateOfBadge(Instant dateOfBadge) {
+        this.dateOfBadge = dateOfBadge;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override

@@ -1,7 +1,5 @@
 package at.qe.sepm.skeleton.model;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
@@ -13,9 +11,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import javax.persistence.*;
-
-import org.hibernate.annotations.GenericGenerator;
 
 /**
  * Entity representing users.
@@ -72,6 +67,8 @@ public class User implements Persistable<String>, Serializable {
     @JoinColumn(name="department_id")
     private Department department;
 
+
+
     public Set<Vacation> getVacations() {
         return vacations;
     }
@@ -86,7 +83,6 @@ public class User implements Persistable<String>, Serializable {
 
     @Enumerated(EnumType.STRING)
     private Interval intervall;
-
 
     public String getUsername() {
         return username;

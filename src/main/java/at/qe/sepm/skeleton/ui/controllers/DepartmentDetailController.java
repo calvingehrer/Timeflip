@@ -6,12 +6,11 @@ import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.DepartmentService;
 import at.qe.sepm.skeleton.services.TeamService;
 import at.qe.sepm.skeleton.services.UserService;
+import at.qe.sepm.skeleton.utils.MessagesView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import java.io.Serializable;
 
 @Component
@@ -72,24 +71,11 @@ public class DepartmentDetailController implements Serializable {
         }
         else {
             System.out.println("hello");
-            warnMessage("department deletion", "You can't delete this department");
+            MessagesView.warnMessage("department deletion", "You can't delete this department");
             return;
         }
 
-        successMessage("department deletion", "Department deleted");
-    }
-
-
-    public static void warnMessage(String target, String message) {
-        addMessage(target, new FacesMessage(FacesMessage.SEVERITY_WARN, "Warning!", message));
-    }
-
-    public static void successMessage(String target, String message) {
-        addMessage(target, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success!", message));
-    }
-
-    private static void addMessage(String target, FacesMessage message) {
-        FacesContext.getCurrentInstance().addMessage(target, message);
+        MessagesView.successMessage("department deletion", "Department deleted");
     }
 
     public boolean checkIfDeletionIsAllowed (Department department){
