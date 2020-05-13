@@ -32,7 +32,7 @@ public class StatisticsController {
     private PieChartModel weekTeamModel;
     private PieChartModel monthTeamModel;
 
-    private PieChartModel monthDepartmentModel;
+    //private PieChartModel monthDepartmentModel;
 
     @PostConstruct
     public void init() {
@@ -43,7 +43,7 @@ public class StatisticsController {
         teamTasksLastWeek();
         teamTasksLastMonth();
 
-        departmentTasksLastMonth();
+        //departmentTasksLastMonth();
     }
 
 
@@ -87,13 +87,13 @@ public class StatisticsController {
         this.monthTeamModel = monthTeamModel;
     }
 
-    public PieChartModel getMonthDepartmentModel() {
-        return monthDepartmentModel;
-    }
+    //public PieChartModel getMonthDepartmentModel() {
+    //    return monthDepartmentModel;
+    //}
 
-    public void setMonthDepartmentModel(PieChartModel monthDepartmentModel) {
-        this.monthDepartmentModel = monthDepartmentModel;
-    }
+    //public void setMonthDepartmentModel(PieChartModel monthDepartmentModel) {
+    //    this.monthDepartmentModel = monthDepartmentModel;
+    //}
 
     public void userTasksDaily() {
 
@@ -156,7 +156,7 @@ public class StatisticsController {
         monthTeamModel = initTeamModel(monthTeamModel, "Monthly Stats", start, end);
     }
 
-    public void departmentTasksLastMonth() {
+    /*public void departmentTasksLastMonth() {
 
         Calendar calendar = getLastMonthEnd();
         Instant end = calendar.toInstant();
@@ -165,7 +165,7 @@ public class StatisticsController {
         Instant start = calendar.toInstant();
 
         monthDepartmentModel = initDepartmentModel(monthDepartmentModel, "Monthly Stats", start, end);
-    }
+    }*/
 
     public Calendar getLastMonthEnd(){
         Calendar calendar = getToday();
@@ -195,11 +195,6 @@ public class StatisticsController {
         return getPieChartModel(model, title, tasks);
     }
 
-    public PieChartModel initDepartmentModel(PieChartModel model, String title, Instant start, Instant end) {
-        model = new PieChartModel();
-        HashMap<TaskEnum, Long> tasks = taskService.getDepartmentTasksBetweenDates(sessionInfoBean.getCurrentUser().getDepartment(), start, end);
-        return getPieChartModel(model, title, tasks);
-    }
 
 
     private PieChartModel getPieChartModel(PieChartModel model, String title, HashMap<TaskEnum, Long> tasks) {
