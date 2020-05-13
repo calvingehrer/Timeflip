@@ -16,13 +16,12 @@ import java.util.Set;
  */
 
 @Entity
-public class Task implements Persistable<String>, Serializable {
+public class Task implements Persistable<Long>, Serializable {
 
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    @Column(name = "task_id")
-    private String taskId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="task_id")
+    private Long Id;
 
     @Column(name = "start_time")
     private Instant startTime;
@@ -49,12 +48,9 @@ public class Task implements Persistable<String>, Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createDate;
 
-    public String getId() {
-        return taskId;
-    }
-
-    public void setId(String taskId) {
-        this.taskId = taskId;
+    @Override
+    public Long getId() {
+        return this.Id;
     }
 
     public TaskEnum getTask() {
@@ -115,7 +111,7 @@ public class Task implements Persistable<String>, Serializable {
 
     @Override
     public String toString() {
-        return "at.qe.sepm.skeleton.model.Task[ id=" + taskId + " ]";
+        return "at.qe.sepm.skeleton.model.Task[ id=" + Id + " ]";
     }
 
     @Override
@@ -126,18 +122,11 @@ public class Task implements Persistable<String>, Serializable {
         if (this == o) return true;
         if (!(o instanceof Task)) return false;
         Task task1 = (Task) o;
-        return taskId.equals(task1.taskId) &&
-                Objects.equals(getStartTime(), task1.getStartTime()) &&
-                Objects.equals(getEndTime(), task1.getEndTime()) &&
-                getTask() == task1.getTask() &&
-                Objects.equals(getUser(), task1.getUser()) &&
-                Objects.equals(getTeam(), task1.getTeam()) &&
-                Objects.equals(getDepartment(), task1.getDepartment()) &&
-                Objects.equals(getCreateDate(), task1.getCreateDate());
+        return Id.equals(task1.Id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(taskId, getStartTime(), getEndTime(), getTask(), getUser(), getTeam(), getDepartment(), getCreateDate());
+        return Objects.hash(getId());
     }
 }

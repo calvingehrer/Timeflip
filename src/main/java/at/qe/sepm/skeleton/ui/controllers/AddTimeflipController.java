@@ -8,12 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Component
 @Scope("view")
-public class AddTimeflipController {
+public class AddTimeflipController implements Serializable  {
 
 
     @Autowired

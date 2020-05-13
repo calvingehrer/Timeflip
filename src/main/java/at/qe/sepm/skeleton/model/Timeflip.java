@@ -34,9 +34,6 @@ public class Timeflip implements Persistable<String>, Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date historyTime;
 
-
-
-
     public String getMacAddress() {
         return macAddress;
     }

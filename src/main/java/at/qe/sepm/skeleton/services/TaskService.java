@@ -48,28 +48,49 @@ public class TaskService {
         return dailyTasks;
     }
 
-    public void saveTask (User user, TaskEnum task, Instant startTime, Instant endTime) {
+    /**
+     * Method to save a new Task, that can only be edited in the web application
+     **/
+    public void saveEditedTask (User user, TaskEnum task, Instant startTime, Instant endTime) {
         Task toSave = new Task();
         Task taskBefore = taskRepository.findTaskThatFallsInTimeFrame(user,startTime);
         Task taskAfter = taskRepository.findTaskThatFallsInTimeFrame(user,endTime);
 
+        if (taskBefore != null && taskBefore.equals(taskAfter)) {
+            Task newTask = new Task();
+            newTask.setStartTime(endTime);
+            newTask.setEndTime(taskAfter.getEndTime());
+            newTask.setUser(user);
+            newTask.setTeam(user.getTeam());
+            newTask.setDepartment(user.getDepartment());
+            newTask.setTask(taskAfter.getTask());
+            newTask.setCreateDate(new Date());
+            taskRepository.save(newTask);
+            if (taskBefore.getTask() == task) {
+                taskBefore.setEndTime(endTime);
+                taskRepository.save(taskBefore);
+                return;
+            }
+            taskBefore = null;
+            taskAfter = null;
+
+        }
         if (taskBefore != null) {
-            if (taskBefore.equals(taskAfter)) {
-                System.out.println("hello");
-                Task newTask = new Task();
-                newTask.setStartTime(endTime);
-                newTask.setEndTime(taskAfter.getEndTime());
-                newTask.setUser(user);
-                newTask.setTeam(user.getTeam());
-                newTask.setDepartment(user.getDepartment());
-                newTask.setCreateDate(new Date());
-                taskRepository.save(newTask);
-                taskAfter = null;
+            if (taskBefore.getTask() == task) {
+                taskBefore.setEndTime(endTime);
+                taskRepository.save(taskBefore);
+                return;
             }
             taskBefore.setEndTime(startTime);
             taskRepository.save(taskBefore);
+
         }
         if (taskAfter != null) {
+            if (taskAfter.getTask() == task) {
+                taskAfter.setStartTime(startTime);
+                taskRepository.save(taskAfter);
+                return;
+            }
             taskAfter.setStartTime(endTime);
             taskRepository.save(taskAfter);
         }
@@ -83,5 +104,4 @@ public class TaskService {
         toSave.setCreateDate(new Date());
         taskRepository.save(toSave);
     }
-
 }

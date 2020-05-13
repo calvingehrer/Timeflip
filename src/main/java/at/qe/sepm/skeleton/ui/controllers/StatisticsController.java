@@ -12,12 +12,13 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.*;
 
 @Component
 @Scope("view")
-public class StatisticsController {
+public class StatisticsController implements Serializable {
 
     @Autowired
     private TaskService taskService;

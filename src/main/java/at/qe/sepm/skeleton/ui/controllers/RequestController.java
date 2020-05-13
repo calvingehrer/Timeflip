@@ -9,11 +9,13 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.io.Serializable;
+import java.time.Instant;
 import java.util.List;
 
 @Component
 @Scope("view")
-public class RequestController {
+public class RequestController implements Serializable  {
     @Autowired
     RequestService requestService;
 

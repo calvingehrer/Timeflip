@@ -171,7 +171,7 @@ public class UserService {
         return userRepository.save(setUpdatingFieldsBeforePersist(toSave));
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+
     public User getTeamLeader(Team team) {
         return userRepository.findTeamLeader(team);
     }
@@ -181,12 +181,12 @@ public class UserService {
         return userRepository.findEmployeesWithoutTeam();
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+
     public List<User> getUsersOfTeam(Team team) {
         return userRepository.findUsersOfTeam(team);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+
     public User getDepartmentLeader(Department department) {
         return userRepository.findDepartmentLeader(department);
     }

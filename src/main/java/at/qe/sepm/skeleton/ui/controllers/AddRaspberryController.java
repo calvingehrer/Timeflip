@@ -11,12 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Component
 @Scope("view")
-public class AddRaspberryController {
+public class AddRaspberryController implements Serializable {
 
     @Autowired
     private RaspberryService raspberryService;

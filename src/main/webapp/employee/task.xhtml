@@ -39,16 +39,12 @@
                         <p:outputPanel>
                             <h:form>
                                 <h:panelGrid columns="2">
-                                    <p:outputLabel value="Task Name: " />
-                                    <p:autoComplete id="interval" dropdown="true" value="#{taskController.task}" completeMethod="#{taskController.completeTask}" required="true"/>
-                                    <h:outputText value="Select the start of the task"/>
-                                    <h:outputText value="Select the end of the task"/>
-                                    <p:calendar id="start" mode="inline" value="#{taskController.startTime}" timeZone="#{taskController.utcTimeZone}" pattern="dd.MM.yyyy hh:mm"/>
-                                    <p:calendar id="end" mode="inline" value="#{taskController.endTime}" timeZone="#{taskController.utcTimeZone}" pattern="dd.MM.yyyy hh:mm"/>
+                                    <h:outputText value="Select the requested date"/>
+                                    <p:calendar id="start" mode="inline" value="#{taskController.requestedDate}" timeZone="#{taskController.utcTimeZone}"/>
 
                                 </h:panelGrid>
                                 <h:panelGrid columns="2">
-                                    <p:commandButton update="@form :Tasks" value="Add" action="#{taskController.editTasks()}" oncomplete="PF('editTasksDialog').hide()" />
+                                    <p:commandButton update="@form :Tasks" value="Request" action="#{taskController.sendRequest()}" oncomplete="PF('editTasksDialog').hide()" />
                                     <p:commandButton value="Abort" type="reset" onclick="PF('editTasksDialog').hide()"/>
                                 </h:panelGrid>
                             </h:form>

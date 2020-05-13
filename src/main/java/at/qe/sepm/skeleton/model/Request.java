@@ -5,15 +5,17 @@ import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Date;
 
 @Entity
-public class Request implements Persistable<String>, Serializable {
+public class Request implements Persistable<Long>, Serializable {
+
+    private static final long serialVersionUID = 1543543567124567565L;
+
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    @Column(name="request_id")
-    private String requestId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long Id;
 
     @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name="requester")
@@ -30,14 +32,13 @@ public class Request implements Persistable<String>, Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createDate;
 
+    private Date requestedDate;
+
     private String description;
 
-    public String getId() {
-        return requestId;
-    }
-
-    public void setId(String requestId) {
-        this.requestId = requestId;
+    @Override
+    public Long getId() {
+        return this.Id;
     }
 
     public User getRequester() {
@@ -70,6 +71,22 @@ public class Request implements Persistable<String>, Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getRequestedDate() {
+        return requestedDate;
+    }
+
+    public void setRequestedDate(Date requestedDate) {
+        this.requestedDate = requestedDate;
     }
 
     @Override
