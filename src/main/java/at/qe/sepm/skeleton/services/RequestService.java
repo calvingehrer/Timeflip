@@ -9,8 +9,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
-import javax.transaction.Transactional;
-import java.time.Instant;
 import java.util.List;
 import java.util.Date;
 

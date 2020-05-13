@@ -1,13 +1,11 @@
 package at.qe.sepm.skeleton.rest;
 
-import at.qe.sepm.skeleton.model.User;
-import at.qe.sepm.skeleton.services.UserService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicLong;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;

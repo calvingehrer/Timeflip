@@ -1,16 +1,12 @@
 package at.qe.sepm.skeleton.ui.controllers;
 
 import at.qe.sepm.skeleton.model.Raspberry;
-import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.RaspberryService;
-import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.utils.MessagesView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import java.io.Serializable;
 
 /**

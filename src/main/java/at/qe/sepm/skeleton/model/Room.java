@@ -1,6 +1,5 @@
 package at.qe.sepm.skeleton.model;
 
-import org.eclipse.jdt.internal.compiler.ast.NullLiteral;
 import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;

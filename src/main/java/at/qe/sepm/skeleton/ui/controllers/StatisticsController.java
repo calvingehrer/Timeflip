@@ -1,9 +1,7 @@
 package at.qe.sepm.skeleton.ui.controllers;
 
 
-import at.qe.sepm.skeleton.model.Task;
 import at.qe.sepm.skeleton.model.TaskEnum;
-import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.TaskService;
 import at.qe.sepm.skeleton.ui.beans.SessionInfoBean;
 import org.primefaces.model.chart.PieChartModel;

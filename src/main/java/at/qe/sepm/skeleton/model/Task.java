@@ -1,6 +1,5 @@
 package at.qe.sepm.skeleton.model;
 
-import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
@@ -8,7 +7,6 @@ import java.io.Serializable;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * Entity representing a Task.

@@ -3,7 +3,6 @@ package at.qe.sepm.skeleton.repositories;
 import at.qe.sepm.skeleton.model.Department;
 import at.qe.sepm.skeleton.model.Team;
 
-import at.qe.sepm.skeleton.repositories.AbstractRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
