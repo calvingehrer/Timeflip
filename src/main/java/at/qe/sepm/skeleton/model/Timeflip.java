@@ -8,6 +8,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Timeflip implements Persistable<String>, Serializable {
@@ -34,7 +35,10 @@ public class Timeflip implements Persistable<String>, Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date historyTime;
 
-    private Task task;
+    @ElementCollection(targetClass = TaskEnum.class, fetch = FetchType.EAGER)
+    //@CollectionTable(name = "task_task_type")
+    @Enumerated(EnumType.STRING)
+    private Set<TaskEnum> tasks;
 
 
 
@@ -88,12 +92,12 @@ public class Timeflip implements Persistable<String>, Serializable {
     }
 
 
-    public Task getTask() {
-        return task;
+    public Set<TaskEnum> getTasks() {
+        return tasks;
     }
 
-    public void setTask(Task task) {
-        this.task = task;
+    public void setTasks(Set<TaskEnum> tasks) {
+        this.tasks = tasks;
     }
 
     @Override

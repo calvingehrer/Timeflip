@@ -13,6 +13,7 @@
                 <div class="card">
                     <h1>My Timeflip</h1>
 
+                    <h:form id="timeflipForm">
 
                     <p:dataTable id="TimeflipTable" var="timeflip" value="#{timeflipListController.timeflipOfUser}">
                         <p:column headerText="TimeflipId">
@@ -21,15 +22,31 @@
                         <p:column headerText="Raspberry">
                             <h:outputText value="#{timeflip.raspberry.raspberryId}"/>
                         </p:column>
+
+
                     </p:dataTable>
+
+                    <h:form id="editTimeflipForm">
+
+                        <p:dialog header="Edit Timeflip" id="timeflipEditDialog" widgetVar="timeflipEditDialog" modal="true"
+                                  showEffect="fade"
+                                  hideEffect="fade" resizable="false">
+                            <p:dataTable id="TimeflipEditTable" var="timeflip" value="#{timeflipListController.timeflipOfUser}">
+
+                            </p:dataTable>
+                        </p:dialog>
+
+
+                    </h:form>
+                    </h:form>
                 </div>
             </div>
         </div>
 
-        <h:form id="userForm">
 
 
-        </h:form>
+
+
 
 
 
