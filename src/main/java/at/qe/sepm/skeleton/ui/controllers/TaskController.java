@@ -4,8 +4,12 @@ import at.qe.sepm.skeleton.model.Task;
 import at.qe.sepm.skeleton.model.TaskEnum;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.RequestService;
+import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.TaskService;
 import at.qe.sepm.skeleton.services.UserService;
+import at.qe.sepm.skeleton.services.UserService;
+import at.qe.sepm.skeleton.ui.beans.SessionInfoBean;
+import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -14,8 +18,11 @@ import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.time.ZoneId;
 import java.util.*;
+import javax.annotation.PostConstruct;
+import java.sql.Date;
 import java.time.Instant;
 import java.util.stream.Collectors;
+
 
 
 @Component
@@ -24,6 +31,7 @@ public class TaskController implements Serializable  {
 
     @Autowired
     RequestService requestService;
+    TaskService taskService;
 
     @Autowired
     TaskService taskService;
@@ -57,12 +65,29 @@ public class TaskController implements Serializable  {
     public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
     }
+    UserService userService;
+
+    private User currentUser;
+
+    @PostConstruct
+    public void init() {
+        this.setCurrentUser(userService.getAuthenticatedUser());
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
 
     public long duration(Task task) {
         return taskService.getDuration(task);
     }
 
     public List<Task> getTasksFromUser() {
+        return taskService.getAllTasksFromUser(getCurrentUser());
         return taskService.getAllTasksFromUser(getCurrentUser());
     }
 
@@ -97,6 +122,8 @@ public class TaskController implements Serializable  {
     public void setEndHour(int endHour) {
         this.endHour = endHour;
     }
+
+
 
     public int getEndMinute() {
         return endMinute;

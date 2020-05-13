@@ -26,8 +26,14 @@ public class StatisticsController implements Serializable {
     @Autowired
     private UserService userService;
 
-    private PieChartModel todayModel;
-    private PieChartModel weekModel;
+    private PieChartModel todayUserModel;
+    private PieChartModel weekUserModel;
+    private PieChartModel monthUserModel;
+
+    private PieChartModel weekTeamModel;
+    private PieChartModel monthTeamModel;
+
+    private PieChartModel monthDepartmentModel;
 
     private User currentUser;
 
@@ -36,6 +42,19 @@ public class StatisticsController implements Serializable {
         this.setCurrentUser(userService.getAuthenticatedUser());
         tasksDaily();
         tasksWeekly();
+        userTasksDaily();
+        userTasksWeekly();
+        userTasksMonthly();
+
+        teamTasksLastWeek();
+        teamTasksLastMonth();
+
+        departmentTasksLastMonth();
+    }
+
+
+    public PieChartModel getTodayUserModel() {
+        return todayUserModel;
     }
 
     public User getCurrentUser() {
@@ -45,22 +64,51 @@ public class StatisticsController implements Serializable {
     public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
     }
-
-    public PieChartModel getTodayModel() {
-        return todayModel;
+    public void setTodayUserModel(PieChartModel todayUserModel) {
+        this.todayUserModel = todayUserModel;
     }
 
-    public void setTodayModel(PieChartModel todayModel) {
-        this.todayModel = todayModel;
+    public PieChartModel getWeekUserModel() {
+        return weekUserModel;
     }
 
-    public PieChartModel getWeekModel() {
-        return weekModel;
+    public void setWeekUserModel(PieChartModel weekUserModel) {
+        this.weekUserModel = weekUserModel;
     }
 
-    public void setWeekModel(PieChartModel weekModel) {
-        this.weekModel = weekModel;
+    public PieChartModel getMonthUserModel() {
+        return monthUserModel;
     }
+
+    public void setMonthUserModel(PieChartModel monthUserModel) {
+        this.monthUserModel = monthUserModel;
+    }
+
+    public PieChartModel getWeekTeamModel() {
+        return weekTeamModel;
+    }
+
+    public void setWeekTeamModel(PieChartModel weekTeamModel) {
+        this.weekTeamModel = weekTeamModel;
+    }
+
+    public PieChartModel getMonthTeamModel() {
+        return monthTeamModel;
+    }
+
+    public void setMonthTeamModel(PieChartModel monthTeamModel) {
+        this.monthTeamModel = monthTeamModel;
+    }
+
+    public PieChartModel getMonthDepartmentModel() {
+        return monthDepartmentModel;
+    }
+
+    public void setMonthDepartmentModel(PieChartModel monthDepartmentModel) {
+        this.monthDepartmentModel = monthDepartmentModel;
+    }
+
+    public void userTasksDaily() {
 
     public void tasksDaily() {
         Calendar calendar = getToday();
@@ -69,22 +117,75 @@ public class StatisticsController implements Serializable {
         calendar.add(Calendar.DATE,1);
         Instant end = calendar.toInstant();
 
-        todayModel = initModel(todayModel, "Daily Stats", start, end);
+        todayUserModel = initUserModel(todayUserModel, "Daily Stats", start, end);
 
     }
 
-    public void tasksWeekly() {
+    public void userTasksWeekly() {
+
         Calendar calendar = getToday();
+        calendar.add(Calendar.DATE,1);
         Instant end = calendar.toInstant();
+
         calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
         Instant start = calendar.toInstant();
 
-        weekModel = initModel(weekModel, "Weekly Stats", start, end);
+        weekUserModel = initUserModel(weekUserModel, "Weekly Stats", start, end);
     }
 
 
-    public void tasksMonthly() {
+    public void userTasksMonthly() {
 
+        Calendar calendar = getToday();
+        calendar.add(Calendar.DATE,1);
+        Instant end = calendar.toInstant();
+
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        Instant start = calendar.toInstant();
+
+        monthUserModel = initUserModel(monthUserModel, "Monthly Stats", start, end);
+    }
+
+    public void teamTasksLastWeek() {
+
+        Calendar calendar = getToday();
+        calendar.getFirstDayOfWeek();
+        calendar.add(Calendar.DATE,-1);
+        Instant end = calendar.toInstant();
+
+        calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
+        Instant start = calendar.toInstant();
+
+        weekTeamModel = initTeamModel(weekTeamModel, "Weekly Stats", start, end);
+    }
+
+    public void teamTasksLastMonth() {
+
+        Calendar calendar = getLastMonthEnd();
+        Instant end = calendar.toInstant();
+
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        Instant start = calendar.toInstant();
+
+        monthTeamModel = initTeamModel(monthTeamModel, "Monthly Stats", start, end);
+    }
+
+    public void departmentTasksLastMonth() {
+
+        Calendar calendar = getLastMonthEnd();
+        Instant end = calendar.toInstant();
+
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        Instant start = calendar.toInstant();
+
+        monthDepartmentModel = initDepartmentModel(monthDepartmentModel, "Monthly Stats", start, end);
+    }
+
+    public Calendar getLastMonthEnd(){
+        Calendar calendar = getToday();
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.add(Calendar.DATE,-1);
+        return calendar;
     }
 
     public Calendar getToday() {
@@ -96,8 +197,26 @@ public class StatisticsController implements Serializable {
         return calendar;
     }
 
-    public PieChartModel initModel(PieChartModel model, String title, Instant start, Instant end) {
+    public PieChartModel initUserModel(PieChartModel model, String title, Instant start, Instant end) {
         model = new PieChartModel();
+        HashMap<TaskEnum, Long> tasks = taskService.getUserTasksBetweenDates(sessionInfoBean.getCurrentUser(), start, end);
+        return getPieChartModel(model, title, tasks);
+    }
+
+    public PieChartModel initTeamModel(PieChartModel model, String title, Instant start, Instant end) {
+        model = new PieChartModel();
+        HashMap<TaskEnum, Long> tasks = taskService.getTeamTasksBetweenDates(sessionInfoBean.getCurrentUser().getTeam(), start, end);
+        return getPieChartModel(model, title, tasks);
+    }
+
+    public PieChartModel initDepartmentModel(PieChartModel model, String title, Instant start, Instant end) {
+        model = new PieChartModel();
+        HashMap<TaskEnum, Long> tasks = taskService.getDepartmentTasksBetweenDates(sessionInfoBean.getCurrentUser().getDepartment(), start, end);
+        return getPieChartModel(model, title, tasks);
+    }
+
+
+    private PieChartModel getPieChartModel(PieChartModel model, String title, HashMap<TaskEnum, Long> tasks) {
         HashMap<TaskEnum, Long> tasks = taskService.getTasksBetweenDates(getCurrentUser(), start, end);
         if (tasks.isEmpty()) {
             model.set("Keine Angaben", 100);
@@ -113,4 +232,5 @@ public class StatisticsController implements Serializable {
         model.setShadow(false);
         return model;
     }
+
 }

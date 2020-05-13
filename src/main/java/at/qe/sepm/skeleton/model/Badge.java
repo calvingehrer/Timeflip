@@ -1,6 +1,7 @@
 package at.qe.sepm.skeleton.model;
 
 import javax.persistence.*;
+import java.time.Instant;
 
 /**
  * Entity representing Badges.
@@ -8,14 +9,23 @@ import javax.persistence.*;
  */
 
 
-@Embeddable
+@Entity
 public class Badge {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "badge_id")
     private String badgeId;
 
+    @Column(name = "badge_type")
     private BadgeEnum badgeType;
 
-    private String badgeDescription;
+    @Column(name = "badge_date")
+    private Instant dateOfBadge;
+
+    @ManyToOne
+    @JoinColumn(name="user_username")
+    private User user;
 
     public String getBadgeId() {
         return badgeId;
@@ -33,14 +43,21 @@ public class Badge {
         this.badgeType = badgeType;
     }
 
-    public String getBadgeDescription() {
-        return badgeDescription;
+    public Instant getDateOfBadge() {
+        return dateOfBadge;
     }
 
-    public void setBadgeDescription(String badgeDescription) {
-        this.badgeDescription = badgeDescription;
+    public void setDateOfBadge(Instant dateOfBadge) {
+        this.dateOfBadge = dateOfBadge;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     @Override
     public String toString() {

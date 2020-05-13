@@ -40,8 +40,6 @@ public class BadgeController implements Serializable {
 
     public void setAllBadges(Set<Badge> allBadges) {
         this.allBadges = allBadges;
-        this.badge_monkey.setBadgeType(BadgeEnum.WEEKLY_CODE_MONKEY);
-        this.badge_monkey.setBadgeDescription("For working the most time on implementation this week");
         this.allBadges.add(badge_monkey);
         this.allBadges.add(badge_creative);
         this.allBadges.add(badge_friend);
