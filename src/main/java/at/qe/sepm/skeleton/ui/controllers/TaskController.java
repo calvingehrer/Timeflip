@@ -132,6 +132,7 @@ public class TaskController implements Serializable  {
 
     public void editDate () {
         Calendar calendar = Calendar.getInstance();
+        calendar.setTimeZone(getUtcTimeZone());
         calendar.setTime(this.getRequestedDate());
         calendar.set(Calendar.HOUR_OF_DAY, this.getStartHour());
         calendar.set(Calendar.MINUTE, this.getStartMinute());
