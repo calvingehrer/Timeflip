@@ -25,7 +25,9 @@
                             <h:outputText value="#{openRequest.description}"/>
                         </p:column>
                         <p:column headerText="Requested Date">
-                            <h:outputText value="#{openRequest.requestedDate}"/>
+                            <h:outputText value="#{openRequest.requestedDate}">
+                            <f:convertDateTime pattern="yyyy-dd-MM"/>
+                            </h:outputText>
                         </p:column>
                         <p:column style="width:200px;text-align: center">
                             <p:commandButton update=":RequestTable" action="#{requestController.acceptRequest(openRequest)}" value="Accept" icon="fa fa-fw fa-edit" title="Accept"/>

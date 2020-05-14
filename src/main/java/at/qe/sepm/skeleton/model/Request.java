@@ -20,8 +20,12 @@ public class Request implements Persistable<Long>, Serializable {
     private User requester;
 
     @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name="request_handler")
-    private User requestHandler;
+    @JoinColumn(name="request_handler_tl")
+    private User requestHandlerTeamLeader;
+
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name="request_handler_dl")
+    private User requestHandlerDepartmentLeader;
 
     @Enumerated(EnumType.STRING)
     @Column(name="status")
@@ -47,12 +51,20 @@ public class Request implements Persistable<Long>, Serializable {
         this.requester = requester;
     }
 
-    public User getRequestHandler() {
-        return requestHandler;
+    public User getRequestHandlerTeamLeader() {
+        return requestHandlerTeamLeader;
     }
 
-    public void setRequestHandler(User requestHandler) {
-        this.requestHandler = requestHandler;
+    public void setRequestHandlerTeamLeader(User requestHandlerTeamLeader) {
+        this.requestHandlerTeamLeader = requestHandlerTeamLeader;
+    }
+
+    public User getRequestHandlerDepartmentLeader() {
+        return requestHandlerDepartmentLeader;
+    }
+
+    public void setRequestHandlerDepartmentLeader(User requestHandlerDepartmentLeader) {
+        this.requestHandlerDepartmentLeader = requestHandlerDepartmentLeader;
     }
 
     public RequestEnum getStatus() {

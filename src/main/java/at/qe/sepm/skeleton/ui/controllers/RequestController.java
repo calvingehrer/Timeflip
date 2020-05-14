@@ -99,12 +99,7 @@ public class RequestController implements Serializable  {
      * If a request is declined or was already used the user can delete it to keep an overview
      */
     public void deleteRequest(Request request) {
-        System.out.println("hello");
         requestService.deleteRequest(this.request);
-    }
-
-    public void editDate(Request request) {
-        System.out.println(request);
     }
 
 }

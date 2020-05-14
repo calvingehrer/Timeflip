@@ -86,21 +86,21 @@
                                 <h:form>
                                     <h:panelGrid columns="2">
                                         <h:outputText value="Select the Task"/>
-                                        <p:autoComplete required="true" id="task" dropdown="true" value="#{taskController.task}" completeMethod="#{taskController.completeTask}"/>
+                                        <p:autoComplete id="task" dropdown="true" value="#{taskController.task}" completeMethod="#{taskController.completeTask}"/>
                                     </h:panelGrid>
                                     <h4>start time</h4>
                                     <h:panelGrid columns="2">
                                         <h:outputText value="hour"/>
-                                        <h:inputText required="true" id="startTimeh" value="#{taskController.startHour}"/>
+                                        <h:inputText id="startTimeh" value="#{taskController.startHour}"/>
                                         <h:outputText value="minute"/>
-                                        <h:inputText required="true" id="startTimem" value="#{taskController.startMinute}"/>
+                                        <h:inputText id="startTimem" value="#{taskController.startMinute}"/>
                                     </h:panelGrid>
                                     <h4>end time</h4>
                                     <h:panelGrid columns="2">
                                         <h:outputText value="hour"/>
-                                        <h:inputText required="true" id="endTimeh" value="#{taskController.endHour}"/>
+                                        <h:inputText id="endTimeh" value="#{taskController.endHour}"/>
                                         <h:outputText value="minute"/>
-                                        <h:inputText required="true" id="endTimem" value="#{taskController.endMinute}"/>
+                                        <h:inputText id="endTimem" value="#{taskController.endMinute}"/>
                                     </h:panelGrid>
                                     <h:panelGrid columns="2">
                                         <p:commandButton value="Request" action="#{taskController.editDate()}" oncomplete="PF('editTasksDialog').hide()" update=":TaskForm:Tasks"/>

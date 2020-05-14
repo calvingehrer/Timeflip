@@ -4,9 +4,11 @@ package at.qe.sepm.skeleton.ui.controllers;
 import at.qe.sepm.skeleton.exceptions.VacationException;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.model.Vacation;
+import at.qe.sepm.skeleton.rest.Message;
 import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.services.VacationService;
 import at.qe.sepm.skeleton.ui.beans.SessionInfoBean;
+import at.qe.sepm.skeleton.utils.MessagesView;
 import at.qe.sepm.skeleton.utils.TimeConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -32,7 +34,7 @@ public class VacationController implements Serializable {
     private VacationService vacationService;
 
     @Autowired
-    private UserService userUserService;
+    private UserService userService;
     @Autowired
     private SessionInfoBean sessionInfoBean;
 
@@ -54,12 +56,12 @@ public class VacationController implements Serializable {
         this.vacationService = vacationService;
     }
 
-    public UserService getUserUserService() {
-        return userUserService;
+    public UserService getUserService() {
+        return userService;
     }
 
-    public void setUserUserService(UserService userUserService) {
-        this.userUserService = userUserService;
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
 
     public User getThisUser() {
@@ -96,17 +98,16 @@ public class VacationController implements Serializable {
 
     @PostConstruct
     public void init(){
-        this.setThisUser(userUserService.getAuthenticatedUser());
+        this.setThisUser(userService.getAuthenticatedUser());
         this.setVacations(this.vacationService.getVacationFromUser(thisUser));
     }
 
 
     public void addVacation(){
-        FacesMessage message;
+
 
         if(getBeginVacation() == null || getEndOfVacation() == null){
-            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Please choose a date", null);
-            FacesContext.getCurrentInstance().addMessage(null, message);
+            MessagesView.errorMessage("vacation", "Please choose a date");
         }
 
         Vacation vacation = new Vacation();
@@ -116,12 +117,10 @@ public class VacationController implements Serializable {
             this.vacationService.addVacation(this.getThisUser(), vacation);
         }
         catch (VacationException e){
-            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), null);
-            FacesContext.getCurrentInstance().addMessage(null, message);
+            MessagesView.errorMessage("vacation", e.getMessage());
             return;
         }
-        message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Vacation saved", null);
-        FacesContext.getCurrentInstance().addMessage(null, message);
+        MessagesView.successMessage("vacation", "Vacation saved");
 
         init();
     }

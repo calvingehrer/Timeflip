@@ -1,6 +1,7 @@
 package at.qe.sepm.skeleton.ui.controllers;
 
 import at.qe.sepm.skeleton.model.*;
+import at.qe.sepm.skeleton.rest.Message;
 import at.qe.sepm.skeleton.services.RequestService;
 import at.qe.sepm.skeleton.services.TaskService;
 import at.qe.sepm.skeleton.services.UserService;
@@ -122,8 +123,16 @@ public class TaskController implements Serializable  {
 
     public void sendRequest(RequestEnum status) {
         User u = getCurrentUser();
-        User handler = userService.getTeamLeader(u.getTeam());
-        requestService.addRequest(u, handler, this.requestedDate, status,"Editing  Tasks");
+        User handler1 = userService.getTeamLeader(u.getTeam());
+        if (u.equals(handler1)) {
+            handler1 = null;
+        }
+        User handler2 = userService.getDepartmentLeader(u.getDepartment());
+        if (u.equals(handler2)) {
+            requestService.addRequest(u, handler1, handler2, this.requestedDate, RequestEnum.OPEN,"Editing  Tasks");
+            return;
+        }
+        requestService.addRequest(u, handler1, handler2, this.requestedDate, status,"Editing  Tasks");
     }
 
     public List<String> completeTask(String query) {
@@ -138,6 +147,7 @@ public class TaskController implements Serializable  {
         }
         catch(Exception e) {
             MessagesView.errorMessage("Edit Tasks", e.getMessage());
+            return;
         }
         try {
             taskService.checkIfEarlierThanTwoWeeks(this.getRequestedDate().toInstant());
@@ -145,26 +155,19 @@ public class TaskController implements Serializable  {
         catch (Exception e) {
             MessagesView.errorMessage("Edit Tasks", e.getMessage());
             sendRequest(RequestEnum.OPEN);
+            return;
         }
         sendRequest(RequestEnum.ACCEPTED);
     }
 
     public void editDate () {
+        try {
+            taskService.saveEditedTask(this.getCurrentUser(), this.getTask(), this.getRequestedDate(), this.getStartHour(), this.getEndHour(), this.getStartMinute(), this.getEndMinute());
+        }
+        catch (Exception e) {
+            MessagesView.errorMessage("Edit Tasks", e.getMessage());
 
-        Calendar calendar = Calendar.getInstance(getUtcTimeZone());
-        calendar.setTime(this.getRequestedDate());
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-
-        calendar.set(Calendar.HOUR_OF_DAY, this.getStartHour());
-        calendar.set(Calendar.MINUTE, this.getStartMinute());
-        Instant startTime = calendar.toInstant();
-
-        calendar.set(Calendar.HOUR_OF_DAY, this.getEndHour());
-        calendar.set(Calendar.MINUTE, this.getEndMinute());
-        Instant endTime = calendar.toInstant();
-
-        taskService.saveEditedTask(this.getCurrentUser(), this.task, startTime, endTime);
+        }
 
     }
 
