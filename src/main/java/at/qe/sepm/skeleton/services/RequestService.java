@@ -18,9 +18,9 @@ public class RequestService {
     @Autowired
     RequestRepository requestRepository;
 
-    public void addRequest(User requester, User handler, Date requestedDate, String message) {
+    public void addRequest(User requester, User handler, Date requestedDate, RequestEnum status, String message) {
         Request r = new Request();
-        r.setStatus(RequestEnum.OPEN);
+        r.setStatus(status);
         r.setDescription(message);
         r.setRequester(requester);
         r.setRequestHandler(handler);

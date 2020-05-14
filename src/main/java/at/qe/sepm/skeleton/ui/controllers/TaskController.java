@@ -1,30 +1,25 @@
 package at.qe.sepm.skeleton.ui.controllers;
 
-import at.qe.sepm.skeleton.model.Task;
-import at.qe.sepm.skeleton.model.TaskEnum;
-import at.qe.sepm.skeleton.model.User;
+import at.qe.sepm.skeleton.model.*;
 import at.qe.sepm.skeleton.services.RequestService;
-import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.TaskService;
 import at.qe.sepm.skeleton.services.UserService;
-import at.qe.sepm.skeleton.services.UserService;
-import at.qe.sepm.skeleton.ui.beans.SessionInfoBean;
-import org.apache.commons.lang.time.DateUtils;
+import at.qe.sepm.skeleton.utils.MessagesView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
+import java.time.Instant;
 import java.time.ZoneId;
 import java.util.*;
-import javax.annotation.PostConstruct;
-import java.sql.Date;
-import java.time.Instant;
+import java.util.Date;
 import java.util.stream.Collectors;
 
 
-
+@ManagedBean
 @Component
 @Scope("view")
 public class TaskController implements Serializable  {
@@ -125,10 +120,10 @@ public class TaskController implements Serializable  {
         return TimeZone.getTimeZone(ZoneId.of("UTC"));
     }
 
-    public void sendRequest() {
+    public void sendRequest(RequestEnum status) {
         User u = getCurrentUser();
         User handler = userService.getTeamLeader(u.getTeam());
-        requestService.addRequest(u, handler, this.requestedDate, "Editing  Tasks");
+        requestService.addRequest(u, handler, this.requestedDate, status,"Editing  Tasks");
     }
 
     public List<String> completeTask(String query) {
@@ -136,19 +131,41 @@ public class TaskController implements Serializable  {
         return TaskEnum.getAllTasks().stream().filter(a -> a.contains(upperQuery)).collect(Collectors.toList());
     }
 
+    public void editTasks() {
+
+        try {
+            taskService.checkIfAfterToday(this.getRequestedDate().toInstant());
+        }
+        catch(Exception e) {
+            MessagesView.errorMessage("Edit Tasks", e.getMessage());
+        }
+        try {
+            taskService.checkIfEarlierThanTwoWeeks(this.getRequestedDate().toInstant());
+        }
+        catch (Exception e) {
+            MessagesView.errorMessage("Edit Tasks", e.getMessage());
+            sendRequest(RequestEnum.OPEN);
+        }
+        sendRequest(RequestEnum.ACCEPTED);
+    }
+
     public void editDate () {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeZone(getUtcTimeZone());
+
+        Calendar calendar = Calendar.getInstance(getUtcTimeZone());
         calendar.setTime(this.getRequestedDate());
-        calendar.set(Calendar.HOUR_OF_DAY, this.getStartHour());
-        calendar.set(Calendar.MINUTE, this.getStartMinute());
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
+
+        calendar.set(Calendar.HOUR_OF_DAY, this.getStartHour());
+        calendar.set(Calendar.MINUTE, this.getStartMinute());
         Instant startTime = calendar.toInstant();
+
         calendar.set(Calendar.HOUR_OF_DAY, this.getEndHour());
         calendar.set(Calendar.MINUTE, this.getEndMinute());
         Instant endTime = calendar.toInstant();
+
         taskService.saveEditedTask(this.getCurrentUser(), this.task, startTime, endTime);
+
     }
 
 

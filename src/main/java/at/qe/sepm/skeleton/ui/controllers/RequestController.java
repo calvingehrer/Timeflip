@@ -23,6 +23,8 @@ public class RequestController implements Serializable  {
 
     private User currentUser;
 
+    private Request request;
+
     /**
      * A Function to get the current user
      */
@@ -37,6 +39,14 @@ public class RequestController implements Serializable  {
 
     public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
+    }
+
+    public Request getRequest() {
+        return request;
+    }
+
+    public void setRequest(Request request) {
+        this.request = request;
     }
 
     /**
@@ -87,8 +97,14 @@ public class RequestController implements Serializable  {
 
     /**
      * If a request is declined or was already used the user can delete it to keep an overview
-     * @param request
      */
-    public void deleteRequest(Request request) { requestService.deleteRequest(request); }
+    public void deleteRequest(Request request) {
+        System.out.println("hello");
+        requestService.deleteRequest(this.request);
+    }
+
+    public void editDate(Request request) {
+        System.out.println(request);
+    }
 
 }

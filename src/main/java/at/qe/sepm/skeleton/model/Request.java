@@ -12,7 +12,7 @@ public class Request implements Persistable<Long>, Serializable {
     private static final long serialVersionUID = 1543543567124567565L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
     @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER, optional = false)

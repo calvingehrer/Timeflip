@@ -1,6 +1,7 @@
 package at.qe.sepm.skeleton.services;
 
 
+import at.qe.sepm.skeleton.exceptions.DateNotPossibleException;
 import at.qe.sepm.skeleton.model.*;
 import at.qe.sepm.skeleton.repositories.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +9,10 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import javax.management.InstanceAlreadyExistsException;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -72,11 +75,16 @@ public class TaskService {
      * Method to save a new Task, that can only be edited in the web application
      **/
     public void saveEditedTask (User user, TaskEnum task, Instant startTime, Instant endTime) {
+
         Task toSave = new Task();
+
         Task taskBefore = taskRepository.findTaskThatFallsInTimeFrame(user,startTime);
         Task taskAfter = taskRepository.findTaskThatFallsInTimeFrame(user,endTime);
 
         if (taskBefore != null && taskBefore.equals(taskAfter)) {
+            if (taskBefore.getTask() == task) {
+                return;
+            }
             Task newTask = new Task();
             newTask.setStartTime(endTime);
             newTask.setEndTime(taskAfter.getEndTime());
@@ -86,11 +94,8 @@ public class TaskService {
             newTask.setTask(taskAfter.getTask());
             newTask.setCreateDate(new Date());
             taskRepository.save(newTask);
-            if (taskBefore.getTask() == task) {
-                taskBefore.setEndTime(endTime);
-                taskRepository.save(taskBefore);
-                return;
-            }
+            taskBefore.setEndTime(startTime);
+            taskRepository.save(taskBefore);
             taskBefore = null;
             taskAfter = null;
 
@@ -122,6 +127,26 @@ public class TaskService {
         toSave.setStartTime(startTime);
         toSave.setEndTime(endTime);
         toSave.setCreateDate(new Date());
+
         taskRepository.save(toSave);
+    }
+
+    public void checkIfEarlierThanTwoWeeks (Instant date) throws DateNotPossibleException {
+        Calendar calendar = Calendar.getInstance();
+        calendar.getFirstDayOfWeek();
+        calendar.add(Calendar.DATE, -7);
+
+        Instant lastMonday = calendar.toInstant();
+        if (date.isBefore(lastMonday)) {
+            throw new DateNotPossibleException("The requested date was earlier than last monday. A request has been send to your team leader");
+        }
+    }
+
+    public void checkIfAfterToday(Instant date) throws DateNotPossibleException {
+        Calendar calendar = Calendar.getInstance();
+        Instant today = calendar.toInstant();
+        if (today.isBefore(date)) {
+            throw new DateNotPossibleException("You can not edit a date that is after today");
+        }
     }
 }
