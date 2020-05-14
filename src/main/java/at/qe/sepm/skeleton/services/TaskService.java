@@ -21,8 +21,11 @@ public class TaskService {
     @Autowired
     private TaskRepository taskRepository;
 
-    public List<Task> getAllTasksFromUser(User user) {
-        return taskRepository.findTasksFromUser(user);
+    public List<Task> getAllTasksBetweenDates(User user, Instant start, Instant end) {
+        if (start == null || end == null) {
+            return taskRepository.findTasksFromUser(user);
+        }
+        return taskRepository.findUserTasksBetweenDates(user, start, end);
     }
 
     @PreAuthorize("hasAuthority('TEAMLEADER')")
@@ -37,6 +40,7 @@ public class TaskService {
     }
 
     public HashMap<TaskEnum, Long> getUserTasksBetweenDates(User user, Instant start, Instant end) {
+
         HashMap<TaskEnum, Long> dailyTasks = new HashMap<>();
         List<Task> tasks = taskRepository.findUserTasksBetweenDates(user, start, end);
         return fillTaskList(dailyTasks, tasks);
@@ -151,12 +155,16 @@ public class TaskService {
     }
 
     /**
-     *
+     * check if something is earlier than
+     * @param user
      * @param date
      * @throws TaskException
      */
 
-    public void checkIfEarlierThanTwoWeeks (Instant date) throws TaskException {
+    public void checkIfEarlierThanTwoWeeks (User user, Instant date) throws TaskException {
+        if (user.getRoles().contains(UserRole.DEPARTMENTLEADER)) {
+            return;
+        }
         Calendar calendar = Calendar.getInstance();
         calendar.getFirstDayOfWeek();
         calendar.add(Calendar.DATE, -7);
@@ -164,7 +172,7 @@ public class TaskService {
         Instant lastMonday = calendar.toInstant();
         if (date.isBefore(lastMonday)) {
             throw new TaskException("The requested date was earlier than last monday. " +
-                    "A request has been send to your team leader");
+                    "A request has been send");
         }
     }
 

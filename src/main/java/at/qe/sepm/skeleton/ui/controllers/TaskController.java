@@ -48,6 +48,10 @@ public class TaskController implements Serializable  {
 
     private int endMinute;
 
+    private Date startOfTimeRange;
+
+    private Date endOfTimeRange;
+
     @PostConstruct
     public void init() {
         this.setCurrentUser(userService.getAuthenticatedUser());
@@ -66,7 +70,15 @@ public class TaskController implements Serializable  {
     }
 
     public List<Task> getTasksFromUser() {
-        return taskService.getAllTasksFromUser(getCurrentUser());
+        if (this.getStartOfTimeRange() == null || this.getEndOfTimeRange() == null) {
+            return taskService.getAllTasksBetweenDates(getCurrentUser(), null, null);
+        }
+        return taskService.getAllTasksBetweenDates(getCurrentUser(), this.getStartOfTimeRange().toInstant(), this.getEndOfTimeRange().toInstant());
+    }
+
+    public void resetFilter() {
+        this.setStartOfTimeRange(null);
+        this.setEndOfTimeRange(null);
     }
 
     public TaskEnum getTask() {
@@ -121,6 +133,22 @@ public class TaskController implements Serializable  {
         return TimeZone.getTimeZone(ZoneId.of("UTC"));
     }
 
+    public Date getStartOfTimeRange() {
+        return startOfTimeRange;
+    }
+
+    public void setStartOfTimeRange(Date startOfTimeRange) {
+        this.startOfTimeRange = startOfTimeRange;
+    }
+
+    public Date getEndOfTimeRange() {
+        return endOfTimeRange;
+    }
+
+    public void setEndOfTimeRange(Date endOfTimeRange) {
+        this.endOfTimeRange = endOfTimeRange;
+    }
+
     public void sendRequest(RequestEnum status) {
         User u = getCurrentUser();
         User handler1 = userService.getTeamLeader(u.getTeam());
@@ -128,10 +156,6 @@ public class TaskController implements Serializable  {
             handler1 = null;
         }
         User handler2 = userService.getDepartmentLeader(u.getDepartment());
-        if (u.equals(handler2)) {
-            requestService.addRequest(u, handler1, handler2, this.requestedDate, RequestEnum.OPEN,"Editing  Tasks");
-            return;
-        }
         requestService.addRequest(u, handler1, handler2, this.requestedDate, status,"Editing  Tasks");
     }
 
@@ -150,7 +174,7 @@ public class TaskController implements Serializable  {
             return;
         }
         try {
-            taskService.checkIfEarlierThanTwoWeeks(this.getRequestedDate().toInstant());
+            taskService.checkIfEarlierThanTwoWeeks(this.getCurrentUser(), this.getRequestedDate().toInstant());
         }
         catch (Exception e) {
             MessagesView.errorMessage("Edit Tasks", e.getMessage());
