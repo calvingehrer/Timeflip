@@ -12,16 +12,20 @@ public class Request implements Persistable<Long>, Serializable {
     private static final long serialVersionUID = 1543543567124567565L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
     @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name="requester")
     private User requester;
 
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER, optional = true)
+    @JoinColumn(name="request_handler_tl")
+    private User requestHandlerTeamLeader;
+
     @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name="request_handler")
-    private User requestHandler;
+    @JoinColumn(name="request_handler_dl")
+    private User requestHandlerDepartmentLeader;
 
     @Enumerated(EnumType.STRING)
     @Column(name="status")
@@ -47,12 +51,20 @@ public class Request implements Persistable<Long>, Serializable {
         this.requester = requester;
     }
 
-    public User getRequestHandler() {
-        return requestHandler;
+    public User getRequestHandlerTeamLeader() {
+        return requestHandlerTeamLeader;
     }
 
-    public void setRequestHandler(User requestHandler) {
-        this.requestHandler = requestHandler;
+    public void setRequestHandlerTeamLeader(User requestHandlerTeamLeader) {
+        this.requestHandlerTeamLeader = requestHandlerTeamLeader;
+    }
+
+    public User getRequestHandlerDepartmentLeader() {
+        return requestHandlerDepartmentLeader;
+    }
+
+    public void setRequestHandlerDepartmentLeader(User requestHandlerDepartmentLeader) {
+        this.requestHandlerDepartmentLeader = requestHandlerDepartmentLeader;
     }
 
     public RequestEnum getStatus() {

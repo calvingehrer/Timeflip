@@ -12,7 +12,7 @@ public interface RequestRepository extends AbstractRepository<Request,String> {
     @Query("SELECT r FROM Request r WHERE r.requester=:user AND r.status=:status")
     List<Request> findAllRequestsOfUser(@Param("user") User user, @Param("status") RequestEnum status);
 
-    @Query("SELECT r FROM Request r WHERE r.requestHandler=:user AND r.status=:status")
+    @Query("SELECT r FROM Request r WHERE r.requestHandlerTeamLeader=:user OR r.requestHandlerDepartmentLeader=:user AND r.status=:status")
     List<Request> findOpenMotionsOfRequestHandler(@Param("user") User user, @Param("status") RequestEnum status);
 
 }

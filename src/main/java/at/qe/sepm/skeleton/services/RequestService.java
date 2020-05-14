@@ -18,12 +18,13 @@ public class RequestService {
     @Autowired
     RequestRepository requestRepository;
 
-    public void addRequest(User requester, User handler, Date requestedDate, String message) {
+    public void addRequest(User requester, User requestHandler1, User requestHandler2, Date requestedDate, RequestEnum status, String message) {
         Request r = new Request();
-        r.setStatus(RequestEnum.OPEN);
+        r.setStatus(status);
         r.setDescription(message);
         r.setRequester(requester);
-        r.setRequestHandler(handler);
+        r.setRequestHandlerTeamLeader(requestHandler1);
+        r.setRequestHandlerDepartmentLeader(requestHandler2);
         r.setCreateDate(new Date());
         r.setRequestedDate(requestedDate);
         requestRepository.save(r);
