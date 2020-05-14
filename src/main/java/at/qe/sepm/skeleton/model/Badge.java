@@ -24,7 +24,7 @@ public class Badge {
     private Instant dateOfBadge;
 
     @ManyToOne
-    @JoinColumn(name="user_username")
+    @JoinColumn(name="user_id")
     private User user;
 
     public String getBadgeId() {
