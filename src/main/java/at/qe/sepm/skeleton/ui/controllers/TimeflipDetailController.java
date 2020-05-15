@@ -55,6 +55,11 @@ public class TimeflipDetailController implements Serializable {
         if(!this.tasks.contains(TaskEnum.DESIGN) && design){
             this.tasks.add(TaskEnum.DESIGN);
         }
+        else if(!this.design){
+            if(tasks.contains(TaskEnum.DESIGN)){
+                tasks.remove(TaskEnum.DESIGN);
+            }
+        }
 
     }
 
@@ -67,6 +72,11 @@ public class TimeflipDetailController implements Serializable {
         if(!this.tasks.contains(TaskEnum.IMPLEMENTIERUNG) && implementierung){
             this.tasks.add(TaskEnum.IMPLEMENTIERUNG);
         }
+        else if(!this.implementierung){
+            if(tasks.contains(TaskEnum.IMPLEMENTIERUNG)){
+                tasks.remove(TaskEnum.IMPLEMENTIERUNG);
+            }
+        }
     }
 
     public boolean isTesten() {
@@ -78,6 +88,11 @@ public class TimeflipDetailController implements Serializable {
         if(!this.tasks.contains(TaskEnum.TESTEN) && testen){
             this.tasks.add(TaskEnum.TESTEN);
         }
+        else if(!this.testen){
+            if(tasks.contains(TaskEnum.TESTEN)){
+                tasks.remove(TaskEnum.TESTEN);
+            }
+        }
     }
 
     public boolean isDokumentation() {
@@ -88,6 +103,10 @@ public class TimeflipDetailController implements Serializable {
         this.dokumentation = dokumentation;
         if(!this.tasks.contains(TaskEnum.DOKUMENTATION) && dokumentation){
             this.tasks.add(TaskEnum.DOKUMENTATION);
+        }else if(!this.dokumentation){
+            if(tasks.contains(TaskEnum.DOKUMENTATION)){
+                tasks.remove(TaskEnum.DOKUMENTATION);
+            }
         }
     }
 
@@ -99,6 +118,10 @@ public class TimeflipDetailController implements Serializable {
         this.fehlermanagement = fehlermanagement;
         if(!this.tasks.contains(TaskEnum.FEHLERMANAGEMENT) && fehlermanagement){
             this.tasks.add(TaskEnum.FEHLERMANAGEMENT);
+        }else if(!this.fehlermanagement){
+            if(tasks.contains(TaskEnum.FEHLERMANAGEMENT)){
+                tasks.remove(TaskEnum.FEHLERMANAGEMENT);
+            }
         }
     }
 
@@ -110,6 +133,10 @@ public class TimeflipDetailController implements Serializable {
         this.meeting = meeting;
         if(!this.tasks.contains(TaskEnum.MEETING) && meeting){
             this.tasks.add(TaskEnum.MEETING);
+        } else if(!this.meeting){
+            if(tasks.contains(TaskEnum.MEETING)){
+                tasks.remove(TaskEnum.MEETING);
+            }
         }
     }
 
@@ -121,6 +148,10 @@ public class TimeflipDetailController implements Serializable {
         this.kundenbesprechung = kundenbesprechung;
         if(!this.tasks.contains(TaskEnum.KUNDENBESPRECHNUNG) && kundenbesprechung){
             this.tasks.add(TaskEnum.KUNDENBESPRECHNUNG);
+        }else if(!this.kundenbesprechung){
+            if(tasks.contains(TaskEnum.KUNDENBESPRECHNUNG)){
+                tasks.remove(TaskEnum.KUNDENBESPRECHNUNG);
+            }
         }
     }
 
@@ -132,6 +163,10 @@ public class TimeflipDetailController implements Serializable {
         this.fortbildung = fortbildung;
         if(!this.tasks.contains(TaskEnum.FORTBILDUNG) && fortbildung){
             this.tasks.add(TaskEnum.FORTBILDUNG);
+        }else if(!this.fortbildung){
+            if(tasks.contains(TaskEnum.FORTBILDUNG)){
+                tasks.remove(TaskEnum.FORTBILDUNG);
+            }
         }
     }
 
@@ -143,6 +178,10 @@ public class TimeflipDetailController implements Serializable {
         this.projektmanagement = projektmanagement;
         if(!this.tasks.contains(TaskEnum.PROJEKTMANAGEMENT) && projektmanagement){
             this.tasks.add(TaskEnum.PROJEKTMANAGEMENT);
+        }else if(!this.projektmanagement){
+            if(tasks.contains(TaskEnum.PROJEKTMANAGEMENT)){
+                tasks.remove(TaskEnum.PROJEKTMANAGEMENT);
+            }
         }
     }
 
@@ -154,6 +193,10 @@ public class TimeflipDetailController implements Serializable {
         this.sonstiges = sonstiges;
         if(!this.tasks.contains(TaskEnum.SONSTIGES) && sonstiges){
             this.tasks.add(TaskEnum.SONSTIGES);
+        }else if(!this.sonstiges){
+            if(tasks.contains(TaskEnum.SONSTIGES)){
+                tasks.remove(TaskEnum.SONSTIGES);
+            }
         }
     }
 
@@ -165,6 +208,10 @@ public class TimeflipDetailController implements Serializable {
         this.auszeit = auszeit;
         if(!this.tasks.contains(TaskEnum.AUSZEIT) && auszeit){
             this.tasks.add(TaskEnum.AUSZEIT);
+        }else if(!this.auszeit){
+            if(tasks.contains(TaskEnum.AUSZEIT)){
+                tasks.remove(TaskEnum.AUSZEIT);
+            }
         }
     }
 
@@ -200,11 +247,19 @@ public class TimeflipDetailController implements Serializable {
 
     public void addTasks(){
 
-        Map<Integer, TaskEnum> map = new HashMap<>();
+
+
+
+        Map<Integer, TaskEnum> map = timeflip.getTasks();
 
 
         if(timeflip == null){
             return;
+        }
+
+
+        if(map.isEmpty()){
+            System.out.println("Empty");
         }
 
 

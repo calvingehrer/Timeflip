@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.awt.*;
 import java.util.ArrayList;
@@ -165,6 +166,12 @@ public class UserService {
         }
         return toSave;
     }
+
+
+
+
+
+
 
     @Transactional
     public User updateUser(User toSave) {

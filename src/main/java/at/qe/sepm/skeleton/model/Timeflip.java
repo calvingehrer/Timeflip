@@ -36,7 +36,7 @@ public class Timeflip implements Persistable<String>, Serializable {
     @ElementCollection(targetClass = TaskEnum.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "map_task_type")
     @Enumerated(EnumType.STRING)
-    private Map<Integer, TaskEnum> tasks;
+    private Map<Integer, TaskEnum> tasks = new HashMap<>();
 
 
 
@@ -58,65 +58,19 @@ public class Timeflip implements Persistable<String>, Serializable {
     }
 
     public Map<Integer, TaskEnum> getTasks() {
+
+
         return tasks;
     }
 
     public void setTasks(Map<Integer, TaskEnum> tasks) {
 
         this.tasks = tasks;
-    }
-
-    public void setTasksOnlyTasks(List<TaskEnum> tasks) {
-
-
-
-        int taskCounter = 0;
-
-
-       /* for(int i = 0; i < 12; i++){
-
-            if(tasks.isEmpty()){
-                return;
-            }
-
-            if(this.tasks.get(i) == null){
-                this.tasks.put(i, tasks.get(taskCounter));
-                System.out.println("Schleife" + this.tasks.get(i));
-                tasks.remove(taskCounter);
-                taskCounter++;
-            }
-        }
-        setTasks(this.tasks);
-*/
-
-       if(this.tasks.isEmpty()){
-           System.out.println("NUUUUUUUUUUUUUUULLLLLLLLLLLLLLLLLL");
-       }
-
-       for(Integer key : this.tasks.keySet()){
-           System.out.println(key);
-       }
-        for(Map.Entry<Integer, TaskEnum> entry : this.tasks.entrySet()) {
-
-            System.out.println("In schleifeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
-        }
-
-            /*if(entry.getValue() == null){
-                System.out.println("Sind in if block" + tasks.get(i));
-                entry.setValue(this.tasks.get(i));
-                tasks.remove(i);
-                i++;
-            }
-            System.out.println("Auserhalb if");
-            if(tasks.isEmpty()){
-                return;
-            }
-        }*/
 
     }
+
 
     public List<TaskEnum> getTaskValues(){
-        System.out.println("Get Valuuuuuuuuuuues" + tasks.get(1));
         return new ArrayList<TaskEnum>(tasks.values());
     }
 

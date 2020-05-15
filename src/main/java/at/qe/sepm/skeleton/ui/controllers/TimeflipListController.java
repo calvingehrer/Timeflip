@@ -32,14 +32,21 @@ public class TimeflipListController implements Serializable {
     @Autowired
     UserService userService;
 
+    @Autowired
+    ManageCurrentUserController manageCurrentUserController;
+
 
     public Collection<Timeflip> getTimeflipOfUser() {
-        User currentUser = sessionInfoBean.getCurrentUser();
+        //User currentUser = sessionInfoBean.getCurrentUser();
+
+        User currentUser = manageCurrentUserController.getCurrentUser();
 
        // System.out.println(currentUser.getUsername());
 
         return timeflipService.getTimeflipOfUser(currentUser);
     }
+
+
 
 
 

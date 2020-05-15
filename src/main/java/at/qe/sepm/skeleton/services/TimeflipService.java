@@ -41,15 +41,23 @@ public class TimeflipService {
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DEPARTMENTLEADER')")
     public void addNewTimeflip(Timeflip timeflip, User user, Raspberry raspberry) {
 
+        /*Map<Integer, TaskEnum> map = new HashMap<>();
+
+        for(int i = 1; i <= 12; i++){
+            map.put(i, null);
+        }*/
+
+
         Timeflip newTimeflip = new Timeflip();
 
         newTimeflip.setMacAddress(timeflip.getMacAddress());
         newTimeflip.setUser(user);
         newTimeflip.setRaspberry(raspberry);
+        //newTimeflip.setTasks(map);
         saveTimeflip(newTimeflip);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
     public Timeflip saveTimeflip(Timeflip timeflip) {
 
         return timeflipRepository.save(timeflip);
