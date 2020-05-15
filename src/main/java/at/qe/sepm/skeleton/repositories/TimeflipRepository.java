@@ -18,7 +18,7 @@ public interface TimeflipRepository extends AbstractRepository<Timeflip, String>
     @Query("SELECT t FROM Timeflip t WHERE t.macAddress = :macAddress")
     List<Timeflip> findAllTimeflipsByMacAddress(@Param("macAddress") String macAddress);
 
-    @Query("SELECT t FROM Timeflip t WHERE t.user = user")
+    @Query("SELECT t FROM Timeflip t WHERE t.user = :user")
     List<Timeflip> findTimeflipOfUser(@Param("user") User user);
 
 }
