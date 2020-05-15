@@ -164,6 +164,28 @@ public class TaskController implements Serializable  {
         return TaskEnum.getAllTasks().stream().filter(a -> a.contains(upperQuery)).collect(Collectors.toList());
     }
 
+    public void editDateWithinTimeFrame() {
+        try {
+            taskService.checkIfAfterToday(this.getRequestedDate().toInstant());
+        }
+        catch(Exception e) {
+            MessagesView.errorMessage("Edit Tasks", e.getMessage());
+            return;
+        }
+        try {
+            taskService.checkIfEarlierThanTwoWeeks(this.getCurrentUser(), this.getRequestedDate().toInstant());
+        }
+        catch (Exception e) {
+            MessagesView.errorMessage("Edit Tasks", e.getMessage());
+            return;
+        }
+        try {
+            taskService.saveEditedTask(this.getCurrentUser(), this.getTask(), this.getRequestedDate(), this.getStartHour(), this.getEndHour(), this.getStartMinute(), this.getEndMinute());
+        }
+        catch (Exception e) {
+            MessagesView.errorMessage("Edit Tasks", e.getMessage());
+        }
+    }
     public void editTasks() {
 
         try {
@@ -177,11 +199,8 @@ public class TaskController implements Serializable  {
             taskService.checkIfEarlierThanTwoWeeks(this.getCurrentUser(), this.getRequestedDate().toInstant());
         }
         catch (Exception e) {
-            MessagesView.errorMessage("Edit Tasks", e.getMessage());
             sendRequest(RequestEnum.OPEN);
-            return;
         }
-        sendRequest(RequestEnum.ACCEPTED);
     }
 
     public void editDate () {

@@ -19,7 +19,8 @@
                 <div class="card">
                     <h1>My Requests</h1>
                     <h2>Open Requests</h2>
-                    <p:dataTable id="OpenRequestsTable" var="openRequest" value="#{requestController.openRequestsEmployee}" scrollable="true">
+                    <p:dataTable id="OpenRequestsTable" var="openRequest"
+                                 value="#{requestController.openRequestsEmployee}" scrollable="true">
                         <p:column headerText="Description">
                             <h:outputText value="#{openRequest.description}"/>
                         </p:column>
@@ -33,7 +34,8 @@
                         </p:column>
                     </p:dataTable>
                     <h2>Accepted Requests</h2>
-                    <p:dataTable id="acceptedRequestsTable" var="acceptedRequest" value="#{requestController.acceptedRequestsEmployee}" scrollable="true">
+                    <p:dataTable id="acceptedRequestsTable" var="acceptedRequest"
+                                 value="#{requestController.acceptedRequestsEmployee}" scrollable="true">
                         <p:column headerText="Description">
                             <h:outputText value="#{acceptedRequest.description}"/>
                         </p:column>
@@ -50,12 +52,14 @@
                                              value="Edit" icon="fa fa-edit" title="Edit">
                                 <f:setPropertyActionListener value="#{acceptedRequest.requestedDate}" target="#{taskController.requestedDate}" />
                             </p:commandButton>
-                            <p:commandButton update=":acceptedRequestsTable" action="#{requestController.deleteRequest(acceptedRequest)}" value="Delete" icon="fa fa-trash" title="Delete"/>
+                            <p:commandButton update=":acceptedRequestsTable" action="#{requestController.deleteRequest(acceptedRequest)}"
+                                             value="Delete" icon="fa fa-trash" title="Delete"/>
 
                         </p:column>
                     </p:dataTable>
                     <h2>Declined Requests</h2>
-                    <p:dataTable id="declinedRequestsTable" var="declinedRequest" value="#{requestController.declinedRequestsEmployee}" scrollable="true">
+                    <p:dataTable id="declinedRequestsTable" var="declinedRequest"
+                                 value="#{requestController.declinedRequestsEmployee}" scrollable="true">
                         <p:column headerText="Description">
                             <h:outputText value="#{declinedRequest.description}"/>
                         </p:column>
@@ -68,7 +72,8 @@
                             </h:outputText>
                         </p:column>
                         <p:column style="width:200px;text-align: center">
-                            <p:commandButton update=":declinedRequestsTable" action="#{requestController.deleteRequest(declinedRequest)}" value="Delete" icon="fa fa-trash" title="Delete"/>
+                            <p:commandButton update=":declinedRequestsTable" action="#{requestController.deleteRequest(declinedRequest)}"
+                                             value="Delete" icon="fa fa-trash" title="Delete"/>
                         </p:column>
                     </p:dataTable>
 

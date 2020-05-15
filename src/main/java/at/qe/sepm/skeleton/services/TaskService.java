@@ -165,14 +165,17 @@ public class TaskService {
         if (user.getRoles().contains(UserRole.DEPARTMENTLEADER)) {
             return;
         }
-        Calendar calendar = Calendar.getInstance();
-        calendar.getFirstDayOfWeek();
+        Calendar calendar = Calendar.getInstance(getUtcTimeZone());
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
         calendar.add(Calendar.DATE, -7);
+        calendar.set(Calendar.HOUR_OF_DAY,0);
+        calendar.set(Calendar.MINUTE,0);
+        calendar.set(Calendar.SECOND,0);
 
         Instant lastMonday = calendar.toInstant();
         if (date.isBefore(lastMonday)) {
             throw new TaskException("The requested date was earlier than last monday. " +
-                    "A request has been send");
+                    "Please send a request");
         }
     }
 
