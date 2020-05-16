@@ -23,15 +23,12 @@ import java.sql.Date;
 import java.time.Instant;
 import java.util.stream.Collectors;
 
-
-
 @Component
 @Scope("view")
 public class TaskController implements Serializable  {
 
     @Autowired
     RequestService requestService;
-    TaskService taskService;
 
     @Autowired
     TaskService taskService;
@@ -65,29 +62,12 @@ public class TaskController implements Serializable  {
     public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
     }
-    UserService userService;
-
-    private User currentUser;
-
-    @PostConstruct
-    public void init() {
-        this.setCurrentUser(userService.getAuthenticatedUser());
-    }
-
-    public User getCurrentUser() {
-        return currentUser;
-    }
-
-    public void setCurrentUser(User currentUser) {
-        this.currentUser = currentUser;
-    }
 
     public long duration(Task task) {
         return taskService.getDuration(task);
     }
 
     public List<Task> getTasksFromUser() {
-        return taskService.getAllTasksFromUser(getCurrentUser());
         return taskService.getAllTasksFromUser(getCurrentUser());
     }
 

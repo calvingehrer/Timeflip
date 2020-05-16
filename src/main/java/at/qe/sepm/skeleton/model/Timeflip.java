@@ -1,5 +1,6 @@
 package at.qe.sepm.skeleton.model;
 
+import org.assertj.core.data.TemporalOffset;
 import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
@@ -24,6 +25,9 @@ public class Timeflip implements Persistable<String>, Serializable {
 
     @OneToOne
     private User createdUser;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createDate;
 
     @ManyToOne
     private Raspberry raspberry;
@@ -61,6 +65,14 @@ public class Timeflip implements Persistable<String>, Serializable {
 
     public void setCreatedUser(User createdUser) {
         this.createdUser = createdUser;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 
     public Raspberry getRaspberry() {
