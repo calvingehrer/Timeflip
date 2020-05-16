@@ -212,4 +212,19 @@ public class TaskService {
         }
     }
 
+    /**
+     * Method to delete Tasks
+     * @param task
+     */
+
+    public void deleteTask(Task task) {
+        taskRepository.delete(task);
+    }
+
+    public void deleteTaskOfUser (User user) {
+        for (Task t: taskRepository.findTasksFromUser(user)) {
+            deleteTask(t);
+        }
+    }
+
 }

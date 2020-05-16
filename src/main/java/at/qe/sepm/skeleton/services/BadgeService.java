@@ -21,5 +21,14 @@ public class BadgeService {
         return badgeRepository.findBadgesFromUser(user);
     }
 
+    public void deleteBadge(Badge badge) {
+        badgeRepository.delete(badge);
+    }
+
+    public void deleteBadgesOfUser(User user) {
+        for(Badge b: badgeRepository.findBadgesFromUser(user)) {
+            deleteBadge(b);
+        }
+    }
 
 }
