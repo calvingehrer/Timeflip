@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +32,25 @@ public class RoomService {
 
     @Autowired
     private Logger<String, User> logger;
+    @Autowired
+    UserService userService;
+    User currentUser;
 
+    /**
+     * A Function to get the current user
+     */
+    @PostConstruct
+    public void init() {
+        this.setCurrentUser(userService.getAuthenticatedUser());
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<Room> getAllRooms() {
@@ -55,6 +74,7 @@ public class RoomService {
         newRoom.setRoomNumber(room.getRoomNumber());
         saveRoom(newRoom);
         System.out.println(newRoom.getRoomNumber());
+        logger.logCreation(room.toString(), this.currentUser);
     }
 
     public User getAuthenticatedUser() {
@@ -69,11 +89,9 @@ public class RoomService {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public Room saveRoom(Room room) {
-        /*if (room.isNew()) {
-            room.setCreateDate(new Date());
-            room.setCreateUser(getAuthenticatedUser());
-        }*/
+        logger.logUpdate(room.toString(), this.currentUser);
         return roomRepository.save(room);
+
     }
 
     /**
@@ -84,6 +102,7 @@ public class RoomService {
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteRoom(Room room) {
         roomRepository.delete(room);
+        logger.logDeletion(room.toString(), this.currentUser);
     }
 
 
