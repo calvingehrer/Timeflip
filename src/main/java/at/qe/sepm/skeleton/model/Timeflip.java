@@ -21,8 +21,6 @@ public class Timeflip implements Persistable<String>, Serializable {
     @OneToOne
     private User user;
 
-    //List<int[]> history = new ArrayList<int[]>();
-
     @OneToOne
     private User createdUser;
 

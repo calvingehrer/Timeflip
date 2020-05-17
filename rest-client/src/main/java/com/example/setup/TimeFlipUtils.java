@@ -183,6 +183,8 @@ public class TimeFlipUtils {
                 historyEntries.put(entry);
             }
 
+            entries.clear();
+
             // write command 0X02 to delete history
             byte[] deleteHistory = {0x02};
             command.writeValue(deleteHistory);

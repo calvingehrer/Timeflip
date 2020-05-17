@@ -27,6 +27,8 @@ public class Task implements Persistable<Long>, Serializable {
     @Column(name = "end_time")
     private Instant endTime;
 
+    private int seconds;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "task")
     private TaskEnum task;
@@ -81,6 +83,14 @@ public class Task implements Persistable<Long>, Serializable {
 
     public void setEndTime(Instant endTime) {
         this.endTime = endTime;
+    }
+
+    public int getSeconds() {
+        return seconds;
+    }
+
+    public void setSeconds(int seconds) {
+        this.seconds = seconds;
     }
 
     public Team getTeam() {

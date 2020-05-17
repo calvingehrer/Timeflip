@@ -1,6 +1,9 @@
 package at.qe.sepm.skeleton.rest;
 
 import at.qe.sepm.skeleton.model.HistoryItem;
+import at.qe.sepm.skeleton.model.Task;
+import at.qe.sepm.skeleton.model.Timeflip;
+import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.HistoryRepository;
 
 import java.util.ArrayList;
@@ -10,6 +13,9 @@ import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicLong;
 
+import at.qe.sepm.skeleton.repositories.TaskRepository;
+import at.qe.sepm.skeleton.repositories.TimeflipRepository;
+import at.qe.sepm.skeleton.utils.MessagesView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,43 +28,44 @@ public class HistoryService {
     @Autowired
     public HistoryRepository historyRepository;
 
+    @Autowired
+    public TimeflipRepository timeflipRepository;
+
+    @Autowired
+    public TaskRepository taskRepository;
+
     private static final AtomicLong ID_COUNTER = new AtomicLong(1);
 
-    private static final ConcurrentLinkedQueue<HistoryItem> HISTORY_QUEUE = new ConcurrentLinkedQueue<>();
+    private static final ConcurrentLinkedQueue<HistoryEntry> HISTORY_QUEUE = new ConcurrentLinkedQueue<>();
 
     static Long getNextId() {
         return ID_COUNTER.getAndIncrement();
     }
 
-    public HistoryItem postHistoryObject(String macAddress, int facet, Date start, Date end, int seconds) {
+    public HistoryEntry postHistoryObject(String macAddress, int facet, Date start, Date end, int seconds) {
         if (!StringUtils.hasText(macAddress)){
             throw new IllegalArgumentException("content must not be null or empty");
         }
 
-        //HistoryEntry newHistoryEntry = new HistoryEntry();
-        //newHistoryEntry.setMacAddress(macAddress);
-        //newHistoryEntry.setFacet(facet);
-        //newHistoryEntry.setSeconds(seconds);
+        HistoryEntry historyEntry = new HistoryEntry();
+        historyEntry.setId(getNextId());
+        historyEntry.setMacAddress(macAddress);
+        historyEntry.setFacet(facet);
+        historyEntry.setStart(start);
+        historyEntry.setEnd(end);
+        historyEntry.setSeconds(seconds);
+        addAsTask(historyEntry);
+        HISTORY_QUEUE.add(historyEntry);
 
-        HistoryItem historyItem = new HistoryItem();
-        historyItem.setId(getNextId());
-        historyItem.setMacAddress(macAddress);
-        historyItem.setFacet(facet);
-        historyItem.setStart(start);
-        historyItem.setEnd(end);
-        historyItem.setSeconds(seconds);
-        addHistoryItem(historyItem);
-        HISTORY_QUEUE.add(historyItem);
-
-        return historyItem;
+        return historyEntry;
     }
 
-    public List<HistoryItem> getHistoryItems() {
+    public List<HistoryEntry> getHistoryItems() {
         return new ArrayList<>(HISTORY_QUEUE);
     }
 
-    public HistoryItem findHistoryItems(Long id) {
-        HistoryItem retval = null;
+    public HistoryEntry findHistoryItems(Long id) {
+        HistoryEntry retval = null;
         try {
             retval = HISTORY_QUEUE.stream().filter(msg -> msg.getId().equals(id)).findFirst().get();
         } catch (NoSuchElementException nsee) {
@@ -67,25 +74,26 @@ public class HistoryService {
         return retval;
     }
 
-    public HistoryItem addHistoryItem(HistoryItem historyItem){
-        HistoryItem newHistoryItem = new HistoryItem();
-        newHistoryItem.setId(getNextId());
-        newHistoryItem.setMacAddress(historyItem.getMacAddress());
-        newHistoryItem.setFacet(historyItem.getFacet());
-        newHistoryItem.setSeconds(historyItem.getSeconds());
+    public void addAsTask(HistoryEntry historyEntry){
+        Task task = new Task();
+        Timeflip timeflip = timeflipRepository.findByMacAddress(historyEntry.getMacAddress());
+        if(timeflip != null){
+            User user = timeflip.getUser();
+            task.setTeam(user.getTeam());
+            task.setDepartment(user.getDepartment());
+            task.setUser(user);
+        }
+        task.setStartTime(historyEntry.getStart().toInstant());
+        task.setEndTime(historyEntry.getEnd().toInstant());
+        task.setSeconds(historyEntry.getSeconds());
+        task.setCreateDate(new Date());
 
-        saveHistoryItem(newHistoryItem);
-
-        return newHistoryItem;
-    }
-
-    public HistoryItem saveHistoryItem(HistoryItem historyItem){
-        return historyRepository.save(historyItem);
+        taskRepository.save(task);
     }
 
     public void deleteHistory(Long id) {
-        HistoryItem item = findHistoryItems(id);
-        if (item != null) {
+        HistoryEntry historyEntry = findHistoryItems(id);
+        if (historyEntry != null) {
             HISTORY_QUEUE.removeIf(msg -> msg.getId().equals(id));
         }
     }
