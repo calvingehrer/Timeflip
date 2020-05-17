@@ -2,6 +2,7 @@ package at.qe.sepm.skeleton.services;
 
 
 import at.qe.sepm.skeleton.model.Team;
+import at.qe.sepm.skeleton.model.Raspberry;
 import at.qe.sepm.skeleton.model.Timeflip;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.TimeflipRepository;
@@ -67,7 +68,7 @@ public class TimeflipService {
     }
 
     @PreAuthorize("hasAuthority('EMPLOYEE')")
-    public List<Timeflip> getTimeflipOfUser(User currentUser){
+    public Timeflip getTimeflipOfUser(User currentUser){
         return timeflipRepository.findTimeflipOfUser(currentUser);
     }
 

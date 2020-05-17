@@ -1,6 +1,5 @@
 package at.qe.sepm.skeleton.model;
 
-import at.qe.sepm.skeleton.rest.HistoryEntry;
 import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;

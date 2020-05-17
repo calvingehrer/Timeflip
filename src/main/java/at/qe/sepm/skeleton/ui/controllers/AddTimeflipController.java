@@ -16,7 +16,6 @@ import java.io.Serializable;
 
 @Component
 @Scope("view")
-public class AddTimeflipController implements Serializable {
 public class AddTimeflipController implements Serializable  {
 
 
