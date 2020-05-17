@@ -71,7 +71,6 @@ public class Timeflip implements Persistable<String>, Serializable {
 
     }
 
-
     public List<TaskEnum> getTaskValues(){
         return new ArrayList<TaskEnum>(tasks.values());
     }
