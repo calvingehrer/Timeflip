@@ -1,10 +1,10 @@
 package at.qe.sepm.skeleton.services;
 
 
-import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.Timeflip;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.TimeflipRepository;
+import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,7 +12,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Set;
 
 
 @Component
@@ -30,14 +29,18 @@ public class TimeflipService {
     private PasswordEncoder passwordEncoder;
 
 
+    @Autowired
+    private Logger<String, User> logger;
+
+
     @PreAuthorize("hasAuthority('ADMIN')")
-    public List<Timeflip> getAllTimeflips(){
+    public List<Timeflip> getAllTimeflips() {
         return timeflipRepository.findAll();
     }
 
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public List<Timeflip> getAllTimeflipsByMacAddress(String macAddress){
+    public List<Timeflip> getAllTimeflipsByMacAddress(String macAddress) {
         return timeflipRepository.findAllTimeflipsByMacAddress(macAddress);
     }
 

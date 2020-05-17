@@ -3,6 +3,7 @@ package at.qe.sepm.skeleton.services;
 import at.qe.sepm.skeleton.configs.WebSecurityConfig;
 import at.qe.sepm.skeleton.model.*;
 import at.qe.sepm.skeleton.repositories.UserRepository;
+import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,9 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
-import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -40,6 +39,10 @@ public class UserService {
 
     @Autowired
     TimeflipService timeflipService;
+
+
+    @Autowired
+    private Logger<String, User> logger;
 
     /**
      * Returns a collection of all users.
@@ -205,9 +208,7 @@ public class UserService {
     public List<User> getUsersWithoutTimeflip() {
         List<User> withoutTimeflip = new ArrayList<>(userRepository.getAllUsers());
         for (Timeflip timeflip : timeflipService.getAllTimeflips()) {
-            if (withoutTimeflip.contains(timeflip.getUser())) {
-                withoutTimeflip.remove(timeflip.getUser());
-            }
+            withoutTimeflip.remove(timeflip.getUser());
         }
         return withoutTimeflip;
     }

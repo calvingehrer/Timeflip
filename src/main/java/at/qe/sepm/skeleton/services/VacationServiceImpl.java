@@ -5,6 +5,7 @@ import at.qe.sepm.skeleton.exceptions.VacationException;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.model.Vacation;
 import at.qe.sepm.skeleton.utils.TimeConverter;
+import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,6 +22,10 @@ public class VacationServiceImpl implements VacationService {
 
     @Autowired
     private UserService userService;
+
+
+    @Autowired
+    private Logger<String, User> logger;
 
 
     @Override

@@ -5,6 +5,7 @@ import at.qe.sepm.skeleton.model.Room;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.RoomRepository;
 import at.qe.sepm.skeleton.repositories.UserRepository;
+import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,10 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Component
@@ -31,8 +29,13 @@ public class RoomService {
     @Autowired
     RaspberryService raspberryService;
 
+
+    @Autowired
+    private Logger<String, User> logger;
+
+
     @PreAuthorize("hasAuthority('ADMIN')")
-    public List<Room> getAllRooms(){
+    public List<Room> getAllRooms() {
         return roomRepository.findAll();
     }
 
@@ -41,9 +44,7 @@ public class RoomService {
 
         List<Room> listRooms = new ArrayList<>(roomRepository.findRoomsWithoutRaspberry());
         for(Raspberry raspberry : raspberryService.getAllRaspberries()){
-            if(listRooms.contains(raspberry.getRoom())){
-                listRooms.remove(raspberry.getRoom());
-            }
+            listRooms.remove(raspberry.getRoom());
         }
 
         return listRooms;

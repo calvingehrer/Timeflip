@@ -3,7 +3,7 @@ package at.qe.sepm.skeleton.services;
 import at.qe.sepm.skeleton.model.Interval;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.MailRepository;
-import at.qe.sepm.skeleton.services.MailService;
+import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -16,9 +16,14 @@ public class ScheduledMailService {
     @Autowired
     private MailRepository mailRepository;
 
+
+    @Autowired
+    private Logger<String, User> logger;
+
+
     @Scheduled(cron = "0 0 8 * * MON-FRI", zone = "Europe/Vienna")
-    public void sendDailyStatistics () {
-        for (User u: mailRepository.findByInterval(Interval.DAILY)) {
+    public void sendDailyStatistics() {
+        for (User u : mailRepository.findByInterval(Interval.DAILY)) {
             mailService.sendEmailTo(u, "your daily stats", "default");
         }
     }

@@ -6,6 +6,7 @@ import at.qe.sepm.skeleton.model.Room;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.RaspberryRepository;
 import at.qe.sepm.skeleton.repositories.UserRepository;
+import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,14 +21,17 @@ import java.util.List;
 @Scope("application")
 public class RaspberryService {
 
-
     @Autowired
     RaspberryRepository raspberryRepository;
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    private Logger<String, User> logger;
+
+
     @PreAuthorize("hasAuthority('ADMIN')")
-    public List<Raspberry> getAllRaspberries(){
+    public List<Raspberry> getAllRaspberries() {
         return raspberryRepository.findAll();
     }
 

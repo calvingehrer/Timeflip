@@ -4,15 +4,16 @@ import at.qe.sepm.skeleton.model.Department;
 import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.DepartmentRepository;
+import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 
 @Component
 @Scope("application")
@@ -26,14 +27,20 @@ public class DepartmentService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private Logger<String, User> logger;
 
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public List<Department> getAllDepartments(){return departmentRepository.findAll();}
+    public List<Department> getAllDepartments() {
+        return departmentRepository.findAll();
+    }
 
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Department saveDepartment(Department department) { return departmentRepository.save(department); }
+    public Department saveDepartment(Department department) {
+        return departmentRepository.save(department);
+    }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public void addNewDepartment(User headOfDepartment, Department department) {
@@ -60,7 +67,7 @@ public class DepartmentService {
     @PreAuthorize("hasAuthority('ADMIN')")
     public void removeTeamfromDepartment(Team team, Department department) {
         Set<Team> teams = new HashSet<>();
-        if (teams.contains(team)) { teams.remove(team); }
+        teams.remove(team);
         team.setDepartment(null);
     }
 
