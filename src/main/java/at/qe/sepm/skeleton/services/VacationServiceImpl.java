@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.time.Duration;
 import java.util.Collections;
@@ -26,6 +27,30 @@ public class VacationServiceImpl implements VacationService {
     @Autowired
     private Logger<String, User> logger;
 
+
+    User currentUser;
+
+    /**
+     * A Function to get the current user
+     */
+    @PostConstruct
+    public void init() {
+        this.setCurrentUser(userService.getAuthenticatedUser());
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
+
+    /**
+     * @param user
+     * @param vacation
+     * @throws VacationException Add a new Vacation
+     */
 
     @Override
     @Transactional
@@ -59,17 +84,22 @@ public class VacationServiceImpl implements VacationService {
         if (managedUser.hasVacationInTime(vacation.getStart(), vacation.getEnd())) {
             throw new VacationException("You can take Vacation in this time.");
         }
-
+        logger.logCreation(vacation.toString(), currentUser);
         managedUser.addVacation(vacation);
     }
+
+    /**
+     * @param user
+     * @return Set of Vacation from Current User
+     */
 
     @PreAuthorize("hasAuthority('EMPLOYEE')")
     @Override
     @Transactional
     public Set<Vacation> getVacationFromUser(User user) {
-        User managedUser = this.userService.getManagedUser(user);
-        if (!managedUser.getVacations().isEmpty()) {
-            return managedUser.getVacations();
+        User current = this.userService.getManagedUser(user);
+        if (!current.getVacations().isEmpty()) {
+            return current.getVacations();
         } else {
             return Collections.emptySet();
         }
