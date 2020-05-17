@@ -94,7 +94,10 @@ public class ScheduleController implements Serializable {
                 });
 
                 holidays.forEach(h ->{
-                    java.util.Date holiday  = h.getDate().toDate();
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(h.getDate().toDate());
+                    calendar.add(Calendar.DATE, 1);
+                    Date holiday  = calendar.getTime();
                     addEvent(new DefaultScheduleEvent(h.getDescription(), holiday, holiday));
                 });
 
