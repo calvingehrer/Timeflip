@@ -1,5 +1,6 @@
 package at.qe.sepm.skeleton.services;
 
+import at.qe.sepm.skeleton.model.Raspberry;
 import at.qe.sepm.skeleton.model.Room;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.RoomRepository;
@@ -11,6 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 

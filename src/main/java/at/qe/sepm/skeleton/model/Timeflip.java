@@ -24,7 +24,7 @@ public class Timeflip implements Persistable<String>, Serializable {
     private User user;
 
     @OneToOne
-    private User createdUser;
+    private User createUser;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date createDate;
@@ -32,8 +32,6 @@ public class Timeflip implements Persistable<String>, Serializable {
     @ManyToOne
     private Raspberry raspberry;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date historyTime;
 
     @ElementCollection(targetClass = TaskEnum.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "map_task_type")
@@ -59,37 +57,17 @@ public class Timeflip implements Persistable<String>, Serializable {
         this.user = user;
     }
 
-    public Map<Integer, TaskEnum> getTasks() {
 
-
-        return tasks;
-    }
+    public Map<Integer, TaskEnum> getTasks() { return tasks; }
 
     public void setTasks(Map<Integer, TaskEnum> tasks) {
-
         this.tasks = tasks;
-
     }
 
     public List<TaskEnum> getTaskValues(){
         return new ArrayList<TaskEnum>(tasks.values());
     }
 
-    /*public List<int[]> getHistory() {
-        return history;
-    }
-
-    public void setHistory(List<int[]> history) {
-        this.history = history;
-    }*/
-
-    public User getCreatedUser() {
-        return createdUser;
-    }
-
-    public void setCreatedUser(User createdUser) {
-        this.createdUser = createdUser;
-    }
 
     public Date getCreateDate() {
         return createDate;
@@ -106,16 +84,6 @@ public class Timeflip implements Persistable<String>, Serializable {
     public void setRaspberry(Raspberry raspberry) {
         this.raspberry = raspberry;
     }
-
-    public Date getHistoryTime() {
-        return historyTime;
-    }
-
-    public void setHistoryTime(Date historyTime) {
-        this.historyTime = historyTime;
-    }
-
-
 
     @Override
     public String getId() {

@@ -3,6 +3,7 @@ package at.qe.sepm.skeleton.services;
 import at.qe.sepm.skeleton.model.Request;
 import at.qe.sepm.skeleton.model.RequestEnum;
 import at.qe.sepm.skeleton.model.User;
+import at.qe.sepm.skeleton.model.UserRole;
 import at.qe.sepm.skeleton.repositories.RequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -55,4 +56,42 @@ public class RequestService {
     public List<Request> getDeclinedRequestsOfEmployee(User user) { return requestRepository.findAllRequestsOfUser(user, RequestEnum.DECLINED); }
 
     public void deleteRequest (Request request) { requestRepository.delete(request);}
+
+    /**
+     * when deleting user delete all open requests
+     * when user is a team-leader and the field for department-leader is not null
+     * only set the field team-leader null
+     * vise versa for department-leader
+     * @param user
+     */
+
+    public void deleteRequestsOfUser(User user) {
+        for (Request r: requestRepository.findAllRequestsOfRequester(user)) {
+            deleteRequest(r);
+        }
+        if (user.getRoles().contains(UserRole.TEAMLEADER)) {
+            for (Request r : requestRepository.findAllRequestsOfRequestHandlerTL(user)) {
+                if (r.getRequestHandlerDepartmentLeader() == null) {
+                    deleteRequest(r);
+                }
+
+                else {
+                    r.setRequestHandlerTeamLeader(null);
+                    requestRepository.save(r);
+                }
+            }
+        }
+        if (user.getRoles().contains(UserRole.DEPARTMENTLEADER)) {
+            for (Request r : requestRepository.findAllRequestsOfRequestHandlerDL(user)) {
+                if (r.getRequestHandlerTeamLeader() == null) {
+                    deleteRequest(r);
+                }
+
+                else {
+                    r.setRequestHandlerDepartmentLeader(null);
+                    requestRepository.save(r);
+                }
+            }
+        }
+    }
 }

@@ -21,9 +21,9 @@ public class RequestController implements Serializable  {
     @Autowired
     UserService userService;
 
-    private User currentUser;
-
     private Request request;
+
+    private User currentUser;
 
     /**
      * A Function to get the current user

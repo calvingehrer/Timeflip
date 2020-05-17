@@ -1,10 +1,15 @@
 package at.qe.sepm.skeleton.model;
 
+import at.qe.sepm.skeleton.services.RaspberryService;
+import org.eclipse.jdt.internal.compiler.ast.NullLiteral;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -13,6 +18,7 @@ public class Room implements Persistable<String>, Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @Column(length = 100)
     private String roomNumber;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -21,7 +27,7 @@ public class Room implements Persistable<String>, Serializable {
     @ManyToOne(optional = true)
     private User createUser;
 
-    @OneToOne
+    @OneToOne(mappedBy = "room")
     private Raspberry raspberry;
 
     private boolean equipped;

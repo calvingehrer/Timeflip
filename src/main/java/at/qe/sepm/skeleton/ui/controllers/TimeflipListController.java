@@ -4,6 +4,7 @@ package at.qe.sepm.skeleton.ui.controllers;
 import at.qe.sepm.skeleton.model.Timeflip;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.TimeflipService;
+import at.qe.sepm.skeleton.ui.beans.SessionInfoBean;
 import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.ui.beans.SessionInfoBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +27,6 @@ public class TimeflipListController implements Serializable {
 
     private String macAddress = "";
 
-    @Autowired
-    private SessionInfoBean sessionInfoBean;
 
     @Autowired
     UserService userService;
@@ -36,17 +35,10 @@ public class TimeflipListController implements Serializable {
     ManageCurrentUserController manageCurrentUserController;
 
 
-    public Collection<Timeflip> getTimeflipOfUser() {
-        //User currentUser = sessionInfoBean.getCurrentUser();
-
+    public Timeflip getTimeflipOfUser() {
         User currentUser = manageCurrentUserController.getCurrentUser();
-
-       // System.out.println(currentUser.getUsername());
-
         return timeflipService.getTimeflipOfUser(currentUser);
     }
-
-
 
 
 

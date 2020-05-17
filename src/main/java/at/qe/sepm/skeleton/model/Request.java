@@ -15,7 +15,7 @@ public class Request implements Persistable<Long>, Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
-    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER, optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name="requester")
     private User requester;
 

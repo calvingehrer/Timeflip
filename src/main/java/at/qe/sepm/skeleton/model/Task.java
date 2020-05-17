@@ -33,15 +33,15 @@ public class Task implements Persistable<Long>, Serializable {
     @Column(name = "task")
     private TaskEnum task;
 
-    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER, optional = true)
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER, optional = true, cascade = CascadeType.ALL)
     @JoinColumn(name="user_id")
     private User user;
 
-    @ManyToOne(targetEntity = Team.class, fetch = FetchType.EAGER, optional = true)
+    @ManyToOne(targetEntity = Team.class, fetch = FetchType.EAGER, optional = true, cascade = CascadeType.ALL)
     @JoinColumn(name="team_id")
     private Team team;
 
-    @ManyToOne(targetEntity = Department.class, fetch = FetchType.EAGER, optional = true)
+    @ManyToOne(targetEntity = Department.class, fetch = FetchType.EAGER, optional = true, cascade = CascadeType.ALL)
     @JoinColumn(name="department_id")
     private Department department;
 

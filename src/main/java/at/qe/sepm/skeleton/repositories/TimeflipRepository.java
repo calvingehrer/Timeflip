@@ -1,5 +1,6 @@
 package at.qe.sepm.skeleton.repositories;
 
+import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.Timeflip;
 import at.qe.sepm.skeleton.model.User;
 import org.springframework.data.jpa.repository.Query;
@@ -17,6 +18,6 @@ public interface TimeflipRepository extends AbstractRepository<Timeflip, String>
     List<Timeflip> findAllTimeflipsByMacAddress(@Param("macAddress") String macAddress);
 
     @Query("SELECT t FROM Timeflip t WHERE t.user = :user")
-    List<Timeflip> findTimeflipOfUser(@Param("user") User user);
+    Timeflip findTimeflipOfUser(@Param("user") User user);
 
 }

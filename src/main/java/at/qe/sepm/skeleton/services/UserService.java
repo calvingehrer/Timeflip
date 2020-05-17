@@ -1,10 +1,6 @@
 package at.qe.sepm.skeleton.services;
 
-import at.qe.sepm.skeleton.model.Department;
-import at.qe.sepm.skeleton.model.Team;
-import at.qe.sepm.skeleton.model.Timeflip;
-import at.qe.sepm.skeleton.model.User;
-import at.qe.sepm.skeleton.model.UserRole;
+import at.qe.sepm.skeleton.model.*;
 import at.qe.sepm.skeleton.configs.WebSecurityConfig;
 import at.qe.sepm.skeleton.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +30,15 @@ public class UserService {
 
     @Autowired
     private MailService mailService;
+
+    @Autowired
+    private TaskService taskService;
+
+    @Autowired
+    private BadgeService badgeService;
+
+    @Autowired
+    private RequestService requestService;
 
     @Autowired
     private UserRepository userRepository;
@@ -142,6 +147,10 @@ public class UserService {
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteUser(User user) {
+        taskService.deleteTaskOfUser(user);
+        badgeService.deleteBadgesOfUser(user);
+        requestService.deleteRequestsOfUser(user);
+        timeflipService.deleteTimeFlipOfUser(user);
         userRepository.delete(user);
         // :TODO: write some audit log stating who and when this user was permanently deleted.
     }

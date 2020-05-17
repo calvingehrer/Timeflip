@@ -30,18 +30,11 @@ public class AddTimeflipController implements Serializable {
 
     private Raspberry raspberry;
 
-    //private Map<Integer, TaskEnum> map;
 
 
 
 
     public void add(){
-
-
-        /*map = new HashMap<>();
-        map.put(1, null);
-*/
-
         timeflipServicee.addNewTimeflip(timeflip, user, raspberry);
     }
 
@@ -77,6 +70,7 @@ public class AddTimeflipController implements Serializable {
     }
 
     public void setRaspberry(Raspberry raspberry) {
+
         this.raspberry = raspberry;
     }
 }
