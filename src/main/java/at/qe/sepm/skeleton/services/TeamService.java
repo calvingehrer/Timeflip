@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Set;
 
@@ -35,6 +36,23 @@ public class TeamService {
     @Autowired
     private Logger<String, User> logger;
 
+    User currentUser;
+
+    /**
+     * A Function to get the current user
+     */
+    @PostConstruct
+    public void init() {
+        this.setCurrentUser(userService.getAuthenticatedUser());
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<Team> getAllTeams() {
@@ -45,7 +63,7 @@ public class TeamService {
     @PreAuthorize("hasAuthority('ADMIN')")
     public Team saveTeam(Team team) {
 
-
+        logger.logUpdate(team.getTeamName(), currentUser);
         return teamRepository.save(team);
 
 
@@ -62,6 +80,7 @@ public class TeamService {
             u.setDepartment(team.getDepartment());
             userService.saveUser(u);
         }
+        logger.logCreation(team.getTeamName(), currentUser);
     }
 
     @PreAuthorize("hasAuthority('ADMIN') or principal.username eq #username")
@@ -72,6 +91,7 @@ public class TeamService {
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteTeam(Team team) {
         teamRepository.delete(team);
+        logger.logDeletion(team.toString(), currentUser);
     }
 
 
