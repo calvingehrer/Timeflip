@@ -4,6 +4,7 @@ import at.qe.sepm.skeleton.model.HistoryItem;
 import at.qe.sepm.skeleton.repositories.HistoryRepository;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -29,7 +30,7 @@ public class HistoryService {
         return ID_COUNTER.getAndIncrement();
     }
 
-    public HistoryItem postHistoryObject(String macAddress, int facet, int seconds) {
+    public HistoryItem postHistoryObject(String macAddress, int facet, Date start, Date end, int seconds) {
         if (!StringUtils.hasText(macAddress)){
             throw new IllegalArgumentException("content must not be null or empty");
         }
@@ -43,6 +44,8 @@ public class HistoryService {
         historyItem.setId(getNextId());
         historyItem.setMacAddress(macAddress);
         historyItem.setFacet(facet);
+        historyItem.setStart(start);
+        historyItem.setEnd(end);
         historyItem.setSeconds(seconds);
         addHistoryItem(historyItem);
         HISTORY_QUEUE.add(historyItem);

@@ -1,7 +1,6 @@
 package at.qe.sepm.skeleton.ui.controllers;
 
 import at.qe.sepm.skeleton.model.*;
-import at.qe.sepm.skeleton.rest.Message;
 import at.qe.sepm.skeleton.services.RequestService;
 import at.qe.sepm.skeleton.services.TaskService;
 import at.qe.sepm.skeleton.services.UserService;

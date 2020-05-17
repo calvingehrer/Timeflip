@@ -18,8 +18,8 @@ public class HistoryController {
     }
 
     @PostMapping("/history")
-    private HistoryItem sendMessage(@RequestBody HistoryRequest history) {
-        return service.postHistoryObject(history.getMacAddress(), history.getFacet(), history.getSeconds());
+    private HistoryItem sendMessage(@RequestBody HistoryEntry entry) {
+        return service.postHistoryObject(entry.getMacAddress(), entry.getFacet(), entry.getStart(), entry.getEnd(), entry.getSeconds());
     }
 
     @DeleteMapping("/history/{id}")
