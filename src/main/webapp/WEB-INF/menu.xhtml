@@ -18,17 +18,17 @@
                         <p:submenu label="Statistics" rendered="#{sessionInfoBean.hasRole('EMPLOYEE')}"
                                    icon="fa fa-line-chart" >
                             <p:menuitem value="My Statistics" url="/employee/personal-statistics.xhtml"/>
-                            <p:menuitem value="Team Statistics" url="/teamleader/team-statistics.xhtml" rendered="#{sessionInfoBean.hasRole('TEAMLEADER') or sessionInfoBean.hasRole('DEPARTMENTLEADER')}"/>
+                            <p:menuitem value="Team Statistics" url="/teamleader/team-statistics.xhtml" rendered="#{sessionInfoBean.hasRole('TEAMLEADER')}"/>
                             <p:menuitem value="Department Statistics" url="/departmentleader/department-statistics.xhtml" rendered="#{sessionInfoBean.hasRole('DEPARTMENTLEADER')}"/>
                             <p:menuitem value="Collected Timedata" url="/employee/task.xhtml"/>
                         </p:submenu>
                         <p:submenu label="Team" rendered="#{sessionInfoBean.hasRole('TEAMLEADER')}" icon="fa fa-users">
                             <p:menuitem value="My Team" url="/teamleader/team.xhtml"/>
-                            <p:menuitem value="Time Changes" url="/teamleader/change-requests.xhtml"/>
+                            <p:menuitem value="Time Changes" url="/secured/change-requests.xhtml"/>
                         </p:submenu>
                         <p:submenu label="Department" rendered="#{sessionInfoBean.hasRole('DEPARTMENTLEADER')}" icon="fa fa-users">
                             <p:menuitem value="My Department" url="/departmentleader/department.xhtml"/>
-                            <p:menuitem value="Time Changes" url="/teamleader/change-requests.xhtml"/>
+                            <p:menuitem value="Time Changes" url="/secured/change-requests.xhtml"/>
                         </p:submenu>
                         <p:submenu label="Badges" rendered="#{sessionInfoBean.hasRole('EMPLOYEE')}"
                             icon="fa fa-trophy">

@@ -1,28 +1,26 @@
 package at.qe.sepm.skeleton.ui.controllers;
 
-import at.qe.sepm.skeleton.model.Task;
-import at.qe.sepm.skeleton.model.TaskEnum;
-import at.qe.sepm.skeleton.model.User;
+import at.qe.sepm.skeleton.model.*;
+import at.qe.sepm.skeleton.rest.Message;
 import at.qe.sepm.skeleton.services.RequestService;
-import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.TaskService;
 import at.qe.sepm.skeleton.services.UserService;
-import at.qe.sepm.skeleton.services.UserService;
-import at.qe.sepm.skeleton.ui.beans.SessionInfoBean;
-import org.apache.commons.lang.time.DateUtils;
+import at.qe.sepm.skeleton.utils.MessagesView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
+import java.time.Instant;
 import java.time.ZoneId;
 import java.util.*;
-import javax.annotation.PostConstruct;
-import java.sql.Date;
-import java.time.Instant;
+import java.util.Date;
 import java.util.stream.Collectors;
 
+
+@ManagedBean
 @Component
 @Scope("view")
 public class TaskController implements Serializable  {
@@ -50,6 +48,10 @@ public class TaskController implements Serializable  {
 
     private int endMinute;
 
+    private Date startOfTimeRange;
+
+    private Date endOfTimeRange;
+
     @PostConstruct
     public void init() {
         this.setCurrentUser(userService.getAuthenticatedUser());
@@ -68,7 +70,15 @@ public class TaskController implements Serializable  {
     }
 
     public List<Task> getTasksFromUser() {
-        return taskService.getAllTasksFromUser(getCurrentUser());
+        if (this.getStartOfTimeRange() == null || this.getEndOfTimeRange() == null) {
+            return taskService.getAllTasksBetweenDates(getCurrentUser(), null, null);
+        }
+        return taskService.getAllTasksBetweenDates(getCurrentUser(), this.getStartOfTimeRange().toInstant(), this.getEndOfTimeRange().toInstant());
+    }
+
+    public void resetFilter() {
+        this.setStartOfTimeRange(null);
+        this.setEndOfTimeRange(null);
     }
 
     public TaskEnum getTask() {
@@ -103,8 +113,6 @@ public class TaskController implements Serializable  {
         this.endHour = endHour;
     }
 
-
-
     public int getEndMinute() {
         return endMinute;
     }
@@ -125,10 +133,30 @@ public class TaskController implements Serializable  {
         return TimeZone.getTimeZone(ZoneId.of("UTC"));
     }
 
-    public void sendRequest() {
+    public Date getStartOfTimeRange() {
+        return startOfTimeRange;
+    }
+
+    public void setStartOfTimeRange(Date startOfTimeRange) {
+        this.startOfTimeRange = startOfTimeRange;
+    }
+
+    public Date getEndOfTimeRange() {
+        return endOfTimeRange;
+    }
+
+    public void setEndOfTimeRange(Date endOfTimeRange) {
+        this.endOfTimeRange = endOfTimeRange;
+    }
+
+    public void sendRequest(RequestEnum status) {
         User u = getCurrentUser();
-        User handler = userService.getTeamLeader(u.getTeam());
-        requestService.addRequest(u, handler, this.requestedDate, "Editing  Tasks");
+        User handler1 = userService.getTeamLeader(u.getTeam());
+        if (u.equals(handler1)) {
+            handler1 = null;
+        }
+        User handler2 = userService.getDepartmentLeader(u.getDepartment());
+        requestService.addRequest(u, handler1, handler2, this.requestedDate, status,"Editing  Tasks");
     }
 
     public List<String> completeTask(String query) {
@@ -136,19 +164,54 @@ public class TaskController implements Serializable  {
         return TaskEnum.getAllTasks().stream().filter(a -> a.contains(upperQuery)).collect(Collectors.toList());
     }
 
+    public void editDateWithinTimeFrame() {
+        try {
+            taskService.checkIfAfterToday(this.getRequestedDate().toInstant());
+        }
+        catch(Exception e) {
+            MessagesView.errorMessage("Edit Tasks", e.getMessage());
+            return;
+        }
+        try {
+            taskService.checkIfEarlierThanTwoWeeks(this.getCurrentUser(), this.getRequestedDate().toInstant());
+        }
+        catch (Exception e) {
+            MessagesView.errorMessage("Edit Tasks", e.getMessage());
+            return;
+        }
+        try {
+            taskService.saveEditedTask(this.getCurrentUser(), this.getTask(), this.getRequestedDate(), this.getStartHour(), this.getEndHour(), this.getStartMinute(), this.getEndMinute());
+        }
+        catch (Exception e) {
+            MessagesView.errorMessage("Edit Tasks", e.getMessage());
+        }
+    }
+    public void editTasks() {
+
+        try {
+            taskService.checkIfAfterToday(this.getRequestedDate().toInstant());
+        }
+        catch(Exception e) {
+            MessagesView.errorMessage("Edit Tasks", e.getMessage());
+            return;
+        }
+        try {
+            taskService.checkIfEarlierThanTwoWeeks(this.getCurrentUser(), this.getRequestedDate().toInstant());
+        }
+        catch (Exception e) {
+            sendRequest(RequestEnum.OPEN);
+        }
+    }
+
     public void editDate () {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeZone(getUtcTimeZone());
-        calendar.setTime(this.getRequestedDate());
-        calendar.set(Calendar.HOUR_OF_DAY, this.getStartHour());
-        calendar.set(Calendar.MINUTE, this.getStartMinute());
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        Instant startTime = calendar.toInstant();
-        calendar.set(Calendar.HOUR_OF_DAY, this.getEndHour());
-        calendar.set(Calendar.MINUTE, this.getEndMinute());
-        Instant endTime = calendar.toInstant();
-        taskService.saveEditedTask(this.getCurrentUser(), this.task, startTime, endTime);
+        try {
+            taskService.saveEditedTask(this.getCurrentUser(), this.getTask(), this.getRequestedDate(), this.getStartHour(), this.getEndHour(), this.getStartMinute(), this.getEndMinute());
+        }
+        catch (Exception e) {
+            MessagesView.errorMessage("Edit Tasks", e.getMessage());
+
+        }
+
     }
 
 

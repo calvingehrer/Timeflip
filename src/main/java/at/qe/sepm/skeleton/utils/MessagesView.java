@@ -13,6 +13,10 @@ public class MessagesView {
         addMessage(target, new FacesMessage(FacesMessage.SEVERITY_WARN, "Warning!", message));
     }
 
+    public static void errorMessage(String target, String message) {
+        addMessage(target, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", message));
+    }
+
     public static void successMessage(String target, String message) {
         addMessage(target, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success!", message));
     }
