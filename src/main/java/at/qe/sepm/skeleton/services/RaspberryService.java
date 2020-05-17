@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.Date;
 import java.util.List;
 
@@ -27,6 +28,25 @@ public class RaspberryService {
 
     @Autowired
     private Logger<String, User> logger;
+    @Autowired
+    UserService userService;
+    User currentUser;
+
+    /**
+     * A Function to get the current user
+     */
+    @PostConstruct
+    public void init() {
+        this.setCurrentUser(userService.getAuthenticatedUser());
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
 
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -42,6 +62,7 @@ public class RaspberryService {
         newRaspberry.setRoom(room);
         saveRaspberry(newRaspberry);
         // add raspberry
+        logger.logCreation(raspberry.toString(), currentUser);
     }
 
     public User getAuthenticatedUser() {

@@ -36,7 +36,6 @@ public interface Logger<T, C> {
      */
     void logDeletion(T objectIdentifier, C changer);
 
-    void logCreation(String objectIdentifier, C changer);
 
     /**
      * Logs an error
