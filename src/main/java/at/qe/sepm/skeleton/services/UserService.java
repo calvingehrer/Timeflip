@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,6 +43,26 @@ public class UserService {
 
     @Autowired
     private Logger<String, User> logger;
+
+    @Autowired
+    UserService userService;
+    User currentUser;
+
+    /**
+     * A Function to get the current user
+     */
+    @PostConstruct
+    public void init() {
+        this.setCurrentUser(userService.getAuthenticatedUser());
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
 
     /**
      * Returns a collection of all users.
@@ -116,6 +137,7 @@ public class UserService {
             user.setUpdateDate(new Date());
             user.setUpdateUser(getAuthenticatedUser());
         }
+        logger.logUpdate(user.getUsername(), currentUser);
         return userRepository.save(user);
     }
 
@@ -132,6 +154,7 @@ public class UserService {
         newUser.setRoles(user.getRoles());
         mailService.sendEmailTo(newUser, "New user added", "You've been added as a new user");
         saveUser(newUser);
+        logger.logCreation(user.getUsername(), currentUser);
     }
 
     /**
@@ -142,6 +165,7 @@ public class UserService {
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteUser(User user) {
         userRepository.delete(user);
+        logger.logDeletion(user.getUsername(), currentUser);
         // :TODO: write some audit log stating who and when this user was permanently deleted.
     }
 
@@ -165,11 +189,13 @@ public class UserService {
         } else {
             toSave.setUpdateUser(getAuthenticatedUser());
         }
+
         return toSave;
     }
 
     @Transactional
     public User updateUser(User toSave) {
+        logger.logUpdate(toSave.getUsername(), currentUser);
         return userRepository.save(setUpdatingFieldsBeforePersist(toSave));
     }
 
