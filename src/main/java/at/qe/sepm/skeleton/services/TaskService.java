@@ -223,6 +223,10 @@ public class TaskService {
 
     public void deleteTaskOfUser (User user) {
         for (Task t: taskRepository.findTasksFromUser(user)) {
+            t.setUser(null);
+            t.setDepartment(null);
+            t.setTeam(null);
+            taskRepository.save(t);
             deleteTask(t);
         }
     }

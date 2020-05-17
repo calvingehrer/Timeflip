@@ -20,7 +20,7 @@ public class Timeflip implements Persistable<String>, Serializable {
     @Column(length = 100)
     private String macAddress;
 
-    @OneToOne
+    @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER, optional = true, cascade = CascadeType.ALL)
     private User user;
 
     @OneToOne
@@ -37,9 +37,6 @@ public class Timeflip implements Persistable<String>, Serializable {
     @CollectionTable(name = "map_task_type")
     @Enumerated(EnumType.STRING)
     private Map<Integer, TaskEnum> tasks = new HashMap<>();
-
-
-
 
     public String getMacAddress() {
         return macAddress;

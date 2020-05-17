@@ -71,6 +71,8 @@ public class TimeflipService {
     public void deleteTimeFlipOfUser(User user) {
         Timeflip timeflip = timeflipRepository.findTimeflipOfUser(user);
         if (timeflip != null) {
+            timeflip.setUser(null);
+            timeflipRepository.save(timeflip);
             timeflipRepository.delete(timeflip);
         }
     }
