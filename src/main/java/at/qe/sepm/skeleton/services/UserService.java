@@ -149,6 +149,7 @@ public class UserService {
         taskService.deleteTaskOfUser(user);
         badgeService.deleteBadgesOfUser(user);
         requestService.deleteRequestsOfUser(user);
+        timeflipService.deleteTimeFlipOfUser(user);
         userRepository.delete(user);
         // :TODO: write some audit log stating who and when this user was permanently deleted.
     }

@@ -17,6 +17,7 @@ public class Timeflip implements Persistable<String>, Serializable {
     @Column(length = 100)
     private String macAddress;
 
+    
     @OneToOne
     private User user;
 
