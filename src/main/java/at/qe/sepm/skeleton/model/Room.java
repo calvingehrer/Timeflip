@@ -30,9 +30,6 @@ public class Room implements Persistable<String>, Serializable {
     @OneToOne(mappedBy = "room")
     private Raspberry raspberry;
 
-    //@Autowired
-    //private RaspberryService raspberryService = new RaspberryService();
-
     private boolean equipped;
 
     public String getRoomNumber() {
@@ -67,10 +64,9 @@ public class Room implements Persistable<String>, Serializable {
         this.raspberry = raspberry;
     }
 
-    public boolean getEquipped() {
-       return this.raspberry != null;
+    public boolean isEquipped() {
+        return !(raspberry == null);
     }
-
 
     public void setEquipped(boolean equipped) {
         this.equipped = equipped;

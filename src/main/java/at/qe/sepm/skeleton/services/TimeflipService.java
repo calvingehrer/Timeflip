@@ -1,7 +1,6 @@
 package at.qe.sepm.skeleton.services;
 
 
-import at.qe.sepm.skeleton.model.Raspberry;
 import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.Timeflip;
 import at.qe.sepm.skeleton.model.User;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 
 @Component
@@ -71,6 +69,13 @@ public class TimeflipService {
     @PreAuthorize("hasAuthority('EMPLOYEE')")
     public List<Timeflip> getTimeflipOfUser(User currentUser){
         return timeflipRepository.findTimeflipOfUser(currentUser);
+    }
+
+    public void deleteTimeFlipOfUser(User user) {
+        Timeflip timeflip = timeflipRepository.findTimeflipOfUser(user);
+        if (timeflip != null) {
+            timeflipRepository.delete(timeflip);
+        }
     }
 
 

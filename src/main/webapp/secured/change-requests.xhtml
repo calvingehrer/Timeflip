@@ -1,0 +1,42 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Your Requests</ui:define>
+    <ui:define name="viewname">
+        <li>Teamleader</li>
+        <li>/</li>
+        <li><p:link outcome="/secured/change-requests.xhtml">Requests</p:link></li>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card">
+                    <h1>Requests</h1>
+                    <p:dataTable id="RequestTable" var="openRequest" value="#{requestController.openRequestsLeader}" scrollable="true">
+                        <p:column headerText="Requester">
+                            <h:outputText value="#{openRequest.requester}"/>
+                        </p:column>
+                        <p:column headerText="Description">
+                            <h:outputText value="#{openRequest.description}"/>
+                        </p:column>
+                        <p:column headerText="Requested Date">
+                            <h:outputText value="#{openRequest.requestedDate}">
+                            <f:convertDateTime pattern="yyyy-dd-MM"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column style="width:200px;text-align: center">
+                            <p:commandButton update=":RequestTable" action="#{requestController.acceptRequest(openRequest)}" value="Accept" icon="fa fa-fw fa-edit" title="Accept"/>
+                            <p:commandButton update=":RequestTable" action="#{requestController.declineRequest(openRequest)}" value="Decline" icon="fa fa-trash" title="Decline"/>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+</ui:composition>

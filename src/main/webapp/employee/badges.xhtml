@@ -13,14 +13,11 @@
                 <div class="card">
                     <h1>My Badges</h1>
 
-                    <p:dataTable id="myBadges" var="badge" value="#{badgeController.allBadges}">
-                        <p:column headerText="Badge Type">
+                    <p:dataTable id="myBadges" var="badge" value="#{badgeController.badgesFromUser}">
+                        <p:column headerText="Badge">
                             <h:outputText value="#{badge.badgeType}"/>
                         </p:column>
-                        <p:column headerText="Description">
-                            <h:outputText value="#{badge.badgeDescription}"/>
-                        </p:column>
-e
+
                     </p:dataTable>
                 </div>
             </div>

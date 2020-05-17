@@ -5,12 +5,12 @@ import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.TeamService;
 import at.qe.sepm.skeleton.services.UserService;
+import at.qe.sepm.skeleton.utils.MessagesView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.util.List;
 
@@ -69,11 +69,11 @@ public class TeamDetailController implements Serializable {
         }
         else {
             System.out.println("hello");
-            warnMessage("team deletion", "You can't delete this team");
+            MessagesView.warnMessage("team deletion", "You can't delete this team");
             return;
         }
 
-        successMessage("team deletion", "Team deleted");
+        MessagesView.successMessage("team deletion", "Team deleted");
 
     }
 
@@ -87,17 +87,7 @@ public class TeamDetailController implements Serializable {
         return true;
     }
 
-    public static void warnMessage(String target, String message) {
-        addMessage(target, new FacesMessage(FacesMessage.SEVERITY_WARN, "Warning!", message));
-    }
 
-    public static void successMessage(String target, String message) {
-        addMessage(target, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success!", message));
-    }
-
-    private static void addMessage(String target, FacesMessage message) {
-        FacesContext.getCurrentInstance().addMessage(target, message);
-    }
 
     public User getEmployee() {
         return employeeAdd;

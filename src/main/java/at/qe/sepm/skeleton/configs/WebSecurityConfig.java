@@ -40,7 +40,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/messages**").authenticated().and().httpBasic();
 
         http.authorizeRequests()
-                //Permit access to the H2 console
                 //Permit access for all to error pages
                 .antMatchers("/error/**")
                 .permitAll()
@@ -50,6 +49,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //Permit access only for some roles
                 .antMatchers("/secured/**")
                 .hasAnyAuthority("ADMIN", "DEPARTMENTLEADER", "EMPLOYEE")
+                .antMatchers("/departmentleader/**")
+                .hasAnyAuthority("DEPARTMENTLEADER")
+                .antMatchers("/teamleader/**")
+                .hasAnyAuthority("TEAMLEADER")
+                .antMatchers("/teamleader/change-requests")
+                .hasAnyAuthority("TEAMLEADER", "DEPARTMENTLEADER")
+                .antMatchers("/employee/**")
+                .hasAnyAuthority("EMPLOYEE")
                 //If user doesn't have permission, forward him to login page
                 .and()
                 .formLogin()
@@ -58,7 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/secured/dashboard.xhtml")
                 .failureUrl("/login.xhtml?error=true");
 
-        http.exceptionHandling().accessDeniedPage("/error/denied.xhtml");
+        http.exceptionHandling().accessDeniedPage("/error/access_denied.xhtml");
 
         http.sessionManagement().invalidSessionUrl("/error/invalid_session.xhtml");
 

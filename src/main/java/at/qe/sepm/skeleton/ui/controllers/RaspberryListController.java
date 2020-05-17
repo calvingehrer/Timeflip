@@ -1,9 +1,7 @@
 package at.qe.sepm.skeleton.ui.controllers;
 
 import at.qe.sepm.skeleton.model.Raspberry;
-import at.qe.sepm.skeleton.model.Timeflip;
 import at.qe.sepm.skeleton.services.RaspberryService;
-import at.qe.sepm.skeleton.services.TimeflipService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;

@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -28,9 +27,6 @@ public class RoomService {
     @Autowired
     UserRepository userRepository;
 
-    @Autowired
-    RaspberryService raspberryService;
-
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<Room> getAllRooms(){
         return roomRepository.findAll();
@@ -38,15 +34,7 @@ public class RoomService {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<Room> getRoomsWithoutRaspberry() {
-
-        List<Room> listRooms = new ArrayList<>(roomRepository.findRoomsWithoutRaspberry());
-        for(Raspberry raspberry : raspberryService.getAllRaspberries()){
-            if(listRooms.contains(raspberry.getRoom())){
-                listRooms.remove(raspberry.getRoom());
-            }
-        }
-
-        return listRooms;
+        return roomRepository.findRoomsWithoutRaspberry();
     }
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DEPARTMENTLEADER')")
@@ -54,7 +42,6 @@ public class RoomService {
         Room newRoom = new Room();
         newRoom.setRoomNumber(room.getRoomNumber());
         saveRoom(newRoom);
-        System.out.println(newRoom.getRoomNumber());
     }
 
     public User getAuthenticatedUser() {
@@ -69,10 +56,10 @@ public class RoomService {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public Room saveRoom(Room room) {
-        /*if (room.isNew()) {
+        if (room.isNew()) {
             room.setCreateDate(new Date());
             room.setCreateUser(getAuthenticatedUser());
-        }*/
+        }
         return roomRepository.save(room);
     }
 

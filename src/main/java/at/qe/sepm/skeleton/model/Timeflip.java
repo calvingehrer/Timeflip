@@ -23,8 +23,11 @@ public class Timeflip implements Persistable<String>, Serializable {
     @Column(length = 100)
     private String macAddress;
 
+
     @OneToOne
     private User user;
+
+    //List<int[]> history = new ArrayList<int[]>();
 
     @OneToOne
     private User createUser;
@@ -94,15 +97,6 @@ public class Timeflip implements Persistable<String>, Serializable {
     }
 
 
-    /*
-    public Set<TaskEnum> getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(Set<TaskEnum> tasks) {
-        this.tasks = tasks;
-    }
-*/
     @Override
     public String getId() {
         return getMacAddress();

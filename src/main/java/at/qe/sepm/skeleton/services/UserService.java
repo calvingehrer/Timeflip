@@ -1,7 +1,7 @@
 package at.qe.sepm.skeleton.services;
 
-import at.qe.sepm.skeleton.configs.WebSecurityConfig;
 import at.qe.sepm.skeleton.model.*;
+import at.qe.sepm.skeleton.configs.WebSecurityConfig;
 import at.qe.sepm.skeleton.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -12,9 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
-import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -31,6 +29,15 @@ public class UserService {
 
     @Autowired
     private MailService mailService;
+
+    @Autowired
+    private TaskService taskService;
+
+    @Autowired
+    private BadgeService badgeService;
+
+    @Autowired
+    private RequestService requestService;
 
     @Autowired
     private UserRepository userRepository;
@@ -139,6 +146,10 @@ public class UserService {
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteUser(User user) {
+        taskService.deleteTaskOfUser(user);
+        badgeService.deleteBadgesOfUser(user);
+        requestService.deleteRequestsOfUser(user);
+        timeflipService.deleteTimeFlipOfUser(user);
         userRepository.delete(user);
         // :TODO: write some audit log stating who and when this user was permanently deleted.
     }
@@ -171,7 +182,7 @@ public class UserService {
         return userRepository.save(setUpdatingFieldsBeforePersist(toSave));
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+
     public User getTeamLeader(Team team) {
         return userRepository.findTeamLeader(team);
     }
@@ -181,12 +192,12 @@ public class UserService {
         return userRepository.findEmployeesWithoutTeam();
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+
     public List<User> getUsersOfTeam(Team team) {
         return userRepository.findUsersOfTeam(team);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+
     public User getDepartmentLeader(Department department) {
         return userRepository.findDepartmentLeader(department);
     }
