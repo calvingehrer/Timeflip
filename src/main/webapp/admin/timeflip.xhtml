@@ -30,6 +30,9 @@
                 <p:column headerText="MacAddress">
                     <h:outputText value="#{timeflips.macAddress}"/>
                 </p:column>
+                <p:column headerText="Raspberry">
+                    <h:outputText value="#{timeflips.raspberry.raspberryId}"/>
+                </p:column>
                 <p:column headerText="User">
                     <h:outputText value="#{timeflips.user.username}"/>
                 </p:column>
@@ -59,6 +62,10 @@
                         <p:commandButton value="Select" update=":timeflipUserForm" oncomplete="PF('selectTimeflipUserDialog').show()" />
                     </h:panelGrid>
                     <h:panelGrid columns="2">
+                        <p:outputLabel value="Select Raspberry: "/>
+                        <p:commandButton value="Select" update=":timeflipRaspberryForm" oncomplete="PF('selectTimeflipRaspberryDialog').show()" />
+                    </h:panelGrid>
+                    <h:panelGrid columns="2">
                         <p:commandButton update="@form :timeflipForm:TimeflipTable" value="Add" action="#{addTimeflipController.add}" oncomplete="PF('addTimeflipDialog').hide()" />
                         <p:commandButton value="Abort" type="reset" onclick="PF('addTimeflipDialog').hide()"/>
                     </h:panelGrid>
@@ -86,6 +93,27 @@
             </h:form>
 
         </p:dialog>
+
+            <p:dialog header="Select Raspberry" id="selectTimeflipRaspberryDialog" widgetVar="selectTimeflipRaspberryDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                <h:form id="timeflipRaspberryForm">
+                    <p:dataTable styleClass="project-table" id="timeflipRaspberryTable" var="raspberry" value="#{raspberryListController.raspberries}" scrollable="true" scrollHeight="100">
+                        <p:column headerText="Raspberry Id">
+                            <h:outputText value="#{raspberry.raspberryId}"/>
+                        </p:column>
+
+                        <p:column style="width:100px;text-align: center">
+                            <p:commandButton update="@form :timeflipForm:TimeflipTable" icon="fa fa-plus" title="Select" oncomplete="PF('selectTimeflipRaspberryDialog').hide()">
+                                <f:setPropertyActionListener value="#{raspberry}" target="#{addTimeflipController.raspberry}" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                    <h:panelGrid columns="2">
+                        <p:commandButton value="Abort" type="submit" onclick="PF('selectEmployeesDialog').hide()"/>
+                    </h:panelGrid>
+
+                </h:form>
+
+            </p:dialog>
 
 
         </div>

@@ -28,6 +28,8 @@ public class TeamListController implements Serializable {
 
     private String teamName = "";
 
+
+
     public Collection<Team> getTeams(){
         if(!teamName.equals("")){
           return teamService.getAllTeamsByTeamName(teamName);

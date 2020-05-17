@@ -1,6 +1,7 @@
 package at.qe.sepm.skeleton.services;
 
 
+import at.qe.sepm.skeleton.model.Raspberry;
 import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.Timeflip;
 import at.qe.sepm.skeleton.model.User;
@@ -47,11 +48,12 @@ public class TimeflipService {
     }
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DEPARTMENTLEADER')")
-    public void addNewTimeflip(Timeflip timeflip, User user) {
+    public void addNewTimeflip(Timeflip timeflip, User user, Raspberry raspberry) {
 
         Timeflip newTimeflip = new Timeflip();
         newTimeflip.setMacAddress(timeflip.getMacAddress());
         newTimeflip.setUser(user);
+        newTimeflip.setRaspberry(raspberry);
         saveTimeflip(newTimeflip);
     }
 
@@ -64,7 +66,11 @@ public class TimeflipService {
         }
         return timeflipRepository.save(timeflip);
 
+    }
 
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
+    public List<Timeflip> getTimeflipOfUser(User currentUser){
+        return timeflipRepository.findTimeflipOfUser(currentUser);
     }
 
 

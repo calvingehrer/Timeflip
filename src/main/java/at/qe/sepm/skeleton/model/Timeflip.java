@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Timeflip implements Persistable<String>, Serializable {
@@ -37,6 +38,12 @@ public class Timeflip implements Persistable<String>, Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date historyTime;
 
+    /*
+    @ElementCollection(targetClass = TaskEnum.class, fetch = FetchType.EAGER)
+    //@CollectionTable(name = "task_task_type")
+    @Enumerated(EnumType.STRING)
+    private Set<TaskEnum> tasks;
+*/
 
     public String getMacAddress() {
         return macAddress;
@@ -87,6 +94,15 @@ public class Timeflip implements Persistable<String>, Serializable {
     }
 
 
+    /*
+    public Set<TaskEnum> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(Set<TaskEnum> tasks) {
+        this.tasks = tasks;
+    }
+*/
     @Override
     public String getId() {
         return getMacAddress();
