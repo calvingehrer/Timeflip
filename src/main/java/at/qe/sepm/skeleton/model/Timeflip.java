@@ -1,5 +1,6 @@
 package at.qe.sepm.skeleton.model;
 
+import org.assertj.core.data.TemporalOffset;
 import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
@@ -21,8 +22,6 @@ public class Timeflip implements Persistable<String>, Serializable {
 
     @OneToOne
     private User user;
-
-    //List<int[]> history = new ArrayList<int[]>();
 
     @OneToOne
     private User createUser;
@@ -104,15 +103,6 @@ public class Timeflip implements Persistable<String>, Serializable {
     }
 
 
-    /*
-    public Set<TaskEnum> getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(Set<TaskEnum> tasks) {
-        this.tasks = tasks;
-    }
-*/
     @Override
     public String getId() {
         return getMacAddress();

@@ -15,11 +15,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.io.Serializable;
 
 @Component
 @Scope("view")
-public class AddTimeflipController implements Serializable  {
+public class AddTimeflipController implements Serializable {
 
 
     @Autowired
@@ -37,13 +36,7 @@ public class AddTimeflipController implements Serializable  {
 
 
     public void add(){
-
-
-        /*map = new HashMap<>();
-        map.put(1, null);
-*/
-
-        timeflipServicee.addNewTimeflip(timeflip, user, raspberry);
+        timeflipServicee.addNewTimeflip(timeflip, user);
     }
 
 

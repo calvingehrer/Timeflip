@@ -1,8 +1,6 @@
 package at.qe.sepm.skeleton.services;
 
 
-import at.qe.sepm.skeleton.model.Raspberry;
-import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.Timeflip;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.TimeflipRepository;
@@ -12,8 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 
 @Component
@@ -47,12 +44,11 @@ public class TimeflipService {
     }
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DEPARTMENTLEADER')")
-    public void addNewTimeflip(Timeflip timeflip, User user, Raspberry raspberry) {
+    public void addNewTimeflip(Timeflip timeflip, User user) {
 
         Timeflip newTimeflip = new Timeflip();
         newTimeflip.setMacAddress(timeflip.getMacAddress());
         newTimeflip.setUser(user);
-        newTimeflip.setRaspberry(raspberry);
         saveTimeflip(newTimeflip);
     }
 
@@ -64,7 +60,6 @@ public class TimeflipService {
             timeflip.setHistoryTime(new Date());
         }
         return timeflipRepository.save(timeflip);
-
     }
 
 
@@ -74,6 +69,9 @@ public class TimeflipService {
     }
 
 
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
+    public List<Timeflip> getTimeflipOfUser(User currentUser){
+        return timeflipRepository.findTimeflipOfUser(currentUser);
     @PreAuthorize("hasAuthority('EMPLOYEE')")
     public Timeflip getTimeflipOfUser(User currentUser){
         return timeflipRepository.findTimeflipOfUser(currentUser);

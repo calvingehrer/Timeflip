@@ -87,10 +87,10 @@ public class TimeFlipUtils {
     
     public static JSONArray getHistoryObjects(List<BluetoothDevice> sensors) throws InterruptedException {
         JSONArray historyEntries = new JSONArray();
+        List<HistoryEntry> entries = new ArrayList<>();
         
         for(BluetoothDevice sensor : sensors) {
             printDevice(sensor);
-
 
             if (sensor.connect())
                 System.out.println("Sensor with the provided name connected");
@@ -172,10 +172,18 @@ public class TimeFlipUtils {
                     entry.setSeconds(Preprocessing.getTimeInSeconds(Preprocessing.hexToBinary(historyRawFormatted[i])));
 
                     if (entry.getFacet() != 0) {
-                        historyEntries.put(entry);
+                        entries.add(entry);
                     }
                 }
             }
+
+            List<HistoryEntry> updatedEntries = Preprocessing.calculateStartEndTimes(entries, Preprocessing.getCurrentTimestamp());
+
+            for(HistoryEntry entry : entries){
+                historyEntries.put(entry);
+            }
+
+            entries.clear();
 
             // write command 0X02 to delete history
             byte[] deleteHistory = {0x02};
