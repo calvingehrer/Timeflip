@@ -32,8 +32,6 @@ public class Timeflip implements Persistable<String>, Serializable {
     @ManyToOne
     private Raspberry raspberry;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date historyTime;
 
     @ElementCollection(targetClass = TaskEnum.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "map_task_type")
@@ -60,16 +58,10 @@ public class Timeflip implements Persistable<String>, Serializable {
     }
 
 
-    public Map<Integer, TaskEnum> getTasks() {
-
-
-        return tasks;
-    }
+    public Map<Integer, TaskEnum> getTasks() { return tasks; }
 
     public void setTasks(Map<Integer, TaskEnum> tasks) {
-
         this.tasks = tasks;
-
     }
 
 
@@ -93,15 +85,6 @@ public class Timeflip implements Persistable<String>, Serializable {
     public void setRaspberry(Raspberry raspberry) {
         this.raspberry = raspberry;
     }
-
-    public Date getHistoryTime() {
-        return historyTime;
-    }
-
-    public void setHistoryTime(Date historyTime) {
-        this.historyTime = historyTime;
-    }
-
 
     @Override
     public String getId() {
