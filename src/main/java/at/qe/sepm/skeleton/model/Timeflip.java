@@ -5,11 +5,8 @@ import org.springframework.data.domain.Persistable;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.Map.*;
 
 @Entity
 public class Timeflip implements Persistable<String>, Serializable {
@@ -21,7 +18,6 @@ public class Timeflip implements Persistable<String>, Serializable {
     @Id
     @Column(length = 100)
     private String macAddress;
-
 
     @OneToOne
     private User user;
@@ -40,12 +36,13 @@ public class Timeflip implements Persistable<String>, Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date historyTime;
 
-    /*
     @ElementCollection(targetClass = TaskEnum.class, fetch = FetchType.EAGER)
-    //@CollectionTable(name = "task_task_type")
+    @CollectionTable(name = "map_task_type")
     @Enumerated(EnumType.STRING)
-    private Set<TaskEnum> tasks;
-*/
+    private Map<Integer, TaskEnum> tasks = new HashMap<>();
+
+
+
 
     public String getMacAddress() {
         return macAddress;
@@ -63,13 +60,24 @@ public class Timeflip implements Persistable<String>, Serializable {
         this.user = user;
     }
 
-    public User getCreateUser() {
-        return createUser;
+
+    public Map<Integer, TaskEnum> getTasks() {
+
+
+        return tasks;
     }
 
-    public void setCreateUser(User createdUser) {
-        this.createUser = createdUser;
+    public void setTasks(Map<Integer, TaskEnum> tasks) {
+
+        this.tasks = tasks;
+
     }
+
+
+    public List<TaskEnum> getTaskValues(){
+        return new ArrayList<TaskEnum>(tasks.values());
+    }
+
 
     public Date getCreateDate() {
         return createDate;
@@ -96,6 +104,15 @@ public class Timeflip implements Persistable<String>, Serializable {
     }
 
 
+    /*
+    public Set<TaskEnum> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(Set<TaskEnum> tasks) {
+        this.tasks = tasks;
+    }
+*/
     @Override
     public String getId() {
         return getMacAddress();

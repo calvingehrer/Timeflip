@@ -28,11 +28,20 @@ public class TimeflipListController implements Serializable {
     @Autowired
     private SessionInfoBean sessionInfoBean;
 
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    ManageCurrentUserController manageCurrentUserController;
+
 
     public Timeflip getTimeflipOfUser() {
         User currentUser = sessionInfoBean.getCurrentUser();
         return timeflipService.getTimeflipOfUser(currentUser);
     }
+
+
+
 
     public Collection<Timeflip> getTimeflips(){
         if(!macAddress.equals("")){
