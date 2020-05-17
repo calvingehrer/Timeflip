@@ -5,5 +5,26 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/template.xhtml">
 
-    <ui:define name="title">Overview</ui:define>
-</ui:composition>
+
+    <ui:define name="title">Department Statistics</ui:define>
+
+    <ui:define name="viewname">
+        <li>Pages</li>
+        <li>/</li>
+        <li>
+            <p:link outcome="/teamleader/team-statistics.xhtml">Department Statistics</p:link>
+        </li>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card">
+                    <h1>Statistics of my Department</h1>
+                    <p:chart type="pie" model="#{statisticsController.monthDepartmentModel}" style="width:400px;height:300px"/>
+
+                </div>
+            </div>
+        </div>
+
+    </ui:define></ui:composition>

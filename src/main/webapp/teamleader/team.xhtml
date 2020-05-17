@@ -5,5 +5,24 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/template.xhtml">
 
-    <ui:define name="title">Overview</ui:define>
+    <ui:define name="title">Empty Page</ui:define>
+    <ui:define name="viewname">
+        <li>Pages</li>
+        <li>/</li>
+        <li><p:link outcome="/teamleader/team.xhtml">Team</p:link></li>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card">
+                    <h1>My Team</h1>
+                    <p:headerRow
+                    <p:button outcome="/secured/dashboard" value="Home" style="display:inline-block;margin-top:6px" icon="fa fa-home"/>
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
 </ui:composition>

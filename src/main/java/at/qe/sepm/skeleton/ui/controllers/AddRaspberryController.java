@@ -6,20 +6,23 @@ import at.qe.sepm.skeleton.model.Room;
 import at.qe.sepm.skeleton.model.Timeflip;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.RaspberryService;
+import at.qe.sepm.skeleton.services.RoomService;
 import at.qe.sepm.skeleton.services.TimeflipService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.io.Serializable;
 
 @Component
 @Scope("view")
-public class AddRaspberryController {
+public class AddRaspberryController implements Serializable {
 
     @Autowired
     private RaspberryService raspberryService;
+
+    @Autowired
+    private RoomDetailController roomDetailController;
 
     private Raspberry raspberry = new Raspberry();
 
@@ -27,7 +30,13 @@ public class AddRaspberryController {
 
 
     public void add(){
+        roomDetailController.setRoom(room);
         raspberryService.addNewRaspberry(raspberry, room);
+        resetRaspberry();
+    }
+
+    public void resetRaspberry(){
+        this.raspberry = new Raspberry();
     }
 
 

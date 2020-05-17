@@ -6,7 +6,6 @@ import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.DepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
