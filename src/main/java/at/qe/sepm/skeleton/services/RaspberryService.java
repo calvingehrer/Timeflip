@@ -34,6 +34,10 @@ public class RaspberryService {
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DEPARTMENTLEADER')")
     public void addNewRaspberry(Raspberry raspberry, Room room) {
+        Raspberry newRaspberry = new Raspberry();
+        newRaspberry.setRaspberryId(raspberry.getRaspberryId());
+        newRaspberry.setRoom(room);
+        saveRaspberry(newRaspberry);
         // add raspberry
     }
 

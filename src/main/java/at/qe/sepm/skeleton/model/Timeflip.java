@@ -5,7 +5,9 @@ import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.lang.reflect.Array;
+import java.util.*;
+import java.util.Map.*;
 
 @Entity
 public class Timeflip implements Persistable<String>, Serializable {
@@ -33,6 +35,14 @@ public class Timeflip implements Persistable<String>, Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date historyTime;
 
+    @ElementCollection(targetClass = TaskEnum.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "map_task_type")
+    @Enumerated(EnumType.STRING)
+    private Map<Integer, TaskEnum> tasks = new HashMap<>();
+
+
+
+
     public String getMacAddress() {
         return macAddress;
     }
@@ -47,6 +57,23 @@ public class Timeflip implements Persistable<String>, Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Map<Integer, TaskEnum> getTasks() {
+
+
+        return tasks;
+    }
+
+    public void setTasks(Map<Integer, TaskEnum> tasks) {
+
+        this.tasks = tasks;
+
+    }
+
+
+    public List<TaskEnum> getTaskValues(){
+        return new ArrayList<TaskEnum>(tasks.values());
     }
 
     /*public List<int[]> getHistory() {
@@ -88,6 +115,7 @@ public class Timeflip implements Persistable<String>, Serializable {
     public void setHistoryTime(Date historyTime) {
         this.historyTime = historyTime;
     }
+
 
 
     @Override

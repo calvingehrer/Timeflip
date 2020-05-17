@@ -15,6 +15,10 @@
                                     rendered="#{sessionInfoBean.hasRole('EMPLOYEE')}"
                                     icon="fa fa-list-alt"/>
 
+                        <p:menuitem value="My Timeflip" url="/employee/myTimeflip.xhtml"
+                                    rendered="#{sessionInfoBean.hasRole('EMPLOYEE')}"
+                                    icon="fa fa-list-alt"/>
+
                         <p:submenu label="Statistics" rendered="#{sessionInfoBean.hasRole('EMPLOYEE')}"
                                    icon="fa fa-line-chart" >
                             <p:menuitem value="My Statistics" url="/employee/personal-statistics.xhtml"/>
@@ -40,6 +44,8 @@
                             <p:menuitem value="Leaderboard" url="/employee/leaderboard.xhtml"/>
                             <p:menuitem value="Possible Badges" url="/employee/possible-badges.xhtml"/>
                         </p:submenu>
+
+
 
                         <p:submenu label="User" rendered="#{sessionInfoBean.hasRole('ADMIN')}"
                             icon="fa fa-user">
