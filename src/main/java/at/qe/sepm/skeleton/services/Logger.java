@@ -1,6 +1,5 @@
-package at.qe.sepm.skeleton.utils.auditlog;
+package at.qe.sepm.skeleton.services;
 
-import at.qe.sepm.skeleton.model.User;
 
 /**
  * Handles Logging for managing objects, like updating, deleting, etc.
@@ -37,7 +36,7 @@ public interface Logger<T, C> {
      */
     void logDeletion(T objectIdentifier, C changer);
 
-    void logCreation(String objectIdentifier, User changer);
+    void logCreation(String objectIdentifier, C changer);
 
     /**
      * Logs an error
@@ -47,9 +46,5 @@ public interface Logger<T, C> {
      */
     void logError(Exception e, C executor);
 
-    void logUpdate(String objectIdentifier, User changer);
 
-    void logDeletion(String objectIdentifier, User changer);
-
-    void logError(Exception e, User executor);
 }

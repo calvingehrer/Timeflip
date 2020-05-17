@@ -4,7 +4,6 @@ import at.qe.sepm.skeleton.model.Department;
 import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.DepartmentRepository;
-import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,6 +30,7 @@ public class DepartmentService {
     private Logger<String, User> logger;
 
 
+
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<Department> getAllDepartments() {
         return departmentRepository.findAll();
@@ -39,7 +39,9 @@ public class DepartmentService {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public Department saveDepartment(Department department) {
+        //logger.logUpdate(department.toString(), userService.getAuthenticatedUser());
         return departmentRepository.save(department);
+
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -51,7 +53,7 @@ public class DepartmentService {
         saveDepartment(newDepartment);
 
         userService.saveUser(headOfDepartment);
-
+        //logger.logCreation(headOfDepartment.toString(), userService.getAuthenticatedUser());
     }
 
     @PreAuthorize("hasAuthority('ADMIN') or principal.username eq #username")

@@ -4,6 +4,7 @@ import at.qe.sepm.skeleton.model.Department;
 import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.DepartmentService;
+import at.qe.sepm.skeleton.services.Logger;
 import at.qe.sepm.skeleton.services.TeamService;
 import at.qe.sepm.skeleton.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class DepartmentDetailController implements Serializable {
     @Autowired
     private TeamService teamService;
 
+    @Autowired
+    private Logger<String, User> logger;
+
     private Department department = new Department();
 
     private Team teamRemove;
@@ -35,7 +39,7 @@ public class DepartmentDetailController implements Serializable {
 
     public User newLeader;
 
-    public void setDepartment(Department department){
+    public void setDepartment(Department department) {
         this.department = department;
         doReloadDepartment();
     }
@@ -68,6 +72,7 @@ public class DepartmentDetailController implements Serializable {
             }
             catch (Exception e) {
                 e.printStackTrace();
+                logger.logError(e, userService.getAuthenticatedUser());
             }
         }
         else {
@@ -77,6 +82,7 @@ public class DepartmentDetailController implements Serializable {
         }
 
         successMessage("department deletion", "Department deleted");
+        logger.logUpdate("department was deleted", userService.getAuthenticatedUser());
     }
 
 
@@ -95,11 +101,7 @@ public class DepartmentDetailController implements Serializable {
     public boolean checkIfDeletionIsAllowed (Department department){
         if (!teamService.getTeamsOfDepartment(department).isEmpty()) {
             return false;
-        }
-        else if (userService.getDepartmentLeader(department) != null) {
-            return false;
-        }
-        return true;
+        } else return userService.getDepartmentLeader(department) == null;
     }
 
     public void replaceLeader() {
@@ -109,5 +111,6 @@ public class DepartmentDetailController implements Serializable {
         User newLeader = this.getNewLeader();
         newLeader.setDepartment(department);
         userService.saveUser(newLeader);
+        logger.logUpdate("New depatmentleader" + newLeader, userService.getAuthenticatedUser());
     }
 }
