@@ -76,13 +76,13 @@ public class HistoryService {
 
     public void addAsTask(HistoryEntry historyEntry){
         Task task = new Task();
-        Timeflip timeflip = timeflipRepository.findByMacAddress(historyEntry.getMacAddress());
-        if(timeflip != null){
+        //Timeflip timeflip = timeflipRepository.findByMacAddress(historyEntry.getMacAddress());
+        /*if(timeflip != null){
             User user = timeflip.getUser();
             task.setTeam(user.getTeam());
             task.setDepartment(user.getDepartment());
             task.setUser(user);
-        }
+        }*/
         task.setStartTime(historyEntry.getStart().toInstant());
         task.setEndTime(historyEntry.getEnd().toInstant());
         task.setSeconds(historyEntry.getSeconds());
