@@ -54,11 +54,6 @@ public class TimeflipService {
 
     @PreAuthorize("hasAuthority('EMPLOYEE')")
     public Timeflip saveTimeflip(Timeflip timeflip) {
-        if (timeflip.isNew()) {
-            timeflip.setCreateDate(new Date());
-        } else {
-            timeflip.setHistoryTime(new Date());
-        }
         return timeflipRepository.save(timeflip);
     }
 
