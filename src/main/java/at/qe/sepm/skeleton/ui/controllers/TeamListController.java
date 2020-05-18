@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -27,6 +26,8 @@ public class TeamListController implements Serializable {
     private TeamService teamService;
 
     private String teamName = "";
+
+
 
     public Collection<Team> getTeams(){
         if(!teamName.equals("")){

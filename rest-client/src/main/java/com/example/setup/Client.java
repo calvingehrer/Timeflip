@@ -1,5 +1,7 @@
 package com.example.setup;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -17,19 +19,16 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.List;
 
-public class RestClient implements Runnable {
+public class Client implements Runnable {
 
-    private final String macAddress;
-    private final JSONArray historyArray;
-    private final Timestamp historyReadTime;
+    private final JSONArray historyEntries;
     private final CredentialsProvider credentialsProvider;
     private final String messagingServiceUri;
 
-    public RestClient(String username, String password, String macAddress, JSONArray historyArray, Timestamp historyReadTime, String messagingServiceUri) {
-        this.macAddress = macAddress;
-        this.historyArray = historyArray;
-        this.historyReadTime = historyReadTime;
+    public Client(String username, String password, JSONArray historyEntries, String messagingServiceUri) {
+        this.historyEntries = historyEntries;
         this.messagingServiceUri = messagingServiceUri;
 
         credentialsProvider = new BasicCredentialsProvider();
@@ -40,15 +39,22 @@ public class RestClient implements Runnable {
     @Override
     public void run() {
         try {
-
-            transmitMessage(macAddress, historyReadTime.toString(), historyArray.toString());
+            for(Object historyEntry : historyEntries){
+                ObjectMapper mapper = new ObjectMapper();
+                try {
+                    String json = mapper.writeValueAsString(historyEntry);
+                    transmitMessage(json);
+                }catch (JsonProcessingException e){
+                    e.printStackTrace();
+                }
+            }
 
         } catch (IOException e) {
             // ignore
         }
     }
 
-    public boolean transmitMessage(String address, String historyReadTime, String history) throws IOException {
+    public boolean transmitMessage(Object historyEntry) throws IOException {
         HttpClient httpClient = HttpClientBuilder.create()
                 .setDefaultCredentialsProvider(credentialsProvider)
                 .build();
@@ -58,11 +64,9 @@ public class RestClient implements Runnable {
         httpPost.setHeader("Content-type", "application/json");
 
         JSONObject requestJson = new JSONObject();
-        requestJson.put("macAddress", address);
-        requestJson.put("history", history);
-        requestJson.put("historyReadTime", historyReadTime);
+        requestJson.put("history", historyEntries);
 
-        httpPost.setEntity(new StringEntity(requestJson.toString()));
+        httpPost.setEntity(new StringEntity(historyEntry.toString()));
 
         HttpResponse response = httpClient.execute(httpPost);
 
@@ -74,10 +78,9 @@ public class RestClient implements Runnable {
 
             Long id = responseJson.getLong("id");
             String macAddress = responseJson.getString("macAddress");
-            String hist = responseJson.getString("history");
-            String histReadTime = responseJson.getString("historyReadTime");
+            //String hist = responseJson.getString("history");
 
-            System.out.printf("Id: #%d, MAC-Address: %s, ReadTime: %s, History: %s\n", id, macAddress, histReadTime, hist);
+            System.out.printf("Id: #%d, MAC-Address: %s\n", id, macAddress);
             return true;
         } else {
             System.err.printf("Error posting message, service returned status code %d\n", response.getStatusLine().getStatusCode());

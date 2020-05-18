@@ -2,6 +2,10 @@ package at.qe.sepm.skeleton.model;
 
 import java.util.*;
 
+/**
+ * Enum to represent the Interval for the emails
+ */
+
 public enum Interval {
     DAILY,
     WEEKLY,

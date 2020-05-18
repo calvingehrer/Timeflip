@@ -14,7 +14,7 @@ public class Raspberry implements Persistable<String>, Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column(name="raspberry_id",length = 5)
+    @Column(name="raspberry_id",length = 100)
     private String raspberryId;
 
     private String password;
@@ -25,7 +25,8 @@ public class Raspberry implements Persistable<String>, Serializable {
     @ManyToOne(optional = true)
     private User createUser;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(unique = true)
     private Room room;
 
     @OneToMany
@@ -64,6 +65,7 @@ public class Raspberry implements Persistable<String>, Serializable {
         this.createUser = createUser;
     }
 
+
     public Room getRoom() {
         return room;
     }
@@ -71,6 +73,7 @@ public class Raspberry implements Persistable<String>, Serializable {
     public void setRoom(Room room) {
         this.room = room;
     }
+
 
     public Collection<Timeflip> getTimeflips() {
         return timeflips;
