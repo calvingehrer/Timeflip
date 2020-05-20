@@ -33,6 +33,6 @@ public interface TaskRepository extends AbstractRepository<Task, String> {
     Task findTaskThatFallsInTimeFrame(@Param("user") User user, @Param("time") Instant time);
 
     @Query("SELECT t.user, SUM(t.seconds) FROM Task t WHERE t.task=:taskType AND t.startTime>=:startDate AND t.endTime<=:endDate GROUP BY t.user")
-    List<Task> findTypeTasksBetweenDates(@Param("startDate") TaskEnum taskType, @Param("startDate") Instant startDate, @Param("endDate") Instant endDate);
+    List<Task> findTypeTasksBetweenDates(@Param("taskType") TaskEnum taskType, @Param("startDate") Instant startDate, @Param("endDate") Instant endDate);
 
 }

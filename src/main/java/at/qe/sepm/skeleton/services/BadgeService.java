@@ -3,6 +3,7 @@ package at.qe.sepm.skeleton.services;
 import at.qe.sepm.skeleton.model.*;
 import at.qe.sepm.skeleton.repositories.BadgeRepository;
 import at.qe.sepm.skeleton.repositories.TaskRepository;
+import at.qe.sepm.skeleton.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,9 @@ public class BadgeService {
 
     @Autowired
     private TaskRepository taskRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public List<Badge> getAllBadgesFromUser(User user){
         return badgeRepository.findBadgesFromUser(user);
@@ -48,7 +52,7 @@ public class BadgeService {
         badges.add(evaluateCreativeMind(startDate, endDate));
         badges.add(evaluateFriendAndHelper(startDate, endDate));
         badges.add(evaluateNightOwl(startDate, endDate));
-        badges.add(evaluteAllRounder(startDate, endDate));
+        badges.add(evaluateAllRounder(startDate, endDate));
         badges.add(evaluateWisdomSeeker(startDate, endDate));
 
         return badges;
@@ -65,6 +69,33 @@ public class BadgeService {
         List<Task> implementationList;
 
         implementationList = taskRepository.findTypeTasksBetweenDates(TaskEnum.IMPLEMENTIERUNG, startDate, endDate);
+
+
+        HashMap<String, Integer> implementationTimePerUser = new HashMap<>();
+
+        for(Task entry : implementationList){
+            String currentUserID = entry.getUser().getId();
+            if(implementationTimePerUser.containsKey(currentUserID)){
+                implementationTimePerUser.put(currentUserID, entry.getSeconds()); // maybe not username?
+            }
+            else{
+                implementationTimePerUser.put(currentUserID, implementationTimePerUser.get(currentUserID) + entry.getSeconds());
+            }
+
+        }
+
+        String userWithMostSeconds = new String();
+
+        for(String userId : implementationTimePerUser.keySet()){
+            if(implementationTimePerUser.get(userId) > implementationTimePerUser.get(userWithMostSeconds)){
+                userWithMostSeconds = userId;
+            }
+        }
+
+        codeMonkey.setBadgeType(BadgeEnum.WEEKLY_CODE_MONKEY);
+        codeMonkey.setUser(userRepository.findFirstByUsername(userWithMostSeconds));
+        codeMonkey.setDateOfBadge(startDate);
+
 
         return evaluateMostTimeFromList(startDate, codeMonkey, implementationList);
     }
@@ -108,7 +139,7 @@ public class BadgeService {
      * @param endDate
      */
 
-    private Badge evaluteAllRounder(Instant startDate, Instant endDate){
+    private Badge evaluateAllRounder(Instant startDate, Instant endDate){
         Badge allRounder = new Badge();
 
         return allRounder;
