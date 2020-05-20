@@ -1,9 +1,6 @@
 package at.qe.sepm.skeleton.rest;
 
-import at.qe.sepm.skeleton.model.HistoryItem;
-import at.qe.sepm.skeleton.model.Task;
-import at.qe.sepm.skeleton.model.Timeflip;
-import at.qe.sepm.skeleton.model.User;
+import at.qe.sepm.skeleton.model.*;
 import at.qe.sepm.skeleton.repositories.HistoryRepository;
 
 import java.util.ArrayList;
@@ -76,13 +73,15 @@ public class HistoryService {
 
     public void addAsTask(HistoryEntry historyEntry){
         Task task = new Task();
-        //Timeflip timeflip = timeflipRepository.findByMacAddress(historyEntry.getMacAddress());
-        /*if(timeflip != null){
+        Timeflip timeflip = timeflipRepository.findByMacAddress(historyEntry.getMacAddress());
+        if(timeflip != null){
             User user = timeflip.getUser();
             task.setTeam(user.getTeam());
             task.setDepartment(user.getDepartment());
             task.setUser(user);
-        }*/
+            int facet = historyEntry.getFacet();
+            task.setTask(TaskEnum.values()[facet-1]);
+        }
         task.setStartTime(historyEntry.getStart().toInstant());
         task.setEndTime(historyEntry.getEnd().toInstant());
         task.setSeconds(historyEntry.getSeconds());

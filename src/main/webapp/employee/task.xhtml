@@ -29,10 +29,10 @@
                                     <h:outputText value="#{task.task}"/>
                                 </p:column>
                                 <p:column headerText="Start">
-                                    <h:outputText value="#{task.startTime}"/>
+                                    <h:outputText value="#{taskController.formatDate(task.startTime)}"/>
                                 </p:column>
                                 <p:column headerText="End">
-                                    <h:outputText value="#{task.endTime}"/>
+                                    <h:outputText value="#{taskController.formatDate(task.endTime)}"/>
                                 </p:column>
                                 <p:column headerText="Duration[min]">
                                     <h:outputText value="#{taskController.duration(task)}"/>

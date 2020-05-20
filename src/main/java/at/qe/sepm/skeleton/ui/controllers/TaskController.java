@@ -14,6 +14,8 @@ import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.*;
 import java.util.Date;
 import java.util.stream.Collectors;
@@ -200,6 +202,15 @@ public class TaskController implements Serializable  {
         catch (Exception e) {
             sendRequest(RequestEnum.OPEN);
         }
+    }
+
+    public String formatDate(Instant instant){
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)
+                .withLocale(Locale.GERMAN)
+                .withZone(ZoneId.systemDefault());
+
+        return formatter.format(instant);
     }
 
     public void editDate () {
