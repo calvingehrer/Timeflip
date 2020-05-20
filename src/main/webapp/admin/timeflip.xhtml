@@ -36,6 +36,11 @@
                 <p:column headerText="User">
                     <h:outputText value="#{timeflips.user.username}"/>
                 </p:column>
+                <p:column style="width:200px;text-align: center">
+                    <p:commandButton action="#{timeflipDetailController.doDeleteTimeflip}" value="Delete" icon="fa fa-trash" title="Delete" update=":timeflipForm:TimeflipTable">
+                        <f:setPropertyActionListener value="#{timeflips}" target="#{timeflipDetailController.timeflip}" />
+                    </p:commandButton>
+                </p:column>
             </p:dataTable>
 
 

@@ -4,6 +4,7 @@ package at.qe.sepm.skeleton.ui.controllers;
 import at.qe.sepm.skeleton.model.TaskEnum;
 import at.qe.sepm.skeleton.model.Timeflip;
 import at.qe.sepm.skeleton.services.TimeflipService;
+import at.qe.sepm.skeleton.utils.MessagesView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -242,6 +243,13 @@ public class TimeflipDetailController implements Serializable {
 
     public void doSaveTimeflip(){
         timeflip = this.timeflipService.saveTimeflip(timeflip);
+    }
+
+    public void doDeleteTimeflip() {
+        this.timeflipService.deleteTimeflip(timeflip);
+        timeflip = null;
+        MessagesView.successMessage("timeflip deletion","successfully deleted");
+
     }
 
 

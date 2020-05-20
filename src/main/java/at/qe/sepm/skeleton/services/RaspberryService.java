@@ -16,8 +16,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+import java.sql.Time;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Component
 @Scope("application")
@@ -67,6 +70,11 @@ public class RaspberryService {
         return raspberryRepository.save(raspberry);
     }
 
+
+
+
+
+
     /**
      * Deletes the raspberry.
      * sets the raspberry fields in other classes to null
@@ -80,11 +88,6 @@ public class RaspberryService {
         room.setEquipped(false);
         roomRepository.save(room);
         raspberry.setRoom(null);
-        for(Timeflip t : raspberry.getTimeflips()) {
-            t.setRaspberry(null);
-            timeflipRepository.save(t);
-        }
-        raspberry.getTimeflips().clear();
         raspberryRepository.delete(raspberry);
     }
 
