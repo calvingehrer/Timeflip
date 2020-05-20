@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
+import java.time.Instant;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -27,10 +29,21 @@ public class BadgeController implements Serializable {
 
     private User currentUser;
 
+    /**
+     *  initializes the current user and the Badges for that week that most of our test data is in
+     */
+
     @PostConstruct
     public void init() {
         this.setCurrentUser(userService.getAuthenticatedUser());
+        Calendar start = Calendar.getInstance();
+        start.set(2020, Calendar.MAY, 4, 0, 0, 0);
+        Calendar end = Calendar.getInstance();
+        end.set(2020, Calendar.MAY, 10, 23, 59, 59);
+        badgeService.evaluateWeeklyBadges(start.toInstant(), end.toInstant());
     }
+
+
 
 
     public User getCurrentUser() {
