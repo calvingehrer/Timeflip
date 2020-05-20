@@ -3,6 +3,7 @@ package at.qe.sepm.skeleton.services;
 import at.qe.sepm.skeleton.model.Raspberry;
 import at.qe.sepm.skeleton.model.Room;
 import at.qe.sepm.skeleton.model.User;
+import at.qe.sepm.skeleton.repositories.RaspberryRepository;
 import at.qe.sepm.skeleton.repositories.RoomRepository;
 import at.qe.sepm.skeleton.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,8 @@ public class RoomService {
     RoomRepository roomRepository;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    RaspberryService raspberryService;
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<Room> getAllRooms(){
@@ -70,14 +73,9 @@ public class RoomService {
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteRoom(Room room) {
+        Raspberry raspberry = room.getRaspberry();
+        raspberryService.deleteRaspberry(raspberry);
         roomRepository.delete(room);
-    }
-
-
-
-    public  void deleteRaspberryInRoom(Room room) {
-        room.setRaspberry(null);
-        roomRepository.save(room);
     }
 
 
