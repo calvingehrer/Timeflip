@@ -31,7 +31,7 @@ public class RaspberryService {
     @Autowired
     RoomRepository roomRepository;
     @Autowired
-    TimeflipRepository timeflipRepository;
+    TimeflipService timeflipService;
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<Raspberry> getAllRaspberries(){
@@ -80,10 +80,7 @@ public class RaspberryService {
         room.setEquipped(false);
         roomRepository.save(room);
         raspberry.setRoom(null);
-        for(Timeflip t : raspberry.getTimeflips()) {
-            t.setRaspberry(null);
-            timeflipRepository.save(t);
-        }
+        timeflipService.setRaspberryNull(raspberry);
         raspberry.getTimeflips().clear();
         raspberryRepository.delete(raspberry);
     }

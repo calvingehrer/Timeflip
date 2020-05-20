@@ -70,6 +70,7 @@ public class TimeflipService {
         return timeflipRepository.findTimeflipOfUser(currentUser);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteTimeFlipOfUser(User user) {
         Timeflip timeflip = timeflipRepository.findTimeflipOfUser(user);
         if (timeflip != null) {
@@ -79,5 +80,12 @@ public class TimeflipService {
         }
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public void setRaspberryNull(Raspberry raspberry) {
+        for (Timeflip t : timeflipRepository.findTimeflipsOfRaspberrys(raspberry)) {
+            t.setRaspberry(null);
+            timeflipRepository.save(t);
+        }
+    }
 
 }
