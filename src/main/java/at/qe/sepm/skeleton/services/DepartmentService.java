@@ -41,6 +41,7 @@ public class DepartmentService {
         newDepartment.setDepartmentName(department.getDepartmentName());
 
         saveDepartment(newDepartment);
+        headOfDepartment.setDepartment(newDepartment);
 
         userService.saveUser(headOfDepartment);
 

@@ -74,4 +74,11 @@ public class RoomService {
     }
 
 
+
+    public  void deleteRaspberryInRoom(Room room) {
+        room.setRaspberry(null);
+        roomRepository.save(room);
+    }
+
+
 }

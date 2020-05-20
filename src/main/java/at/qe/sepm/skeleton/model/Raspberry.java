@@ -29,7 +29,7 @@ public class Raspberry implements Persistable<String>, Serializable {
     @JoinColumn(unique = true)
     private Room room;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private Collection<Timeflip> timeflips;
 
 
