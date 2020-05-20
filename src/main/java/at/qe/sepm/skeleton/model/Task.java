@@ -14,7 +14,7 @@ import java.util.Objects;
  */
 
 @Entity
-public class Task implements Persistable<Long>, Serializable {
+public class Task implements Persistable<Long>, Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

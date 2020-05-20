@@ -77,6 +77,17 @@ public class TaskController implements Serializable  {
         return taskService.getAllTasksBetweenDates(getCurrentUser(), this.getStartOfTimeRange().toInstant(), this.getEndOfTimeRange().toInstant());
     }
 
+    public List<Task> getSortedTasksfromUser(){
+        List<Task> tasks = getTasksFromUser();
+        Collections.sort(tasks, new Comparator<Task>() {
+            @Override
+            public int compare(Task task1, Task task2) {
+                return task2.getStartTime().compareTo(task1.getStartTime());
+            }
+        });
+        return tasks;
+    }
+
     public void resetFilter() {
         this.setStartOfTimeRange(null);
         this.setEndOfTimeRange(null);

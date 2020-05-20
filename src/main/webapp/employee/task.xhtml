@@ -24,7 +24,7 @@
                             <h1>Tasks</h1>
                             <span>If you want to edit a date within the current or the week before click edit date.<br/>
                             If you want to edit a date before you first have to request editing it. </span>
-                            <p:dataTable id="Tasks" var="task" value="#{taskController.tasksFromUser}" scrollable="true">
+                            <p:dataTable id="Tasks" var="task" value="#{taskController.sortedTasksfromUser}" scrollable="true">
                                 <p:column headerText="Task">
                                     <h:outputText value="#{task.task}"/>
                                 </p:column>
