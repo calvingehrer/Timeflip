@@ -171,12 +171,13 @@ public class TaskController implements Serializable  {
             MessagesView.errorMessage("Edit Tasks", e.getMessage());
             return;
         }
-        try {
-            taskService.checkIfEarlierThanTwoWeeks(this.getCurrentUser(), this.getRequestedDate().toInstant());
-        }
-        catch (Exception e) {
-            MessagesView.errorMessage("Edit Tasks", e.getMessage());
-            return;
+        if (!this.getCurrentUser().getRoles().contains(UserRole.DEPARTMENTLEADER) && !this.getCurrentUser().getRoles().contains(UserRole.ADMIN)) {
+            try {
+                taskService.checkIfEarlierThanTwoWeeks(this.getCurrentUser(), this.getRequestedDate().toInstant());
+            } catch (Exception e) {
+                MessagesView.errorMessage("Edit Tasks", e.getMessage());
+                return;
+            }
         }
         try {
             taskService.saveEditedTask(this.getCurrentUser(), this.getTask(), this.getRequestedDate(), this.getStartHour(), this.getEndHour(), this.getStartMinute(), this.getEndMinute());
