@@ -93,6 +93,18 @@ public class UserService {
     }
 
 
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<User> getAllUsersOfTeamByTeamname(String teamname) {
+        return userRepository.findByTeamnamePrefix(teamname);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<User> getAllUsersOfDepartmentByDepartmentname(String department) {
+        return userRepository.findByDepartmentnamePrefix(department);
+    }
+
+
+
     /**
      * Loads a single user identified by its username.
      *

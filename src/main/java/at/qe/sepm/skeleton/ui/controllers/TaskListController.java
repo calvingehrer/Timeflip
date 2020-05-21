@@ -5,6 +5,8 @@ import at.qe.sepm.skeleton.model.Task;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.TaskService;
 import at.qe.sepm.skeleton.services.UserService;
+import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
+import at.qe.sepm.skeleton.ui.beans.SessionInfoBean;
 import at.qe.sepm.skeleton.ui.beans.TimeZoneBean;
 import com.sun.istack.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,8 @@ public class TaskListController implements Serializable {
     UserService userService;
     @Autowired
     TimeZoneBean timeZoneBean;
+    @Autowired
+    CurrentUserBean currentUserBean;
 
     private Date startOfTimeRange;
 
@@ -37,19 +41,9 @@ public class TaskListController implements Serializable {
 
     private Interval interval = Interval.NONE;
 
-    private User currentUser;
-
     @PostConstruct
     public void init() {
-        this.setCurrentUser(userService.getAuthenticatedUser());
-    }
-
-    public User getCurrentUser() {
-        return currentUser;
-    }
-
-    public void setCurrentUser(User currentUser) {
-        this.currentUser = currentUser;
+        currentUserBean.init();
     }
 
     public Date getStartOfTimeRange() {
@@ -86,7 +80,7 @@ public class TaskListController implements Serializable {
 
     public List<Task> getTasksFromUser() {
         if (this.getInterval()==Interval.NONE) {
-            return taskService.getAllTasksBetweenDates(getCurrentUser(), null, null);
+            return taskService.getAllTasksBetweenDates(currentUserBean.getCurrentUser(), null, null);
         }
         Calendar calendar = Calendar.getInstance(timeZoneBean.getUtcTimeZone());
         calendar.setTime(this.getChosenDate());
@@ -102,7 +96,7 @@ public class TaskListController implements Serializable {
             calendar.set(Calendar.DAY_OF_MONTH, 1);
             settingTimeRange(calendar, "month", 1);
         }
-        return taskService.getAllTasksBetweenDates(getCurrentUser(), this.getStartOfTimeRange().toInstant(), this.getEndOfTimeRange().toInstant());
+        return taskService.getAllTasksBetweenDates(currentUserBean.getCurrentUser(), this.getStartOfTimeRange().toInstant(), this.getEndOfTimeRange().toInstant());
     }
 
     public void resetFilter() {
