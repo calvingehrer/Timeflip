@@ -4,6 +4,7 @@ import at.qe.sepm.skeleton.model.*;
 import at.qe.sepm.skeleton.services.RequestService;
 import at.qe.sepm.skeleton.services.TaskService;
 import at.qe.sepm.skeleton.services.UserService;
+import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import at.qe.sepm.skeleton.utils.MessagesView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -25,15 +26,17 @@ import java.util.stream.Collectors;
 public class TaskController implements Serializable  {
 
     @Autowired
-    RequestService requestService;
+    private RequestService requestService;
 
     @Autowired
-    TaskService taskService;
+    private TaskService taskService;
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
-    private User currentUser;
+    @Autowired
+    CurrentUserBean currentUserBean;
+
 
     private TaskEnum task;
 
@@ -51,15 +54,7 @@ public class TaskController implements Serializable  {
 
     @PostConstruct
     public void init() {
-        this.setCurrentUser(userService.getAuthenticatedUser());
-    }
-
-    public User getCurrentUser() {
-        return currentUser;
-    }
-
-    public void setCurrentUser(User currentUser) {
-        this.currentUser = currentUser;
+        currentUserBean.init();
     }
 
     public long duration(Task task) {
@@ -117,11 +112,14 @@ public class TaskController implements Serializable  {
     }
 
 
-
-
+    /**
+     * method is called when the user is requesting a date that is not in the current or the previous week
+     * does not check whether the user is a departmentleader because a depaartmentleader does not have to request
+     * @param status
+     */
 
     public void sendRequest(RequestEnum status) {
-        User u = getCurrentUser();
+        User u = currentUserBean.getCurrentUser();
         User handler1 = userService.getTeamLeader(u.getTeam());
         if (u.equals(handler1)) {
             handler1 = null;
@@ -130,16 +128,7 @@ public class TaskController implements Serializable  {
         requestService.addRequest(u, handler1, handler2, this.requestedDate, status,"Editing  Tasks");
     }
 
-    /**
-     * method to complete the tasks
-     * @param query
-     * @return
-     */
 
-    public List<String> completeTask(String query) {
-        String upperQuery = query.toUpperCase();
-        return TaskEnum.getAllTasks().stream().filter(a -> a.contains(upperQuery)).collect(Collectors.toList());
-    }
 
     /**
      * method to save a task that was within the current or the last week
@@ -157,14 +146,14 @@ public class TaskController implements Serializable  {
             MessagesView.errorMessage("Edit Tasks", e.getMessage());
             return;
         }
-        if (!this.getCurrentUser().getRoles().contains(UserRole.DEPARTMENTLEADER) && !this.getCurrentUser().getRoles().contains(UserRole.ADMIN)) {
-            if(taskService.checkIfEarlierThanTwoWeeks(this.getCurrentUser(), this.getRequestedDate().toInstant())) {
+        if (!currentUserBean.getCurrentUser().getRoles().contains(UserRole.DEPARTMENTLEADER) && !currentUserBean.getCurrentUser().getRoles().contains(UserRole.ADMIN)) {
+            if(taskService.checkIfEarlierThanTwoWeeks(currentUserBean.getCurrentUser(), this.getRequestedDate().toInstant())) {
                 MessagesView.errorMessage("Edit Tasks", "You need to request this date first");
                 return;
             }
         }
         try {
-            taskService.saveEditedTask(this.getCurrentUser(), this.getTask(), this.getRequestedDate(), this.getStartHour(), this.getEndHour(), this.getStartMinute(), this.getEndMinute());
+            taskService.saveEditedTask(currentUserBean.getCurrentUser(), this.getTask(), this.getRequestedDate(), this.getStartHour(), this.getEndHour(), this.getStartMinute(), this.getEndMinute());
         }
         catch (Exception e) {
             MessagesView.errorMessage("Edit Tasks", e.getMessage());
@@ -180,7 +169,7 @@ public class TaskController implements Serializable  {
             return;
         }
         try {
-            taskService.checkIfEarlierThanTwoWeeks(this.getCurrentUser(), this.getRequestedDate().toInstant());
+            taskService.checkIfEarlierThanTwoWeeks(currentUserBean.getCurrentUser(), this.getRequestedDate().toInstant());
         }
         catch (Exception e) {
             sendRequest(RequestEnum.OPEN);
@@ -189,7 +178,7 @@ public class TaskController implements Serializable  {
 
     public void editDate () {
         try {
-            taskService.saveEditedTask(this.getCurrentUser(), this.getTask(), this.getRequestedDate(), this.getStartHour(), this.getEndHour(), this.getStartMinute(), this.getEndMinute());
+            taskService.saveEditedTask(currentUserBean.getCurrentUser(), this.getTask(), this.getRequestedDate(), this.getStartHour(), this.getEndHour(), this.getStartMinute(), this.getEndMinute());
         }
         catch (Exception e) {
             MessagesView.errorMessage("Edit Tasks", e.getMessage());
