@@ -22,15 +22,6 @@ public class TimeflipService {
     @Autowired
     TimeflipRepository timeflipRepository;
 
-    @Autowired
-    RaspberryService raspberryService;
-
-
-    @Autowired
-    private MailService mailService;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public Timeflip getTimeFlipByAddress(String macAddress){

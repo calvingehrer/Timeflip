@@ -81,7 +81,6 @@ public class RaspberryService {
         roomRepository.save(room);
         raspberry.setRoom(null);
         timeflipService.setRaspberryNull(raspberry);
-        raspberry.getTimeflips().clear();
         raspberryRepository.delete(raspberry);
     }
 
