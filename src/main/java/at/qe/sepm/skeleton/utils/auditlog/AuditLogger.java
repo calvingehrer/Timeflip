@@ -4,7 +4,6 @@ package at.qe.sepm.skeleton.utils.auditlog;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.AuditLogRepository;
 import at.qe.sepm.skeleton.repositories.UserRepository;
-import at.qe.sepm.skeleton.services.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
