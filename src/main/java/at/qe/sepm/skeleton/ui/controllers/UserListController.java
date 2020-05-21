@@ -2,7 +2,6 @@ package at.qe.sepm.skeleton.ui.controllers;
 
 import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
-import at.qe.sepm.skeleton.services.TimeflipService;
 import at.qe.sepm.skeleton.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -31,6 +30,7 @@ public class UserListController implements Serializable {
     private String userrole = "";
     private String username = "";
     private String teamname = "";
+    private String departmentname = "";
 
     /**
      * Returns a list of all users.
@@ -41,8 +41,16 @@ public class UserListController implements Serializable {
         if (!username.equals("")) {
             return userService.getAllUsersByUsername(username);
         }
+        if (!teamname.equals("")) {
+            return userService.getAllUsersOfTeamByTeamname(teamname);
+        }
+        if (!departmentname.equals("")) {
+            return userService.getAllUsersOfDepartmentByDepartmentname(departmentname);
+        }
         return userService.getAllUsersByRole(userrole);
     }
+
+
 
 
     public Collection<User> getUsersWithoutTimeflip() {
@@ -63,6 +71,14 @@ public class UserListController implements Serializable {
 
     public void setTeamname(String teamname) {
         this.teamname = teamname;
+    }
+
+    public String getDepartmentname() {
+        return departmentname;
+    }
+
+    public void setDepartmentname(String departmentname) {
+        this.departmentname = departmentname;
     }
 
     public void resetFilter() {

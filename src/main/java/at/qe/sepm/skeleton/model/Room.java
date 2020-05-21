@@ -27,11 +27,8 @@ public class Room implements Persistable<String>, Serializable {
     @ManyToOne(optional = true)
     private User createUser;
 
-    //@OneToOne
-    //private Raspberry raspberry;
-
-    //@Autowired
-    //private RaspberryService raspberryService = new RaspberryService();
+    @OneToOne(mappedBy = "room")
+    private Raspberry raspberry;
 
     private boolean equipped;
 
@@ -59,7 +56,6 @@ public class Room implements Persistable<String>, Serializable {
         this.createUser = createUser;
     }
 
-/*
     public Raspberry getRaspberry() {
         return raspberry;
     }
@@ -68,19 +64,9 @@ public class Room implements Persistable<String>, Serializable {
         this.raspberry = raspberry;
     }
 
-
-*/
-    public boolean getEquipped() {
-       /* List<String> rooms = new ArrayList<>();
-        for(Raspberry raspberry : raspberryService.getAllRaspberries()){
-            if(!rooms.contains(raspberry.getRoom())){
-                rooms.add(raspberry.getRoom().getRoomNumber());
-            }
-        }
-        return rooms.contains(this.roomNumber);*/
-       return false;
+    public boolean isEquipped() {
+        return !(raspberry == null);
     }
-
 
     public void setEquipped(boolean equipped) {
         this.equipped = equipped;

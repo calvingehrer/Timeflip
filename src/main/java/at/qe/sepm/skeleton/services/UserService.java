@@ -1,7 +1,7 @@
 package at.qe.sepm.skeleton.services;
 
-import at.qe.sepm.skeleton.configs.WebSecurityConfig;
 import at.qe.sepm.skeleton.model.*;
+import at.qe.sepm.skeleton.configs.WebSecurityConfig;
 import at.qe.sepm.skeleton.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -29,13 +29,22 @@ import java.util.List;
 public class UserService {
 
     @Autowired
-    private MailService mailService;
+    MailService mailService;
 
     @Autowired
-    private UserRepository userRepository;
+    TaskService taskService;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    BadgeService badgeService;
+
+    @Autowired
+    RequestService requestService;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Autowired
     TimeflipService timeflipService;
@@ -108,6 +117,18 @@ public class UserService {
     }
 
 
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<User> getAllUsersOfTeamByTeamname(String teamname) {
+        return userRepository.findByTeamnamePrefix(teamname);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<User> getAllUsersOfDepartmentByDepartmentname(String department) {
+        return userRepository.findByDepartmentnamePrefix(department);
+    }
+
+
+
     /**
      * Loads a single user identified by its username.
      *
@@ -164,6 +185,10 @@ public class UserService {
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteUser(User user) {
+        taskService.deleteTaskOfUser(user);
+        badgeService.deleteBadgesOfUser(user);
+        requestService.deleteRequestsOfUser(user);
+        timeflipService.deleteTimeFlipOfUser(user);
         userRepository.delete(user);
         logger.logDeletion(user.getUsername(), currentUser);
         // :TODO: write some audit log stating who and when this user was permanently deleted.
@@ -193,13 +218,19 @@ public class UserService {
         return toSave;
     }
 
+
+
+
+
+
+
     @Transactional
     public User updateUser(User toSave) {
         logger.logUpdate(toSave.getUsername(), currentUser);
         return userRepository.save(setUpdatingFieldsBeforePersist(toSave));
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+
     public User getTeamLeader(Team team) {
         return userRepository.findTeamLeader(team);
     }
@@ -209,12 +240,12 @@ public class UserService {
         return userRepository.findEmployeesWithoutTeam();
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+
     public List<User> getUsersOfTeam(Team team) {
         return userRepository.findUsersOfTeam(team);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+
     public User getDepartmentLeader(Department department) {
         return userRepository.findDepartmentLeader(department);
     }

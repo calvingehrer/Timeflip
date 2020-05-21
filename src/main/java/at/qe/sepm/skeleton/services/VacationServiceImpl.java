@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.time.Duration;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Set;
 
@@ -55,6 +56,9 @@ public class VacationServiceImpl implements VacationService {
     @Override
     @Transactional
     public void addVacation(User user, Vacation vacation) throws VacationException {
+        if (vacation.getStart().isBefore(Calendar.getInstance().toInstant()) || vacation.getEnd().isBefore(Calendar.getInstance().toInstant())) {
+            throw new VacationException("The requested Vacation would already have passed.");
+        }
         if (vacation.getStart().compareTo(vacation.getEnd()) >= 0) {
             throw new VacationException("You have done nonesense. End must be after the beginning.");
         }

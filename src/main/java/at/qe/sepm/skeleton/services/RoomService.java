@@ -3,6 +3,7 @@ package at.qe.sepm.skeleton.services;
 import at.qe.sepm.skeleton.model.Raspberry;
 import at.qe.sepm.skeleton.model.Room;
 import at.qe.sepm.skeleton.model.User;
+import at.qe.sepm.skeleton.repositories.RaspberryRepository;
 import at.qe.sepm.skeleton.repositories.RoomRepository;
 import at.qe.sepm.skeleton.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,9 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -53,7 +57,7 @@ public class RoomService {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public List<Room> getAllRooms() {
+    public List<Room> getAllRooms(){
         return roomRepository.findAll();
     }
 
@@ -65,7 +69,8 @@ public class RoomService {
             listRooms.remove(raspberry.getRoom());
         }
 
-        return listRooms;
+
+        return roomRepository.findRoomsWithoutRaspberry();
     }
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DEPARTMENTLEADER')")
@@ -89,9 +94,12 @@ public class RoomService {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public Room saveRoom(Room room) {
+        if (room.isNew()) {
+            room.setCreateDate(new Date());
+            room.setCreateUser(getAuthenticatedUser());
+        }
         logger.logUpdate(room.toString(), this.currentUser);
         return roomRepository.save(room);
-
     }
 
     /**
@@ -101,6 +109,8 @@ public class RoomService {
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteRoom(Room room) {
+        Raspberry raspberry = room.getRaspberry();
+        raspberryService.deleteRaspberry(raspberry);
         roomRepository.delete(room);
         logger.logDeletion(room.toString(), this.currentUser);
     }

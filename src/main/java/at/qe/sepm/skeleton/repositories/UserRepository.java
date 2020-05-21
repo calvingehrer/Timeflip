@@ -6,7 +6,6 @@ import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.model.UserRole;
 import java.util.List;
 
-import at.qe.sepm.skeleton.repositories.AbstractRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -36,6 +35,12 @@ public interface UserRepository extends AbstractRepository<User, String> {
 
     @Query("SELECT u FROM User u WHERE u.username LIKE CONCAT(:usernamePrefix, '%')")
     List<User> findByUsernamePrefix(@Param("usernamePrefix") String usernamePrefix);
+
+    @Query("SELECT u FROM User u WHERE u.team.teamName LIKE CONCAT(:teamnamePrefix, '%')")
+    List<User> findByTeamnamePrefix(@Param("teamnamePrefix") String teamnamePrefix);
+
+    @Query("SELECT u FROM User u WHERE u.department.departmentName LIKE CONCAT(:departmentnamePrefix, '%')")
+    List<User> findByDepartmentnamePrefix(@Param("departmentnamePrefix") String departmentnamePrefix);
 
     @Query("SELECT u from User u WHERE u.team IS NULL AND 'TEAMLEADER' NOT MEMBER OF u.roles AND 'DEPARTMENTLEADER' NOT MEMBER OF u.roles AND 'ADMIN' NOT MEMBER OF u.roles" )
     List<User> findEmployeesWithoutTeam();

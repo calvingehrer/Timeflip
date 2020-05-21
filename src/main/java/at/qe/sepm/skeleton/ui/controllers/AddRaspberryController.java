@@ -12,18 +12,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.io.Serializable;
 
 @Component
 @Scope("view")
-public class AddRaspberryController {
+public class AddRaspberryController implements Serializable {
 
     @Autowired
     private RaspberryService raspberryService;
 
     @Autowired
-    private RoomService roomService;
+    private RoomDetailController roomDetailController;
 
     private Raspberry raspberry = new Raspberry();
 
@@ -31,9 +30,8 @@ public class AddRaspberryController {
 
 
     public void add(){
+        roomDetailController.setRoom(room);
         raspberryService.addNewRaspberry(raspberry, room);
-        room.setEquipped(true);
-        //roomService.saveRoom(room);
         resetRaspberry();
     }
 

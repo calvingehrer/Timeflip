@@ -1,15 +1,14 @@
 package at.qe.sepm.skeleton.model;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
+/**
+ * Entity representing a Team
+ */
 
 @Entity
 public class Team implements Persistable<String>, Serializable {

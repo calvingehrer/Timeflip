@@ -51,6 +51,7 @@ public class DepartmentService {
         newDepartment.setDepartmentName(department.getDepartmentName());
 
         saveDepartment(newDepartment);
+        headOfDepartment.setDepartment(newDepartment);
 
         userService.saveUser(headOfDepartment);
         //logger.logCreation(headOfDepartment.toString(), userService.getAuthenticatedUser());

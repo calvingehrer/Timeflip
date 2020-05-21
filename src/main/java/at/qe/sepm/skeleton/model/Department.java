@@ -4,10 +4,13 @@ import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-
+/**
+ * Entity representing Department
+ */
 @Entity
 public class Department implements Persistable<String>, Serializable {
 
@@ -16,6 +19,8 @@ public class Department implements Persistable<String>, Serializable {
     @Id
     @Column(length = 100)
     private String departmentName;
+
+    private Date createDate;
 
     public String getDepartmentName() {
         return departmentName;
