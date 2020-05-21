@@ -4,6 +4,7 @@ package at.qe.sepm.skeleton.services;
 import at.qe.sepm.skeleton.exceptions.TaskException;
 import at.qe.sepm.skeleton.model.*;
 import at.qe.sepm.skeleton.repositories.TaskRepository;
+import at.qe.sepm.skeleton.ui.beans.TimeZoneBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,6 +21,8 @@ public class TaskService {
 
     @Autowired
     private TaskRepository taskRepository;
+    @Autowired
+    TimeZoneBean timeZoneBean;
 
     public List<Task> getAllTasksBetweenDates(User user, Instant start, Instant end) {
         if (start == null || end == null) {
@@ -72,10 +75,6 @@ public class TaskService {
         return dailyTasks;
     }
 
-    public TimeZone getUtcTimeZone() {
-        return TimeZone.getTimeZone(ZoneId.of("UTC"));
-    }
-
     /**
      * Method to save a new Task, that can only be edited in the web application
      **/
@@ -85,7 +84,7 @@ public class TaskService {
         }
         checkTime(startHour, endHour, startMinute, endMinute);
 
-        Calendar calendar = Calendar.getInstance(getUtcTimeZone());
+        Calendar calendar = Calendar.getInstance(timeZoneBean.getUtcTimeZone());
 
         calendar.setTime(date);
         calendar.set(Calendar.SECOND, 0);
@@ -155,17 +154,14 @@ public class TaskService {
     }
 
     /**
-     * check if something is earlier than
+     * check if something is earlier than the current or the last week
      * @param user
      * @param date
      * @throws TaskException
      */
 
-    public void checkIfEarlierThanTwoWeeks (User user, Instant date) throws TaskException {
-        if (user.getRoles().contains(UserRole.DEPARTMENTLEADER)) {
-            return;
-        }
-        Calendar calendar = Calendar.getInstance(getUtcTimeZone());
+    public boolean checkIfEarlierThanTwoWeeks (User user, Instant date) {
+        Calendar calendar = Calendar.getInstance(timeZoneBean.getUtcTimeZone());
         calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
         calendar.add(Calendar.DATE, -7);
         calendar.set(Calendar.HOUR_OF_DAY,0);
@@ -173,10 +169,7 @@ public class TaskService {
         calendar.set(Calendar.SECOND,0);
 
         Instant lastMonday = calendar.toInstant();
-        if (date.isBefore(lastMonday)) {
-            throw new TaskException("The requested date was earlier than last monday. " +
-                    "Please send a request");
-        }
+        return date.isBefore(lastMonday);
     }
 
     /**

@@ -29,22 +29,22 @@ import java.util.List;
 public class UserService {
 
     @Autowired
-    private MailService mailService;
+    MailService mailService;
 
     @Autowired
-    private TaskService taskService;
+    TaskService taskService;
 
     @Autowired
-    private BadgeService badgeService;
+    BadgeService badgeService;
 
     @Autowired
-    private RequestService requestService;
+    RequestService requestService;
 
     @Autowired
-    private UserRepository userRepository;
+    UserRepository userRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    PasswordEncoder passwordEncoder;
 
     @Autowired
     TimeflipService timeflipService;
@@ -91,6 +91,18 @@ public class UserService {
     public List<User> getAllUsersByUsername(String username) {
         return userRepository.findByUsernamePrefix(username);
     }
+
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<User> getAllUsersOfTeamByTeamname(String teamname) {
+        return userRepository.findByTeamnamePrefix(teamname);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<User> getAllUsersOfDepartmentByDepartmentname(String department) {
+        return userRepository.findByDepartmentnamePrefix(department);
+    }
+
 
 
     /**
