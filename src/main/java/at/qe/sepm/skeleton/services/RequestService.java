@@ -81,41 +81,5 @@ public class RequestService {
         logger.logDeletion(request.getDescription(), currentUserBean.getCurrentUser());
     }
 
-    /**
-     * when deleting user delete all open requests
-     * when user is a team-leader and the field for department-leader is not null
-     * only set the field team-leader null
-     * vise versa for department-leader
-     * @param user
-     */
 
-    public void deleteRequestsOfUser(User user) {
-        for (Request r: requestRepository.findAllRequestsOfRequester(user)) {
-            deleteRequest(r);
-        }
-        if (user.getRoles().contains(UserRole.TEAMLEADER)) {
-            for (Request r : requestRepository.findAllRequestsOfRequestHandlerTL(user)) {
-                if (r.getRequestHandlerDepartmentLeader() == null) {
-                    deleteRequest(r);
-                }
-
-                else {
-                    r.setRequestHandlerTeamLeader(null);
-                    requestRepository.save(r);
-                }
-            }
-        }
-        if (user.getRoles().contains(UserRole.DEPARTMENTLEADER)) {
-            for (Request r : requestRepository.findAllRequestsOfRequestHandlerDL(user)) {
-                if (r.getRequestHandlerTeamLeader() == null) {
-                    deleteRequest(r);
-                }
-
-                else {
-                    r.setRequestHandlerDepartmentLeader(null);
-                    requestRepository.save(r);
-                }
-            }
-        }
-    }
 }

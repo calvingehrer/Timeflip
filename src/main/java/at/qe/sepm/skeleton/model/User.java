@@ -55,7 +55,7 @@ public class User implements Persistable<String>, Serializable {
     @Enumerated(EnumType.STRING)
     private Set<UserRole> roles;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_vacation")
     Set<Vacation> vacations = new HashSet<>();
 

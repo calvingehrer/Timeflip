@@ -45,28 +45,6 @@ public class ScheduleController implements Serializable {
     @Autowired
     private VacationService vacationService;
 
-    /*public ScheduleController(VacationServiceImpl vacationService) {
-
-        eventModel = new DefaultScheduleModel();
-
-        Collection<Vacation> vacations = vacationService.getVacationFromUser(sessionInfoBean.getCurrentUser());
-
-
-        if (!vacations.isEmpty()) {
-
-            vacations.forEach(x ->
-            {
-
-                Instant endInstant = x.getEnd();
-
-                Date newEnd = (Date) Date.from(endInstant.plus(1, ChronoUnit.MINUTES));
-
-                DefaultScheduleEvent vacation = new DefaultScheduleEvent("Vacation", java.util.Date.from(x.getStart()), newEnd, true);
-                vacation.setData(x);
-                eventModel.addEvent(vacation);
-            });
-        }
-    }*/
 
     @PostConstruct
     public void init() {

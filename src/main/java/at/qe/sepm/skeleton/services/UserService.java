@@ -2,6 +2,7 @@ package at.qe.sepm.skeleton.services;
 
 import at.qe.sepm.skeleton.configs.WebSecurityConfig;
 import at.qe.sepm.skeleton.model.*;
+import at.qe.sepm.skeleton.repositories.*;
 import at.qe.sepm.skeleton.repositories.TimeflipRepository;
 import at.qe.sepm.skeleton.repositories.UserRepository;
 import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
@@ -35,13 +36,13 @@ public class UserService {
     MailService mailService;
 
     @Autowired
-    TaskService taskService;
+    TaskRepository taskRepository;
 
     @Autowired
-    BadgeService badgeService;
+    BadgeRepository badgeRepository;
 
     @Autowired
-    RequestService requestService;
+    RequestRepository requestRepository;
 
     @Autowired
     UserRepository userRepository;
@@ -52,23 +53,9 @@ public class UserService {
     @Autowired
     TimeflipRepository timeflipRepository;
 
-
-    @Autowired
-    @Lazy
-    CurrentUserBean currentUserBean;
     @Autowired
 
     private Logger<String, User> logger;
-
-    /**
-     * A Function to get the current user
-     */
-
-    @PostConstruct
-    public void init() {
-        currentUserBean.init();
-    }
-
 
     /**
      * Returns a collection of all users.
@@ -155,7 +142,7 @@ public class UserService {
             user.setUpdateDate(new Date());
             user.setUpdateUser(getAuthenticatedUser());
         }
-        logger.logUpdate(user.getUsername(), currentUserBean.getCurrentUser());
+        logger.logUpdate(user.getUsername(), getAuthenticatedUser());
         return userRepository.save(user);
     }
 
@@ -172,7 +159,7 @@ public class UserService {
         newUser.setRoles(user.getRoles());
         mailService.sendEmailTo(newUser, "New user added", "You've been added as a new user");
         saveUser(newUser);
-        logger.logCreation(newUser.getUsername(), currentUserBean.getCurrentUser());
+        logger.logCreation(newUser.getUsername(), getAuthenticatedUser());
     }
 
     /**
@@ -182,15 +169,15 @@ public class UserService {
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteUser(User user) {
-        taskService.deleteTaskOfUser(user);
-        badgeService.deleteBadgesOfUser(user);
-        requestService.deleteRequestsOfUser(user);
-        Timeflip timeflip = timeflipRepository.findTimeflipOfUser(user);
-        timeflipRepository.delete(timeflip);
+        deleteTaskOfUser(user);
+        deleteBadgesOfUser(user);
+        deleteRequestsOfUser(user);
+        Timeflip t = timeflipRepository.findTimeflipOfUser(user);
+        if (t != null) {
+            timeflipRepository.delete(t);
+        }
         userRepository.delete(user);
-
-        // :TODO: write some audit log stating who and when this user was permanently deleted.
-        logger.logDeletion(user.getUsername(), currentUserBean.getCurrentUser());
+        logger.logDeletion(user.getUsername(), getAuthenticatedUser());
     }
 
     public User getAuthenticatedUser() {
@@ -223,7 +210,7 @@ public class UserService {
 
     @Transactional
     public User updateUser(User toSave) {
-        logger.logUpdate(toSave.getUsername(), currentUserBean.getCurrentUser());
+        logger.logUpdate(toSave.getUsername(), getAuthenticatedUser());
         return userRepository.save(setUpdatingFieldsBeforePersist(toSave));
     }
 
@@ -264,5 +251,73 @@ public class UserService {
             withoutTimeflip.remove(timeflip.getUser());
         }
         return withoutTimeflip;
+    }
+
+    /**
+     * deletes all tasks of the user
+     * @param user
+     */
+
+    public void deleteTaskOfUser (User user) {
+        for (Task t: taskRepository.findTasksFromUser(user)) {
+            t.setUser(null);
+            t.setDepartment(null);
+            t.setTeam(null);
+            taskRepository.save(t);
+            taskRepository.delete(t);
+            logger.logDeletion(t.getTask().toString(), getAuthenticatedUser());
+        }
+
+    }
+
+    /**
+     * deletes all badges of the user
+     * @param user
+     */
+
+    public void deleteBadgesOfUser(User user) {
+        for(Badge b: badgeRepository.findBadgesFromUser(user)) {
+            badgeRepository.delete(b);
+            logger.logDeletion(b.getBadgeType().toString(), getAuthenticatedUser());
+        }
+    }
+
+    /**
+     * when deleting user delete all open requests
+     * when user is a team-leader and the field for department-leader is not null
+     * only set the field team-leader null
+     * vise versa for department-leader
+     * @param user
+     */
+
+    public void deleteRequestsOfUser(User user) {
+        for (Request r: requestRepository.findAllRequestsOfRequester(user)) {
+            requestRepository.delete(r);
+            logger.logDeletion(r.getDescription(), getAuthenticatedUser());
+        }
+        if (user.getRoles().contains(UserRole.TEAMLEADER)) {
+            for (Request r : requestRepository.findAllRequestsOfRequestHandlerTL(user)) {
+                if (r.getRequestHandlerDepartmentLeader() == null) {
+                    requestRepository.delete(r);
+                }
+
+                else {
+                    r.setRequestHandlerTeamLeader(null);
+                    requestRepository.save(r);
+                }
+            }
+        }
+        if (user.getRoles().contains(UserRole.DEPARTMENTLEADER)) {
+            for (Request r : requestRepository.findAllRequestsOfRequestHandlerDL(user)) {
+                if (r.getRequestHandlerTeamLeader() == null) {
+                    requestRepository.delete(r);
+                }
+
+                else {
+                    r.setRequestHandlerDepartmentLeader(null);
+                    requestRepository.save(r);
+                }
+            }
+        }
     }
 }

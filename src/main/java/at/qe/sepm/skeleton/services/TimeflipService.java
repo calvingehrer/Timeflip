@@ -107,12 +107,5 @@ public class TimeflipService {
         logger.logDeletion(timeflip.getId(), user);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public void setRaspberryNull(Raspberry raspberry) {
-        for (Timeflip t : timeflipRepository.findTimeflipsOfRaspberrys(raspberry)) {
-            t.setRaspberry(null);
-            timeflipRepository.save(t);
-        }
-    }
 
 }
