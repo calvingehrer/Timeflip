@@ -21,10 +21,11 @@
                             <p:messages id="messages" showDetail="true" closable="true">
                                 <p:autoUpdate />
                             </p:messages>
-                            <h1>Tasks</h1>
-                            <span>If you want to edit a date within the current or the week before click edit date.<br/>
-                            If you want to edit a date before you first have to request editing it. </span>
+
                             <p:dataTable id="Tasks" var="task" value="#{taskController.tasksFromUser}" scrollable="true">
+                                <f:facet name="header">
+                                    My Tasks
+                                </f:facet>
                                 <p:column headerText="Task">
                                     <h:outputText value="#{task.task}"/>
                                 </p:column>
@@ -40,11 +41,14 @@
 
                             </p:dataTable>
                             <p:commandButton update=":TaskForm:Tasks" value="Edit Tasks" styleClass="addButton" oncomplete="PF('editTasksWithinTimeFrameDialog').show()"/>
-                            <p:commandButton update=":TaskForm:acceptedRequestsTable" value="Request Date" styleClass="addButton" oncomplete="PF('requestDateDialog').show()"/>
+                            <p:commandButton update=":TaskForm:acceptedRequestsTable" value="Request Date" styleClass="addButton" oncomplete="PF('requestDateDialog').show()" rendered="#{!sessionInfoBean.hasRole('DEPARTMENTLEAADER') and !sessionInfoBean.hasRole('ADMIN')} "/>
                             <p:commandButton update=":TaskForm:Tasks" value="Filter Tasks" styleClass="addButton" oncomplete="PF('filterTaskDialog').show()"/>
 
-                            <h2>Editable Dates</h2>
-                            <p:dataTable id="acceptedRequestsTable" var="acceptedRequest" value="#{requestController.acceptedRequestsEmployee}" scrollable="true">
+                            <p:separator></p:separator>
+                            <p:dataTable id="acceptedRequestsTable" var="acceptedRequest" value="#{requestController.acceptedRequestsEmployee}" scrollable="true" rendered="#{!sessionInfoBean.hasRole('DEPARTMENTLEAADER') and !sessionInfoBean.hasRole('ADMIN')} ">
+                                <f:facet name="header">
+                                    Editable Dates
+                                </f:facet>
                                 <p:column headerText="Description">
                                     <h:outputText value="#{acceptedRequest.description}"/>
                                 </p:column>

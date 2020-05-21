@@ -7,7 +7,7 @@
     <body>
         <ui:composition>
             <h:form>
-                <p:menubar>
+                <p:menubar widgetVar="menu" >
                     <p:menuitem label="Overview" url="/employee/overview.xhtml" rendered="#{sessionInfoBean.hasRole('EMPLOYEE')}"/>
                     <p:submenu label="Statistics" rendered="#{sessionInfoBean.hasRole('EMPLOYEE')}">
                         <p:menuitem value="Personal Statistics" url="/employee/personal-statistics.xhtml"/>
