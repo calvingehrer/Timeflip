@@ -23,6 +23,10 @@ public class TimeflipService {
     TimeflipRepository timeflipRepository;
 
     @Autowired
+    RaspberryService raspberryService;
+
+
+    @Autowired
     private MailService mailService;
 
     @Autowired
@@ -57,6 +61,18 @@ public class TimeflipService {
     @PreAuthorize("hasAuthority('EMPLOYEE')")
     public Timeflip saveTimeflip(Timeflip timeflip) {
         return timeflipRepository.save(timeflip);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public void deleteTimeflip(Timeflip timeflip) {
+
+
+        timeflip.setRaspberry(null);
+        timeflip.setTasks(null);
+        timeflip.setUser(null);
+        timeflip.setCreateDate(null);
+
+        timeflipRepository.delete(timeflip);
     }
 
 
