@@ -106,6 +106,8 @@ public class UserListController implements Serializable {
         return userService.getUsersOfTeam(team);
     }
 
+
+
     public User getTeamLeader(Team team) {
         return userService.getTeamLeader(team);
     }

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -37,13 +38,21 @@ public class RoomService {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<Room> getRoomsWithoutRaspberry() {
-        return roomRepository.findRoomsWithoutRaspberry();
+        List<Room> rooms = new ArrayList<>();
+
+        for(Room room : roomRepository.findAllRooms()){
+            if(room.getRaspberry() == null){
+                rooms.add(room);
+            }
+        }
+        return rooms;
     }
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DEPARTMENTLEADER')")
     public void addNewRoom(Room room) {
         Room newRoom = new Room();
         newRoom.setRoomNumber(room.getRoomNumber());
+        newRoom.setRaspberry(null);
         saveRoom(newRoom);
     }
 
