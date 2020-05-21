@@ -4,6 +4,7 @@ package at.qe.sepm.skeleton.services;
 import at.qe.sepm.skeleton.exceptions.VacationException;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.model.Vacation;
+import at.qe.sepm.skeleton.ui.beans.HolidayBean;
 import at.qe.sepm.skeleton.utils.TimeConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.Duration;
+import java.time.Instant;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Set;
@@ -22,6 +24,9 @@ public class VacationServiceImpl implements VacationService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    HolidayBean holidayBean;
 
 
     @Override
@@ -50,6 +55,12 @@ public class VacationServiceImpl implements VacationService {
         User managedUser = this.userService.getAuthenticatedUser();
 
         long lengthNewVacation = Duration.between(vacation.getStart(), vacation.getEnd()).toDays();
+
+        for (Instant i = vacation.getStart(); i.isBefore(vacation.getEnd()); i = i.plusSeconds(86400)) {
+            if (holidayBean.getPublicHolidays().contains(i)) {
+                lengthNewVacation = lengthNewVacation - 1;
+            }
+        }
 
         long totalDays = managedUser.getVacations().stream().filter(x -> TimeConverter.getYear(x.getStart()) == beginYear).map(x -> Duration.between(x.getStart(), x.getEnd()).toDays()).mapToLong(Long::valueOf).sum();
 
