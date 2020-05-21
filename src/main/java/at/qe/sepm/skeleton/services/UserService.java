@@ -2,6 +2,7 @@ package at.qe.sepm.skeleton.services;
 
 import at.qe.sepm.skeleton.configs.WebSecurityConfig;
 import at.qe.sepm.skeleton.model.*;
+import at.qe.sepm.skeleton.repositories.TimeflipRepository;
 import at.qe.sepm.skeleton.repositories.UserRepository;
 import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,7 @@ public class UserService {
     PasswordEncoder passwordEncoder;
 
     @Autowired
-    TimeflipService timeflipService;
+    TimeflipRepository timeflipRepository;
 
 
     @Autowired
@@ -184,7 +185,8 @@ public class UserService {
         taskService.deleteTaskOfUser(user);
         badgeService.deleteBadgesOfUser(user);
         requestService.deleteRequestsOfUser(user);
-        timeflipService.deleteTimeFlipOfUser(user);
+        Timeflip timeflip = timeflipRepository.findTimeflipOfUser(user);
+        timeflipRepository.delete(timeflip);
         userRepository.delete(user);
 
         // :TODO: write some audit log stating who and when this user was permanently deleted.
@@ -258,7 +260,7 @@ public class UserService {
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<User> getUsersWithoutTimeflip() {
         List<User> withoutTimeflip = new ArrayList<>(userRepository.getAllUsers());
-        for (Timeflip timeflip : timeflipService.getAllTimeflips()) {
+        for (Timeflip timeflip : timeflipRepository.findAll()) {
             withoutTimeflip.remove(timeflip.getUser());
         }
         return withoutTimeflip;

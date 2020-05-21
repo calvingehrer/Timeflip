@@ -23,7 +23,6 @@ public class TeamService {
     @Autowired
     private MailService mailService;
 
-
     @Autowired
     private UserService userService;
 
