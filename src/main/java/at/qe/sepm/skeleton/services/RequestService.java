@@ -55,7 +55,12 @@ public class RequestService {
 
     public List<Request> getDeclinedRequestsOfEmployee(User user) { return requestRepository.findAllRequestsOfUser(user, RequestEnum.DECLINED); }
 
-    public void deleteRequest (Request request) { requestRepository.delete(request);}
+    public void deleteRequest (Request request) {
+        request.setRequester(null);
+        request.setRequestHandlerTeamLeader(null);
+        request.setRequestHandlerDepartmentLeader(null);
+        requestRepository.delete(request);
+    }
 
     /**
      * when deleting user delete all open requests

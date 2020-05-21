@@ -15,15 +15,15 @@ public class Request implements Persistable<Long>, Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
-    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER, optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(name="requester")
     private User requester;
 
-    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER, optional = true)
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(name="request_handler_tl")
     private User requestHandlerTeamLeader;
 
-    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(name="request_handler_dl")
     private User requestHandlerDepartmentLeader;
 
