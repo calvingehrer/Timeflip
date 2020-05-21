@@ -13,10 +13,11 @@ import java.time.Instant;
 public class Badge {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "badge_id")
-    private String badgeId;
+    private Long badgeId;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "badge_type")
     private BadgeEnum badgeType;
 
@@ -27,11 +28,14 @@ public class Badge {
     @JoinColumn(name="user_id")
     private User user;
 
-    public String getBadgeId() {
+    @Column(name = "badge_image")
+    private String imagePath;
+
+    public Long getBadgeId() {
         return badgeId;
     }
 
-    public void setBadgeId(String badgeId) {
+    public void setBadgeId(Long badgeId) {
         this.badgeId = badgeId;
     }
 
@@ -57,6 +61,14 @@ public class Badge {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     @Override

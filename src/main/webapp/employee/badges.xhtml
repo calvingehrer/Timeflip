@@ -17,6 +17,13 @@
                         <p:column headerText="Badge">
                             <h:outputText value="#{badge.badgeType}"/>
                         </p:column>
+                        <p:column headerText="Date">
+                            <h:outputText value="#{badge.dateOfBadge}"/>
+                        </p:column>
+                        <p:column headerText="Image">
+                            <h:graphicImage value="#{badge.imagePath}" width="200x" height="200px"/>
+                        </p:column>
+
 
                     </p:dataTable>
                 </div>

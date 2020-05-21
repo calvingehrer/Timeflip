@@ -45,17 +45,16 @@ public class BadgeService {
      * creates the Badges of the given period
      */
 
-    public List<Badge> evaluateWeeklyBadges(Instant startDate, Instant endDate){
-        List<Badge> badges = new ArrayList<>();
+    public void evaluateWeeklyBadges(Instant startDate, Instant endDate){
 
-        badges.add(evaluateCodeMonkey(startDate, endDate));
-        badges.add(evaluateCreativeMind(startDate, endDate));
-        badges.add(evaluateFriendAndHelper(startDate, endDate));
-        badges.add(evaluateNightOwl(startDate, endDate));
-        badges.add(evaluateAllRounder(startDate, endDate));
-        badges.add(evaluateWisdomSeeker(startDate, endDate));
+        //evaluateCodeMonkey(startDate, endDate);
+        /*evaluateCreativeMind(startDate, endDate);
+        evaluateFriendAndHelper(startDate, endDate);
+        evaluateNightOwl(startDate, endDate);
+        evaluateAllRounder(startDate, endDate);
+        evaluateWisdomSeeker(startDate, endDate);
+        */
 
-        return badges;
     }
 
     /**
@@ -64,8 +63,7 @@ public class BadgeService {
      * @param endDate
      */
 
-    private Badge evaluateCodeMonkey(Instant startDate, Instant endDate){
-        Badge codeMonkey = new Badge();
+    private void evaluateCodeMonkey(Instant startDate, Instant endDate){
         List<Task> implementationList;
 
         implementationList = taskRepository.findTypeTasksBetweenDates(TaskEnum.IMPLEMENTIERUNG, startDate, endDate);
@@ -75,7 +73,7 @@ public class BadgeService {
 
         for(Task entry : implementationList){
             String currentUserID = entry.getUser().getId();
-            if(implementationTimePerUser.containsKey(currentUserID)){
+            if(!implementationTimePerUser.containsKey(currentUserID)){
                 implementationTimePerUser.put(currentUserID, entry.getSeconds()); // maybe not username?
             }
             else{
@@ -84,21 +82,32 @@ public class BadgeService {
 
         }
 
-        String userWithMostSeconds = new String();
+        String userWithMostSeconds = "";
 
         for(String userId : implementationTimePerUser.keySet()){
-            if(implementationTimePerUser.get(userId) > implementationTimePerUser.get(userWithMostSeconds)){
+            if(userWithMostSeconds.isEmpty()){
+                userWithMostSeconds = userId;
+            }
+            else if(implementationTimePerUser.get(userId) > implementationTimePerUser.get(userWithMostSeconds)){
                 userWithMostSeconds = userId;
             }
         }
 
+        if(userWithMostSeconds.isEmpty()){
+            return;
+        }
+
+        Badge codeMonkey = new Badge();
+
         codeMonkey.setBadgeType(BadgeEnum.WEEKLY_CODE_MONKEY);
         codeMonkey.setUser(userRepository.findFirstByUsername(userWithMostSeconds));
         codeMonkey.setDateOfBadge(startDate);
+        codeMonkey.setImagePath("/resources/badges/weekly_code_monkey.png");
+
+        System.out.println("CodeMoney goes to "+ codeMonkey.getUser().getId());
 
 
-        return evaluateMostTimeFromList(startDate, codeMonkey, implementationList);
-    }
+        }
 
     /**
      * returns the Creative Mind (Person with most Design Time) of the given period
@@ -106,13 +115,48 @@ public class BadgeService {
      * @param endDate
      */
 
-    private Badge evaluateCreativeMind(Instant startDate, Instant endDate){
-        Badge creativeMind = new Badge();
+    private void evaluateCreativeMind(Instant startDate, Instant endDate){
         List<Task> designList;
 
         designList = taskRepository.findTypeTasksBetweenDates(TaskEnum.DESIGN, startDate, endDate);
 
-        return evaluateMostTimeFromList(startDate, creativeMind, designList);
+        HashMap<String, Integer> designTimePerUser = new HashMap<>();
+
+        for(Task entry : designList){
+            String currentUserID = entry.getUser().getId();
+            if(!designTimePerUser.containsKey(currentUserID)){
+                designTimePerUser.put(currentUserID, entry.getSeconds()); // maybe not username?
+            }
+            else{
+                designTimePerUser.put(currentUserID, designTimePerUser.get(currentUserID) + entry.getSeconds());
+            }
+
+        }
+
+        String userWithMostSeconds = "";
+
+        for(String userId : designTimePerUser.keySet()){
+            if(userWithMostSeconds.isEmpty()){
+                userWithMostSeconds = userId;
+            }
+            else if(designTimePerUser.get(userId) > designTimePerUser.get(userWithMostSeconds)){
+                userWithMostSeconds = userId;
+            }
+        }
+
+        if(userWithMostSeconds.isEmpty()){
+            return;
+        }
+
+        Badge creativeMind = new Badge();
+
+        creativeMind.setBadgeType(BadgeEnum.CREATIVE_MIND);
+        creativeMind.setUser(userRepository.findFirstByUsername(userWithMostSeconds));
+        creativeMind.setDateOfBadge(startDate);
+        creativeMind.setImagePath("/resources/badges/creative_mind.png");
+
+
+        return;
     }
 
 
@@ -189,7 +233,6 @@ public class BadgeService {
             }
         }
 
-        badge.setBadgeType(BadgeEnum.WEEKLY_CODE_MONKEY);
         badge.setUser(winner.getUser());
         badge.setDateOfBadge(startDate);
 
