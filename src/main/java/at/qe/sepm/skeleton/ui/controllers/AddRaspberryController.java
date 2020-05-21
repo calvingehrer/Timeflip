@@ -30,7 +30,9 @@ public class AddRaspberryController implements Serializable {
 
 
     public void add(){
-        roomDetailController.setRoom(room);
+        if(room != null){
+            roomDetailController.setRoom(room);
+        }
         raspberryService.addNewRaspberry(raspberry, room);
         resetRaspberry();
     }
