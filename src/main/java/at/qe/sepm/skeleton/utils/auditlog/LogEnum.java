@@ -4,5 +4,7 @@ public enum LogEnum {
     CREATE,
     UPDATE,
     DELETE,
-    ERROR
+    ERROR,
+    LOGIN,
+    LOGOUT
 }

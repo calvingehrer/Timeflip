@@ -51,6 +51,21 @@ public class AuditLogger implements Logger<String, User> {
         logEntry.setMessage(e.toString());
     }
 
+    @Override
+    public void logLogin(String objectIdentifier, User changer) {
+        LogEntry logEntry = createLogEntry(changer);
+        logEntry.setLogActionType(LogEnum.LOGIN);
+        logEntry.setMessage(objectIdentifier + " was logged in.");
+    }
+
+    @Override
+    public void logLogout(String objectIdentifier, User changer) {
+        LogEntry logEntry = createLogEntry(changer);
+        logEntry.setLogActionType(LogEnum.LOGOUT);
+        logEntry.setMessage(objectIdentifier + " was logged out.");
+    }
+
+
     private LogEntry createLogEntry(User changer) {
         LogEntry logEntry = new LogEntry();
         logEntry.setLogDate(Instant.now());

@@ -45,5 +45,20 @@ public interface Logger<T, C> {
      */
     void logError(Exception e, C executor);
 
+    /**
+     * Logs Login of User
+     *
+     * @param objectIdentifier the name of the object
+     * @param changer          the changer of the object
+     */
+    void logLogin(T objectIdentifier, C changer);
+
+    /**
+     * Logs Logout of User
+     *
+     * @param objectIdentifier the name of the object
+     * @param changer          the changer of the object
+     */
+    void logLogout(T objectIdentifier, C changer);
 
 }
