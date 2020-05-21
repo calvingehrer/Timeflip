@@ -73,7 +73,6 @@
 
                 <p:dialog header="Select User" id="editUserDialog" widgetVar="editUserDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
                     <h:form id="editUserForm">
-                        <span>Remove employees from team</span>
                         <p:dataTable styleClass="project-table" id="userTimeflipTable" var="user" value="#{userListController.getUsersWithoutTimeflip()}" scrollable="true" scrollHeight="100%">
                             <p:column headerText="Employee ID">
                                 <h:outputText value="#{user.username}"/>
