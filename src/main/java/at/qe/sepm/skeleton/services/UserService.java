@@ -5,6 +5,7 @@ import at.qe.sepm.skeleton.model.*;
 import at.qe.sepm.skeleton.repositories.UserRepository;
 import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -52,10 +53,11 @@ public class UserService {
 
 
     @Autowired
-    private Logger<String, User> logger;
-
-    @Autowired
+    @Lazy
     CurrentUserBean currentUserBean;
+    @Autowired
+
+    private Logger<String, User> logger;
 
     /**
      * A Function to get the current user

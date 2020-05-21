@@ -13,7 +13,7 @@ import java.time.Instant;
 
 @Component
 @Scope("application")
-public class AuditLoger implements Logger<String, User> {
+public class AuditLogger implements Logger<String, User> {
 
     @Autowired
     AuditLogRepository auditLogRepository;
