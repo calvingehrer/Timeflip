@@ -3,12 +3,11 @@ package at.qe.sepm.skeleton.services;
 
 import at.qe.sepm.skeleton.model.Raspberry;
 import at.qe.sepm.skeleton.model.Room;
-import at.qe.sepm.skeleton.model.Timeflip;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.RaspberryRepository;
 import at.qe.sepm.skeleton.repositories.RoomRepository;
-import at.qe.sepm.skeleton.repositories.TimeflipRepository;
 import at.qe.sepm.skeleton.repositories.UserRepository;
+import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -35,24 +34,17 @@ public class RaspberryService {
 
     @Autowired
     private Logger<String, User> logger;
+
     @Autowired
-    UserService userService;
-    User currentUser;
+    CurrentUserBean currentUserBean;
 
     /**
      * A Function to get the current user
      */
+
     @PostConstruct
     public void init() {
-        this.setCurrentUser(userService.getAuthenticatedUser());
-    }
-
-    public User getCurrentUser() {
-        return currentUser;
-    }
-
-    public void setCurrentUser(User currentUser) {
-        this.currentUser = currentUser;
+        currentUserBean.init();
     }
 
 
@@ -69,7 +61,7 @@ public class RaspberryService {
         newRaspberry.setRoom(room);
         saveRaspberry(newRaspberry);
         // add raspberry
-        logger.logCreation(raspberry.toString(), currentUser);
+        logger.logCreation(raspberry.getId(), currentUserBean.getCurrentUser());
     }
 
     public User getAuthenticatedUser() {
@@ -88,6 +80,7 @@ public class RaspberryService {
             raspberry.setCreateDate(new Date());
             raspberry.setCreateUser(getAuthenticatedUser());
         }
+        logger.logUpdate(raspberry.getId(), currentUserBean.getCurrentUser());
         return raspberryRepository.save(raspberry);
     }
 
@@ -106,6 +99,7 @@ public class RaspberryService {
         raspberry.setRoom(null);
         timeflipService.setRaspberryNull(raspberry);
         raspberryRepository.delete(raspberry);
+        logger.logDeletion(raspberry.getId(), currentUserBean.getCurrentUser());
     }
 
 

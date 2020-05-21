@@ -1,8 +1,9 @@
 package at.qe.sepm.skeleton.services;
 
-import at.qe.sepm.skeleton.model.*;
 import at.qe.sepm.skeleton.configs.WebSecurityConfig;
+import at.qe.sepm.skeleton.model.*;
 import at.qe.sepm.skeleton.repositories.UserRepository;
+import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -54,24 +55,17 @@ public class UserService {
     private Logger<String, User> logger;
 
     @Autowired
-    UserService userService;
-    User currentUser;
+    CurrentUserBean currentUserBean;
 
     /**
      * A Function to get the current user
      */
+
     @PostConstruct
     public void init() {
-        this.setCurrentUser(userService.getAuthenticatedUser());
+        currentUserBean.init();
     }
 
-    public User getCurrentUser() {
-        return currentUser;
-    }
-
-    public void setCurrentUser(User currentUser) {
-        this.currentUser = currentUser;
-    }
 
     /**
      * Returns a collection of all users.
@@ -158,7 +152,7 @@ public class UserService {
             user.setUpdateDate(new Date());
             user.setUpdateUser(getAuthenticatedUser());
         }
-        logger.logUpdate(user.getUsername(), currentUser);
+        logger.logUpdate(user.getUsername(), currentUserBean.getCurrentUser());
         return userRepository.save(user);
     }
 
@@ -175,7 +169,7 @@ public class UserService {
         newUser.setRoles(user.getRoles());
         mailService.sendEmailTo(newUser, "New user added", "You've been added as a new user");
         saveUser(newUser);
-        logger.logCreation(user.getUsername(), currentUser);
+        logger.logCreation(newUser.getUsername(), currentUserBean.getCurrentUser());
     }
 
     /**
@@ -190,8 +184,9 @@ public class UserService {
         requestService.deleteRequestsOfUser(user);
         timeflipService.deleteTimeFlipOfUser(user);
         userRepository.delete(user);
-        logger.logDeletion(user.getUsername(), currentUser);
+
         // :TODO: write some audit log stating who and when this user was permanently deleted.
+        logger.logDeletion(user.getUsername(), currentUserBean.getCurrentUser());
     }
 
     public User getAuthenticatedUser() {
@@ -222,11 +217,9 @@ public class UserService {
 
 
 
-
-
     @Transactional
     public User updateUser(User toSave) {
-        logger.logUpdate(toSave.getUsername(), currentUser);
+        logger.logUpdate(toSave.getUsername(), currentUserBean.getCurrentUser());
         return userRepository.save(setUpdatingFieldsBeforePersist(toSave));
     }
 

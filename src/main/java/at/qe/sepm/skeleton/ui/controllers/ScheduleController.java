@@ -1,7 +1,7 @@
 package at.qe.sepm.skeleton.ui.controllers;
 
 import at.qe.sepm.skeleton.model.Vacation;
-import at.qe.sepm.skeleton.services.VacationServiceImpl;
+import at.qe.sepm.skeleton.services.VacationService;
 import at.qe.sepm.skeleton.ui.beans.SessionInfoBean;
 import de.jollyday.Holiday;
 import de.jollyday.HolidayCalendar;
@@ -21,7 +21,6 @@ import java.time.Instant;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Set;
 
 @Component
 @Scope("view")
@@ -44,7 +43,7 @@ public class ScheduleController implements Serializable {
 
 
     @Autowired
-    private VacationServiceImpl vacationService;
+    private VacationService vacationService;
 
     /*public ScheduleController(VacationServiceImpl vacationService) {
 

@@ -5,15 +5,14 @@ import at.qe.sepm.skeleton.model.Raspberry;
 import at.qe.sepm.skeleton.model.Timeflip;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.TimeflipRepository;
+import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
-import java.util.*;
 
 
 @Component
@@ -34,23 +33,15 @@ public class TimeflipService {
     private Logger<String, User> logger;
 
     @Autowired
-    UserService userService;
-    User currentUser;
+    CurrentUserBean currentUserBean;
 
     /**
      * A Function to get the current user
      */
+
     @PostConstruct
     public void init() {
-        this.setCurrentUser(userService.getAuthenticatedUser());
-    }
-
-    public User getCurrentUser() {
-        return currentUser;
-    }
-
-    public void setCurrentUser(User currentUser) {
-        this.currentUser = currentUser;
+        currentUserBean.init();
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -72,12 +63,12 @@ public class TimeflipService {
         newTimeflip.setUser(user);
         newTimeflip.setRaspberry(raspberry);
         saveTimeflip(newTimeflip);
-        logger.logCreation(timeflip.getId(), currentUser);
+        logger.logCreation(timeflip.getId(), currentUserBean.getCurrentUser());
     }
 
     @PreAuthorize("hasAuthority('EMPLOYEE')")
     public Timeflip saveTimeflip(Timeflip timeflip) {
-        logger.logUpdate(timeflip.getId(), currentUser);
+        logger.logUpdate(timeflip.getId(), currentUserBean.getCurrentUser());
         return timeflipRepository.save(timeflip);
     }
 
@@ -91,6 +82,7 @@ public class TimeflipService {
         timeflip.setCreateDate(null);
 
         timeflipRepository.delete(timeflip);
+        logger.logDeletion(timeflip.getId(), currentUserBean.getCurrentUser());
     }
 
 
@@ -112,6 +104,7 @@ public class TimeflipService {
             timeflipRepository.save(timeflip);
             timeflipRepository.delete(timeflip);
         }
+        logger.logDeletion(timeflip.getId(), user);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

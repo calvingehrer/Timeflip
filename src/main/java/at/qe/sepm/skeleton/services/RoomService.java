@@ -3,9 +3,9 @@ package at.qe.sepm.skeleton.services;
 import at.qe.sepm.skeleton.model.Raspberry;
 import at.qe.sepm.skeleton.model.Room;
 import at.qe.sepm.skeleton.model.User;
-import at.qe.sepm.skeleton.repositories.RaspberryRepository;
 import at.qe.sepm.skeleton.repositories.RoomRepository;
 import at.qe.sepm.skeleton.repositories.UserRepository;
+import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,8 +15,6 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -36,25 +34,19 @@ public class RoomService {
 
     @Autowired
     private Logger<String, User> logger;
+
     @Autowired
-    UserService userService;
-    User currentUser;
+    CurrentUserBean currentUserBean;
 
     /**
      * A Function to get the current user
      */
+
     @PostConstruct
     public void init() {
-        this.setCurrentUser(userService.getAuthenticatedUser());
+        currentUserBean.init();
     }
 
-    public User getCurrentUser() {
-        return currentUser;
-    }
-
-    public void setCurrentUser(User currentUser) {
-        this.currentUser = currentUser;
-    }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<Room> getAllRooms(){
@@ -79,7 +71,7 @@ public class RoomService {
         newRoom.setRoomNumber(room.getRoomNumber());
         saveRoom(newRoom);
         System.out.println(newRoom.getRoomNumber());
-        logger.logCreation(room.toString(), this.currentUser);
+        logger.logCreation(room.toString(), currentUserBean.getCurrentUser());
     }
 
     public User getAuthenticatedUser() {
@@ -98,7 +90,7 @@ public class RoomService {
             room.setCreateDate(new Date());
             room.setCreateUser(getAuthenticatedUser());
         }
-        logger.logUpdate(room.toString(), this.currentUser);
+        logger.logUpdate(room.toString(), currentUserBean.getCurrentUser());
         return roomRepository.save(room);
     }
 
@@ -112,7 +104,7 @@ public class RoomService {
         Raspberry raspberry = room.getRaspberry();
         raspberryService.deleteRaspberry(raspberry);
         roomRepository.delete(room);
-        logger.logDeletion(room.toString(), this.currentUser);
+        logger.logDeletion(room.toString(), currentUserBean.getCurrentUser());
     }
 
 

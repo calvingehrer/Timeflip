@@ -4,11 +4,13 @@ import at.qe.sepm.skeleton.model.Department;
 import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.DepartmentRepository;
+import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,7 +31,13 @@ public class DepartmentService {
     @Autowired
     private Logger<String, User> logger;
 
+    @Autowired
+    CurrentUserBean currentUserBean;
 
+    @PostConstruct
+    public void init() {
+        currentUserBean.init();
+    }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<Department> getAllDepartments() {
@@ -39,7 +47,7 @@ public class DepartmentService {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public Department saveDepartment(Department department) {
-        //logger.logUpdate(department.toString(), userService.getAuthenticatedUser());
+        logger.logUpdate(department.toString(), currentUserBean.getCurrentUser());
         return departmentRepository.save(department);
 
     }
@@ -54,7 +62,7 @@ public class DepartmentService {
         headOfDepartment.setDepartment(newDepartment);
 
         userService.saveUser(headOfDepartment);
-        //logger.logCreation(headOfDepartment.toString(), userService.getAuthenticatedUser());
+        logger.logCreation(headOfDepartment.toString(), currentUserBean.getCurrentUser());
     }
 
     @PreAuthorize("hasAuthority('ADMIN') or principal.username eq #username")
