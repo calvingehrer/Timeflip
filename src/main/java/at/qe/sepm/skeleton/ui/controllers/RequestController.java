@@ -4,6 +4,7 @@ import at.qe.sepm.skeleton.model.Request;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.RequestService;
 import at.qe.sepm.skeleton.services.UserService;
+import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -21,24 +22,18 @@ public class RequestController implements Serializable  {
     @Autowired
     UserService userService;
 
+    @Autowired
+    CurrentUserBean currentUserBean;
+
     private Request request;
 
-    private User currentUser;
 
     /**
      * A Function to get the current user
      */
     @PostConstruct
     public void init() {
-        this.setCurrentUser(userService.getAuthenticatedUser());
-    }
-
-    public User getCurrentUser() {
-        return currentUser;
-    }
-
-    public void setCurrentUser(User currentUser) {
-        this.currentUser = currentUser;
+        currentUserBean.init();
     }
 
     public Request getRequest() {
@@ -55,7 +50,7 @@ public class RequestController implements Serializable  {
      */
 
     public List<Request> getOpenRequestsLeader() {
-        return requestService.getAllOpenRequestsOfLeader(getCurrentUser());
+        return requestService.getAllOpenRequestsOfLeader(currentUserBean.getCurrentUser());
     }
 
     /**
@@ -63,21 +58,21 @@ public class RequestController implements Serializable  {
      * @return all the requests of the employee that have yet to be edited
      */
 
-    public List<Request> getOpenRequestsEmployee() { return requestService.getOpenRequestsOfEmployee(getCurrentUser()); }
+    public List<Request> getOpenRequestsEmployee() { return requestService.getOpenRequestsOfEmployee(currentUserBean.getCurrentUser()); }
 
     /**
      * Function to get accepted requests of requester
      * @return all accepted requests of user
      */
 
-    public List<Request> getAcceptedRequestsEmployee() { return requestService.getAcceptedRequestsOfEmployee(getCurrentUser()); }
+    public List<Request> getAcceptedRequestsEmployee() { return requestService.getAcceptedRequestsOfEmployee(currentUserBean.getCurrentUser()); }
 
     /**
      * Function to get declined requests of requester
      * @return all declined requests of user
      */
 
-    public List<Request> getDeclinedRequestsEmployee() { return requestService.getDeclinedRequestsOfEmployee(getCurrentUser()); }
+    public List<Request> getDeclinedRequestsEmployee() { return requestService.getDeclinedRequestsOfEmployee(currentUserBean.getCurrentUser()); }
 
     /**
      * Function to accept a request

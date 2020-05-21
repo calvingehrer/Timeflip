@@ -2,7 +2,10 @@ package at.qe.sepm.skeleton.ui.controllers;
 
 import at.qe.sepm.skeleton.model.Vacation;
 import at.qe.sepm.skeleton.services.VacationServiceImpl;
+import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
+import at.qe.sepm.skeleton.ui.beans.HolidayBean;
 import at.qe.sepm.skeleton.ui.beans.SessionInfoBean;
+import at.qe.sepm.skeleton.ui.beans.TimeZoneBean;
 import de.jollyday.Holiday;
 import de.jollyday.HolidayCalendar;
 import de.jollyday.HolidayManager;
@@ -40,37 +43,25 @@ public class ScheduleController implements Serializable {
     }
 
     @Autowired
-    private SessionInfoBean sessionInfoBean;
-
+    private TimeZoneBean timeZoneBean;
+    @Autowired
+    private HolidayBean holidayBean;
 
     @Autowired
     private VacationServiceImpl vacationService;
 
-    /*public ScheduleController(VacationServiceImpl vacationService) {
+    @Autowired
+    private CurrentUserBean currentUserBean;
 
-        eventModel = new DefaultScheduleModel();
-
-        Collection<Vacation> vacations = vacationService.getVacationFromUser(sessionInfoBean.getCurrentUser());
-
-
-        if (!vacations.isEmpty()) {
-
-            vacations.forEach(x ->
-            {
-
-                Instant endInstant = x.getEnd();
-
-                Date newEnd = (Date) Date.from(endInstant.plus(1, ChronoUnit.MINUTES));
-
-                DefaultScheduleEvent vacation = new DefaultScheduleEvent("Vacation", java.util.Date.from(x.getStart()), newEnd, true);
-                vacation.setData(x);
-                eventModel.addEvent(vacation);
-            });
-        }
-    }*/
+    /**
+     * method to initialize the calendar
+     * the plus one for the holidays is because the defaulscheduler
+     * sets them one day earlier
+     */
 
     @PostConstruct
     public void init() {
+        currentUserBean.init();
         this.lazyEventModel = new LazyScheduleModel() {
             private static final long serialVersionUID = 3580478297132439482L;
 
@@ -81,9 +72,8 @@ public class ScheduleController implements Serializable {
                 Instant endInstant = end.toInstant();
 
 
-                Collection<Vacation> vacations = vacationService.getVacationFromUser(sessionInfoBean.getCurrentUser());
-                HolidayManager m = HolidayManager.getInstance(HolidayCalendar.AUSTRIA);
-                Collection<Holiday> holidays = m.getHolidays(Calendar.getInstance().get(Calendar.YEAR), "Austria");
+                Collection<Vacation> vacations = vacationService.getVacationFromUser(currentUserBean.getCurrentUser());
+
 
                 vacations.forEach(f -> {
 
@@ -93,11 +83,11 @@ public class ScheduleController implements Serializable {
                     addEvent(new DefaultScheduleEvent("Vacation", startVacation, endVacation, f));
                 });
 
-                holidays.forEach(h ->{
-                    Calendar calendar = Calendar.getInstance();
+                holidayBean.getPublicHolidays().forEach(h ->{
+                    Calendar calendar = Calendar.getInstance(timeZoneBean.getUtcTimeZone());
                     calendar.setTime(h.getDate().toDate());
                     calendar.add(Calendar.DATE, 1);
-                    Date holiday  = calendar.getTime();
+                    Date holiday = calendar.getTime();
                     addEvent(new DefaultScheduleEvent(h.getDescription(), holiday, holiday));
                 });
 

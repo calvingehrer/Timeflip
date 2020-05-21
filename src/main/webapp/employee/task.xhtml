@@ -78,7 +78,7 @@
                                 <p:calendar id="date" mode="inline" value="#{taskController.requestedDate}" timeZone="#{timeZoneBean.utcTimeZone}"/>
                                 <h:panelGrid columns="2">
                                     <h:outputText value="Select the Task"/>
-                                    <p:autoComplete id="task1" dropdown="true" value="#{taskController.task}" completeMethod="#{taskController.completeTask}"/>
+                                    <p:autoComplete id="task1" dropdown="true" value="#{taskController.task}" completeMethod="#{completeMethodBean.completeTask}"/>
                                 </h:panelGrid>
                                 <h4>start time</h4>
                                 <h:panelGrid columns="2">
@@ -124,7 +124,7 @@
                                 <h:form>
                                     <h:panelGrid columns="2">
                                         <h:outputText value="Select the Task"/>
-                                        <p:autoComplete id="task" dropdown="true" value="#{taskController.task}" completeMethod="#{taskController.completeTask}"/>
+                                        <p:autoComplete id="task" dropdown="true" value="#{taskController.task}" completeMethod="#{completeMethodBean.completeTask()}"/>
                                     </h:panelGrid>
                                     <h4>start time</h4>
                                     <h:panelGrid columns="2">
@@ -155,7 +155,7 @@
                             <h:panelGrid columns="5">
                                 <h:panelGrid columns="2">
                                     <p:outputLabel value="Choose Interval "/>
-                                    <p:autoComplete id="view" dropdown="true"  value="#{taskListController.interval}" completeMethod="#{manageCurrentUserController.completeIntervall}"/>
+                                    <p:autoComplete id="view" dropdown="true"  value="#{taskListController.interval}" completeMethod="#{completeMethodBean.completeIntervall}"/>
                                 </h:panelGrid>
                                 <h:panelGrid columns="2">
                                     <p:outputLabel value="Choose Day in Interval"/>
