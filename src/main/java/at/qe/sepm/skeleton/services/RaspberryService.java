@@ -3,9 +3,11 @@ package at.qe.sepm.skeleton.services;
 
 import at.qe.sepm.skeleton.model.Raspberry;
 import at.qe.sepm.skeleton.model.Room;
+import at.qe.sepm.skeleton.model.Timeflip;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.RaspberryRepository;
 import at.qe.sepm.skeleton.repositories.RoomRepository;
+import at.qe.sepm.skeleton.repositories.TimeflipRepository;
 import at.qe.sepm.skeleton.repositories.UserRepository;
 import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 
@@ -30,7 +33,7 @@ public class RaspberryService {
     @Autowired
     RoomRepository roomRepository;
     @Autowired
-    TimeflipService timeflipService;
+    TimeflipRepository timeflipRepository;
 
     @Autowired
     private Logger<String, User> logger;
@@ -91,14 +94,15 @@ public class RaspberryService {
      * @param raspberry the raspberry to delete
      */
     @PreAuthorize("hasAuthority('ADMIN')")
+    @Transactional
     public void deleteRaspberry(Raspberry raspberry) {
         Room room = raspberry.getRoom();
         room.setRaspberry(null);
         room.setEquipped(false);
-        roomRepository.save(room);
         raspberry.setRoom(null);
-        timeflipService.setRaspberryNull(raspberry);
-        raspberryRepository.delete(raspberry);
+        for (Timeflip t: timeflipRepository.findTimeflipsOfRaspberrys(raspberry)) {
+            t.setRaspberry(null);
+        }
         logger.logDeletion(raspberry.getId(), currentUserBean.getCurrentUser());
     }
 

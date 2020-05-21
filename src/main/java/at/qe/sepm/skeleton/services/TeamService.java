@@ -20,8 +20,6 @@ import java.util.Set;
 @Scope("application")
 public class TeamService {
 
-    @Autowired
-    private MailService mailService;
 
 
     @Autowired
@@ -29,10 +27,6 @@ public class TeamService {
 
     @Autowired
     private TeamRepository teamRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
 
     @Autowired
     private Logger<String, User> logger;
