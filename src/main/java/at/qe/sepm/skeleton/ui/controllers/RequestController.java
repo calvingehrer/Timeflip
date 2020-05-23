@@ -1,7 +1,6 @@
 package at.qe.sepm.skeleton.ui.controllers;
 
-import at.qe.sepm.skeleton.model.Request;
-import at.qe.sepm.skeleton.model.User;
+import at.qe.sepm.skeleton.model.TaskRequest;
 import at.qe.sepm.skeleton.services.RequestService;
 import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
@@ -25,7 +24,7 @@ public class RequestController implements Serializable  {
     @Autowired
     CurrentUserBean currentUserBean;
 
-    private Request request;
+    private TaskRequest taskRequest;
 
 
     /**
@@ -36,20 +35,20 @@ public class RequestController implements Serializable  {
         currentUserBean.init();
     }
 
-    public Request getRequest() {
-        return request;
+    public TaskRequest getTaskRequest() {
+        return taskRequest;
     }
 
-    public void setRequest(Request request) {
-        this.request = request;
+    public void setTaskRequest(TaskRequest taskRequest) {
+        this.taskRequest = taskRequest;
     }
 
     /**
-     * Function to get open requests of request handler
+     * Function to get open requests of taskRequest handler
      * @return all the requests the leader has yet to edit
      */
 
-    public List<Request> getOpenRequestsLeader() {
+    public List<TaskRequest> getOpenRequestsLeader() {
         return requestService.getAllOpenRequestsOfLeader(currentUserBean.getCurrentUser());
     }
 
@@ -58,43 +57,43 @@ public class RequestController implements Serializable  {
      * @return all the requests of the employee that have yet to be edited
      */
 
-    public List<Request> getOpenRequestsEmployee() { return requestService.getOpenRequestsOfEmployee(currentUserBean.getCurrentUser()); }
+    public List<TaskRequest> getOpenRequestsEmployee() { return requestService.getOpenRequestsOfEmployee(currentUserBean.getCurrentUser()); }
 
     /**
      * Function to get accepted requests of requester
      * @return all accepted requests of user
      */
 
-    public List<Request> getAcceptedRequestsEmployee() { return requestService.getAcceptedRequestsOfEmployee(currentUserBean.getCurrentUser()); }
+    public List<TaskRequest> getAcceptedRequestsEmployee() { return requestService.getAcceptedRequestsOfEmployee(currentUserBean.getCurrentUser()); }
 
     /**
      * Function to get declined requests of requester
      * @return all declined requests of user
      */
 
-    public List<Request> getDeclinedRequestsEmployee() { return requestService.getDeclinedRequestsOfEmployee(currentUserBean.getCurrentUser()); }
+    public List<TaskRequest> getDeclinedRequestsEmployee() { return requestService.getDeclinedRequestsOfEmployee(currentUserBean.getCurrentUser()); }
 
     /**
-     * Function to accept a request
-     * @param request
+     * Function to accept a taskRequest
+     * @param taskRequest
      */
-    public void acceptRequest(Request request) {
-        requestService.acceptRequest(request);
+    public void acceptRequest(TaskRequest taskRequest) {
+        requestService.acceptRequest(taskRequest);
     }
 
     /**
-     * Function to decline a request
-     * @param request
+     * Function to decline a taskRequest
+     * @param taskRequest
      */
-    public void declineRequest(Request request) {
-        requestService.declineRequest(request);
+    public void declineRequest(TaskRequest taskRequest) {
+        requestService.declineRequest(taskRequest);
     }
 
     /**
-     * If a request is declined or was already used the user can delete it to keep an overview
+     * If a taskRequest is declined or was already used the user can delete it to keep an overview
      */
-    public void deleteRequest(Request request) {
-        requestService.deleteRequest(request);
+    public void deleteRequest(TaskRequest taskRequest) {
+        requestService.deleteRequest(taskRequest);
     }
 
 }

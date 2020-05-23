@@ -71,7 +71,7 @@
 
                                 </p:column>
                             </p:dataTable>
-                            <p:commandButton ajax="false" value="Request Overview" styleClass="raised-btn" action="/employee/request-overview.xhtml?faces-redirect=true" rendered="#{!sessionInfoBean.hasRole('DEPARTMENTLEADER') and !sessionInfoBean.hasRole('ADMIN')}"/>
+                            <p:commandButton ajax="false" value="Request Overview" styleClass="raised-btn" action="/employee/taskRequest-overview.xhtml?faces-redirect=true" rendered="#{!sessionInfoBean.hasRole('DEPARTMENTLEADER') and !sessionInfoBean.hasRole('ADMIN')}"/>
 
                         </h:form>
 

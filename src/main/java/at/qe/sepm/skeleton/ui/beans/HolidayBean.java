@@ -1,5 +1,6 @@
 package at.qe.sepm.skeleton.ui.beans;
 
+import at.qe.sepm.skeleton.utils.TimeConverter;
 import de.jollyday.Holiday;
 import de.jollyday.HolidayCalendar;
 import de.jollyday.HolidayManager;
@@ -23,7 +24,7 @@ public class HolidayBean {
      */
     public Collection<Holiday> getPublicHolidays(){
         HolidayManager m = HolidayManager.getInstance(HolidayCalendar.AUSTRIA);
-        Collection<Holiday> holidays = m.getHolidays(Calendar.getInstance().get(Calendar.YEAR), "Austria");
+        Collection<Holiday> holidays = m.getHolidays(TimeConverter.getYear(new Date().toInstant()), "Austria");
         return holidays;
     }
 

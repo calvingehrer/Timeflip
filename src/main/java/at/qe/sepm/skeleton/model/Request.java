@@ -7,12 +7,13 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Request implements Persistable<Long>, Serializable {
-
     private static final long serialVersionUID = 1543543567124567565L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="request_id")
     private Long Id;
 
     @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
@@ -34,7 +35,6 @@ public class Request implements Persistable<Long>, Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createDate;
 
-    private Date requestedDate;
 
     private String description;
 
@@ -89,14 +89,6 @@ public class Request implements Persistable<Long>, Serializable {
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
-    }
-
-    public Date getRequestedDate() {
-        return requestedDate;
-    }
-
-    public void setRequestedDate(Date requestedDate) {
-        this.requestedDate = requestedDate;
     }
 
     @Override

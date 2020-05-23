@@ -44,14 +44,6 @@ public class VacationController implements Serializable {
         return serialVersionUID;
     }
 
-    public VacationService getVacationService() {
-        return vacationService;
-    }
-
-    public void setVacationService(VacationService vacationService) {
-        this.vacationService = vacationService;
-    }
-
     public UserService getUserService() {
         return userService;
     }

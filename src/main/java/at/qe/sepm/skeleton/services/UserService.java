@@ -4,7 +4,6 @@ import at.qe.sepm.skeleton.configs.WebSecurityConfig;
 import at.qe.sepm.skeleton.model.*;
 import at.qe.sepm.skeleton.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -12,7 +11,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
@@ -288,12 +286,12 @@ public class UserService {
      */
 
     public void deleteRequestsOfUser(User user) {
-        for (Request r: requestRepository.findAllRequestsOfRequester(user)) {
+        for (TaskRequest r: requestRepository.findAllRequestsOfRequester(user)) {
             requestRepository.delete(r);
             logger.logDeletion(r.getDescription(), getAuthenticatedUser());
         }
         if (user.getRoles().contains(UserRole.TEAMLEADER)) {
-            for (Request r : requestRepository.findAllRequestsOfRequestHandlerTL(user)) {
+            for (TaskRequest r : requestRepository.findAllRequestsOfRequestHandlerTL(user)) {
                 if (r.getRequestHandlerDepartmentLeader() == null) {
                     requestRepository.delete(r);
                 }
@@ -305,7 +303,7 @@ public class UserService {
             }
         }
         if (user.getRoles().contains(UserRole.DEPARTMENTLEADER)) {
-            for (Request r : requestRepository.findAllRequestsOfRequestHandlerDL(user)) {
+            for (TaskRequest r : requestRepository.findAllRequestsOfRequestHandlerDL(user)) {
                 if (r.getRequestHandlerTeamLeader() == null) {
                     requestRepository.delete(r);
                 }

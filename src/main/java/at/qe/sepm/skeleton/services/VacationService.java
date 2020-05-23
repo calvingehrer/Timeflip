@@ -50,7 +50,7 @@ public class VacationService {
             throw new VacationException("The requested Vacation would already have passed.");
         }
         if (vacation.getStart().compareTo(vacation.getEnd()) >= 0) {
-            throw new VacationException("You have done nonesense. End must be after the beginning.");
+            throw new VacationException("You have done nonsense. End must be after the beginning.");
         }
         int beginYear = TimeConverter.getYear(vacation.getEnd());
         int endYear = TimeConverter.getYear(vacation.getEnd());
