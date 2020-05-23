@@ -3,7 +3,6 @@ package at.qe.sepm.skeleton.services;
 import at.qe.sepm.skeleton.model.Raspberry;
 import at.qe.sepm.skeleton.model.Room;
 import at.qe.sepm.skeleton.model.User;
-import at.qe.sepm.skeleton.repositories.RaspberryRepository;
 import at.qe.sepm.skeleton.repositories.RoomRepository;
 import at.qe.sepm.skeleton.repositories.UserRepository;
 import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;

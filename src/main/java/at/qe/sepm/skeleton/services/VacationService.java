@@ -18,7 +18,6 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Set;
 
 @Service
@@ -63,7 +62,7 @@ public class VacationService {
             this.addVacation(user, nextYear);
         }
 
-        logger.logCreation(vacation.toString(), user);
+        logger.logCreation("Vacation of " + user.getUsername(), currentUserBean.getCurrentUser());
         user.addVacation(vacation);
     }
 

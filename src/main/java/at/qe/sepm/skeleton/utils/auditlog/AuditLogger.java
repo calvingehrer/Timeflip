@@ -23,8 +23,8 @@ public class AuditLogger implements Logger<String, User> {
     @Override
     public void logCreation(String objectIdentifier, User changer) {
         LogEntry logEntry = createLogEntry(changer);
-        logEntry.setLogActionType(LogEnum.CREATE);
-        logEntry.setMessage(objectIdentifier + " was created");
+        logEntry.setLogActionType(LogEnum.ADD);
+        logEntry.setMessage(objectIdentifier + " was added");
         auditLogRepository.save(logEntry);
     }
 
