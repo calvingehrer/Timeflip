@@ -1,5 +1,4 @@
 <ui:composition xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns="http://www.w3.org/1999/xhtml"
@@ -16,63 +15,27 @@
         <div class="ui-g">
             <div class="ui-g-12">
                 <div class="card">
-                    <h1>User</h1>
-
-                    <h:form id="selection">
-                        <h:panelGrid columns="7">
-                            <h:panelGrid columns="2">
-                                <p:outputLabel value="ID: "/>
-                                <p:inputText value="#{userListController.username}"/>
-                            </h:panelGrid>
-                            <h:panelGrid columns="2">
-                                <p:outputLabel value="Type: "/>
-                                <p:inputText value="#{userListController.teamname}"/>
-                            </h:panelGrid>
-                            <h:panelGrid columns="2">
-                                <p:outputLabel value="Date: "/>
-                                <p:inputText value="#{userListController.teamname}"/>
-                            </h:panelGrid>
-                            <h:panelGrid columns="2">
-                                <p:outputLabel value="Message: "/>
-                                <p:inputText value="#{userListController.departmentname}"/>
-                            </h:panelGrid>
-                            <h:panelGrid columns="3">
-                                <p:outputLabel value="Changing User: "/>
-                                <p:selectOneMenu value="#{userListController.userrole}">
-                                    <f:selectItem itemLabel="All" itemValue=""/>
-                                    <f:selectItem itemLabel="Admin" itemValue="Admin"/>
-                                    <f:selectItem itemLabel="Dept. Leader" itemValue="Departmentleader"/>
-                                    <f:selectItem itemLabel="Teamleader" itemValue="Teamleader"/>
-                                    <f:selectItem itemLabel="Employee" itemValue="Employee"/>
-                                </p:selectOneMenu>
-                                <p:commandButton value="Filter" update=":userForm"/>
-                            </h:panelGrid>
-                            <p:commandButton value="Reset" action="#{userListController.resetFilter}"
-                                             update=":selection :userForm:usersTable"/>
-                            <p:commandButton value="Add User" styleClass="addButton"
-                                             oncomplete="PF('addUserDialog').show()"/>
-                        </h:panelGrid>
-                    </h:form>
+                    <h1>AuditLog</h1>
 
                     <h:form id="userForm">
                         <p:messages id="messages" showDetail="true" closable="true">
                             <p:autoUpdate/>
                         </p:messages>
-                        <p:dataTable id="auditlog" var="log" value="#{userListController.users}" scrollable="true">
+                        <p:dataTable id="auditlog" var="log" value="#{auditLogController.logEntry}" scrollable="true">
                             <p:column headerText="ID">
-                                <h:outputText value="#{user.username}"/>
+                                <h:outputText value="#{logEntry.id}"/>
                             </p:column>
                             <p:column headerText="Log Type">
-                                <h:outputText value="#{user.firstName}"/>
+                                <h:outputText value="#{logEntry.logActionType}"/>
                             </p:column>
                             <p:column headerText="Log Date">
-                                <h:outputText value="#{user.lastName}"/>
+                                <h:outputText value="#{logEntry.logDate}"/>
                             </p:column>
                             <p:column headerText="Message">
-                                <h:outputText value="#{user.roles}"/>
+                                <h:outputText value="#{logEntry.message}"/>
                             </p:column>
                             <p:column headerText="Changing User">
-                                <h:outputText value="#{user.team}"/>
+                                <h:outputText value="#{logEntry.changingUser}"/>
                             </p:column>
                         </p:dataTable>
 
