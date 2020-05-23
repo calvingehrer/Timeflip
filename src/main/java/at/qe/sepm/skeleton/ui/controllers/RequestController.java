@@ -1,9 +1,14 @@
 package at.qe.sepm.skeleton.ui.controllers;
 
+import at.qe.sepm.skeleton.model.Request;
 import at.qe.sepm.skeleton.model.TaskRequest;
+import at.qe.sepm.skeleton.model.Vacation;
+import at.qe.sepm.skeleton.model.VacationRequest;
 import at.qe.sepm.skeleton.services.RequestService;
 import at.qe.sepm.skeleton.services.UserService;
+import at.qe.sepm.skeleton.services.VacationService;
 import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
+import at.qe.sepm.skeleton.utils.MessagesView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -11,12 +16,16 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @Scope("view")
 public class RequestController implements Serializable  {
     @Autowired
     RequestService requestService;
+
+    @Autowired
+    VacationService vacationService;
 
     @Autowired
     UserService userService;
@@ -35,20 +44,12 @@ public class RequestController implements Serializable  {
         currentUserBean.init();
     }
 
-    public TaskRequest getTaskRequest() {
-        return taskRequest;
-    }
-
-    public void setTaskRequest(TaskRequest taskRequest) {
-        this.taskRequest = taskRequest;
-    }
-
     /**
      * Function to get open requests of taskRequest handler
      * @return all the requests the leader has yet to edit
      */
 
-    public List<TaskRequest> getOpenRequestsLeader() {
+    public List<Request> getOpenRequestsLeader() {
         return requestService.getAllOpenRequestsOfLeader(currentUserBean.getCurrentUser());
     }
 
@@ -57,43 +58,62 @@ public class RequestController implements Serializable  {
      * @return all the requests of the employee that have yet to be edited
      */
 
-    public List<TaskRequest> getOpenRequestsEmployee() { return requestService.getOpenRequestsOfEmployee(currentUserBean.getCurrentUser()); }
+    public List<Request> getOpenRequestsEmployee() { return requestService.getOpenRequestsOfEmployee(currentUserBean.getCurrentUser()); }
 
     /**
      * Function to get accepted requests of requester
      * @return all accepted requests of user
      */
 
-    public List<TaskRequest> getAcceptedRequestsEmployee() { return requestService.getAcceptedRequestsOfEmployee(currentUserBean.getCurrentUser()); }
+    public List<Request> getAcceptedRequestsEmployee() { return requestService.getAcceptedRequestsOfEmployee(currentUserBean.getCurrentUser()); }
 
     /**
      * Function to get declined requests of requester
      * @return all declined requests of user
      */
 
-    public List<TaskRequest> getDeclinedRequestsEmployee() { return requestService.getDeclinedRequestsOfEmployee(currentUserBean.getCurrentUser()); }
+    public List<Request> getDeclinedRequestsEmployee() { return requestService.getDeclinedRequestsOfEmployee(currentUserBean.getCurrentUser()); }
 
     /**
      * Function to accept a taskRequest
-     * @param taskRequest
+     * @param request
      */
-    public void acceptRequest(TaskRequest taskRequest) {
-        requestService.acceptRequest(taskRequest);
+    public void acceptRequest(Request request) {
+        requestService.acceptRequest(request);
+        if (request.getClass() == VacationRequest.class) {
+            VacationRequest vr = (VacationRequest) request;
+            Vacation vacation = new Vacation();
+            vacation.setStart(vr.getRequestedStartDate().toInstant());
+            vacation.setEnd(vr.getRequestedEndDate().toInstant());
+            try {
+                vacationService.addVacation(vr.getRequester(), vacation);
+            }
+            catch (Exception e) {
+                MessagesView.errorMessage("Vacation", "The granted vacation ist not valid, it is denied");
+                requestService.declineRequest(request);
+            }
+        }
     }
 
     /**
      * Function to decline a taskRequest
-     * @param taskRequest
+     * @param request
      */
-    public void declineRequest(TaskRequest taskRequest) {
-        requestService.declineRequest(taskRequest);
+    public void declineRequest(Request request) {
+        requestService.declineRequest(request);
     }
 
     /**
      * If a taskRequest is declined or was already used the user can delete it to keep an overview
+     * @param request
      */
-    public void deleteRequest(TaskRequest taskRequest) {
-        requestService.deleteRequest(taskRequest);
+    public void deleteRequest(Request request) {
+        requestService.deleteRequest(request);
     }
+
+    public List<Request> getAcceptedTaskRequestsEmployee() { return requestService.getAcceptedRequestsOfEmployee(currentUserBean.getCurrentUser())
+            .stream()
+            .filter(request -> request.getClass().equals(VacationRequest.class))
+            .collect(Collectors.toList()); }
 
 }

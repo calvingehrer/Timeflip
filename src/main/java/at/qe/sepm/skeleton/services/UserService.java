@@ -286,12 +286,12 @@ public class UserService {
      */
 
     public void deleteRequestsOfUser(User user) {
-        for (TaskRequest r: requestRepository.findAllRequestsOfRequester(user)) {
+        for (Request r: requestRepository.findAllRequestsOfRequester(user)) {
             requestRepository.delete(r);
             logger.logDeletion(r.getDescription(), getAuthenticatedUser());
         }
         if (user.getRoles().contains(UserRole.TEAMLEADER)) {
-            for (TaskRequest r : requestRepository.findAllRequestsOfRequestHandlerTL(user)) {
+            for (Request r : requestRepository.findAllRequestsOfRequestHandlerTL(user)) {
                 if (r.getRequestHandlerDepartmentLeader() == null) {
                     requestRepository.delete(r);
                 }
@@ -303,7 +303,7 @@ public class UserService {
             }
         }
         if (user.getRoles().contains(UserRole.DEPARTMENTLEADER)) {
-            for (TaskRequest r : requestRepository.findAllRequestsOfRequestHandlerDL(user)) {
+            for (Request r : requestRepository.findAllRequestsOfRequestHandlerDL(user)) {
                 if (r.getRequestHandlerTeamLeader() == null) {
                     requestRepository.delete(r);
                 }

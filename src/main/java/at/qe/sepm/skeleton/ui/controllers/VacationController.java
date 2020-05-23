@@ -2,7 +2,9 @@ package at.qe.sepm.skeleton.ui.controllers;
 
 
 import at.qe.sepm.skeleton.exceptions.VacationException;
+import at.qe.sepm.skeleton.model.UserRole;
 import at.qe.sepm.skeleton.model.Vacation;
+import at.qe.sepm.skeleton.services.RequestService;
 import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.services.VacationService;
 import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
@@ -33,6 +35,9 @@ public class VacationController implements Serializable {
     private UserService userService;
 
     @Autowired
+    private RequestService requestService;
+
+    @Autowired
     CurrentUserBean currentUserBean;
 
     private Date beginVacation;
@@ -43,6 +48,7 @@ public class VacationController implements Serializable {
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
+
 
     public UserService getUserService() {
         return userService;
@@ -88,18 +94,31 @@ public class VacationController implements Serializable {
         if(getBeginVacation() == null || getEndOfVacation() == null){
             MessagesView.errorMessage("vacation", "Please choose a date");
         }
+        if (currentUserBean.getCurrentUser().getRoles().contains(UserRole.DEPARTMENTLEADER) || currentUserBean.getCurrentUser().getRoles().contains(UserRole.ADMIN)) {
+            Vacation vacation = new Vacation();
+            vacation.setStart(getBeginVacation().toInstant());
+            vacation.setEnd(TimeConverter.addTime(getEndOfVacation().toInstant(), 1440));
+            try {
+                this.vacationService.addVacation(currentUserBean.getCurrentUser(), vacation);
+            }
+            catch (VacationException e){
+                MessagesView.errorMessage("vacation", e.getMessage());
+                return;
+            }
+            MessagesView.successMessage("vacation", "Vacation saved");
+        }
 
-        Vacation vacation = new Vacation();
-        vacation.setStart(getBeginVacation().toInstant());
-        vacation.setEnd(TimeConverter.addTime(getEndOfVacation().toInstant(), 1440));
-        try {
-            this.vacationService.addVacation(currentUserBean.getCurrentUser(), vacation);
+        else {
+            try {
+                this.vacationService.checkVacationDates(this.getBeginVacation().toInstant(), this.getEndOfVacation().toInstant());
+            }
+            catch (Exception e) {
+                MessagesView.errorMessage("vacation", e.getMessage());
+                return;
+            }
+            requestService.addVacationRequest(currentUserBean.getCurrentUser(), this.getBeginVacation(), this.getEndOfVacation(), "Requesting Vacation from " + this.getBeginVacation() + " to " + this.getEndOfVacation());
+            MessagesView.successMessage("vacation", "Request sent");
         }
-        catch (VacationException e){
-            MessagesView.errorMessage("vacation", e.getMessage());
-            return;
-        }
-        MessagesView.successMessage("vacation", "Vacation saved");
 
         init();
     }

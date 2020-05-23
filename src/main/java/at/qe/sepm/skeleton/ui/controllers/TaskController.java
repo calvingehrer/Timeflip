@@ -115,17 +115,11 @@ public class TaskController implements Serializable  {
     /**
      * method is called when the user is requesting a date that is not in the current or the previous week
      * does not check whether the user is a departmentleader because a depaartmentleader does not have to request
-     * @param status
      */
 
-    public void sendRequest(RequestEnum status) {
+    public void sendRequest() {
         User u = currentUserBean.getCurrentUser();
-        User handler1 = userService.getTeamLeader(u.getTeam());
-        if (u.equals(handler1)) {
-            handler1 = null;
-        }
-        User handler2 = userService.getDepartmentLeader(u.getDepartment());
-        requestService.addRequest(u, handler1, handler2, this.requestedDate, status,"Editing  Tasks");
+        requestService.addTaskRequest(u, this.getRequestedDate(), "Editing  " + this.getRequestedDate());
     }
 
 
@@ -176,7 +170,7 @@ public class TaskController implements Serializable  {
             taskService.checkIfEarlierThanTwoWeeks(currentUserBean.getCurrentUser(), this.getRequestedDate().toInstant());
         }
         catch (Exception e) {
-            sendRequest(RequestEnum.OPEN);
+            sendRequest();
         }
     }
 

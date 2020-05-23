@@ -7,7 +7,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity(name="taskrequest")
-@PrimaryKeyJoinColumn(name = "request")
 public class TaskRequest extends Request {
     private Date requestedDate;
 
