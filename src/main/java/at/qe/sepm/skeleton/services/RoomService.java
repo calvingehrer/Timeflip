@@ -105,7 +105,7 @@ public class RoomService {
         Raspberry raspberry = room.getRaspberry();
         raspberryService.deleteRaspberry(raspberry);
         roomRepository.delete(room);
-        logger.logDeletion(room.toString(), currentUserBean.getCurrentUser());
+        logger.logDeletion(room.getId(), currentUserBean.getCurrentUser());
     }
 
 

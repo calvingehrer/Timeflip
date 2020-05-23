@@ -117,6 +117,7 @@ public class UserService {
      */
     @PreAuthorize("hasAuthority('ADMIN') or principal.username eq #username")
     public User loadUser(String username) {
+
         return userRepository.findFirstByUsername(username);
     }
 
