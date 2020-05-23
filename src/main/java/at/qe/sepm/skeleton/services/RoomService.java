@@ -88,13 +88,15 @@ public class RoomService {
 
     /**
      * Deletes the room.
-     *
+     * if it is equipped it deletes the raspberry as well
      * @param room the room to delete
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteRoom(Room room) {
-        Raspberry raspberry = room.getRaspberry();
-        raspberryService.deleteRaspberry(raspberry);
+        if (room.isEquipped()) {
+            Raspberry raspberry = room.getRaspberry();
+            raspberryService.deleteRaspberry(raspberry);
+        }
         roomRepository.delete(room);
         logger.logDeletion(room.toString(), currentUserBean.getCurrentUser());
     }

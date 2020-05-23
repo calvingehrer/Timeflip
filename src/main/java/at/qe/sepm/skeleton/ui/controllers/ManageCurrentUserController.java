@@ -29,11 +29,7 @@ public class ManageCurrentUserController implements Serializable {
     @Autowired
     private UserService userService;
 
-    @Autowired
     private Logger<Exception, User> logger;
-
-
-    private User currentUser;
 
     private String intervall;
 
@@ -77,6 +73,7 @@ public class ManageCurrentUserController implements Serializable {
     public void setIntervall(String intervall) { this.intervall = intervall; }
 
 
+
     @PostConstruct
     public void init() {
         currentUserBean.init();
@@ -94,6 +91,10 @@ public class ManageCurrentUserController implements Serializable {
         newPassword = passwordEncoder.encode(newPassword);
         return passwordEncoder.matches(confirmNew, newPassword);
     }
+
+    /**
+     * method to change the password
+     */
 
 
     public void changePassword(){
@@ -119,6 +120,10 @@ public class ManageCurrentUserController implements Serializable {
         }
     }
 
+    /**
+     * after a users details have been changed it updates the fields and saves them
+     */
+
 
     public void saveUserDetails() {
         try {
@@ -127,7 +132,7 @@ public class ManageCurrentUserController implements Serializable {
             FacesContext.getCurrentInstance().getExternalContext().redirect("/employee/profile.xhtml");
         } catch (Exception e) {
             e.printStackTrace();
-            logger.logError(e, getCurrentUser());
+            logger.logError(e, currentUserBean.getCurrentUser());
         }
     }
 

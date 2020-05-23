@@ -32,16 +32,10 @@ public class TeamDetailController implements Serializable {
 
     private User newLeader;
 
-    private List<User> employees;
-
-
-
-
     public void setTeam(Team team) {
         this.team = team;
         doReloadTeam();
     }
-
 
     public Team getTeam(){
         return team;
@@ -55,9 +49,13 @@ public class TeamDetailController implements Serializable {
         team = this.teamService.saveTeam(team);
     }
 
+    /**
+     * deletes the team if it is empty
+     * displays a warn message if it is no possible
+     * otherwise it displays a success message
+     */
 
     public void doDeleteTeam(){
-        FacesMessage message;
         if (checkIfDeletionIsAllowed(team)) {
             try {
                 this.teamService.deleteTeam(team);
@@ -68,7 +66,6 @@ public class TeamDetailController implements Serializable {
             }
         }
         else {
-            System.out.println("hello");
             MessagesView.warnMessage("team deletion", "You can't delete this team");
             return;
         }
@@ -86,8 +83,6 @@ public class TeamDetailController implements Serializable {
         }
         return true;
     }
-
-
 
     public User getEmployee() {
         return employeeAdd;
@@ -125,11 +120,7 @@ public class TeamDetailController implements Serializable {
         userService.saveUser(employeeRemove);
     }
 
-    public List<User> getEmployees() {
-        return teamService.getUsersOfTeam(this.team);
-    }
-
-    public void replaceLeader() {
+     public void replaceLeader() {
 
         User oldLeader = userService.getTeamLeader(team);
         if (oldLeader != null) {

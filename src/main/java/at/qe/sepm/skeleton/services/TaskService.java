@@ -5,7 +5,7 @@ import at.qe.sepm.skeleton.exceptions.TaskException;
 import at.qe.sepm.skeleton.model.*;
 import at.qe.sepm.skeleton.repositories.TaskRepository;
 import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
-import at.qe.sepm.skeleton.ui.beans.TimeZoneBean;
+import at.qe.sepm.skeleton.ui.beans.TimeBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,7 +26,7 @@ public class TaskService {
     @Autowired
     private TaskRepository taskRepository;
     @Autowired
-    TimeZoneBean timeZoneBean;
+    TimeBean timeBean;
     @Autowired
     CurrentUserBean currentUserBean;
     @Autowired
@@ -101,7 +101,7 @@ public class TaskService {
         }
         checkTime(startHour, endHour, startMinute, endMinute);
 
-        Calendar calendar = Calendar.getInstance(timeZoneBean.getUtcTimeZone());
+        Calendar calendar = Calendar.getInstance(timeBean.getUtcTimeZone());
 
         calendar.setTime(date);
         calendar.set(Calendar.SECOND, 0);
@@ -179,7 +179,7 @@ public class TaskService {
      */
 
     public boolean checkIfEarlierThanTwoWeeks (User user, Instant date) {
-        Calendar calendar = Calendar.getInstance(timeZoneBean.getUtcTimeZone());
+        Calendar calendar = Calendar.getInstance(timeBean.getUtcTimeZone());
         calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
         calendar.add(Calendar.DATE, -7);
         calendar.set(Calendar.HOUR_OF_DAY,0);

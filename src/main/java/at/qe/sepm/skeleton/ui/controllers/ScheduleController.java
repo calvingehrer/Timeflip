@@ -1,14 +1,10 @@
 package at.qe.sepm.skeleton.ui.controllers;
 
 import at.qe.sepm.skeleton.model.Vacation;
-import at.qe.sepm.skeleton.services.VacationServiceImpl;
+import at.qe.sepm.skeleton.services.VacationService;
 import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import at.qe.sepm.skeleton.ui.beans.HolidayBean;
-import at.qe.sepm.skeleton.ui.beans.SessionInfoBean;
-import at.qe.sepm.skeleton.ui.beans.TimeZoneBean;
-import de.jollyday.Holiday;
-import de.jollyday.HolidayCalendar;
-import de.jollyday.HolidayManager;
+import at.qe.sepm.skeleton.ui.beans.TimeBean;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.LazyScheduleModel;
@@ -42,19 +38,19 @@ public class ScheduleController implements Serializable {
     }
 
     @Autowired
-    private TimeZoneBean timeZoneBean;
+    private TimeBean timeBean;
     @Autowired
     private HolidayBean holidayBean;
 
     @Autowired
-    private VacationServiceImpl vacationService;
+    private VacationService vacationService;
 
     @Autowired
     private CurrentUserBean currentUserBean;
 
     /**
-     * method to initialize the calendar
-     * the plus one for the holidays is because the defaulscheduler
+     * method to initialize the calendar with vacation and public holidays
+     * the plus one for the holidays is because the default scheduler
      * sets them one day earlier
      */
 
@@ -83,7 +79,7 @@ public class ScheduleController implements Serializable {
                 });
 
                 holidayBean.getPublicHolidays().forEach(h ->{
-                    Calendar calendar = Calendar.getInstance(timeZoneBean.getUtcTimeZone());
+                    Calendar calendar = Calendar.getInstance(timeBean.getUtcTimeZone());
                     calendar.setTime(h.getDate().toDate());
                     calendar.add(Calendar.DATE, 1);
                     Date holiday = calendar.getTime();

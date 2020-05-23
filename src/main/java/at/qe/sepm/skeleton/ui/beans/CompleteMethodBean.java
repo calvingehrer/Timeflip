@@ -26,6 +26,12 @@ public class CompleteMethodBean {
         return TaskEnum.getAllTasks().stream().filter(a -> a.contains(upperQuery)).collect(Collectors.toList());
     }
 
+    /**
+     * method to complete the intervals
+     * @param query
+     * @return
+     */
+
     public List<String> completeIntervall(String query) {
         String upperQuery = query.toUpperCase();
         return Interval.getAllIntervals().stream().filter(a -> a.contains(upperQuery)).collect(Collectors.toList());

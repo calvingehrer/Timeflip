@@ -50,7 +50,9 @@ public class TaskController implements Serializable  {
 
     private int endMinute;
 
-
+    /**
+     * initialize the current user
+     */
 
     @PostConstruct
     public void init() {
@@ -60,8 +62,6 @@ public class TaskController implements Serializable  {
     public long duration(Task task) {
         return taskService.getDuration(task);
     }
-
-
 
     public TaskEnum getTask() {
         return task;
@@ -159,7 +159,11 @@ public class TaskController implements Serializable  {
             MessagesView.errorMessage("Edit Tasks", e.getMessage());
         }
     }
-    public void editTasks() {
+
+    /**
+     *
+     */
+    public void checkRequestedDate() {
 
         try {
             taskService.checkIfAfterToday(this.getRequestedDate().toInstant());
@@ -175,6 +179,10 @@ public class TaskController implements Serializable  {
             sendRequest(RequestEnum.OPEN);
         }
     }
+
+    /**
+     * edit any date
+     */
 
     public void editDate () {
         try {

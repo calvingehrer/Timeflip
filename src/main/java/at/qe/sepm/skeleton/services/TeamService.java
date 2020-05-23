@@ -20,7 +20,8 @@ import java.util.Set;
 @Scope("application")
 public class TeamService {
 
-
+    @Autowired
+    private MailService mailService;
 
     @Autowired
     private UserService userService;
@@ -68,6 +69,7 @@ public class TeamService {
             u.setTeam(team);
             u.setDepartment(team.getDepartment());
             userService.saveUser(u);
+            mailService.sendEmailTo(u, "New Team", "You have been added to " + newTeam.getTeamName());
         }
         logger.logCreation(team.getTeamName(), currentUserBean.getCurrentUser());
     }
