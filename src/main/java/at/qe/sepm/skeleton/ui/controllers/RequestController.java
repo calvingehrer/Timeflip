@@ -80,7 +80,8 @@ public class RequestController implements Serializable  {
      */
     public void acceptRequest(Request request) {
         requestService.acceptRequest(request);
-        if (request.getClass() == VacationRequest.class) {
+        if (request.getDiscriminatorValue() == 2) {
+            System.out.println("hello");
             VacationRequest vr = (VacationRequest) request;
             Vacation vacation = new Vacation();
             vacation.setStart(vr.getRequestedStartDate().toInstant());
@@ -113,7 +114,6 @@ public class RequestController implements Serializable  {
 
     public List<Request> getAcceptedTaskRequestsEmployee() { return requestService.getAcceptedRequestsOfEmployee(currentUserBean.getCurrentUser())
             .stream()
-            .filter(request -> request.getClass().equals(VacationRequest.class))
+            .filter(request -> request.getDiscriminatorValue() == 1)
             .collect(Collectors.toList()); }
-
 }

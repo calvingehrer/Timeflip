@@ -90,27 +90,27 @@ public class VacationController implements Serializable {
 
 
     public void addVacation(){
-
         if(getBeginVacation() == null || getEndOfVacation() == null){
             MessagesView.errorMessage("vacation", "Please choose a date");
         }
-        if (currentUserBean.getCurrentUser().getRoles().contains(UserRole.DEPARTMENTLEADER) || currentUserBean.getCurrentUser().getRoles().contains(UserRole.ADMIN)) {
+        if (currentUserBean.getCurrentUser().getRoles().contains(UserRole.DEPARTMENTLEADER)
+                || currentUserBean.getCurrentUser().getRoles().contains(UserRole.ADMIN)) {
             Vacation vacation = new Vacation();
             vacation.setStart(getBeginVacation().toInstant());
             vacation.setEnd(TimeConverter.addTime(getEndOfVacation().toInstant(), 1440));
             try {
-                this.vacationService.addVacation(currentUserBean.getCurrentUser(), vacation);
+                vacationService.addVacation(currentUserBean.getCurrentUser(), vacation);
             }
             catch (VacationException e){
-                MessagesView.errorMessage("vacation", e.getMessage());
+                MessagesView.errorMessage("Vacation", e.getMessage());
                 return;
             }
-            MessagesView.successMessage("vacation", "Vacation saved");
+            MessagesView.successMessage("Vacation", "Vacation saved");
         }
 
         else {
             try {
-                this.vacationService.checkVacationDates(this.getBeginVacation().toInstant(), this.getEndOfVacation().toInstant());
+                this.vacationService.checkVacationDates(currentUserBean.getCurrentUser(), this.getBeginVacation().toInstant(), this.getEndOfVacation().toInstant());
             }
             catch (Exception e) {
                 MessagesView.errorMessage("vacation", e.getMessage());

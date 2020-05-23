@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface RequestRepository extends AbstractRepository<TaskRequest,String> {
+public interface RequestRepository extends AbstractRepository<Request,String> {
     @Query("SELECT r FROM Request r WHERE r.requester=:user AND r.status=:status")
     List<Request> findAllRequestsOfUser(@Param("user") User user, @Param("status") RequestEnum status);
 

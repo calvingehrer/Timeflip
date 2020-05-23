@@ -49,7 +49,7 @@ public class VacationService {
     @Transactional
     public void addVacation(User user, Vacation vacation) throws VacationException {
 
-        checkVacationDates(vacation.getStart(), vacation.getEnd());
+        checkVacationDates(user, vacation.getStart(), vacation.getEnd());
 
         int beginYear = TimeConverter.getYear(vacation.getStart());
         int endYear = TimeConverter.getYear(vacation.getEnd());
@@ -61,11 +61,9 @@ public class VacationService {
             nextYear.setStart(TimeConverter.beginOfYear(endYear));
             this.addVacation(user, nextYear);
         }
-        User managedUser = currentUserBean.getCurrentUser();
 
-
-        logger.logCreation(vacation.toString(), currentUserBean.getCurrentUser());
-        managedUser.addVacation(vacation);
+        logger.logCreation(vacation.toString(), user);
+        user.addVacation(vacation);
     }
 
     /**
@@ -84,7 +82,7 @@ public class VacationService {
         }
     }
 
-    public void checkVacationDates(Instant startDate, Instant endDate) throws VacationException {
+    public void checkVacationDates(User user, Instant startDate, Instant endDate) throws VacationException {
         if (startDate.isBefore(Calendar.getInstance().toInstant()) || endDate.isBefore(Calendar.getInstance().toInstant())) {
             throw new VacationException("The requested Vacation would already have passed.");
         }
@@ -99,16 +97,15 @@ public class VacationService {
                 throw new VacationException("Vacation exceeds the limit");
             }
         }
-        User managedUser = currentUserBean.getCurrentUser();
 
         long lengthNewVacation = Duration.between(startDate, endDate).toDays();
 
-        long totalDays = managedUser.getVacations().stream().filter(x -> TimeConverter.getYear(x.getStart()) == beginYear).map(x -> Duration.between(x.getStart(), x.getEnd()).toDays()).mapToLong(Long::valueOf).sum();
+        long totalDays = user.getVacations().stream().filter(x -> TimeConverter.getYear(x.getStart()) == beginYear).map(x -> Duration.between(x.getStart(), x.getEnd()).toDays()).mapToLong(Long::valueOf).sum();
 
         if (totalDays + lengthNewVacation > Vacation.MAX_VACATION_DAYS_PER_YEAR) {
             throw new VacationException("Limit exceeded .You can't take vacation that long.");
         }
-        if (managedUser.hasVacationInTime(startDate, endDate)) {
+        if (user.hasVacationInTime(startDate, endDate)) {
             throw new VacationException("You can take Vacation in this time.");
         }
     }

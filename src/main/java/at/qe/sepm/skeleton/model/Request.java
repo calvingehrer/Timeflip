@@ -7,8 +7,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
-public class Request implements Persistable<Long>, Serializable {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="request_type", discriminatorType = DiscriminatorType.INTEGER)
+public abstract class Request implements Persistable<Long>, Serializable {
     private static final long serialVersionUID = 1543543567124567565L;
 
     @Id
@@ -93,4 +94,6 @@ public class Request implements Persistable<Long>, Serializable {
 
     @Override
     public boolean isNew() { return null == createDate; }
+
+    public abstract int getDiscriminatorValue();
 }
