@@ -39,6 +39,8 @@ public class ManageCurrentUserController implements Serializable {
 
     private String confirmNew;
 
+    private User currentUser;
+
 
     public String getOldPassword() {
         return oldPassword;
@@ -72,11 +74,18 @@ public class ManageCurrentUserController implements Serializable {
 
     public void setIntervall(String intervall) { this.intervall = intervall; }
 
+    public User getCurrentUser() {
+        return currentUser;
+    }
 
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
 
     @PostConstruct
     public void init() {
         currentUserBean.init();
+        this.setCurrentUser(currentUserBean.getCurrentUser());
     }
 
     public String getFullName() {

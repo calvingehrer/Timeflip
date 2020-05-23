@@ -4,6 +4,7 @@ package at.qe.sepm.skeleton.services;
 import at.qe.sepm.skeleton.exceptions.VacationException;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.model.Vacation;
+import at.qe.sepm.skeleton.repositories.UserRepository;
 import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import at.qe.sepm.skeleton.utils.TimeConverter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,12 @@ public class VacationService {
     @Autowired
     CurrentUserBean currentUserBean;
 
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    UserRepository userRepository;
+
     /**
      * A Function to get the current user
      */
@@ -44,9 +51,6 @@ public class VacationService {
      * @param vacation
      * @throws VacationException Add a new Vacation
      */
-
-    @PreAuthorize("hasAuthority('EMPLOYEE')")
-    @Transactional
     public void addVacation(User user, Vacation vacation) throws VacationException {
 
         checkVacationDates(user, vacation.getStart(), vacation.getEnd());
@@ -62,8 +66,11 @@ public class VacationService {
             this.addVacation(user, nextYear);
         }
 
-        logger.logCreation(vacation.toString(), user);
-        user.addVacation(vacation);
+        User managedUser = userService.getManagedUser(user);
+
+        logger.logCreation(vacation.toString(), managedUser);
+        managedUser.addVacation(vacation);
+        userRepository.save(managedUser);
     }
 
     /**
@@ -71,7 +78,6 @@ public class VacationService {
      * @return Set of Vacation from Current User
      */
 
-    @PreAuthorize("hasAuthority('EMPLOYEE')")
     @Transactional
     public Set<Vacation> getVacationFromUser(User user) {
         User current = currentUserBean.getCurrentUser();
@@ -81,6 +87,14 @@ public class VacationService {
             return Collections.emptySet();
         }
     }
+
+    /**
+     * checks if the dates are valid
+     * @param user
+     * @param startDate
+     * @param endDate
+     * @throws VacationException
+     */
 
     public void checkVacationDates(User user, Instant startDate, Instant endDate) throws VacationException {
         if (startDate.isBefore(Calendar.getInstance().toInstant()) || endDate.isBefore(Calendar.getInstance().toInstant())) {

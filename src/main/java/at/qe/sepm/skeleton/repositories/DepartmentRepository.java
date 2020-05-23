@@ -3,6 +3,7 @@ package at.qe.sepm.skeleton.repositories;
 
 import at.qe.sepm.skeleton.model.Department;
 
+import at.qe.sepm.skeleton.model.User;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -14,8 +15,5 @@ public interface DepartmentRepository extends AbstractRepository<Department, Str
 
     @Query("SELECT d FROM Department d WHERE d.departmentName = :departmentName ")
     Department findByDepartmentName1(@Param("departmentName") String departmentName);
-
-
-
 
 }

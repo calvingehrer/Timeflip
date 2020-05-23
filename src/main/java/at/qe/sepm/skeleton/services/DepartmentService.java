@@ -5,6 +5,7 @@ import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.DepartmentRepository;
 import at.qe.sepm.skeleton.repositories.TeamRepository;
+import at.qe.sepm.skeleton.repositories.UserRepository;
 import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -83,7 +84,7 @@ public class DepartmentService {
         team.setDepartment(null);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DEPARTMENTLEADER')")
     public List<Team> getTeamsOfDepartment (Department department) {
         return teamRepository.findByDepartment(department);
     }

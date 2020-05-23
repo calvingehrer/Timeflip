@@ -62,4 +62,6 @@ public interface UserRepository extends AbstractRepository<User, String> {
 
     @Query("SELECT u FROM User u")
     List<User> getAllUsers();
+
+
 }
