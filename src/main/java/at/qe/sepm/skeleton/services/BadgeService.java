@@ -30,6 +30,10 @@ public class BadgeService {
         return badgeRepository.findBadgesFromUser(user);
     }
 
+    public List<Badge> getAllBadgesAfterDate(Instant date){
+        return badgeRepository.findBadgesAfterDate(date);
+    }
+
     public void deleteBadge(Badge badge) {
         badgeRepository.delete(badge);
     }
@@ -224,7 +228,7 @@ public class BadgeService {
 
         for(Task entry : taskList){
             Integer hour = entry.getEndTime().atZone(ZoneOffset.UTC).getHour();
-            if(hour >= 20 || hour < 6){
+            if(hour >= 20 || hour < 6 && entry.getTask() != TaskEnum.AUSZEIT){
                 nightTasks.add(entry);
             }
         }
