@@ -2,12 +2,10 @@ package at.qe.sepm.skeleton.ui.controllers;
 
 
 import at.qe.sepm.skeleton.exceptions.VacationException;
-import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.model.Vacation;
 import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.services.VacationService;
 import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
-import at.qe.sepm.skeleton.ui.beans.SessionInfoBean;
 import at.qe.sepm.skeleton.utils.MessagesView;
 import at.qe.sepm.skeleton.utils.TimeConverter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,7 +92,6 @@ public class VacationController implements Serializable {
 
 
     public void addVacation(){
-
 
         if(getBeginVacation() == null || getEndOfVacation() == null){
             MessagesView.errorMessage("vacation", "Please choose a date");
