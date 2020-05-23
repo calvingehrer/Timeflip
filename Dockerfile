@@ -1,5 +1,18 @@
-FROM tomcat:8.0.51-jre8-alpine
-RUN rm -rf /usr/local/tomcat/webapps/*
-COPY ./target/sepm-start-1.0.4.war /usr/local/tomcat/webapps/ROOT.war
-EXPOSE 8080
-CMD ["catalina.sh","run"]
+FROM maven:3.5-jdk-8
+
+RUN adduser --disabled-password nonroot
+
+
+RUN mkdir -p /user/nonroot
+
+WORKDIR /user/nonroot/app
+
+COPY ./pom.xml /user/nonroot/app/pom.xml
+
+COPY ./src/main/resources/ecuador-theme-3.0.0.jar /user/nonroot/app/src/main/resources/ecuador-theme-3.0.0.jar
+
+RUN mvn clean package
+
+COPY ./src /user/nonroot/app/src
+
+ENTRYPOINT [ "mvn", "spring-boot:run"]

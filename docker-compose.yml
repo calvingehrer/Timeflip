@@ -1,0 +1,24 @@
+version: '3'
+services:
+  db:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=Timeflippers.123
+      - MYSQL_ROOT_USER=default
+      - MYSQL_DATABASE=spring_boot_database
+      - MYSQL_PASSWORD=Timeflippers.123
+      - MYSQL_USER=default
+      #- MYSQL_USER=root
+      #restart: always
+    ports:
+      - 3307:3306
+
+  app:
+    build: .
+    image: app:latest
+    #restart: always
+    depends_on:
+      - db
+    ports:
+      - 8080:8080
+
