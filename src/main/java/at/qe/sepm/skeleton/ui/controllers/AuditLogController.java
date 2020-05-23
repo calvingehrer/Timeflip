@@ -11,7 +11,7 @@ import java.util.Collection;
 
 @Component
 @Scope("view")
-public class AuditLogListController implements Serializable {
+public class AuditLogController implements Serializable {
 
     @Autowired
     private AuditLogService auditLogService;

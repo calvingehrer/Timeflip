@@ -32,6 +32,7 @@
                         <p:submenu label="Department" rendered="#{sessionInfoBean.hasRole('DEPARTMENTLEADER')}" icon="fa fa-users">
                             <p:menuitem value="My Department" url="/departmentleader/department.xhtml"/>
                             <p:menuitem value="Time Changes" url="/secured/change-requests.xhtml"/>
+                            <p:menuitem value="AuditLog" url="/departmentleader/auditlog.hxtml"/>
                         </p:submenu>
                         <p:submenu label="Badges" rendered="#{sessionInfoBean.hasRole('EMPLOYEE')}"
                             icon="fa fa-trophy">
@@ -43,7 +44,6 @@
                             <p:menuitem value="Leaderboard" url="/employee/leaderboard.xhtml"/>
                             <p:menuitem value="Possible Badges" url="/employee/possible-badges.xhtml"/>
                         </p:submenu>
-
 
 
                         <p:submenu label="User" rendered="#{sessionInfoBean.hasRole('ADMIN')}"
