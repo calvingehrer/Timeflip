@@ -12,10 +12,12 @@
         <li>Pages</li>
         <li>/</li>
         <li>
-            <p:link outcome="/departmentleader/auditlog">Auditlog</p:link>
+            <p:link outcome="/departmentleader/auditlog.xhtml">Auditlog</p:link>
         </li>
     </ui:define>
 
+
+    <ui:define name="content">
     <div class="ui-g">
             <div class="ui-g-12">
                 <div class="card">
@@ -25,21 +27,21 @@
                         <p:messages id="messages" showDetail="true" closable="true">
                             <p:autoUpdate/>
                         </p:messages>
-                        <p:dataTable id="auditlog" var="log" value="#{auditLogController.logEntry}" scrollable="true">
+                        <p:dataTable id="auditlog" var="log" value="#{auditLogController.entries}" scrollable="true">
                             <p:column headerText="ID">
-                                <h:outputText value="#{logEntry.id}"/>
+                                <h:outputText value="#{log.id}"/>
                             </p:column>
                             <p:column headerText="Log Type">
-                                <h:outputText value="#{logEntry.logActionType}"/>
+                                <h:outputText value="#{log.logActionType}"/>
                             </p:column>
                             <p:column headerText="Log Date">
-                                <h:outputText value="#{logEntry.logDate}"/>
+                                <h:outputText value="#{log.logDate}"/>
                             </p:column>
                             <p:column headerText="Message">
-                                <h:outputText value="#{logEntry.message}"/>
+                                <h:outputText value="#{log.message}"/>
                             </p:column>
                             <p:column headerText="Changing User">
-                                <h:outputText value="#{logEntry.changingUser}"/>
+                                <h:outputText value="#{log.changingUser}"/>
                             </p:column>
                         </p:dataTable>
 

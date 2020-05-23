@@ -28,7 +28,6 @@ public class ManageCurrentUserController implements Serializable {
     @Autowired
     private UserService userService;
 
-    @Autowired
     private Logger<Exception, User> logger;
 
 
