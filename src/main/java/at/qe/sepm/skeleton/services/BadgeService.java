@@ -9,10 +9,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.util.*;
 
 @Component
 @Scope("application")
@@ -50,8 +49,8 @@ public class BadgeService {
         evaluateCodeMonkey(startDate, endDate);
         evaluateCreativeMind(startDate, endDate);
         evaluateFriendAndHelper(startDate, endDate);
-        //evaluateNightOwl(startDate, endDate);
-        //evaluateAllRounder(startDate, endDate);
+        evaluateNightOwl(startDate, endDate);
+        evaluateAllRounder(startDate, endDate);
         evaluateWisdomSeeker(startDate, endDate);
 
 
@@ -82,7 +81,7 @@ public class BadgeService {
         codeMonkey.setDateOfBadge(startDate);
         codeMonkey.setImagePath("/resources/badges/weekly_code_monkey.png");
 
-        System.out.println("CodeMoney goes to "+ codeMonkey.getUser().getId());
+        System.out.println("Code Money goes to "+ codeMonkey.getUser().getId());
 
         badgeRepository.save(codeMonkey);
 
@@ -151,13 +150,61 @@ public class BadgeService {
 
 
     /**
-     * returns the All-Rounder (Person with most different tasks) of the given period
+     * returns the All-Rounder (Person with most different tasks) of the given period by creating a list of every task
+     * between startDate and endDate, then creating a HashMap where every new task gets saved per user.
+     * Finally the user with the most different tasks is searched in that HashMap.
+     *
      * @param startDate
      * @param endDate
      */
 
     private void evaluateAllRounder(Instant startDate, Instant endDate){
+        List<Task> taskList;
+
+        taskList = taskRepository.findTasksBetweenDates(startDate, endDate);
+
+
+        HashMap<String, List<TaskEnum>> differentTasksPerUser = new HashMap<>();
+
+        for(Task entry : taskList){
+            String currentUserID = entry.getUser().getId();
+            if(!differentTasksPerUser.containsKey(currentUserID)){
+                List<TaskEnum> differentTasks = new ArrayList<>();
+                differentTasks.add(entry.getTask());
+                differentTasksPerUser.put(currentUserID, differentTasks);
+            }
+            else{
+                if(!differentTasksPerUser.get(currentUserID).contains(entry.getTask())){
+                    differentTasksPerUser.get(currentUserID).add(entry.getTask());
+                }
+            }
+        }
+
+        String userWithMostDifferentTasks = "";
+
+        for(String userId : differentTasksPerUser.keySet()){
+            if(userWithMostDifferentTasks.isEmpty()){
+                userWithMostDifferentTasks = userId;
+            }
+            else if(differentTasksPerUser.get(userId).size() > differentTasksPerUser.get(userWithMostDifferentTasks).size()){
+                userWithMostDifferentTasks = userId;
+            }
+        }
+
+        if(userWithMostDifferentTasks.isEmpty()){
+            return;
+        }
+
         Badge allRounder = new Badge();
+
+        allRounder.setBadgeType(BadgeEnum.ALL_ROUNDER);
+        allRounder.setUser(userRepository.findFirstByUsername(userWithMostDifferentTasks));
+        allRounder.setDateOfBadge(startDate);
+        allRounder.setImagePath("/resources/badges/all_rounder.png");
+
+        System.out.println("All-Rounder goes to "+ allRounder.getUser().getId());
+
+        badgeRepository.save(allRounder);
 
 
     }
@@ -169,7 +216,39 @@ public class BadgeService {
      */
 
     private void evaluateNightOwl(Instant startDate, Instant endDate){
+        List<Task> taskList;
+
+        taskList = taskRepository.findTasksBetweenDates(startDate, endDate);
+
+        List<Task> nightTasks = new ArrayList<>();
+
+        for(Task entry : taskList){
+            Integer hour = entry.getEndTime().atZone(ZoneOffset.UTC).getHour();
+            if(hour >= 20 || hour < 6){
+                nightTasks.add(entry);
+            }
+        }
+
+        if(nightTasks.isEmpty()){
+            return;
+        }
+
+        String userWithMostSeconds = evaluateUserWithMostTime(nightTasks);
+
+        if(userWithMostSeconds.isEmpty()){
+            return;
+        }
+
         Badge nightOwl = new Badge();
+
+        nightOwl.setBadgeType(BadgeEnum.NIGHT_OWL);
+        nightOwl.setUser(userRepository.findFirstByUsername(userWithMostSeconds));
+        nightOwl.setDateOfBadge(startDate);
+        nightOwl.setImagePath("/resources/badges/night_owl.png");
+
+        System.out.println("Night owl goes to "+ nightOwl.getUser().getId());
+
+        badgeRepository.save(nightOwl);
 
     }
 
