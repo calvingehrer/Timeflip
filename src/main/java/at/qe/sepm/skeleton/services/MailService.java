@@ -11,12 +11,14 @@ public class MailService {
     @Autowired
     private JavaMailSender mailSender;
 
+
     public void sendMail(String toAddress, String subject, String text) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(toAddress);
         message.setSubject(subject);
         message.setText(text);
         mailSender.send(message);
+
     }
 
     public void sendEmailTo(User user, String subject, String text) {

@@ -4,16 +4,20 @@ package at.qe.sepm.skeleton.services;
 import at.qe.sepm.skeleton.exceptions.TaskException;
 import at.qe.sepm.skeleton.model.*;
 import at.qe.sepm.skeleton.repositories.TaskRepository;
+import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import at.qe.sepm.skeleton.ui.beans.TimeZoneBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.time.Duration;
 import java.time.Instant;
-import java.time.ZoneId;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 @Service
 @Scope("application")
@@ -23,6 +27,19 @@ public class TaskService {
     private TaskRepository taskRepository;
     @Autowired
     TimeZoneBean timeZoneBean;
+    @Autowired
+    CurrentUserBean currentUserBean;
+    @Autowired
+    private Logger<String, User> logger;
+
+    /**
+     * A Function to get the current user
+     */
+
+    @PostConstruct
+    public void init() {
+        currentUserBean.init();
+    }
 
     public List<Task> getAllTasksBetweenDates(User user, Instant start, Instant end) {
         if (start == null || end == null) {
@@ -32,7 +49,7 @@ public class TaskService {
     }
 
     @PreAuthorize("hasAuthority('TEAMLEADER')")
-    public List<Task> getAllTasksFromTeam(Team team){
+    public List<Task> getAllTasksFromTeam(Team team) {
         return taskRepository.findTasksFromTeam(team);
     }
 
@@ -151,6 +168,7 @@ public class TaskService {
         toSave.setCreateDate(new Date());
 
         taskRepository.save(toSave);
+        logger.logUpdate(task.toString(), currentUserBean.getCurrentUser());
     }
 
     /**
@@ -212,16 +230,9 @@ public class TaskService {
 
     public void deleteTask(Task task) {
         taskRepository.delete(task);
+        logger.logDeletion(task.getTask().toString(), currentUserBean.getCurrentUser());
     }
 
-    public void deleteTaskOfUser (User user) {
-        for (Task t: taskRepository.findTasksFromUser(user)) {
-            t.setUser(null);
-            t.setDepartment(null);
-            t.setTeam(null);
-            taskRepository.save(t);
-            deleteTask(t);
-        }
-    }
+
 
 }

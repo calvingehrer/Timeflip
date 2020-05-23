@@ -15,9 +15,14 @@ public class ScheduledMailService {
     @Autowired
     private MailRepository mailRepository;
 
+
+    @Autowired
+    private Logger<String, User> logger;
+
+
     @Scheduled(cron = "0 0 8 * * MON-FRI", zone = "Europe/Vienna")
-    public void sendDailyStatistics () {
-        for (User u: mailRepository.findByInterval(Interval.DAILY)) {
+    public void sendDailyStatistics() {
+        for (User u : mailRepository.findByInterval(Interval.DAILY)) {
             mailService.sendEmailTo(u, "your daily stats", "default");
         }
     }

@@ -2,6 +2,7 @@ package at.qe.sepm.skeleton.ui.controllers;
 
 import at.qe.sepm.skeleton.model.Interval;
 import at.qe.sepm.skeleton.model.User;
+import at.qe.sepm.skeleton.services.Logger;
 import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import at.qe.sepm.skeleton.ui.beans.SessionInfoBean;
@@ -27,6 +28,12 @@ public class ManageCurrentUserController implements Serializable {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private Logger<Exception, User> logger;
+
+
+    private User currentUser;
 
     private String intervall;
 
@@ -69,6 +76,7 @@ public class ManageCurrentUserController implements Serializable {
 
     public void setIntervall(String intervall) { this.intervall = intervall; }
 
+
     @PostConstruct
     public void init() {
         currentUserBean.init();
@@ -99,6 +107,7 @@ public class ManageCurrentUserController implements Serializable {
                     currentUserBean.reloadUser();
                 } catch (Exception e) {
                     e.printStackTrace();
+                    logger.logError(e, currentUserBean.getCurrentUser());
                 }
             }
             else{
@@ -118,6 +127,7 @@ public class ManageCurrentUserController implements Serializable {
             FacesContext.getCurrentInstance().getExternalContext().redirect("/employee/profile.xhtml");
         } catch (Exception e) {
             e.printStackTrace();
+            logger.logError(e, getCurrentUser());
         }
     }
 

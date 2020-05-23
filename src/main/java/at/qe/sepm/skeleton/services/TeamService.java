@@ -4,12 +4,14 @@ import at.qe.sepm.skeleton.model.Department;
 import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.TeamRepository;
+import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Set;
 
@@ -18,8 +20,6 @@ import java.util.Set;
 @Scope("application")
 public class TeamService {
 
-    @Autowired
-    private MailService mailService;
 
 
     @Autowired
@@ -29,16 +29,30 @@ public class TeamService {
     private TeamRepository teamRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private Logger<String, User> logger;
+
+    @Autowired
+    CurrentUserBean currentUserBean;
+
+    /**
+     * A Function to get the current user
+     */
+
+    @PostConstruct
+    public void init() {
+        currentUserBean.init();
+    }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public List<Team> getAllTeams(){return teamRepository.findAll();}
+    public List<Team> getAllTeams() {
+        return teamRepository.findAll();
+    }
 
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public Team saveTeam(Team team) {
 
-
+        logger.logUpdate(team.getTeamName(), currentUserBean.getCurrentUser());
         return teamRepository.save(team);
 
 
@@ -55,6 +69,7 @@ public class TeamService {
             u.setDepartment(team.getDepartment());
             userService.saveUser(u);
         }
+        logger.logCreation(team.getTeamName(), currentUserBean.getCurrentUser());
     }
 
     @PreAuthorize("hasAuthority('ADMIN') or principal.username eq #username")
@@ -65,6 +80,7 @@ public class TeamService {
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteTeam(Team team) {
         teamRepository.delete(team);
+        logger.logDeletion(team.toString(), currentUserBean.getCurrentUser());
     }
 
 

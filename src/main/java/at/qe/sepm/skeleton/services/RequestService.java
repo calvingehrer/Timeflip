@@ -5,19 +5,36 @@ import at.qe.sepm.skeleton.model.RequestEnum;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.model.UserRole;
 import at.qe.sepm.skeleton.repositories.RequestRepository;
+import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import javax.annotation.PostConstruct;
 import java.util.Date;
+import java.util.List;
 
 @Component
 @Scope("application")
 public class RequestService {
     @Autowired
     RequestRepository requestRepository;
+
+    @Autowired
+    CurrentUserBean currentUserBean;
+    @Autowired
+    private Logger<String, User> logger;
+
+    /**
+     * A Function to get the current user
+     */
+
+    @PostConstruct
+    public void init() {
+        currentUserBean.init();
+    }
+
 
     public void addRequest(User requester, User requestHandler1, User requestHandler2, Date requestedDate, RequestEnum status, String message) {
         Request r = new Request();
@@ -29,6 +46,7 @@ public class RequestService {
         r.setCreateDate(new Date());
         r.setRequestedDate(requestedDate);
         requestRepository.save(r);
+        logger.logCreation(r.getDescription(), requester);
     }
 
     @PreAuthorize("hasAuthority('TEAMLEADER') or hasAuthority('DEPARTMENTLEADER')")
@@ -60,43 +78,8 @@ public class RequestService {
         request.setRequestHandlerTeamLeader(null);
         request.setRequestHandlerDepartmentLeader(null);
         requestRepository.delete(request);
+        logger.logDeletion(request.getDescription(), currentUserBean.getCurrentUser());
     }
 
-    /**
-     * when deleting user delete all open requests
-     * when user is a team-leader and the field for department-leader is not null
-     * only set the field team-leader null
-     * vise versa for department-leader
-     * @param user
-     */
 
-    public void deleteRequestsOfUser(User user) {
-        for (Request r: requestRepository.findAllRequestsOfRequester(user)) {
-            deleteRequest(r);
-        }
-        if (user.getRoles().contains(UserRole.TEAMLEADER)) {
-            for (Request r : requestRepository.findAllRequestsOfRequestHandlerTL(user)) {
-                if (r.getRequestHandlerDepartmentLeader() == null) {
-                    deleteRequest(r);
-                }
-
-                else {
-                    r.setRequestHandlerTeamLeader(null);
-                    requestRepository.save(r);
-                }
-            }
-        }
-        if (user.getRoles().contains(UserRole.DEPARTMENTLEADER)) {
-            for (Request r : requestRepository.findAllRequestsOfRequestHandlerDL(user)) {
-                if (r.getRequestHandlerTeamLeader() == null) {
-                    deleteRequest(r);
-                }
-
-                else {
-                    r.setRequestHandlerDepartmentLeader(null);
-                    requestRepository.save(r);
-                }
-            }
-        }
-    }
 }
