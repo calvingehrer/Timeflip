@@ -3,6 +3,7 @@ package at.qe.sepm.skeleton.ui.controllers;
 
 import at.qe.sepm.skeleton.model.TaskEnum;
 import at.qe.sepm.skeleton.model.Timeflip;
+import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.TimeflipService;
 import at.qe.sepm.skeleton.utils.MessagesView;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ public class TimeflipDetailController implements Serializable {
     TimeflipService timeflipService;
 
     Timeflip timeflip;
+
+    User user;
 
     boolean design = false;
     boolean konzeption  = false;
@@ -265,12 +268,6 @@ public class TimeflipDetailController implements Serializable {
             return;
         }
 
-
-        if(map.isEmpty()){
-            System.out.println("Empty");
-        }
-
-
         for(int i = 1; i <= 12; i++){
             map.put(i, null);
         }
@@ -292,8 +289,18 @@ public class TimeflipDetailController implements Serializable {
     }
 
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
+    }
 
 
-
+    public void addUser(){
+        this.timeflip.setUser(user);
+        doSaveTimeflip();
+    }
 
 }

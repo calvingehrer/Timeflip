@@ -57,12 +57,11 @@ public class TimeflipService {
     }
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DEPARTMENTLEADER')")
-    public void addNewTimeflip(Timeflip timeflip, User user, Raspberry raspberry) {
+    public void addNewTimeflip(Timeflip timeflip, User user) {
 
         Timeflip newTimeflip = new Timeflip();
         newTimeflip.setMacAddress(timeflip.getMacAddress());
         newTimeflip.setUser(user);
-        newTimeflip.setRaspberry(raspberry);
         saveTimeflip(newTimeflip);
         logger.logCreation(timeflip.getId(), currentUserBean.getCurrentUser());
     }

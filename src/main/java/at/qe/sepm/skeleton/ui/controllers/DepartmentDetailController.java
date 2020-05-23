@@ -34,10 +34,6 @@ public class DepartmentDetailController implements Serializable {
 
     private Department department = new Department();
 
-    private Team teamRemove;
-
-    private Team teamAdd;
-
     public User newLeader;
 
     public void setDepartment(Department department) {
@@ -65,6 +61,12 @@ public class DepartmentDetailController implements Serializable {
         department = this.departmentService.saveDepartment(department);
     }
 
+    /**
+     * deletes a department
+     * when errors occur like that it is not empty you get a warn message
+     * otherwise you get a success message
+     */
+
     public void doDeleteDepartment(){
         if (checkIfDeletionIsAllowed(department)) {
             try {
@@ -77,34 +79,32 @@ public class DepartmentDetailController implements Serializable {
             }
         }
         else {
-            System.out.println("hello");
             MessagesView.warnMessage("department deletion", "You can't delete this department");
             return;
         }
 
-        successMessage("department deletion", "Department deleted");
+        MessagesView.successMessage("department deletion", "Department deleted");
         logger.logUpdate("department was deleted", userService.getAuthenticatedUser());
     }
 
 
-    public static void warnMessage(String target, String message) {
-        addMessage(target, new FacesMessage(FacesMessage.SEVERITY_WARN, "Warning!", message));
-    }
-
-    public static void successMessage(String target, String message) {
-        addMessage(target, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success!", message));
-    }
-
-    private static void addMessage(String target, FacesMessage message) {
-        FacesContext.getCurrentInstance().addMessage(target, message);
-        MessagesView.successMessage("department deletion", "Department deleted");
-    }
+    /**
+     * checks whether there are any teams still  in the department or it
+     * still has an departmentleader
+     * @param department
+     * @return
+     */
 
     public boolean checkIfDeletionIsAllowed (Department department){
         if (!teamService.getTeamsOfDepartment(department).isEmpty()) {
             return false;
         } else return userService.getDepartmentLeader(department) == null;
     }
+
+    /**
+     * replaces the leader
+     * as a working department can not have no leader it only is possible to set one to the position
+     */
 
     public void replaceLeader() {
         User oldLeader = userService.getDepartmentLeader(department);

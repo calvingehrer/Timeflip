@@ -37,7 +37,7 @@
                             <p:outputLabel for="email" value="E-Mail: "/>
                             <p:inputText id="email" value="#{manageCurrentUserController.currentUser.email}"/>
                             <p:outputLabel for="interval" value="Interval for mails: "/>
-                            <p:autoComplete id="interval" dropdown="true" value="#{manageCurrentUserController.currentUser.intervall}" completeMethod="#{manageCurrentUserController.completeIntervall}"/>
+                            <p:autoComplete id="interval" dropdown="true" value="#{manageCurrentUserController.currentUser.intervall}" completeMethod="#{completeMethodBean.completeIntervall}"/>
                             <p:outputLabel value="Password: "/>
                             <p:commandButton id="passwordChange" update=":changeDetailsForm:editPassword" value="Change Password" oncomplete="PF('editPassword').show()">
                             </p:commandButton>

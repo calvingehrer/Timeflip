@@ -3,6 +3,7 @@ package at.qe.sepm.skeleton.services;
 import at.qe.sepm.skeleton.model.Raspberry;
 import at.qe.sepm.skeleton.model.Room;
 import at.qe.sepm.skeleton.model.User;
+import at.qe.sepm.skeleton.repositories.RaspberryRepository;
 import at.qe.sepm.skeleton.repositories.RoomRepository;
 import at.qe.sepm.skeleton.repositories.UserRepository;
 import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
@@ -15,7 +16,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -28,7 +28,6 @@ public class RoomService {
     RoomRepository roomRepository;
     @Autowired
     UserRepository userRepository;
-
     @Autowired
     RaspberryService raspberryService;
 
@@ -56,13 +55,6 @@ public class RoomService {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<Room> getRoomsWithoutRaspberry() {
-
-        List<Room> listRooms = new ArrayList<>(roomRepository.findRoomsWithoutRaspberry());
-        for(Raspberry raspberry : raspberryService.getAllRaspberries()){
-            listRooms.remove(raspberry.getRoom());
-        }
-
-
         return roomRepository.findRoomsWithoutRaspberry();
     }
 
@@ -70,8 +62,8 @@ public class RoomService {
     public void addNewRoom(Room room) {
         Room newRoom = new Room();
         newRoom.setRoomNumber(room.getRoomNumber());
+        newRoom.setRaspberry(null);
         saveRoom(newRoom);
-        System.out.println(newRoom.getRoomNumber());
         logger.logCreation(room.toString(), currentUserBean.getCurrentUser());
     }
 
@@ -97,13 +89,15 @@ public class RoomService {
 
     /**
      * Deletes the room.
-     *
+     * if it is equipped it deletes the raspberry as well
      * @param room the room to delete
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteRoom(Room room) {
-        Raspberry raspberry = room.getRaspberry();
-        raspberryService.deleteRaspberry(raspberry);
+        if (room.isEquipped()) {
+            Raspberry raspberry = room.getRaspberry();
+            raspberryService.deleteRaspberry(raspberry);
+        }
         roomRepository.delete(room);
         logger.logDeletion(room.getId(), currentUserBean.getCurrentUser());
     }

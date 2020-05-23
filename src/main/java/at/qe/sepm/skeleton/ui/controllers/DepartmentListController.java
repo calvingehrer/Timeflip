@@ -18,18 +18,27 @@ public class DepartmentListController implements Serializable {
     @Autowired
     private DepartmentService departmentService;
 
-    private String departmentName = "";
+    /**
+     * @return all department
+     */
 
     public Collection<Department> getDepartments(){
-       // if(!departmentName.equals("")){
-         //   return departmentService.g
-        //}
         return departmentService.getAllDepartments();
     }
+
+    /**
+     * @param department
+     * @return all teams in the department
+     */
 
     public List<Team> getTeamsOfDepartment (Department department) {
         return departmentService.getTeamsOfDepartment(department);
     }
+
+    /**
+     * @param department
+     * @return the head of the department
+     */
 
     public User getDepartmentLeader(Department department) {
         return departmentService.getDepartmentLeader(department);

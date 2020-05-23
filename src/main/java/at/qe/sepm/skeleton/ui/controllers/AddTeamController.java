@@ -19,19 +19,16 @@ import java.util.Set;
 public class AddTeamController implements Serializable {
     @Autowired
     private TeamService teamService;
+    @Autowired
+    private Logger<String, User> logger;
 
     private final Set<User> employees = new HashSet<>();
 
     private Team team = new Team();
 
     private User employee;
-    @Autowired
-    private Logger<String, User> logger;
 
     private Department department;
-
-    boolean check;
-
 
     public void add() {
         teamService.addNewTeam(employees, team);
@@ -40,17 +37,15 @@ public class AddTeamController implements Serializable {
 
     public void resetTeam() {
         this.team = new Team();
-        //this.employees = new HashSet<>();
     }
 
-    public Team getTeam() {
-        return team;
+    public void addDepartment() {
+        this.team.setDepartment(this.department);
     }
 
-    public TeamService getTeamService() {
-        return teamService;
+    public void addEmployee(){
+        this.employees.add(this.employee);
     }
-
 
     public Department getDepartment() {
         return department;
@@ -60,12 +55,8 @@ public class AddTeamController implements Serializable {
         this.department = department;
     }
 
-    public void addDepartment() {
-        this.team.setDepartment(this.department);
-    }
-
-    public void setTeamService(TeamService teamService) {
-        this.teamService = teamService;
+    public Team getTeam() {
+        return team;
     }
 
     public void setTeam(Team team) {
@@ -78,10 +69,6 @@ public class AddTeamController implements Serializable {
 
     public void setEmployee(User employee){
         this.employee = employee;
-    }
-
-    public void addEmployee(){
-        this.employees.add(this.employee);
     }
 
 }

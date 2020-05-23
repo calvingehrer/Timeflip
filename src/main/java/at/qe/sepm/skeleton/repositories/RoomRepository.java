@@ -9,6 +9,9 @@ public interface RoomRepository extends AbstractRepository<Room, String> {
 
     Room findByRoomNumber(String roomNumber);
 
-    @Query("SELECT r FROM Room r WHERE r.raspberry IS null")
+    @Query("SELECT r FROM Room r")
+    List<Room> findAllRooms();
+
+    @Query("SELECT r FROM Room r WHERE r.raspberry IS NULL")
     List<Room> findRoomsWithoutRaspberry();
 }

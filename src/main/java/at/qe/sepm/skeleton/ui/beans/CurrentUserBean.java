@@ -25,6 +25,10 @@ public class CurrentUserBean {
         this.currentUser = currentUser;
     }
 
+    /**
+     * method to reload the user
+     */
+
     public void reloadUser() {
         this.setCurrentUser(this.userService.loadUser(currentUser.getUsername()));
     }
@@ -33,6 +37,7 @@ public class CurrentUserBean {
      * method to load the current user
      * has to be called in the function that uses the bean to load it when a new user is logged in
      */
+    @PostConstruct
     public void init() {
         this.setCurrentUser(userService.getAuthenticatedUser());
     }

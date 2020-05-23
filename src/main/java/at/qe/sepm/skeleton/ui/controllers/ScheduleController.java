@@ -2,10 +2,9 @@ package at.qe.sepm.skeleton.ui.controllers;
 
 import at.qe.sepm.skeleton.model.Vacation;
 import at.qe.sepm.skeleton.services.VacationService;
-import at.qe.sepm.skeleton.ui.beans.SessionInfoBean;
-import de.jollyday.Holiday;
-import de.jollyday.HolidayCalendar;
-import de.jollyday.HolidayManager;
+import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
+import at.qe.sepm.skeleton.ui.beans.HolidayBean;
+import at.qe.sepm.skeleton.ui.beans.TimeBean;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.LazyScheduleModel;
@@ -39,15 +38,25 @@ public class ScheduleController implements Serializable {
     }
 
     @Autowired
-    private SessionInfoBean sessionInfoBean;
-
+    private TimeBean timeBean;
+    @Autowired
+    private HolidayBean holidayBean;
 
     @Autowired
     private VacationService vacationService;
 
+    @Autowired
+    private CurrentUserBean currentUserBean;
+
+    /**
+     * method to initialize the calendar with vacation and public holidays
+     * the plus one for the holidays is because the default scheduler
+     * sets them one day earlier
+     */
 
     @PostConstruct
     public void init() {
+        currentUserBean.init();
         this.lazyEventModel = new LazyScheduleModel() {
             private static final long serialVersionUID = 3580478297132439482L;
 
@@ -58,9 +67,8 @@ public class ScheduleController implements Serializable {
                 Instant endInstant = end.toInstant();
 
 
-                Collection<Vacation> vacations = vacationService.getVacationFromUser(sessionInfoBean.getCurrentUser());
-                HolidayManager m = HolidayManager.getInstance(HolidayCalendar.AUSTRIA);
-                Collection<Holiday> holidays = m.getHolidays(Calendar.getInstance().get(Calendar.YEAR), "Austria");
+                Collection<Vacation> vacations = vacationService.getVacationFromUser(currentUserBean.getCurrentUser());
+
 
                 vacations.forEach(f -> {
 
@@ -70,11 +78,11 @@ public class ScheduleController implements Serializable {
                     addEvent(new DefaultScheduleEvent("Vacation", startVacation, endVacation, f));
                 });
 
-                holidays.forEach(h ->{
-                    Calendar calendar = Calendar.getInstance();
+                holidayBean.getPublicHolidays().forEach(h ->{
+                    Calendar calendar = Calendar.getInstance(timeBean.getUtcTimeZone());
                     calendar.setTime(h.getDate().toDate());
                     calendar.add(Calendar.DATE, 1);
-                    Date holiday  = calendar.getTime();
+                    Date holiday = calendar.getTime();
                     addEvent(new DefaultScheduleEvent(h.getDescription(), holiday, holiday));
                 });
 
