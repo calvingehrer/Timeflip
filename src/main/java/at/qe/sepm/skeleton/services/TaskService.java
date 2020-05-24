@@ -49,16 +49,34 @@ public class TaskService {
         return taskRepository.findUserTasksBetweenDates(user, start, end);
     }
 
+    /**
+     * @param team
+     * @return all Tasks from the Team
+     */
+
     @PreAuthorize("hasAuthority('TEAMLEADER')")
     public List<Task> getAllTasksFromTeam(Team team) {
         return taskRepository.findTasksFromTeam(team);
     }
 
+    /**
+     *
+     * @param task
+     * @return duration of the task in minutes
+     */
 
     public long getDuration(Task task) {
         long duration = Duration.between(task.getStartTime(), task.getEndTime()).toMinutes();
         return duration;
     }
+
+    /**
+     *
+     * @param user
+     * @param start
+     * @param end
+     * @return Map of all user task types between two Dates with duration of each task type
+     */
 
     public HashMap<TaskEnum, Long> getUserTasksBetweenDates(User user, Instant start, Instant end) {
 
@@ -67,17 +85,40 @@ public class TaskService {
         return fillTaskList(dailyTasks, tasks);
     }
 
+    /**
+     *
+     * @param team
+     * @param start
+     * @param end
+     * @return Map of all team task types between two Dates with duration of each task type
+     */
+
     public HashMap<TaskEnum, Long> getTeamTasksBetweenDates(Team team, Instant start, Instant end) {
         HashMap<TaskEnum, Long> dailyTasks = new HashMap<>();
         List<Task> tasks = taskRepository.findTeamTasksBetweenDates(team, start, end);
         return fillTaskList(dailyTasks, tasks);
     }
 
+    /**
+     *
+     * @param department
+     * @param start
+     * @param end
+     * @return Map of all department task types between two Dates with duration of each task type
+     */
+
     public HashMap<TaskEnum, Long> getDepartmentTasksBetweenDates(Department department, Instant start, Instant end) {
         HashMap<TaskEnum, Long> dailyTasks = new HashMap<>();
         List<Task> tasks = taskRepository.findDepartmentTasksBetweenDates(department, start, end);
         return fillTaskList(dailyTasks, tasks);
     }
+
+    /**
+     * fills the list of task types with duration
+     * @param dailyTasks
+     * @param tasks
+     * @return filled list
+     */
 
     private HashMap<TaskEnum, Long> fillTaskList(HashMap<TaskEnum, Long> dailyTasks, List<Task> tasks) {
         tasks.forEach(t -> {

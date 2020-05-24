@@ -11,6 +11,11 @@ import org.springframework.stereotype.Service;
 import java.util.Calendar;
 import java.util.HashMap;
 
+/**
+ * source: https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/scheduling/annotation/Scheduled.html
+ * class to send scheduled statistics per mail
+ * either daily, weekly or monthly
+ */
 @Service
 public class ScheduledMailService {
     @Autowired

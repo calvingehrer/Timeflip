@@ -153,7 +153,11 @@ public class TaskController implements Serializable  {
     }
 
     /**
-     *
+     * check if the requested date is not after the current date
+     * and if it is within the allowed time frame it tells the user to
+     * just edit it.
+     * if the given date is longer than two weeks before the current
+     * date it sends a request
      */
     public void checkRequestedDate() {
 

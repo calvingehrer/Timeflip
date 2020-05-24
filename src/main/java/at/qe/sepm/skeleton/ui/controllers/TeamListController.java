@@ -28,6 +28,10 @@ public class TeamListController implements Serializable {
     private String teamName = "";
 
 
+    /**
+     *
+     * @return all teams
+     */
 
     public Collection<Team> getTeams(){
         if(!teamName.equals("")){
@@ -36,15 +40,29 @@ public class TeamListController implements Serializable {
         return teamService.getAllTeams();
     }
 
+    /**
+     *
+     * @return teams without department
+     */
+
     public Collection<Team> getTeamsWithoutDepartment(){
         return teamService.getTeamsWithoutDepartment();
     }
+
+    /**
+     *
+     * @return users without team
+     */
 
     public Collection<User> getUsersNotInTeam() {
         return teamService.getAllUsersWithoutTeam();
     }
 
-
+    /**
+     *
+     * @param teamsInDepartment
+     * @return teams without department
+     */
 
     public Collection<Team> getTeamsNotInDepartment(Set<Team> teamsInDepartment) {
 
