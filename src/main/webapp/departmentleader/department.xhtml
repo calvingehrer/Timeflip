@@ -10,6 +10,8 @@
         <div class="ui-g">
             <div class="ui-g-12">
                 <div class="card">
+                    <h1>#{sessionInfoBean.currentUser.department}</h1>
+
                     <p:dataTable id="MyDepartmentTable" var="team" value="#{departmentListController.teamsOfLeadersDepartment}" scrollable="true">
                         <p:column headerText="Team Name">
                             <h:outputText value="#{team.teamName}"/>

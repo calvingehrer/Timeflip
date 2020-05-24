@@ -19,9 +19,12 @@
             <div class="ui-g-12">
                 <div class="card">
                     <h1>My Statistics</h1>
-                    <p:chart type="pie" model="#{statisticsController.todayUserModel}" style="width:400px;height:300px"/>
-                    <p:chart type="pie" model="#{statisticsController.weekUserModel}" style="width:400px;height:300px"/>
-                    <p:chart type="pie" model="#{statisticsController.monthUserModel}" style="width:400px;height:300px"/>
+
+                        <h:panelGrid columns="3" style="width:100%">
+                            <p:chart type="pie" model="#{statisticsController.todayUserModel}" style="width:400px;height:300px"/>
+                            <p:chart type="pie" model="#{statisticsController.weekUserModel}" style="width:400px;height:300px"/>
+                            <p:chart type="pie" model="#{statisticsController.monthUserModel}" style="width:400px;height:300px"/>
+                        </h:panelGrid>
 
                 </div>
             </div>

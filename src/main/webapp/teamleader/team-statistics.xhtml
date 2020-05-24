@@ -19,9 +19,13 @@
         <div class="ui-g">
             <div class="ui-g-12">
                 <div class="card">
-                    <h1>Statistics of my Team</h1>
-                    <p:chart type="pie" model="#{statisticsController.weekTeamModel}" style="width:400px;height:300px"/>
-                    <p:chart type="pie" model="#{statisticsController.monthTeamModel}" style="width:400px;height:300px"/>
+                    <h1>Statistics of Team #{sessionInfoBean.currentUser.team}</h1>
+
+                    <h:panelGrid columns="2" style="width:66.6%">
+                        <p:chart type="pie" model="#{statisticsController.weekTeamModel}" style="width:400px;height:300px"/>
+                        <p:chart type="pie" model="#{statisticsController.monthTeamModel}" style="width:400px;height:300px"/>
+                    </h:panelGrid>
+
 
                 </div>
             </div>

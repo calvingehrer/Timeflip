@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -40,6 +41,9 @@ public class BadgeController implements Serializable {
         badgeService.evaluateWeeklyBadges(start.toInstant(), end.toInstant());*/
     }
 
+    public User getCurrentUser() {
+        return currentUserBean.getCurrentUser();
+    }
 
 
     public List<Badge> getBadgesFromUser(){
