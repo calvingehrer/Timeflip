@@ -192,13 +192,23 @@ public class UserServiceTest {
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void testGetAllUsersWithoutTeam() {
         Collection<User> usersWithoutTeam = userService.getAllUsersWithoutTeam();
-        Assert.assertEquals("Call to userService.loadUser returned wrong user", 1, usersWithoutTeam.size());
+        Assert.assertEquals("Call to userService.loadUser returned wrong size", 1, usersWithoutTeam.size());
     }
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void testGetTeamLeaderWithoutTeam() {
         Collection<User> usersWithoutTeam = userService.getTeamLeaderWithoutTeam();
-        Assert.assertEquals("Call to userService.loadUser returned wrong user", 1, usersWithoutTeam.size());
+        Assert.assertEquals("Call to userService.loadUser returned wrong size", 1, usersWithoutTeam.size());
     }
+
+
+    @Test
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    public void testGetAllUsersByUsername() {
+        Collection<User> usersStartingWithUser = userService.getAllUsersByUsername("user");
+        Assert.assertEquals("Call to userService.loadUser returned wrong user", 3, usersStartingWithUser.size());
+    }
+
+
 }
