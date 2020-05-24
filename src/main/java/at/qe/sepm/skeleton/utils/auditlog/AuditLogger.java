@@ -20,6 +20,12 @@ public class AuditLogger implements Logger<String, User> {
     @Autowired
     UserRepository userRepository;
 
+
+    /**
+     * @param objectIdentifier the name of the object
+     * @param changer          the changer of the object
+     *                         Log Entry when something is added
+     */
     @Override
     public void logCreation(String objectIdentifier, User changer) {
         LogEntry logEntry = createLogEntry(changer);
@@ -27,6 +33,13 @@ public class AuditLogger implements Logger<String, User> {
         logEntry.setMessage(objectIdentifier + " was added");
         auditLogRepository.save(logEntry);
     }
+
+    /**
+     * Log Entry when something is changed, modified or saved
+     *
+     * @param objectIdentifier the name of the object
+     * @param changer          the changer of the object
+     */
 
     @Override
     public void logUpdate(String objectIdentifier, User changer) {
@@ -36,6 +49,13 @@ public class AuditLogger implements Logger<String, User> {
         auditLogRepository.save(logEntry);
     }
 
+    /**
+     * Log Entry when something is deleted
+     *
+     * @param objectIdentifier the name of the object
+     * @param changer          the changer of the object
+     */
+
     @Override
     public void logDeletion(String objectIdentifier, User changer) {
         LogEntry logEntry = createLogEntry(changer);
@@ -43,6 +63,13 @@ public class AuditLogger implements Logger<String, User> {
         logEntry.setMessage(objectIdentifier + " was deleted");
         auditLogRepository.save(logEntry);
     }
+
+    /**
+     * Log Entry when a ned User is logged in
+     *
+     * @param e        exception that was thrown
+     * @param executor the executor of the operation which threw an error
+     */
 
     @Override
     public void logError(Exception e, User executor) {
@@ -52,9 +79,14 @@ public class AuditLogger implements Logger<String, User> {
         auditLogRepository.save(logEntry);
     }
 
+    /**
+     * Log Entry when new user is logged in
+     *
+     * @param objectIdentifier the name of the object
+     */
     @Override
     public void logLogin(String objectIdentifier) {
-        LogEntry logEntry = createLogEntry(objectIdentifier);
+        LogEntry logEntry = createLogEntry();
         logEntry.setLogActionType(LogEnum.LOGIN);
         logEntry.setMessage(objectIdentifier + " was logged in.");
         auditLogRepository.save(logEntry);
@@ -62,15 +94,26 @@ public class AuditLogger implements Logger<String, User> {
 
     }
 
+    /**
+     * Log Entry when someone logs out
+     *
+     * @param objectIdentifier the name of the object
+     */
+
     @Override
     public void logLogout(String objectIdentifier) {
-        LogEntry logEntry = createLogEntry(objectIdentifier);
+        LogEntry logEntry = createLogEntry();
         logEntry.setLogActionType(LogEnum.LOGOUT);
         logEntry.setMessage(objectIdentifier + " was logged out.");
         auditLogRepository.save(logEntry);
     }
 
-
+    /**
+     * Create the Log Entry in the DB
+     *
+     * @param changer
+     * @return
+     */
     private LogEntry createLogEntry(User changer) {
         LogEntry logEntry = new LogEntry();
         logEntry.setLogDate(Instant.now());
@@ -78,7 +121,7 @@ public class AuditLogger implements Logger<String, User> {
         return logEntry;
     }
 
-    private LogEntry createLogEntry(String user) {
+    private LogEntry createLogEntry() {
         LogEntry logEntry = new LogEntry();
         logEntry.setLogDate(Instant.now());
         return logEntry;
