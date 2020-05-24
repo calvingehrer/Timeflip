@@ -21,10 +21,11 @@
                             <p:messages id="messages" showDetail="true" closable="true">
                                 <p:autoUpdate />
                             </p:messages>
-                            <h1>Tasks</h1>
-                            <span>If you want to edit a date within the current or the week before click edit date.<br/>
-                            If you want to edit a date before you first have to request editing it. </span>
-                            <p:dataTable id="Tasks" var="task" value="#{taskController.tasksFromUser}" scrollable="true">
+
+                            <p:dataTable id="Tasks" var="task" value="#{taskListController.tasksFromUser}" scrollable="true">
+                                <f:facet name="header">
+                                    My Tasks
+                                </f:facet>
                                 <p:column headerText="Task">
                                     <h:outputText value="#{task.task}"/>
                                 </p:column>
@@ -39,12 +40,17 @@
                                 </p:column>
 
                             </p:dataTable>
+
+
                             <p:commandButton update=":TaskForm:Tasks" value="Edit Tasks" styleClass="addButton" oncomplete="PF('editTasksWithinTimeFrameDialog').show()"/>
-                            <p:commandButton update=":TaskForm:acceptedRequestsTable" value="Request Date" styleClass="addButton" oncomplete="PF('requestDateDialog').show()"/>
+                            <p:commandButton update=":TaskForm:acceptedRequestsTable" value="Request Date" styleClass="addButton" oncomplete="PF('requestDateDialog').show()" rendered="#{!sessionInfoBean.hasRole('DEPARTMENTLEADER') and !sessionInfoBean.hasRole('ADMIN')}"/>
                             <p:commandButton update=":TaskForm:Tasks" value="Filter Tasks" styleClass="addButton" oncomplete="PF('filterTaskDialog').show()"/>
 
-                            <h2>Editable Dates</h2>
-                            <p:dataTable id="acceptedRequestsTable" var="acceptedRequest" value="#{requestController.acceptedRequestsEmployee}" scrollable="true">
+                            <p:separator/>
+                            <p:dataTable id="acceptedRequestsTable" var="acceptedRequest" value="#{requestController.acceptedTaskRequestsEmployee}" scrollable="true" rendered="#{!sessionInfoBean.hasRole('DEPARTMENTLEADER') and !sessionInfoBean.hasRole('ADMIN')}">
+                                <f:facet name="header">
+                                    Editable Dates
+                                </f:facet>
                                 <p:column headerText="Description">
                                     <h:outputText value="#{acceptedRequest.description}"/>
                                 </p:column>
@@ -65,16 +71,17 @@
 
                                 </p:column>
                             </p:dataTable>
+
                         </h:form>
 
                     <p:dialog header="Edit Tasks" id="editTasksWithinTimeFrameDialog" widgetVar="editTasksWithinTimeFrameDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
                         <p:outputPanel>
                             <h:form>
                                 <h:outputText value="Select the requested date"/>
-                                <p:calendar id="date" mode="inline" value="#{taskController.requestedDate}" timeZone="#{taskController.utcTimeZone}"/>
+                                <p:calendar id="date" mode="inline" value="#{taskController.requestedDate}" timeZone="#{timeBean.utcTimeZone}"/>
                                 <h:panelGrid columns="2">
                                     <h:outputText value="Select the Task"/>
-                                    <p:autoComplete id="task1" dropdown="true" value="#{taskController.task}" completeMethod="#{taskController.completeTask}"/>
+                                    <p:autoComplete id="task1" dropdown="true" value="#{taskController.task}" completeMethod="#{completeMethodBean.completeTask}"/>
                                 </h:panelGrid>
                                 <h4>start time</h4>
                                 <h:panelGrid columns="2">
@@ -103,11 +110,11 @@
                                 <h:form>
                                     <h:panelGrid columns="2">
                                         <h:outputText value="Select the requested date"/>
-                                        <p:calendar id="start" mode="inline" value="#{taskController.requestedDate}" timeZone="#{taskController.utcTimeZone}"/>
+                                        <p:calendar id="start" mode="inline" value="#{taskController.requestedDate}" timeZone="#{timeBean.utcTimeZone}"/>
 
                                     </h:panelGrid>
                                     <h:panelGrid columns="2">
-                                        <p:commandButton update="@form :TaskForm:" value="Request" action="#{taskController.editTasks()}" oncomplete="PF('requestDateDialog').hide()" />
+                                        <p:commandButton update="@form :TaskForm:" value="Request" action="#{taskController.checkRequestedDate()}" oncomplete="PF('requestDateDialog').hide()" />
                                         <p:commandButton value="Abort" type="reset" onclick="PF('editTasksDialog').hide()"/>
                                     </h:panelGrid>
                                 </h:form>
@@ -120,7 +127,7 @@
                                 <h:form>
                                     <h:panelGrid columns="2">
                                         <h:outputText value="Select the Task"/>
-                                        <p:autoComplete id="task" dropdown="true" value="#{taskController.task}" completeMethod="#{taskController.completeTask}"/>
+                                        <p:autoComplete id="task" dropdown="true" value="#{taskController.task}" completeMethod="#{completeMethodBean.completeTask}"/>
                                     </h:panelGrid>
                                     <h4>start time</h4>
                                     <h:panelGrid columns="2">
@@ -150,15 +157,16 @@
                         <h:form id="timeRange">
                             <h:panelGrid columns="5">
                                 <h:panelGrid columns="2">
-                                    <p:outputLabel value="Start Date "/>
-                                    <p:calendar id="startTimeRange" mode="inline" value="#{taskController.startOfTimeRange}" timeZone="#{taskController.utcTimeZone}"/>
+                                    <p:outputLabel value="Choose Interval "/>
+                                    <p:autoComplete id="view" dropdown="true"  value="#{taskListController.interval}" completeMethod="#{completeMethodBean.completeIntervall}"/>
                                 </h:panelGrid>
                                 <h:panelGrid columns="2">
-                                    <p:outputLabel value="End Date "/>
-                                    <p:calendar id="endTimeRange" mode="inline" value="#{taskController.endOfTimeRange}" timeZone="#{taskController.utcTimeZone}"/>
+                                    <p:outputLabel value="Choose Day in Interval"/>
+                                    <p:calendar id="startTimeRange" mode="inline" value="#{taskListController.chosenDate}" timeZone="#{timeBean.utcTimeZone}"/>
                                 </h:panelGrid>
+
                                 <p:commandButton value="Find" update="TaskForm:Tasks" oncomplete="PF('filterTaskDialog').hide()"/>
-                                <p:commandButton value="Reset" action="#{taskController.resetFilter}" update=":TaskForm:Tasks" oncomplete="PF('filterTaskDialog').hide()"/>
+                                <p:commandButton value="Reset" action="#{taskListController.resetFilter}" update=":TaskForm:Tasks" oncomplete="PF('filterTaskDialog').hide()"/>
                             </h:panelGrid>
                         </h:form>
                     </p:dialog>

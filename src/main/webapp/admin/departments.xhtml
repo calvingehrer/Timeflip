@@ -26,14 +26,19 @@
                 <p:column headerText="Department Name">
                     <h:outputText value="#{department.departmentName}"/>
                 </p:column>
-                <p:column headerText="Teams">
-                    <h:outputText value="#{departmentListController.getTeamsOfDepartment(department)}"/>
+                <p:column headerText="Team">
+                    <p:dataList id="TeamsOfDepartment" var="team" value="#{departmentListController.getTeamsOfDepartment(department)}" type="definition">
+                        <p:column>
+                            <h:outputText value="#{team}"/>
+                        </p:column>
+                    </p:dataList>
                 </p:column>
+
                 <p:column headerText="Head Of Department">
                     <h:outputText value="#{departmentListController.getDepartmentLeader(department)}"/>
                 </p:column>
                 <p:column style="width:200px;text-align: center">
-                    <p:commandButton update=":departmentForm:editDepartmentForm" value="Edit" oncomplete="PF('departmentEditDialog').show()" icon="fa fa-fw fa-edit">
+                    <p:commandButton update=":departmentForm:editDepartmentForm:departmentEditDialog" value="Edit" oncomplete="PF('departmentEditDialog').show()" icon="fa fa-fw fa-edit">
                         <f:setPropertyActionListener value="#{department}" target="#{departmentDetailController.department}" />
                     </p:commandButton>
                     <p:commandButton action="#{departmentDetailController.doDeleteDepartment()}" value="Delete" icon="fa fa-trash" title="Delete" update=":departmentForm:DepartmentTable">
@@ -52,10 +57,9 @@
                               hideEffect="fade" resizable="false">
                         <p:outputPanel id="departmentData" rendered="#{not empty departmentDetailController.department}" >
                             <h:panelGrid columns="2" >
+
                                 <p:outputLabel for="departmentname" value="Departmentname: " />
                                 <p:inputText id="departmentname" value="#{departmentDetailController.department.departmentName}" disabled="true"/>
-
-
 
                                 <h:panelGrid columns="2">
                                     <p:outputLabel value="Edit Department Leader: "/>
@@ -153,6 +157,7 @@
         </div>
         </div>
         </div>
+
 
 
 

@@ -29,7 +29,7 @@ public interface TaskRepository extends AbstractRepository<Task, String> {
     @Query("SELECT t FROM Task t WHERE t.department=:department and t.startTime>=:start_date and t.endTime<=:end_date")
     List<Task> findDepartmentTasksBetweenDates(@Param("department") Department department, @Param("start_date") Instant start_date, @Param("end_date") Instant end_date);
 
-    @Query("SELECT t FROM Task t WHERE t.user=:user  AND t.startTime<=:time AND  t.endTime>=:time")
+    @Query("SELECT t FROM Task t WHERE t.user=:user  AND t.startTime<=:time AND  t.endTime>:time")
     Task findTaskThatFallsInTimeFrame(@Param("user") User user, @Param("time") Instant time);
 
     @Query("SELECT t FROM Task t WHERE t.task=:taskType AND t.startTime>=:startDate AND t.endTime<=:endDate")

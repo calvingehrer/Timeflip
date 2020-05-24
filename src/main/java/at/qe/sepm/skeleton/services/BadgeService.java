@@ -42,11 +42,7 @@ public class BadgeService {
         badgeRepository.delete(badge);
     }
 
-    public void deleteBadgesOfUser(User user) {
-        for(Badge b: badgeRepository.findBadgesFromUser(user)) {
-            deleteBadge(b);
-        }
-    }
+
 
     /**
      * creates the Badges of the given period

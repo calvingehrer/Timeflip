@@ -5,14 +5,13 @@ import at.qe.sepm.skeleton.model.BadgeEnum;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.BadgeService;
 import at.qe.sepm.skeleton.services.UserService;
+import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
-import java.time.Instant;
-import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -22,12 +21,10 @@ import java.util.Set;
 public class BadgeController implements Serializable {
 
     @Autowired
-    private UserService userService;
+    private BadgeService badgeService;
 
     @Autowired
-    BadgeService badgeService;
-
-    private User currentUser;
+    private CurrentUserBean currentUserBean;
 
     /**
      *  initializes the current user and the Badges for that week that most of our test data is in
@@ -35,7 +32,7 @@ public class BadgeController implements Serializable {
 
     @PostConstruct
     public void init() {
-        this.setCurrentUser(userService.getAuthenticatedUser());
+        currentUserBean.init();
         /*Calendar start = Calendar.getInstance();
         start.set(2020, Calendar.MAY, 4, 0, 0, 0);
         Calendar end = Calendar.getInstance();
@@ -45,21 +42,12 @@ public class BadgeController implements Serializable {
 
 
 
-
-    public User getCurrentUser() {
-        return currentUser;
-    }
-
-    public void setCurrentUser(User currentUser) {
-        this.currentUser = currentUser;
-    }
-
     public List<Badge> getBadgesFromUser(){
-        return badgeService.getAllBadgesFromUser(getCurrentUser());
+        return badgeService.getAllBadgesFromUser(currentUserBean.getCurrentUser());
     }
 
     public List<Badge> getBadgesFromDepartment(){
-        return badgeService.getAllBadgesFromDepartment(getCurrentUser().getDepartment());
+        return badgeService.getAllBadgesFromDepartment(currentUserBean.getCurrentUser().getDepartment());
     }
 
     public List<Badge> getBadgesFromLastWeek(){

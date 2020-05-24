@@ -4,15 +4,21 @@ package at.qe.sepm.skeleton.services;
 import at.qe.sepm.skeleton.exceptions.TaskException;
 import at.qe.sepm.skeleton.model.*;
 import at.qe.sepm.skeleton.repositories.TaskRepository;
+import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
+import at.qe.sepm.skeleton.ui.beans.TimeBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.time.Duration;
 import java.time.Instant;
-import java.time.ZoneId;
-import java.util.*;
+import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 @Service
 @Scope("application")
@@ -20,6 +26,21 @@ public class TaskService {
 
     @Autowired
     private TaskRepository taskRepository;
+    @Autowired
+    TimeBean timeBean;
+    @Autowired
+    CurrentUserBean currentUserBean;
+    @Autowired
+    private Logger<String, User> logger;
+
+    /**
+     * A Function to get the current user
+     */
+
+    @PostConstruct
+    public void init() {
+        currentUserBean.init();
+    }
 
     public List<Task> getAllTasksBetweenDates(User user, Instant start, Instant end) {
         if (start == null || end == null) {
@@ -29,7 +50,7 @@ public class TaskService {
     }
 
     @PreAuthorize("hasAuthority('TEAMLEADER')")
-    public List<Task> getAllTasksFromTeam(Team team){
+    public List<Task> getAllTasksFromTeam(Team team) {
         return taskRepository.findTasksFromTeam(team);
     }
 
@@ -72,12 +93,13 @@ public class TaskService {
         return dailyTasks;
     }
 
-    public TimeZone getUtcTimeZone() {
-        return TimeZone.getTimeZone(ZoneId.of("UTC"));
-    }
-
     /**
      * Method to save a new Task, that can only be edited in the web application
+     * It checks certain possibilities:
+     * 1. If a task and a valid time has been entered
+     * 2. If the task before is the same as the task after and has to be splitted
+     * 3. If the task before or the task after has the same task type as the given task
+     * 4. If the task before or the task after falls into the exact same time frame it only changes the task type
      **/
     public void saveEditedTask (User user, TaskEnum task, Date date, int startHour, int endHour, int startMinute, int endMinute) throws TaskException {
         if (task == null) {
@@ -85,7 +107,7 @@ public class TaskService {
         }
         checkTime(startHour, endHour, startMinute, endMinute);
 
-        Calendar calendar = Calendar.getInstance(getUtcTimeZone());
+        Calendar calendar = Calendar.getInstance(timeBean.getUtcTimeZone());
 
         calendar.setTime(date);
         calendar.set(Calendar.SECOND, 0);
@@ -108,39 +130,72 @@ public class TaskService {
             if (taskBefore.getTask() == task) {
                 return;
             }
-            Task newTask = new Task();
-            newTask.setStartTime(endTime);
-            newTask.setEndTime(taskAfter.getEndTime());
-            newTask.setUser(user);
-            newTask.setTeam(user.getTeam());
-            newTask.setDepartment(user.getDepartment());
-            newTask.setTask(taskAfter.getTask());
-            newTask.setCreateDate(new Date());
-            taskRepository.save(newTask);
-            taskBefore.setEndTime(startTime);
-            taskRepository.save(taskBefore);
+            if (Duration.between(taskBefore.getStartTime(),startTime).toMinutes() == 0
+                    && Duration.between(taskBefore.getEndTime(),endTime).toMinutes() == 0) {
+                taskBefore.setTask(task);
+                taskRepository.save(taskBefore);
+                return;
+            }
+            else {
+                Task newTask = new Task();
+                newTask.setStartTime(endTime);
+                newTask.setEndTime(taskAfter.getEndTime());
+                newTask.setUser(user);
+                newTask.setTeam(user.getTeam());
+                newTask.setDepartment(user.getDepartment());
+                newTask.setTask(taskAfter.getTask());
+                newTask.setCreateDate(new Date());
+                taskRepository.save(newTask);
+                taskBefore.setEndTime(startTime);
+                taskRepository.save(taskBefore);
+            }
             taskBefore = null;
             taskAfter = null;
 
         }
         if (taskBefore != null) {
-            if (taskBefore.getTask() == task) {
-                taskBefore.setEndTime(endTime);
-                taskRepository.save(taskBefore);
-                return;
-            }
-            taskBefore.setEndTime(startTime);
-            taskRepository.save(taskBefore);
+
+                if (taskBefore.getTask() == task) {
+                    taskBefore.setEndTime(endTime);
+                    taskRepository.save(taskBefore);
+                    return;
+                }
+
+                if (Duration.between(taskBefore.getStartTime(), startTime).toMinutes() == 0){
+                    taskBefore.setTask(task);
+                    taskBefore.setEndTime(endTime);
+                    taskRepository.save(taskBefore);
+                    return;
+                }
+                else {
+                    taskBefore.setEndTime(startTime);
+                    taskRepository.save(taskBefore);
+                }
+
 
         }
         if (taskAfter != null) {
-            if (taskAfter.getTask() == task) {
-                taskAfter.setStartTime(startTime);
-                taskRepository.save(taskAfter);
-                return;
-            }
-            taskAfter.setStartTime(endTime);
-            taskRepository.save(taskAfter);
+
+                if (taskAfter.getTask() == task) {
+                    taskAfter.setStartTime(startTime);
+                    taskRepository.save(taskAfter);
+                    return;
+                }
+                if (Duration.between(taskAfter.getStartTime(), endTime).toMinutes() == 0) {
+                    taskAfter.setTask(task);
+                    taskAfter.setStartTime(startTime);
+                    taskRepository.save(taskAfter);
+                    return;
+                }
+                else {
+
+                    taskAfter.setStartTime(endTime);
+
+
+                    taskRepository.save(taskAfter);
+                }
+
+
         }
 
         toSave.setTask(task);
@@ -152,20 +207,18 @@ public class TaskService {
         toSave.setCreateDate(new Date());
 
         taskRepository.save(toSave);
+        logger.logUpdate(task.toString(), currentUserBean.getCurrentUser());
     }
 
     /**
-     * check if something is earlier than
+     * check if something is earlier than the current or the last week
      * @param user
      * @param date
      * @throws TaskException
      */
 
-    public void checkIfEarlierThanTwoWeeks (User user, Instant date) throws TaskException {
-        if (user.getRoles().contains(UserRole.DEPARTMENTLEADER)) {
-            return;
-        }
-        Calendar calendar = Calendar.getInstance(getUtcTimeZone());
+    public boolean checkIfEarlierThanTwoWeeks (User user, Instant date) {
+        Calendar calendar = Calendar.getInstance(timeBean.getUtcTimeZone());
         calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
         calendar.add(Calendar.DATE, -7);
         calendar.set(Calendar.HOUR_OF_DAY,0);
@@ -173,10 +226,7 @@ public class TaskService {
         calendar.set(Calendar.SECOND,0);
 
         Instant lastMonday = calendar.toInstant();
-        if (date.isBefore(lastMonday)) {
-            throw new TaskException("The requested date was earlier than last monday. " +
-                    "Please send a request");
-        }
+        return date.isBefore(lastMonday);
     }
 
     /**
@@ -219,16 +269,9 @@ public class TaskService {
 
     public void deleteTask(Task task) {
         taskRepository.delete(task);
+        logger.logDeletion(task.getTask().toString(), currentUserBean.getCurrentUser());
     }
 
-    public void deleteTaskOfUser (User user) {
-        for (Task t: taskRepository.findTasksFromUser(user)) {
-            t.setUser(null);
-            t.setDepartment(null);
-            t.setTeam(null);
-            taskRepository.save(t);
-            deleteTask(t);
-        }
-    }
+
 
 }

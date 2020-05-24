@@ -1,8 +1,8 @@
 package at.qe.sepm.skeleton.services;
 
-import at.qe.sepm.skeleton.model.*;
 import at.qe.sepm.skeleton.configs.WebSecurityConfig;
-import at.qe.sepm.skeleton.repositories.UserRepository;
+import at.qe.sepm.skeleton.model.*;
+import at.qe.sepm.skeleton.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -11,7 +11,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,25 +28,29 @@ import java.util.List;
 public class UserService {
 
     @Autowired
-    private MailService mailService;
+    MailService mailService;
 
     @Autowired
-    private TaskService taskService;
+    TaskRepository taskRepository;
 
     @Autowired
-    private BadgeService badgeService;
+    BadgeRepository badgeRepository;
 
     @Autowired
-    private RequestService requestService;
+    RequestRepository requestRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    UserRepository userRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    PasswordEncoder passwordEncoder;
 
     @Autowired
-    TimeflipService timeflipService;
+    TimeflipRepository timeflipRepository;
+
+    @Autowired
+
+    private Logger<String, User> logger;
 
     /**
      * Returns a collection of all users.
@@ -93,6 +96,18 @@ public class UserService {
     }
 
 
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<User> getAllUsersOfTeamByTeamname(String teamname) {
+        return userRepository.findByTeamnamePrefix(teamname);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<User> getAllUsersOfDepartmentByDepartmentname(String department) {
+        return userRepository.findByDepartmentnamePrefix(department);
+    }
+
+
+
     /**
      * Loads a single user identified by its username.
      *
@@ -122,6 +137,7 @@ public class UserService {
             user.setUpdateDate(new Date());
             user.setUpdateUser(getAuthenticatedUser());
         }
+        logger.logUpdate(user.getUsername(), getAuthenticatedUser());
         return userRepository.save(user);
     }
 
@@ -138,6 +154,7 @@ public class UserService {
         newUser.setRoles(user.getRoles());
         mailService.sendEmailTo(newUser, "New user added", "You've been added as a new user");
         saveUser(newUser);
+        logger.logCreation(newUser.getUsername(), getAuthenticatedUser());
     }
 
     /**
@@ -147,12 +164,15 @@ public class UserService {
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteUser(User user) {
-        taskService.deleteTaskOfUser(user);
-        badgeService.deleteBadgesOfUser(user);
-        requestService.deleteRequestsOfUser(user);
-        timeflipService.deleteTimeFlipOfUser(user);
+        deleteTaskOfUser(user);
+        deleteBadgesOfUser(user);
+        deleteRequestsOfUser(user);
+        Timeflip t = timeflipRepository.findTimeflipOfUser(user);
+        if (t != null) {
+            timeflipRepository.delete(t);
+        }
         userRepository.delete(user);
-        // :TODO: write some audit log stating who and when this user was permanently deleted.
+        logger.logDeletion(user.getUsername(), getAuthenticatedUser());
     }
 
     public User getAuthenticatedUser() {
@@ -175,20 +195,15 @@ public class UserService {
         } else {
             toSave.setUpdateUser(getAuthenticatedUser());
         }
+
         return toSave;
     }
 
-
-
-
-
-
-
     @Transactional
     public User updateUser(User toSave) {
+        logger.logUpdate(toSave.getUsername(), getAuthenticatedUser());
         return userRepository.save(setUpdatingFieldsBeforePersist(toSave));
     }
-
 
     public User getTeamLeader(Team team) {
         return userRepository.findTeamLeader(team);
@@ -222,11 +237,77 @@ public class UserService {
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<User> getUsersWithoutTimeflip() {
         List<User> withoutTimeflip = new ArrayList<>(userRepository.getAllUsers());
-        for (Timeflip timeflip : timeflipService.getAllTimeflips()) {
-            if (withoutTimeflip.contains(timeflip.getUser())) {
-                withoutTimeflip.remove(timeflip.getUser());
-            }
+        for (Timeflip timeflip : timeflipRepository.findAll()) {
+            withoutTimeflip.remove(timeflip.getUser());
         }
         return withoutTimeflip;
+    }
+
+    /**
+     * deletes all tasks of the user
+     * @param user
+     */
+
+    public void deleteTaskOfUser (User user) {
+        for (Task t: taskRepository.findTasksFromUser(user)) {
+            t.setUser(null);
+            t.setDepartment(null);
+            t.setTeam(null);
+            taskRepository.save(t);
+            taskRepository.delete(t);
+            logger.logDeletion(t.getTask().toString(), getAuthenticatedUser());
+        }
+
+    }
+
+    /**
+     * deletes all badges of the user
+     * @param user
+     */
+
+    public void deleteBadgesOfUser(User user) {
+        for(Badge b: badgeRepository.findBadgesFromUser(user)) {
+            badgeRepository.delete(b);
+            logger.logDeletion(b.getBadgeType().toString(), getAuthenticatedUser());
+        }
+    }
+
+    /**
+     * when deleting user delete all open requests
+     * when user is a team-leader and the field for department-leader is not null
+     * only set the field team-leader null
+     * vise versa for department-leader
+     * @param user
+     */
+
+    public void deleteRequestsOfUser(User user) {
+        for (Request r: requestRepository.findAllRequestsOfRequester(user)) {
+            requestRepository.delete(r);
+            logger.logDeletion(r.getDescription(), getAuthenticatedUser());
+        }
+        if (user.getRoles().contains(UserRole.TEAMLEADER)) {
+            for (Request r : requestRepository.findAllRequestsOfRequestHandlerTL(user)) {
+                if (r.getRequestHandlerDepartmentLeader() == null) {
+                    requestRepository.delete(r);
+                }
+
+                else {
+                    r.setRequestHandlerTeamLeader(null);
+                    requestRepository.save(r);
+                }
+            }
+        }
+        if (user.getRoles().contains(UserRole.DEPARTMENTLEADER)) {
+            for (Request r : requestRepository.findAllRequestsOfRequestHandlerDL(user)) {
+                if (r.getRequestHandlerTeamLeader() == null) {
+                    requestRepository.delete(r);
+                }
+
+                else {
+                    r.setRequestHandlerDepartmentLeader(null);
+                    requestRepository.save(r);
+                }
+            }
+        }
     }
 }

@@ -1,6 +1,7 @@
 package at.qe.sepm.skeleton.repositories;
 
 import at.qe.sepm.skeleton.model.Request;
+import at.qe.sepm.skeleton.model.TaskRequest;
 import at.qe.sepm.skeleton.model.RequestEnum;
 import at.qe.sepm.skeleton.model.User;
 import org.springframework.data.jpa.repository.Query;

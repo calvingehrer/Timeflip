@@ -7,6 +7,9 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import java.util.Properties;
 
+/**
+ * source: https://www.baeldung.com/spring-email
+ */
 @Configuration
 public class MailConfig {
 

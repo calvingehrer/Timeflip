@@ -10,14 +10,13 @@
                 <h:form id="menuform">
                     <div class="layout-menu-title">MAIN MENU</div>
                     <pe:menu widgetVar="me">
-
                         <p:menuitem value="Dashboard" url="/secured/dashboard.xhtml"
                                     rendered="#{sessionInfoBean.hasRole('EMPLOYEE')}"
                                     icon="fa fa-list-alt"/>
 
                         <p:menuitem value="My Timeflip" url="/employee/myTimeflip.xhtml"
                                     rendered="#{sessionInfoBean.hasRole('EMPLOYEE')}"
-                                    icon="fa fa-list-alt"/>
+                                    icon="fa fa-cube"/>
 
                         <p:submenu label="Statistics" rendered="#{sessionInfoBean.hasRole('EMPLOYEE')}"
                                    icon="fa fa-line-chart" >
@@ -60,7 +59,7 @@
                                     icon="fa fa-list-alt"/>
 
 
-                        <p:menuitem id="logout" value="Logout" rendered="#{sessionInfoBean.loggedIn}" outcome="/login" icon="fa fa-road"/>
+                        <p:menuitem id="logout" value="Logout" rendered="#{sessionInfoBean.loggedIn}" outcome="/login" icon="fa fa-sign-out"/>
                     </pe:menu>
                 </h:form>
             </div>
