@@ -1,13 +1,8 @@
-package com.example.setup;
+package at.ac.uibk.rest;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
-import tinyb.BluetoothDevice;
-import tinyb.BluetoothGattCharacteristic;
-import tinyb.BluetoothGattService;
-import tinyb.BluetoothManager;
+import tinyb.*;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,13 +12,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class TimeFlipUtils {
     static boolean running = true;
-
-    static void printDevice(BluetoothDevice device) {
-        System.out.print("Address = " + device.getAddress());
-        System.out.print(" Name = " + device.getName());
-        System.out.print(" Connected = " + device.getConnected());
-        System.out.println();
-    }
 
     /*
      * After discovery is started, new devices will be detected. We can get a list of all devices through the manager's
@@ -39,7 +27,6 @@ public class TimeFlipUtils {
                 return null;
 
             for (BluetoothDevice device : list) {
-                printDevice(device);
 
                 if (device.getName().toLowerCase().contains("timeflip"))
                     sensors.add(device);
@@ -54,7 +41,6 @@ public class TimeFlipUtils {
     }
 
     static BluetoothGattService getService(BluetoothDevice device, String UUID) throws InterruptedException {
-        System.out.println("Services exposed by device:");
         BluetoothGattService tempService = null;
         List<BluetoothGattService> bluetoothServices = null;
         do
@@ -64,7 +50,6 @@ public class TimeFlipUtils {
                 return null;
 
             for (BluetoothGattService service : bluetoothServices) {
-                System.out.println("UUID: " + service.getUUID());
                 if (service.getUUID().equals(UUID))
                     tempService = service;
             }
@@ -90,13 +75,12 @@ public class TimeFlipUtils {
         List<HistoryEntry> entries = new ArrayList<>();
         
         for(BluetoothDevice sensor : sensors) {
-            printDevice(sensor);
 
-            if (sensor.connect())
-                System.out.println("Sensor with the provided name connected");
-            else {
-                System.out.println("Could not connect device.");
-                System.exit(-1);
+            try{
+                sensor.connect();
+            }catch(BluetoothException e){
+                System.out.println(" (" + new Date() + ") Could not connect to sensor with MAC-Address " + sensor.getAddress());
+                continue;
             }
 
             Lock lock = new ReentrantLock();
@@ -118,11 +102,9 @@ public class TimeFlipUtils {
             BluetoothGattService timeflipService = getService(sensor, "f1196f50-71a4-11e6-bdf4-0800200c9a66");
 
             if (timeflipService == null) {
-                System.err.println("This device does not have the timeflip service we are looking for.");
                 sensor.disconnect();
                 System.exit(-1);
             }
-            System.out.println("Found service " + timeflipService.getUUID());
 
             BluetoothGattCharacteristic facet = getCharacteristic(timeflipService, "f1196f52-71a4-11e6-bdf4-0800200c9a66");
             BluetoothGattCharacteristic password = getCharacteristic(timeflipService, "f1196f57-71a4-11e6-bdf4-0800200c9a66");
@@ -131,15 +113,10 @@ public class TimeFlipUtils {
 
 
             if (facet == null || password == null || command == null || commandResult == null) {
-                System.err.println("Could not find the correct characteristics.");
                 sensor.disconnect();
                 System.exit(-1);
             }
-
-            System.out.println("Found TimeFlip characteristics");
-
-
-            // before getting output of TimeFlip characteristics, a password must be send to the cube (just once and at every re-connect)
+            
             byte[] passwd = {0x30, 0x30, 0x30, 0x30, 0x30, 0x30};
             password.writeValue(passwd);
 
@@ -177,7 +154,7 @@ public class TimeFlipUtils {
                 }
             }
 
-            List<HistoryEntry> updatedEntries = Preprocessing.calculateStartEndTimes(entries, Preprocessing.getCurrentTimestamp());
+            Preprocessing.calculateStartEndTimes(entries, Preprocessing.getCurrentTimestamp());
 
             for(HistoryEntry entry : entries){
                 historyEntries.put(entry);
@@ -194,5 +171,4 @@ public class TimeFlipUtils {
         
         return historyEntries;
     }
-    
 }

@@ -1,4 +1,4 @@
-package com.example.setup;
+package at.ac.uibk.rest;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -35,9 +35,7 @@ public class Preprocessing {
     public static Timestamp getCurrentTimestamp(){
         Date date = new Date();
         long time = date.getTime();
-        Timestamp current = new Timestamp(time);
-
-        return current;
+        return new Timestamp(time);
     }
 
     public static List<HistoryEntry> calculateStartEndTimes(List<HistoryEntry> historyEntries, Date current){
