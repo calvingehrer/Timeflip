@@ -74,8 +74,7 @@ public class AuditLogger implements Logger<String, User> {
     private LogEntry createLogEntry(User changer) {
         LogEntry logEntry = new LogEntry();
         logEntry.setLogDate(Instant.now());
-        logEntry.setChangingUser(new User());
-
+        logEntry.setChangingUser(changer);
         return logEntry;
     }
 
