@@ -26,9 +26,14 @@
                 <p:column headerText="Department Name">
                     <h:outputText value="#{department.departmentName}"/>
                 </p:column>
-                <p:column headerText="Teams">
-                    <h:outputText value="#{departmentListController.getTeamsOfDepartment(department)}"/>
+                <p:column headerText="Team">
+                    <p:dataList id="TeamsOfDepartment" var="team" value="#{departmentListController.getTeamsOfDepartment(department)}" type="definition">
+                        <p:column>
+                            <h:outputText value="#{team}"/>
+                        </p:column>
+                    </p:dataList>
                 </p:column>
+
                 <p:column headerText="Head Of Department">
                     <h:outputText value="#{departmentListController.getDepartmentLeader(department)}"/>
                 </p:column>
@@ -152,6 +157,7 @@
         </div>
         </div>
         </div>
+
 
 
 

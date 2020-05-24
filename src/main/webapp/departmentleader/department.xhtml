@@ -6,4 +6,24 @@
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="title">Overview</ui:define>
+    <ui:define name="content">
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card">
+                    <p:dataTable id="MyDepartmentTable" var="team" value="#{departmentListController.teamsOfLeadersDepartment}" scrollable="true">
+                        <p:column headerText="Team Name">
+                            <h:outputText value="#{team.teamName}"/>
+                        </p:column>
+                        <p:column headerText="Employees of team">
+                            <p:dataList id="UsersOfTeam" var="user" value="#{userListController.getEmployees(team)}" type="definition">
+                                <p:column>
+                                     <h:outputText value="#{user}"/>
+                                </p:column>
+                            </p:dataList>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </div>
+        </div>
+    </ui:define>
 </ui:composition>

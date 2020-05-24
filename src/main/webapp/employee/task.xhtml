@@ -47,7 +47,7 @@
                             <p:commandButton update=":TaskForm:Tasks" value="Filter Tasks" styleClass="addButton" oncomplete="PF('filterTaskDialog').show()"/>
 
                             <p:separator/>
-                            <p:dataTable id="acceptedRequestsTable" var="acceptedRequest" value="#{requestController.acceptedRequestsEmployee}" scrollable="true" rendered="#{!sessionInfoBean.hasRole('DEPARTMENTLEADER') and !sessionInfoBean.hasRole('ADMIN')}">
+                            <p:dataTable id="acceptedRequestsTable" var="acceptedRequest" value="#{requestController.acceptedTaskRequestsEmployee}" scrollable="true" rendered="#{!sessionInfoBean.hasRole('DEPARTMENTLEADER') and !sessionInfoBean.hasRole('ADMIN')}">
                                 <f:facet name="header">
                                     Editable Dates
                                 </f:facet>
@@ -71,7 +71,6 @@
 
                                 </p:column>
                             </p:dataTable>
-                            <p:commandButton ajax="false" value="Request Overview" styleClass="raised-btn" action="/employee/taskRequest-overview.xhtml?faces-redirect=true" rendered="#{!sessionInfoBean.hasRole('DEPARTMENTLEADER') and !sessionInfoBean.hasRole('ADMIN')}"/>
 
                         </h:form>
 
@@ -115,7 +114,7 @@
 
                                     </h:panelGrid>
                                     <h:panelGrid columns="2">
-                                        <p:commandButton update="@form :TaskForm:" value="Request" action="#{taskController.editTasks()}" oncomplete="PF('requestDateDialog').hide()" />
+                                        <p:commandButton update="@form :TaskForm:" value="Request" action="#{taskController.checkRequestedDate()}" oncomplete="PF('requestDateDialog').hide()" />
                                         <p:commandButton value="Abort" type="reset" onclick="PF('editTasksDialog').hide()"/>
                                     </h:panelGrid>
                                 </h:form>
@@ -128,7 +127,7 @@
                                 <h:form>
                                     <h:panelGrid columns="2">
                                         <h:outputText value="Select the Task"/>
-                                        <p:autoComplete id="task" dropdown="true" value="#{taskController.task}" completeMethod="#{completeMethodBean.completeTask()}"/>
+                                        <p:autoComplete id="task" dropdown="true" value="#{taskController.task}" completeMethod="#{completeMethodBean.completeTask}"/>
                                     </h:panelGrid>
                                     <h4>start time</h4>
                                     <h:panelGrid columns="2">
@@ -145,7 +144,7 @@
                                         <h:inputText id="endTimem" value="#{taskController.endMinute}"/>
                                     </h:panelGrid>
                                     <h:panelGrid columns="2">
-                                        <p:commandButton value="Request" action="#{taskController.checkRequestedDate()}" oncomplete="PF('editTasksDialog').hide()" update=":TaskForm:Tasks"/>
+                                        <p:commandButton value="Request" action="#{taskController.editDate()}" oncomplete="PF('editTasksDialog').hide()" update=":TaskForm:Tasks"/>
                                         <p:commandButton value="Abort" type="reset" onclick="PF('editTasksDialog').hide()"/>
                                     </h:panelGrid>
                                 </h:form>

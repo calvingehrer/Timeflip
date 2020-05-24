@@ -4,7 +4,9 @@ package at.qe.sepm.skeleton.services;
 import at.qe.sepm.skeleton.exceptions.VacationException;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.model.Vacation;
+import at.qe.sepm.skeleton.repositories.UserRepository;
 import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
+import at.qe.sepm.skeleton.ui.beans.HolidayBean;
 import at.qe.sepm.skeleton.utils.TimeConverter;
 import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +18,10 @@ import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Set;
 
 @Service
@@ -29,6 +33,16 @@ public class VacationService {
 
     @Autowired
     CurrentUserBean currentUserBean;
+
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    HolidayBean holidayBean;
+
 
     /**
      * A Function to get the current user
@@ -45,8 +59,6 @@ public class VacationService {
      * @throws VacationException Add a new Vacation
      */
 
-    @PreAuthorize("hasAuthority('EMPLOYEE')")
-    @Transactional
     public void addVacation(User user, Vacation vacation) throws VacationException {
 
         checkVacationDates(user, vacation.getStart(), vacation.getEnd());
@@ -62,8 +74,22 @@ public class VacationService {
             this.addVacation(user, nextYear);
         }
 
-        logger.logCreation("Vacation of " + user.getUsername(), currentUserBean.getCurrentUser());
-        user.addVacation(vacation);
+        User managedUser = userService.getManagedUser(user);
+
+        long lengthNewVacation = Duration.between(vacation.getStart(), vacation.getEnd()).toDays();
+
+        for (Instant i = vacation.getStart(); i.isBefore(vacation.getEnd()); i = i.plusSeconds(86400)) {
+            if (holidayBean.getDatesOfPublicHolidays().contains(i.truncatedTo(ChronoUnit.DAYS))) {
+                lengthNewVacation = lengthNewVacation - 1;
+            }
+        }
+
+        long totalDays = managedUser.getVacationDays() + lengthNewVacation;
+
+        logger.logCreation(vacation.toString(), managedUser);
+        managedUser.setVacationDays(totalDays);
+        managedUser.addVacation(vacation);
+        userRepository.save(managedUser);
     }
 
     /**
@@ -71,7 +97,6 @@ public class VacationService {
      * @return Set of Vacation from Current User
      */
 
-    @PreAuthorize("hasAuthority('EMPLOYEE')")
     @Transactional
     public Set<Vacation> getVacationFromUser(User user) {
         User current = currentUserBean.getCurrentUser();
@@ -81,6 +106,14 @@ public class VacationService {
             return Collections.emptySet();
         }
     }
+
+    /**
+     * checks if the dates are valid
+     * @param user
+     * @param startDate
+     * @param endDate
+     * @throws VacationException
+     */
 
     public void checkVacationDates(User user, Instant startDate, Instant endDate) throws VacationException {
         if (startDate.isBefore(Calendar.getInstance().toInstant()) || endDate.isBefore(Calendar.getInstance().toInstant())) {
@@ -100,7 +133,14 @@ public class VacationService {
 
         long lengthNewVacation = Duration.between(startDate, endDate).toDays();
 
-        long totalDays = user.getVacations().stream().filter(x -> TimeConverter.getYear(x.getStart()) == beginYear).map(x -> Duration.between(x.getStart(), x.getEnd()).toDays()).mapToLong(Long::valueOf).sum();
+        for (Instant i = startDate; i.isBefore(endDate); i = i.plusSeconds(86400)) {
+            if (holidayBean.getPublicHolidays().contains(i)) {
+                lengthNewVacation = lengthNewVacation - 1;
+            }
+        }
+
+
+        long totalDays = user.getVacationDays();
 
         if (totalDays + lengthNewVacation > Vacation.MAX_VACATION_DAYS_PER_YEAR) {
             throw new VacationException("Limit exceeded .You can't take vacation that long.");

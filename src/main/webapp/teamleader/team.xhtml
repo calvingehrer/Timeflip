@@ -17,8 +17,14 @@
             <div class="ui-g-12">
                 <div class="card">
                     <h1>My Team</h1>
-                    <p:headerRow
-                    <p:button outcome="/secured/dashboard" value="Home" style="display:inline-block;margin-top:6px" icon="fa fa-home"/>
+                    <p:dataTable var="user" value="#{userListController.getEmployees(sessionInfoBean.currentUser.team)}">
+                        <p:column headerText="Full Name">
+                            <h:outputText value="#{user}"/>
+                        </p:column>
+                        <p:column headerText="User Name">
+                            <h:outputText value="#{user.username}"/>
+                        </p:column>
+                    </p:dataTable>
                 </div>
             </div>
         </div>

@@ -201,16 +201,11 @@ public class UserService {
         return toSave;
     }
 
-
-
-
-
     @Transactional
     public User updateUser(User toSave) {
         logger.logUpdate(toSave.getUsername(), getAuthenticatedUser());
         return userRepository.save(setUpdatingFieldsBeforePersist(toSave));
     }
-
 
     public User getTeamLeader(Team team) {
         return userRepository.findTeamLeader(team);
