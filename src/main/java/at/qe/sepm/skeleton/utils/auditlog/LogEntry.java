@@ -25,7 +25,7 @@ public class LogEntry implements Serializable {
     @Column(length = 250)
     private String message;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = true)
     private User changingUser;
 
     @Column(nullable = false)
@@ -65,10 +65,6 @@ public class LogEntry implements Serializable {
 
     public void setChangingUser(User changingUser) {
         this.changingUser = changingUser;
-    }
-
-    public void setChangingUser2(String changingUser) {
-        this.changingUser = new User();
     }
 
     public Instant getLogDate() {

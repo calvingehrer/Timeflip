@@ -56,7 +56,7 @@ public class AuditLogger implements Logger<String, User> {
     public void logLogin(String objectIdentifier) {
         LogEntry logEntry = createLogEntry(objectIdentifier);
         logEntry.setLogActionType(LogEnum.LOGIN);
-        logEntry.setMessage(" was logged in.");
+        logEntry.setMessage(objectIdentifier + " was logged in.");
         auditLogRepository.save(logEntry);
 
 
@@ -82,7 +82,6 @@ public class AuditLogger implements Logger<String, User> {
     private LogEntry createLogEntry(String user) {
         LogEntry logEntry = new LogEntry();
         logEntry.setLogDate(Instant.now());
-        logEntry.setChangingUser(userRepository.findDefaultUser());
         return logEntry;
     }
 

@@ -15,6 +15,6 @@ public class LoginListener implements ApplicationListener<AuthenticationSuccessE
 
     @Override
     public void onApplicationEvent(AuthenticationSuccessEvent event) {
-        logger.logLogin(event.getAuthentication().toString());
+        logger.logLogin(event.getAuthentication().getName());
     }
 }
