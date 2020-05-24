@@ -51,9 +51,7 @@ public class TeamListController implements Serializable {
         Collection<Team> allTeams= teamService.getAllTeams();
 
         for(Team team : teamsInDepartment){
-            // if(allUsers.contains(user)){
             allTeams.remove(team);
-            //}
         }
         return allTeams;
     }
@@ -66,15 +64,6 @@ public class TeamListController implements Serializable {
     public void setTeam(Team team) {
         this.team = team;
     }
-
-    public String getTeamName() {
-        return teamName;
-    }
-
-    public void setTeamName(String teamName) {
-        this.teamName = teamName;
-    }
-
 
 
 }

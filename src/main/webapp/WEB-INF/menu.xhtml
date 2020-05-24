@@ -38,7 +38,7 @@
                             icon="fa fa-trophy">
                             <p:menuitem value="My Badges" url="/employee/badges.xhtml"/>
                             <p:menuitem value="Team" url="/teamleader/team-badges.xhtml"
-                                        rendered="#{sessionInfoBean.hasRole('TEAMLEADER') or sessionInfoBean.hasRole('DEPARTMENTLEADER')}"/>
+                                        rendered="#{sessionInfoBean.hasRole('TEAMLEADER')}"/>
                             <p:menuitem value="Department" url="/departmentleader/department-badges.xhtml"
                                         rendered="#{sessionInfoBean.hasRole('DEPARTMENTLEADER')}"/>
                             <p:menuitem value="Leaderboard" url="/employee/leaderboard.xhtml"/>

@@ -85,8 +85,6 @@ public class TeamService {
         logger.logDeletion(team.toString(), currentUserBean.getCurrentUser());
     }
 
-
-
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<Team> getAllTeamsByTeamName (String teamName) { return this.teamRepository.getAllTeamsByTeamPrefix(teamName); }
 
@@ -96,7 +94,7 @@ public class TeamService {
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<User> getAllUsersWithoutTeam() { return userService.getAllUsersWithoutTeam(); }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DEPARTMENTLEADER') or hasAuthority('TEAMLEADER')")
     public List<User> getUsersOfTeam(Team team) { return userService.getUsersOfTeam(team); }
 
     @PreAuthorize("hasAuthority('ADMIN')")

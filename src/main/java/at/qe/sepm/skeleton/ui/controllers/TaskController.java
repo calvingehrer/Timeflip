@@ -122,8 +122,6 @@ public class TaskController implements Serializable  {
         requestService.addTaskRequest(u, this.getRequestedDate(), "Editing  " + this.getRequestedDate());
     }
 
-
-
     /**
      * method to save a task that was within the current or the last week
      * checks first if the date is in the right time frame
@@ -166,12 +164,14 @@ public class TaskController implements Serializable  {
             MessagesView.errorMessage("Edit Tasks", e.getMessage());
             return;
         }
-        try {
-            taskService.checkIfEarlierThanTwoWeeks(currentUserBean.getCurrentUser(), this.getRequestedDate().toInstant());
-        }
-        catch (Exception e) {
+        if(taskService.checkIfEarlierThanTwoWeeks(currentUserBean.getCurrentUser(), this.getRequestedDate().toInstant())) {
             sendRequest();
+            MessagesView.successMessage("Editing Tasks", "Request has been sent");
         }
+        else {
+            MessagesView.warnMessage("Editing Tasks", "You can edit this date without requesting it");
+        }
+
     }
 
     /**

@@ -29,7 +29,11 @@
                         <h:outputText value="#{team.teamName}"/>
                     </p:column>
                     <p:column headerText="Employees">
-                        <h:outputText value="#{userListController.getEmployees(team)}"/>
+                        <p:dataList id="UsersOfTeam" var="user" value="#{userListController.getEmployees(team)}" type="definition">
+                            <p:column>
+                                <h:outputText value="#{user}"/>
+                            </p:column>
+                        </p:dataList>
                     </p:column>
                     <p:column headerText="Leader">
                         <h:outputText value="#{userListController.getTeamLeader(team)}"/>
