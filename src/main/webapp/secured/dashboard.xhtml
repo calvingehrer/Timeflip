@@ -69,19 +69,67 @@
                     </p:panel>
                 </div>
                 <div class="ui-g-12 ui-md-12 ui-lg-4">
-                    <p:panel header="Badges" styleClass="tasks">
-                        <p:dataTable id="myBadges" var="badge" value="#{badgeController.badgesFromLastWeek}" >
-                            <p:column headerText="User">
-                                <h:outputText value="#{badge.user}"/>
-                            </p:column>
-                            <p:column headerText="Image">
-                                <h:graphicImage value="#{badge.imagePath}" width="200px" height="200px"/>
-                            </p:column>
-
-
-                        </p:dataTable>
+                    <p:panel header="Tasks" styleClass="tasks">
+                        <ul>
+                            <li>
+                                <p:selectBooleanCheckbox/>
+                                <span>Sales Reports</span>
+                                <div class="time-badge">
+                                    <span>TODAY</span>
+                                </div>
+                            </li>
+                            <li>
+                                <p:selectBooleanCheckbox/>
+                                <span>Pay Invoices</span>
+                                <div class="time-badge">
+                                    <span>1 D</span>
+                                </div>
+                            </li>
+                            <li>
+                                <p:selectBooleanCheckbox/>
+                                <span>Jenny's Birthday</span>
+                                <div class="time-badge">
+                                    <span>1 D</span>
+                                </div>
+                            </li>
+                            <li>
+                                <p:selectBooleanCheckbox/>
+                                <span>Client Meeting</span>
+                                <div class="time-badge">
+                                    <span>2 D</span>
+                                </div>
+                            </li>
+                            <li>
+                                <p:selectBooleanCheckbox/>
+                                <span>Flight Ticket</span>
+                                <div class="time-badge">
+                                    <span>5 D</span>
+                                </div>
+                            </li>
+                            <li>
+                                <p:selectBooleanCheckbox/>
+                                <span>New Themes</span>
+                                <div class="time-badge">
+                                    <span>LATER</span>
+                                </div>
+                            </li>
+                        </ul>
                     </p:panel>
                 </div>
+
+
+                <div class="ui-g-12">
+                    <p:panel header="Congratulations to our winners of last week!" styleClass="tasks">
+                        <p:dataGrid id="myBadges" var="badge" value="#{badgeController.badgesFromLastWeek}" columns="6">
+
+                            <p:panel header="#{badge.user}" style="text-align:center">
+                                <h:graphicImage value="#{badge.imagePath}" width="200px" height="200px"/>
+                            </p:panel>
+
+                        </p:dataGrid>
+                    </p:panel>
+                </div>
+
 
 
                 <div class="ui-g-12 ui-md-12 ui-lg-12">
