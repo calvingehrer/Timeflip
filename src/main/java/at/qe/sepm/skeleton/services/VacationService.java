@@ -58,7 +58,6 @@ public class VacationService {
      * @param vacation
      * @throws VacationException Add a new Vacation
      */
-
     public void addVacation(User user, Vacation vacation) throws VacationException {
 
         checkVacationDates(user, vacation.getStart(), vacation.getEnd());
@@ -90,6 +89,8 @@ public class VacationService {
         managedUser.setVacationDays(totalDays);
         managedUser.addVacation(vacation);
         userRepository.save(managedUser);
+        logger.logCreation("Vacation of " + user.getUsername(), currentUserBean.getCurrentUser());
+        user.addVacation(vacation);
     }
 
     /**
