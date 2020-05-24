@@ -15,7 +15,7 @@
 
                     <p:dataTable id="myBadges" var="badge" value="#{badgeController.badgesFromLastWeek}">
                         <p:column headerText="User">
-                            <h:outputText value="#{badge.user.toString}"/>
+                            <h:outputText value="#{badge.user}"/>
                         </p:column>
                         <p:column headerText="Date">
                             <h:outputText value="#{badge.dateOfBadge}"/>

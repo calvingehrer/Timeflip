@@ -1,6 +1,6 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:p="http://primefaces.org/ui"
+                xmlns:p="http://primefaces.org/ui" xmlns:h="http://xmlns.jcp.org/jsf/html"
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="title">Dashboard • Timeflippers</ui:define>
@@ -69,51 +69,17 @@
                     </p:panel>
                 </div>
                 <div class="ui-g-12 ui-md-12 ui-lg-4">
-                    <p:panel header="Tasks" styleClass="tasks">
-                        <ul>
-                            <li>
-                                <p:selectBooleanCheckbox/>
-                                <span>Sales Reports</span>
-                                <div class="time-badge">
-                                    <span>TODAY</span>
-                                </div>
-                            </li>
-                            <li>
-                                <p:selectBooleanCheckbox/>
-                                <span>Pay Invoices</span>
-                                <div class="time-badge">
-                                    <span>1 D</span>
-                                </div>
-                            </li>
-                            <li>
-                                <p:selectBooleanCheckbox/>
-                                <span>Jenny's Birthday</span>
-                                <div class="time-badge">
-                                    <span>1 D</span>
-                                </div>
-                            </li>
-                            <li>
-                                <p:selectBooleanCheckbox/>
-                                <span>Client Meeting</span>
-                                <div class="time-badge">
-                                    <span>2 D</span>
-                                </div>
-                            </li>
-                            <li>
-                                <p:selectBooleanCheckbox/>
-                                <span>Flight Ticket</span>
-                                <div class="time-badge">
-                                    <span>5 D</span>
-                                </div>
-                            </li>
-                            <li>
-                                <p:selectBooleanCheckbox/>
-                                <span>New Themes</span>
-                                <div class="time-badge">
-                                    <span>LATER</span>
-                                </div>
-                            </li>
-                        </ul>
+                    <p:panel header="Badges" styleClass="tasks">
+                        <p:dataTable id="myBadges" var="badge" value="#{badgeController.badgesFromLastWeek}" >
+                            <p:column headerText="User">
+                                <h:outputText value="#{badge.user}"/>
+                            </p:column>
+                            <p:column headerText="Image">
+                                <h:graphicImage value="#{badge.imagePath}" width="200px" height="200px"/>
+                            </p:column>
+
+
+                        </p:dataTable>
                     </p:panel>
                 </div>
 
