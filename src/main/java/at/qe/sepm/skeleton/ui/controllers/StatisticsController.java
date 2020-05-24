@@ -249,6 +249,7 @@ public class StatisticsController implements Serializable {
 
             for (Map.Entry<TaskEnum, Long> pair : tasks.entrySet()) {
                 ChartSeries series = new ChartSeries();
+                series.setLabel(pair.getKey().toString());
                 series.set(pair.getKey().toString(), pair.getValue());
                 model.addSeries(series);
             }

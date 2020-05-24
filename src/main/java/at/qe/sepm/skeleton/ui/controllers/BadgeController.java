@@ -62,6 +62,7 @@ public class BadgeController implements Serializable {
     }
 
     public static Calendar getWeekStart() {
+
         Calendar lastWeek = Calendar.getInstance();
         lastWeek.set(Calendar.HOUR_OF_DAY, 0);
         lastWeek.set(Calendar.MINUTE, 0);
