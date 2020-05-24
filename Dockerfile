@@ -2,6 +2,7 @@ FROM maven:3.5-jdk-8
 
 RUN adduser --disabled-password nonroot
 
+USER nonroot
 
 RUN mkdir -p /user/nonroot
 

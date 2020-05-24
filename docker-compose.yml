@@ -1,24 +1,31 @@
 version: '3'
 services:
-  db:
-    image: mysql:5.7
-    environment:
-      - MYSQL_ROOT_PASSWORD=Timeflippers.123
-      - MYSQL_ROOT_USER=default
-      - MYSQL_DATABASE=spring_boot_database
-      - MYSQL_PASSWORD=Timeflippers.123
-      - MYSQL_USER=default
-      #- MYSQL_USER=root
-      #restart: always
-    ports:
-      - 3307:3306
-
   app:
+    container_name: app-container
+    restart: always
     build: .
-    image: app:latest
-    #restart: always
-    depends_on:
-      - db
+    volumes:
+      - ~/.m2:/home/nonroot/.m2
+    expose:
+      - "8080"
+
     ports:
       - 8080:8080
 
+    networks:
+      - webapp-mysql-network
+    depends_on:
+      - db
+  db:
+    container_name: db-container
+    image: mysql:5.7
+    networks:
+      - webapp-mysql-network
+    ports:
+      - 3307:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=Timeflippers.123
+      - MYSQL_DATABASE=db-timeflip
+networks:
+  webapp-mysql-network:
+    driver: bridge
