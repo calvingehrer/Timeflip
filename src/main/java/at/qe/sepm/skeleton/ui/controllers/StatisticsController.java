@@ -6,6 +6,8 @@ import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.TaskService;
 import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
+import org.primefaces.model.chart.BarChartModel;
+import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.chart.PieChartModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -38,6 +40,8 @@ public class StatisticsController implements Serializable {
 
     private PieChartModel monthDepartmentModel;
 
+    private BarChartModel monthBarUserModel;
+
 
     @PostConstruct
     public void init() {
@@ -50,6 +54,7 @@ public class StatisticsController implements Serializable {
         teamTasksLastMonth();
 
         departmentTasksLastMonth();
+
     }
 
 
@@ -102,6 +107,14 @@ public class StatisticsController implements Serializable {
         this.monthDepartmentModel = monthDepartmentModel;
     }
 
+    public BarChartModel getMonthBarUserModel() {
+        return monthBarUserModel;
+    }
+
+    public void setMonthBarUserModel(BarChartModel monthBarUserModel) {
+        this.monthBarUserModel = monthBarUserModel;
+    }
+
     public void userTasksDaily() {
         Calendar calendar = getToday();
 
@@ -136,6 +149,7 @@ public class StatisticsController implements Serializable {
         Instant start = calendar.toInstant();
 
         monthUserModel = initUserModel(monthUserModel, "Monthly Stats", start, end);
+        monthBarUserModel = initBarUserModel(monthBarUserModel, "Monthly Stats", start, end);
     }
 
     public void teamTasksLastWeek () {
@@ -195,6 +209,12 @@ public class StatisticsController implements Serializable {
         return getPieChartModel(model, title, tasks);
     }
 
+    public BarChartModel initBarUserModel (BarChartModel model, String title, Instant start, Instant end){
+        model = new BarChartModel();
+        HashMap<TaskEnum, Long> tasks = taskService.getUserTasksBetweenDates(currentUserBean.getCurrentUser(), start, end);
+        return getBarChartModel(model, title, tasks);
+    }
+
     public PieChartModel initTeamModel (PieChartModel model, String title, Instant start, Instant end){
         model = new PieChartModel();
         HashMap<TaskEnum, Long> tasks = taskService.getTeamTasksBetweenDates(currentUserBean.getCurrentUser().getTeam(), start, end);
@@ -214,6 +234,23 @@ public class StatisticsController implements Serializable {
         } else {
             for (Map.Entry<TaskEnum, Long> pair : tasks.entrySet()) {
                 model.set(pair.getKey().toString(), pair.getValue());
+            }
+        }
+
+        model.setTitle(title);
+        model.setLegendPosition("w");
+        model.setShadow(false);
+        return model;
+    }
+
+    private BarChartModel getBarChartModel (BarChartModel model, String title, HashMap <TaskEnum, Long> tasks){
+        if (tasks.isEmpty()) {
+        } else {
+
+            for (Map.Entry<TaskEnum, Long> pair : tasks.entrySet()) {
+                ChartSeries series = new ChartSeries();
+                series.set(pair.getKey().toString(), pair.getValue());
+                model.addSeries(series);
             }
         }
 
