@@ -31,8 +31,6 @@ public class LogEntry implements Serializable {
     @Column(nullable = false)
     private Instant logDate;
 
-    User user = new User();
-
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
@@ -70,7 +68,7 @@ public class LogEntry implements Serializable {
     }
 
     public void setChangingUser2(String changingUser) {
-        this.changingUser = user;
+        this.changingUser = new User();
     }
 
     public Instant getLogDate() {

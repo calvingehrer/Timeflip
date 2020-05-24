@@ -63,5 +63,8 @@ public interface UserRepository extends AbstractRepository<User, String> {
     @Query("SELECT u FROM User u")
     List<User> getAllUsers();
 
+    @Query("SELECT u FROM User u WHERE u.username LIKE 'default'")
+    User findDefaultUser();
+
 
 }
