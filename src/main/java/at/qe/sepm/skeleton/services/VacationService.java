@@ -11,7 +11,6 @@ import at.qe.sepm.skeleton.utils.TimeConverter;
 import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -21,7 +20,6 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Set;
 
 @Service
@@ -85,7 +83,7 @@ public class VacationService {
 
         long totalDays = managedUser.getVacationDays() + lengthNewVacation;
 
-        logger.logCreation(vacation.toString(), managedUser);
+
         managedUser.setVacationDays(totalDays);
         managedUser.addVacation(vacation);
         userRepository.save(managedUser);
@@ -134,8 +132,9 @@ public class VacationService {
 
         long lengthNewVacation = Duration.between(startDate, endDate).toDays();
 
+
         for (Instant i = startDate; i.isBefore(endDate); i = i.plusSeconds(86400)) {
-            if (holidayBean.getPublicHolidays().contains(i)) {
+            if (holidayBean.getPublicHolidays().contains(i.truncatedTo(ChronoUnit.DAYS))) {
                 lengthNewVacation = lengthNewVacation - 1;
             }
         }
