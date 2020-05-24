@@ -6,9 +6,7 @@ import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.TaskService;
 import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
-import org.primefaces.model.chart.BarChartModel;
-import org.primefaces.model.chart.ChartSeries;
-import org.primefaces.model.chart.PieChartModel;
+import org.primefaces.model.chart.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -41,6 +39,8 @@ public class StatisticsController implements Serializable {
     private PieChartModel monthDepartmentModel;
 
     private BarChartModel monthBarUserModel;
+    private BarChartModel monthBarTeamModel;
+    private BarChartModel monthBarDepartmentModel;
 
 
     @PostConstruct
@@ -115,6 +115,22 @@ public class StatisticsController implements Serializable {
         this.monthBarUserModel = monthBarUserModel;
     }
 
+    public BarChartModel getMonthBarTeamModel() {
+        return monthBarTeamModel;
+    }
+
+    public void setMonthBarTeamModel(BarChartModel monthBarTeamModel) {
+        this.monthBarTeamModel = monthBarTeamModel;
+    }
+
+    public BarChartModel getMonthBarDeparmentModel() {
+        return monthBarDepartmentModel;
+    }
+
+    public void setMonthBarDeparmentModel(BarChartModel monthBarDeparmentModel) {
+        this.monthBarDepartmentModel = monthBarDeparmentModel;
+    }
+
     public void userTasksDaily() {
         Calendar calendar = getToday();
 
@@ -174,6 +190,7 @@ public class StatisticsController implements Serializable {
         Instant start = calendar.toInstant();
 
         monthTeamModel = initTeamModel(monthTeamModel, "Monthly Stats", start, end);
+        monthBarTeamModel = initBarTeamModel(monthBarTeamModel, "Monthly Stats", start, end);
     }
 
     public void departmentTasksLastMonth () {
@@ -185,6 +202,7 @@ public class StatisticsController implements Serializable {
         Instant start = calendar.toInstant();
 
         monthDepartmentModel = initDepartmentModel(monthDepartmentModel, "Monthly Stats", start, end);
+        monthBarDepartmentModel = initBarDepartmentModel(monthBarDepartmentModel, "Monthly Stats", start, end);
     }
 
     public Calendar getLastMonthEnd () {
@@ -221,16 +239,28 @@ public class StatisticsController implements Serializable {
         return getPieChartModel(model, title, tasks);
     }
 
+    public BarChartModel initBarTeamModel (BarChartModel model, String title, Instant start, Instant end){
+        model = new BarChartModel();
+        HashMap<TaskEnum, Long> tasks = taskService.getTeamTasksBetweenDates(currentUserBean.getCurrentUser().getTeam(), start, end);
+        return getBarChartModel(model, title, tasks);
+    }
+
     public PieChartModel initDepartmentModel (PieChartModel model, String title, Instant start, Instant end){
         model = new PieChartModel();
         HashMap<TaskEnum, Long> tasks = taskService.getDepartmentTasksBetweenDates(currentUserBean.getCurrentUser().getDepartment(), start, end);
         return getPieChartModel(model, title, tasks);
     }
 
+    public BarChartModel initBarDepartmentModel (BarChartModel model, String title, Instant start, Instant end){
+        model = new BarChartModel();
+        HashMap<TaskEnum, Long> tasks = taskService.getDepartmentTasksBetweenDates(currentUserBean.getCurrentUser().getDepartment(), start, end);
+        return getBarChartModel(model, title, tasks);
+    }
+
 
     private PieChartModel getPieChartModel (PieChartModel model, String title, HashMap <TaskEnum, Long> tasks){
         if (tasks.isEmpty()) {
-            model.set("Keine Angaben", 100);
+            model.set("No Data", 100);
         } else {
             for (Map.Entry<TaskEnum, Long> pair : tasks.entrySet()) {
                 model.set(pair.getKey().toString(), pair.getValue());
@@ -245,18 +275,26 @@ public class StatisticsController implements Serializable {
 
     private BarChartModel getBarChartModel (BarChartModel model, String title, HashMap <TaskEnum, Long> tasks){
         if (tasks.isEmpty()) {
+            ChartSeries series = new ChartSeries();
+            series.set("No Data", 0);
+            model.addSeries(series);
         } else {
-
+            ChartSeries series = new ChartSeries();
             for (Map.Entry<TaskEnum, Long> pair : tasks.entrySet()) {
-                ChartSeries series = new ChartSeries();
-                series.setLabel(pair.getKey().toString());
                 series.set(pair.getKey().toString(), pair.getValue());
-                model.addSeries(series);
             }
+            model.addSeries(series);
         }
 
+        Axis xAxis = model.getAxis(AxisType.X);
+        xAxis.setLabel("Tasks");
+
+        Axis yAxis = model.getAxis(AxisType.Y);
+        yAxis.setLabel("Minutes");
+
+
         model.setTitle(title);
-        model.setLegendPosition("w");
+        model.setBarWidth(100);
         model.setShadow(false);
         return model;
     }
