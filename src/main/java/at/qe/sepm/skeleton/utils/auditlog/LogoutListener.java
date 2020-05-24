@@ -6,6 +6,10 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.security.authentication.event.LogoutSuccessEvent;
 import org.springframework.stereotype.Component;
 
+/**
+ * This class listen for an Logout to occur. When someone logs out it is saved in the db
+ */
+
 @Component
 public class LogoutListener implements ApplicationListener<LogoutSuccessEvent> {
 

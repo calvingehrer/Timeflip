@@ -6,6 +6,10 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.stereotype.Component;
 
+/**
+ * This class listen for an Login to occur. When someone logs in it is saved in the db
+ */
+
 @Component
 public class LoginListener implements ApplicationListener<AuthenticationSuccessEvent> {
 
