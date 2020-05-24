@@ -14,46 +14,53 @@
                     <h1>Possible Badges</h1>
 
 
-                    <p:panelGrid id="possibleBadgesGrid" columns="2" cellpadding="10" layout="grid"
-                                 columnClasses="ui-g-4 ui-md-4 ui-lg-4 ui-xl-2">
-
-                        <p:outputLabel value="Weekly Code Monkey:" style="vertical-align: middle"/>
-                        <p:outputLabel value="For working the most time on Implementation in a week"/>
-                        <h:graphicImage value="/resources/badges/weekly_code_monkey.png" width="200x" height="200px" />
-                        <p:outputLabel value=""/>
-
-                        <p:outputLabel value="Creative Mind:"/>
-                        <p:outputLabel value="For working the most time on Design in a week:"/>
-                        <h:graphicImage value="/resources/badges/creative_mind.png" width="200x" height="200px" />
-                        <p:outputLabel value=""/>
-
-                        <p:outputLabel value="Friend and Helper:"/>
-                        <p:outputLabel value="For spending the most time on Customer Service in a week"/>
-                        <h:graphicImage value="/resources/badges/friend_and_helper.png" width="200x" height="200px" />
-                        <p:outputLabel value=""/>
-
-                        <p:outputLabel value="All-Rounder:"/>
-                        <p:outputLabel value="For having the most variaty of tasks in a week"/>
-                        <h:graphicImage value="/resources/badges/all_rounder.png" width="200x" height="200px" />
-                        <p:outputLabel value=""/>
-
-                        <p:outputLabel value="Night Owl:"/>
-                        <p:outputLabel value="For working the most time between 8pm and 6am"/>
-                        <h:graphicImage value="/resources/badges/night_owl.png" width="200x" height="200px" />
-                        <p:outputLabel value=""/>
-
-                        <p:outputLabel value="Wisdom Seeker:"/>
-                        <p:outputLabel value="For spending the most time on further education in a week"/>
-                        <h:graphicImage value="/resources/badges/wisdom_seeker.png" width="200x" height="200px" />
-                        <p:outputLabel value=""/>
+                    <p:panelGrid id="possibleBadgesGrid" columns="3"  layout="grid">
 
 
+                        <p:panel header="Weekly Code Monkey:" style="text-align:center">
+                            <h:panelGrid columns="1" style="width:100%">
+                                <h:graphicImage value="/resources/badges/weekly_code_monkey.png" width="200x" height="200px" />
+                                <p:outputLabel value="For working the most time on Implementation in a week"/>
+                            </h:panelGrid>
+                        </p:panel>
+
+                        <p:panel header="Creative Mind:" style="text-align:center">
+                            <h:panelGrid columns="1" style="width:100%">
+                                <h:graphicImage value="/resources/badges/creative_mind.png" width="200x" height="200px" />
+                                <p:outputLabel value="For working the most time on Design in a week"/>
+                            </h:panelGrid>
+                        </p:panel>
+
+                        <p:panel header="Friend and Helper:" style="text-align:center">
+                            <h:panelGrid columns="1" style="width:100%">
+                                <h:graphicImage value="/resources/badges/friend_and_helper.png" width="200x" height="200px" />
+                                <p:outputLabel value="For spending the most time on Customer Service in a week"/>
+                            </h:panelGrid>
+                        </p:panel>
+
+                        <p:panel header="All-Rounder:" style="text-align:center">
+                            <h:panelGrid columns="1" style="width:100%">
+                                <h:graphicImage value="/resources/badges/all_rounder.png" width="200x" height="200px" />
+                                <p:outputLabel value="For having the most variaty of tasks in a week"/>
+                            </h:panelGrid>
+                        </p:panel>
+
+                        <p:panel header="Night Owl:" style="text-align:center">
+                            <h:panelGrid columns="1" style="width:100%">
+                                <h:graphicImage value="/resources/badges/night_owl.png" width="200x" height="200px" />
+                                <p:outputLabel value="For working the most time between 8pm and 6am"/>
+                            </h:panelGrid>
+                        </p:panel>
+
+                        <p:panel header="Wisdom Seeker:" style="text-align:center">
+                            <h:panelGrid columns="1" style="width:100%">
+                                <h:graphicImage value="/resources/badges/wisdom_seeker.png" width="200x" height="200px" />
+                                <p:outputLabel value="For spending the most time on further education in a week"/>
+                            </h:panelGrid>
+                        </p:panel>
 
 
                     </p:panelGrid>
-
-
-
 
 
                 </div>

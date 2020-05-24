@@ -58,15 +58,25 @@ public class BadgeController implements Serializable {
         return badgeService.getAllBadgesFromUser(getCurrentUser());
     }
 
+    public List<Badge> getBadgesFromDepartment(){
+        return badgeService.getAllBadgesFromDepartment(getCurrentUser().getDepartment());
+    }
+
     public List<Badge> getBadgesFromLastWeek(){
+
+        Calendar lastWeek = getWeekStart();
+        lastWeek.add(Calendar.DATE, -7);
+        return badgeService.getAllBadgesAfterDate(lastWeek.toInstant());
+    }
+
+    public static Calendar getWeekStart() {
         Calendar lastWeek = Calendar.getInstance();
         lastWeek.set(Calendar.HOUR_OF_DAY, 0);
         lastWeek.set(Calendar.MINUTE, 0);
         lastWeek.set(Calendar.SECOND, 0);
         lastWeek.set(Calendar.MILLISECOND, 0);
         lastWeek.getFirstDayOfWeek();
-        lastWeek.add(Calendar.DATE, -7);
-        return badgeService.getAllBadgesAfterDate(lastWeek.toInstant());
+        return lastWeek;
     }
 
 }

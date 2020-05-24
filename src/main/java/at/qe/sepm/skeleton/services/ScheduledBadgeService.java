@@ -2,6 +2,7 @@ package at.qe.sepm.skeleton.services;
 
 import at.qe.sepm.skeleton.model.Interval;
 import at.qe.sepm.skeleton.model.User;
+import at.qe.sepm.skeleton.ui.controllers.BadgeController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -17,12 +18,7 @@ public class ScheduledBadgeService {
 
     @Scheduled(cron = "0 0 8 * * MON", zone = "Europe/Vienna")
     public void awardBadges () {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        calendar.getFirstDayOfWeek();
+        Calendar calendar = BadgeController.getWeekStart();
         calendar.add(Calendar.DATE, -1);
         Instant weekEnd = calendar.toInstant();
 

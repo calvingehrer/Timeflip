@@ -30,6 +30,10 @@ public class BadgeService {
         return badgeRepository.findBadgesFromUser(user);
     }
 
+    public List<Badge> getAllBadgesFromDepartment(Department department){
+        return badgeRepository.findBadgesFromDepartment(department);
+    }
+
     public List<Badge> getAllBadgesAfterDate(Instant date){
         return badgeRepository.findBadgesAfterDate(date);
     }
@@ -154,8 +158,8 @@ public class BadgeService {
 
 
     /**
-     * returns the All-Rounder (Person with most different tasks) of the given period by creating a list of every task
-     * between startDate and endDate, then creating a HashMap where every new task gets saved per user.
+     * creates Badge for the All-Rounder (Person with most different tasks) of the given period by creating a list of
+     * every task between startDate and endDate, then creating a HashMap where every new task gets saved per user.
      * Finally the user with the most different tasks is searched in that HashMap.
      *
      * @param startDate
@@ -214,7 +218,7 @@ public class BadgeService {
     }
 
     /**
-     * returns the Night Owl (Person with most time during 20:00 and 6:00) of the given period
+     * creates Badge for the Night Owl (Person with most time during 20:00 and 6:00) of the given period
      * @param startDate
      * @param endDate
      */
@@ -227,7 +231,7 @@ public class BadgeService {
         List<Task> nightTasks = new ArrayList<>();
 
         for(Task entry : taskList){
-            Integer hour = entry.getEndTime().atZone(ZoneOffset.UTC).getHour();
+            Integer hour = entry.getStartTime().atZone(ZoneOffset.UTC).getHour();
             if(hour >= 20 || hour < 6 && entry.getTask() != TaskEnum.AUSZEIT){
                 nightTasks.add(entry);
             }

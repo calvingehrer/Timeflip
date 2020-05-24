@@ -5,5 +5,37 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/template.xhtml">
 
-    <ui:define name="title">Overview</ui:define>
+    <ui:define name="title">Department Badges</ui:define>
+
+    <ui:define name="content">
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card">
+                    <h1>Badges of Department #{badgeController.currentUser.department}</h1>
+
+                    <p:dataGrid id="departmentBadges" var="badge" value="#{badgeController.badgesFromDepartment}" columns="3">
+
+                        <p:panel header="#{badge.badgeType}" style="text-align:center">
+                            <h:panelGrid columns="1" style="width:100%">
+                                <h:graphicImage value="#{badge.imagePath}" width="200px" height="200px"/>
+                                <h:outputText value="#{badge.user}" style="font-weight: bold"/>
+                                <h:outputText value="#{badge.dateOfBadge}"/>
+                            </h:panelGrid>
+                        </p:panel>
+
+                    </p:dataGrid>
+
+                </div>
+            </div>
+        </div>
+
+        <h:form id="userForm">
+
+
+        </h:form>
+
+
+
+
+    </ui:define>
 </ui:composition>
