@@ -63,7 +63,7 @@ public class RoomService {
         newRoom.setRoomNumber(room.getRoomNumber());
         newRoom.setRaspberry(null);
         saveRoom(newRoom);
-        logger.logCreation(room.toString(), currentUserBean.getCurrentUser());
+        logger.logCreation(room.getRoomNumber(), currentUserBean.getCurrentUser());
     }
 
     public User getAuthenticatedUser() {
@@ -82,7 +82,7 @@ public class RoomService {
             room.setCreateDate(new Date());
             room.setCreateUser(getAuthenticatedUser());
         }
-        logger.logUpdate(room.toString(), currentUserBean.getCurrentUser());
+        logger.logUpdate(room.getRoomNumber(), currentUserBean.getCurrentUser());
         return roomRepository.save(room);
     }
 

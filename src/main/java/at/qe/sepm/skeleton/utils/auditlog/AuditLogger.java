@@ -41,6 +41,7 @@ public class AuditLogger implements Logger<String, User> {
         LogEntry logEntry = createLogEntry(changer);
         logEntry.setLogActionType(LogEnum.DELETE);
         logEntry.setMessage(objectIdentifier + " was deleted");
+        auditLogRepository.save(logEntry);
     }
 
     @Override
@@ -48,6 +49,7 @@ public class AuditLogger implements Logger<String, User> {
         LogEntry logEntry = createLogEntry(executor);
         logEntry.setLogActionType(LogEnum.ERROR);
         logEntry.setMessage(e.toString());
+        auditLogRepository.save(logEntry);
     }
 
     @Override
@@ -55,6 +57,9 @@ public class AuditLogger implements Logger<String, User> {
         LogEntry logEntry = createLogEntry(changer);
         logEntry.setLogActionType(LogEnum.LOGIN);
         logEntry.setMessage(objectIdentifier + " was logged in.");
+        auditLogRepository.save(logEntry);
+
+        //https://www.baeldung.com/spring-boot-authentication-audit
     }
 
     @Override
@@ -62,6 +67,7 @@ public class AuditLogger implements Logger<String, User> {
         LogEntry logEntry = createLogEntry(changer);
         logEntry.setLogActionType(LogEnum.LOGOUT);
         logEntry.setMessage(objectIdentifier + " was logged out.");
+        auditLogRepository.save(logEntry);
     }
 
 
