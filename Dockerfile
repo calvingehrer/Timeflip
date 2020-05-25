@@ -1,41 +1,16 @@
-FROM java:8
-FROM maven:alpine
+FROM maven:3-jdk-8
 
-# image layer
-WORKDIR /src
-ADD pom.xml /src
-RUN mvn verify clean --fail-never
+RUN mkdir -p /home/nonroot/app
 
-# Image layer: with the application
-COPY . /src
-ADD ./src/main/resources/Docker_recources/application.properties /src/src/main/resources
-ADD ./src/main/resources/Docker_recources/application.properties /src/src/test/resources
-RUN mvn -v
-RUN mvn clean install -DskipTests
+WORKDIR /home/nonroot/app
+
+COPY pom.xml /home/nonroot/app/pom.xml
+COPY ./src /home/nonroot/app/src
+COPY ./src/main/resources/Docker_recources/application.properties /home/nonroot/app/src/main/resources/application.properties
+COPY ./src/main/resources/Docker_recources/application.properties /home/nonroot/app/src/test/resources/application.properties
+
 EXPOSE 8080
-ENTRYPOINT ["mvn","spring-boot:run"]
 
+RUN mvn clean package -DskipTests
 
-
-
-
-
-
-#FROM maven:3.5-jdk-8
-
-#RUN adduser --disabled-password nonroot
-
-
-#RUN mkdir -p /home/nonroot
-
-#WORKDIR /home/nonroot/app
-
-#COPY ./pom.xml /home/nonroot/app/pom.xml
-
-#COPY ./src/main/resources/ecuador-theme-3.0.0.jar /home/nonroot/app/src/main/resources/ecuador-theme-3.0.0.jar
-
-#RUN mvn clean package
-
-#COPY ./src /home/nonroot/app/src
-
-#ENTRYPOINT [ "mvn", "spring-boot:run"]
+ENTRYPOINT [ "mvn", "spring-boot:run"]
