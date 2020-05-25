@@ -14,6 +14,9 @@ import java.util.List;
 
 public interface TaskRepository extends AbstractRepository<Task, String> {
 
+    @Query("SELECT t FROM Task t")
+    List<Task> getAllTasks();
+
     @Query("SELECT t FROM Task t WHERE t.user=:user")
     List<Task> findTasksFromUser(@Param("user") User user);
 

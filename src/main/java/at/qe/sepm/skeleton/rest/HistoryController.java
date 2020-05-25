@@ -1,7 +1,7 @@
 package at.qe.sepm.skeleton.rest;
 
 import java.util.List;
-import at.qe.sepm.skeleton.model.Task;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +23,7 @@ public class HistoryController {
 
     @DeleteMapping("/history/{id}")
     private void deleteHistory(@PathVariable Long id) {
-        service.deleteHistory(id);
+        service.deleteHistoryEntry(id);
     }
 
 }

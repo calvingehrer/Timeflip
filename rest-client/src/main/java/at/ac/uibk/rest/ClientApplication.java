@@ -60,7 +60,7 @@ public class ClientApplication {
             }
         };
 
-        timer.schedule(task, 1, 1000*30);  
+        timer.schedule(task, 1, 1000*30);
     }
 }
 
