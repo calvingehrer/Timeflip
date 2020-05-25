@@ -2,9 +2,7 @@ package at.qe.sepm.skeleton.ui.controllers;
 
 
 import at.qe.sepm.skeleton.model.TaskEnum;
-import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.TaskService;
-import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import org.primefaces.model.chart.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +22,6 @@ public class StatisticsController implements Serializable {
     private TaskService taskService;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
     CurrentUserBean currentUserBean;
 
     private PieChartModel todayUserModel;
@@ -42,6 +37,9 @@ public class StatisticsController implements Serializable {
     private BarChartModel monthBarTeamModel;
     private BarChartModel monthBarDepartmentModel;
 
+    /**
+     * Calls the functions to initialize the Charts
+     */
 
     @PostConstruct
     public void init() {
@@ -123,15 +121,20 @@ public class StatisticsController implements Serializable {
         this.monthBarTeamModel = monthBarTeamModel;
     }
 
-    public BarChartModel getMonthBarDeparmentModel() {
+    public BarChartModel getMonthBarDepartmentModel() {
         return monthBarDepartmentModel;
     }
 
-    public void setMonthBarDeparmentModel(BarChartModel monthBarDeparmentModel) {
-        this.monthBarDepartmentModel = monthBarDeparmentModel;
+    public void setMonthBarDepartmentModel(BarChartModel monthBarDepartmentModel) {
+        this.monthBarDepartmentModel = monthBarDepartmentModel;
     }
 
-    public void userTasksDaily() {
+
+    /**
+     * Functions that initialize the Charts needed for Statistics
+     */
+
+    private void userTasksDaily() {
         Calendar calendar = getToday();
 
         Instant start = calendar.toInstant();
@@ -142,7 +145,7 @@ public class StatisticsController implements Serializable {
 
     }
 
-    public void userTasksWeekly () {
+    private void userTasksWeekly() {
 
         Calendar calendar = getToday();
         calendar.add(Calendar.DATE, 1);
@@ -155,7 +158,7 @@ public class StatisticsController implements Serializable {
     }
 
 
-    public void userTasksMonthly () {
+    private void userTasksMonthly() {
 
         Calendar calendar = getToday();
         calendar.add(Calendar.DATE, 1);
@@ -168,7 +171,7 @@ public class StatisticsController implements Serializable {
         monthBarUserModel = initBarUserModel(monthBarUserModel, "Monthly Stats", start, end);
     }
 
-    public void teamTasksLastWeek () {
+    private void teamTasksLastWeek() {
 
         Calendar calendar = getToday();
         calendar.getFirstDayOfWeek();
@@ -181,7 +184,7 @@ public class StatisticsController implements Serializable {
         weekTeamModel = initTeamModel(weekTeamModel, "Weekly Stats", start, end);
     }
 
-    public void teamTasksLastMonth () {
+    private void teamTasksLastMonth() {
 
         Calendar calendar = getLastMonthEnd();
         Instant end = calendar.toInstant();
@@ -193,7 +196,7 @@ public class StatisticsController implements Serializable {
         monthBarTeamModel = initBarTeamModel(monthBarTeamModel, "Monthly Stats", start, end);
     }
 
-    public void departmentTasksLastMonth () {
+    private void departmentTasksLastMonth() {
 
         Calendar calendar = getLastMonthEnd();
         Instant end = calendar.toInstant();
@@ -205,14 +208,26 @@ public class StatisticsController implements Serializable {
         monthBarDepartmentModel = initBarDepartmentModel(monthBarDepartmentModel, "Monthly Stats", start, end);
     }
 
-    public Calendar getLastMonthEnd () {
+    /**
+     * creates a Calendar with the last date from last month
+     *
+     * @return Calendar
+     */
+
+    private Calendar getLastMonthEnd() {
         Calendar calendar = getToday();
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         calendar.add(Calendar.DATE, -1);
         return calendar;
     }
 
-    public Calendar getToday () {
+    /**
+     * creates and returns a Calendar with the current date.
+     *
+     * @return Calendar
+     */
+
+    private Calendar getToday() {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
@@ -221,42 +236,61 @@ public class StatisticsController implements Serializable {
         return calendar;
     }
 
-    public PieChartModel initUserModel (PieChartModel model, String title, Instant start, Instant end){
+    /**
+     * Functions that take a model, title, start date and end date and return a full Model of the Tasks with the help
+     * of a get...ChartModel function.
+     *
+     * @param model
+     * @param title
+     * @param start
+     * @param end
+     * @return BarChart or PieChart
+     */
+
+    private PieChartModel initUserModel(PieChartModel model, String title, Instant start, Instant end){
         model = new PieChartModel();
         HashMap<TaskEnum, Long> tasks = taskService.getUserTasksBetweenDates(currentUserBean.getCurrentUser(), start, end);
         return getPieChartModel(model, title, tasks);
     }
 
-    public BarChartModel initBarUserModel (BarChartModel model, String title, Instant start, Instant end){
+    private BarChartModel initBarUserModel(BarChartModel model, String title, Instant start, Instant end){
         model = new BarChartModel();
         HashMap<TaskEnum, Long> tasks = taskService.getUserTasksBetweenDates(currentUserBean.getCurrentUser(), start, end);
         return getBarChartModel(model, title, tasks);
     }
 
-    public PieChartModel initTeamModel (PieChartModel model, String title, Instant start, Instant end){
+    private PieChartModel initTeamModel(PieChartModel model, String title, Instant start, Instant end){
         model = new PieChartModel();
         HashMap<TaskEnum, Long> tasks = taskService.getTeamTasksBetweenDates(currentUserBean.getCurrentUser().getTeam(), start, end);
         return getPieChartModel(model, title, tasks);
     }
 
-    public BarChartModel initBarTeamModel (BarChartModel model, String title, Instant start, Instant end){
+    private BarChartModel initBarTeamModel(BarChartModel model, String title, Instant start, Instant end){
         model = new BarChartModel();
         HashMap<TaskEnum, Long> tasks = taskService.getTeamTasksBetweenDates(currentUserBean.getCurrentUser().getTeam(), start, end);
         return getBarChartModel(model, title, tasks);
     }
 
-    public PieChartModel initDepartmentModel (PieChartModel model, String title, Instant start, Instant end){
+    private PieChartModel initDepartmentModel(PieChartModel model, String title, Instant start, Instant end){
         model = new PieChartModel();
         HashMap<TaskEnum, Long> tasks = taskService.getDepartmentTasksBetweenDates(currentUserBean.getCurrentUser().getDepartment(), start, end);
         return getPieChartModel(model, title, tasks);
     }
 
-    public BarChartModel initBarDepartmentModel (BarChartModel model, String title, Instant start, Instant end){
+    private BarChartModel initBarDepartmentModel(BarChartModel model, String title, Instant start, Instant end){
         model = new BarChartModel();
         HashMap<TaskEnum, Long> tasks = taskService.getDepartmentTasksBetweenDates(currentUserBean.getCurrentUser().getDepartment(), start, end);
         return getBarChartModel(model, title, tasks);
     }
 
+    /**
+     * Takes a model, title and a HashMap of tasks as parameters and fills the model with a PieChart of the tasks.
+     *
+     * @param model
+     * @param title
+     * @param tasks
+     * @return model
+     */
 
     private PieChartModel getPieChartModel (PieChartModel model, String title, HashMap <TaskEnum, Long> tasks){
         if (tasks.isEmpty()) {
@@ -272,6 +306,16 @@ public class StatisticsController implements Serializable {
         model.setShadow(false);
         return model;
     }
+
+    /**
+     * Takes a model, title and a HashMap of tasks as parameters and fills the model with a BarChart of the tasks.
+     *
+     * @param model
+     * @param title
+     * @param tasks
+     * @return model
+     */
+
 
     private BarChartModel getBarChartModel (BarChartModel model, String title, HashMap <TaskEnum, Long> tasks){
         if (tasks.isEmpty()) {
