@@ -350,7 +350,7 @@ public class StatisticsController implements Serializable {
     }
 
     /**
-     * function that rebuilds the Charts based on the selected Date
+     * function that rebuilds the User-Charts based on the selected Date
      */
 
     public void rebuildChartsUser(){
@@ -370,28 +370,21 @@ public class StatisticsController implements Serializable {
             todayUserModel = initUserModel(todayUserModel, "Daily Stats", start, end);
             date.add(Calendar.DATE, -1);
 
-            setWeekDates(date, start, end);
+            start = firstDayOfWeek(date);
+            end = lastDayOfWeek(date);
             weekUserModel = initUserModel(weekUserModel, "Weekly Stats", start, end);
 
-            date.set(Calendar.DAY_OF_MONTH, 1);
-            start = date.toInstant();
-            date.set(Calendar.DAY_OF_MONTH, date.getActualMaximum(Calendar.DAY_OF_MONTH));
-            end = date.toInstant();
+            start = firstDayOfMonth(date);
+            end = lastDayOfMonth(date);
             monthUserModel = initUserModel(monthUserModel, "Monthly Stats", start, end);
             monthBarUserModel = initBarUserModel(monthBarUserModel, "Monthly Stats", start, end);
-
         }
 
     }
 
-    public static void setWeekDates(Calendar date, Instant start, Instant end) {
-        Calendar dateForWeek = (Calendar) date.clone();
-        dateForWeek.set(Calendar.DAY_OF_WEEK, dateForWeek.getFirstDayOfWeek());
-        start = dateForWeek.toInstant();
-        dateForWeek.add(Calendar.DATE, 7);
-        end = dateForWeek.toInstant();
-    }
-
+    /**
+     * function that rebuilds the Team-Charts based on the selected Date
+     */
     public void rebuildChartsTeam(){
         Calendar date = toCalendar(chosenDate);
         Calendar today = getToday();
@@ -405,16 +398,13 @@ public class StatisticsController implements Serializable {
         else{
             setDayToBeginning(date);
 
-            Instant start = date.toInstant();
-            Instant end = date.toInstant();
-
-            setWeekDates(date, start, end);
+            Instant start = firstDayOfWeek(date);
+            Instant end = lastDayOfWeek(date);
             weekTeamModel = initTeamModel(weekTeamModel, "Weekly Stats", start, end);
 
-            date.set(Calendar.DAY_OF_MONTH, 1);
-            start = date.toInstant();
-            date.set(Calendar.DAY_OF_MONTH, date.getActualMaximum(Calendar.DAY_OF_MONTH));
-            end = date.toInstant();
+
+            start = firstDayOfMonth(date);
+            end = lastDayOfMonth(date);
             monthTeamModel = initTeamModel(monthTeamModel, "Monthly Stats", start, end);
             monthBarTeamModel = initBarTeamModel(monthBarTeamModel, "Monthly Stats", start, end);
 
@@ -422,6 +412,9 @@ public class StatisticsController implements Serializable {
 
     }
 
+    /**
+     * function that rebuilds the Department-Charts based on the selected Date
+     */
     public void rebuildChartsDepartment(){
         Calendar date = toCalendar(chosenDate);
         Calendar today = getToday();
@@ -435,13 +428,9 @@ public class StatisticsController implements Serializable {
         else{
             setDayToBeginning(date);
 
-            Instant start;
-            Instant end;
+            Instant start = firstDayOfMonth(date);
+            Instant end = lastDayOfMonth(date);
 
-            date.set(Calendar.DAY_OF_MONTH, 1);
-            start = date.toInstant();
-            date.set(Calendar.DAY_OF_MONTH, date.getActualMaximum(Calendar.DAY_OF_MONTH));
-            end = date.toInstant();
             monthDepartmentModel = initDepartmentModel(monthDepartmentModel, "Monthly Stats", start, end);
             monthBarDepartmentModel = initBarDepartmentModel(monthBarDepartmentModel, "Monthly Stats", start, end);
         }
@@ -461,12 +450,49 @@ public class StatisticsController implements Serializable {
     }
 
     /**
+     * function that uses date to set the instant start to the beginning of the week and end to the last day of the week
+     * @param date
+     */
+    private static Instant firstDayOfWeek(Calendar date) {
+        Calendar dateForWeek = (Calendar) date.clone();
+        dateForWeek.set(Calendar.DAY_OF_WEEK, dateForWeek.getFirstDayOfWeek());
+        return dateForWeek.toInstant();
+    }
+
+    private static Instant lastDayOfWeek(Calendar date) {
+        Calendar dateForWeek = (Calendar) date.clone();
+        dateForWeek.set(Calendar.DAY_OF_WEEK, dateForWeek.getFirstDayOfWeek());
+        dateForWeek.add(Calendar.DATE, 7);
+        return dateForWeek.toInstant();
+    }
+
+    /**
+     * Returns the instant of first last day of a month
+     * @param date
+     * @return firstDay
+     */
+    private static Instant firstDayOfMonth(Calendar date) {
+        date.set(Calendar.DAY_OF_MONTH, 1);
+        return date.toInstant();
+    }
+
+    /**
+     * Returns the instant of the last day of a month
+     * @param date
+     * @return lastDay
+     */
+
+    private static Instant lastDayOfMonth(Calendar date) {
+        date.set(Calendar.DAY_OF_MONTH, date.getActualMaximum(Calendar.DAY_OF_MONTH));
+        return date.toInstant();
+    }
+
+
+    /**
      * turns Calendar into Date, needed for choosing date
      * @param date
      * @return calendar
      */
-
-
     private static Calendar toCalendar(Date date){
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
