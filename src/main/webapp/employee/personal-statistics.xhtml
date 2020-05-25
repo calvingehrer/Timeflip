@@ -19,14 +19,38 @@
             <div class="ui-g-12">
                 <div class="card">
                     <h1>My Statistics</h1>
+                    <h:form id="userStatForm">
 
-                        <h:panelGrid columns="3" style="width:100%">
-                            <p:chart type="pie" model="#{statisticsController.todayUserModel}" style="width:400px;height:300px"/>
-                            <p:chart type="pie" model="#{statisticsController.weekUserModel}" style="width:400px;height:300px"/>
-                            <p:chart type="pie" model="#{statisticsController.monthUserModel}" style="width:400px;height:300px"/>
-                            <p:chart type="bar" model="#{statisticsController.monthBarUserModel}" style="height:300px"/>
-                        </h:panelGrid>
+                        <p:messages id="messages" showDetail="true" closable="true">
+                            <p:autoUpdate />
+                        </p:messages>
 
+                        <p:commandButton value="Choose a Date"
+                                         oncomplete="PF('dateDialog').show()"/>
+
+                        <p:dialog header="Choose a Date" id="chooseDate" widgetVar="dateDialog"
+                                  showEffect="fade"
+                                  hideEffect="fade" resizable="false">
+                            <h:form id="dates">
+                                    <h:outputText value="Select the Date you want the statistics from"/>
+
+                                    <p:calendar id="start" mode="inline" value="#{statisticsController.chosenDate}"/>
+
+                                    <p:commandButton value="Apply" action="#{statisticsController.rebuildChartsUser}" update="userStatForm:userStats"
+                                                     oncomplete="PF('dateDialog').hide()"/>
+                            </h:form>
+                        </p:dialog>
+
+
+                        <h:form id="userStats" prependId="false">
+                            <h:panelGrid columns="3" style="width:100%">
+                                <p:chart type="pie" model="#{statisticsController.todayUserModel}" style="width:400px;height:300px"/>
+                                <p:chart type="pie" model="#{statisticsController.weekUserModel}" style="width:400px;height:300px"/>
+                                <p:chart type="pie" model="#{statisticsController.monthUserModel}" style="width:400px;height:300px"/>
+                                <p:chart type="bar" model="#{statisticsController.monthBarUserModel}" style="height:300px"/>
+                            </h:panelGrid>
+                        </h:form>
+                    </h:form>
                 </div>
             </div>
         </div>

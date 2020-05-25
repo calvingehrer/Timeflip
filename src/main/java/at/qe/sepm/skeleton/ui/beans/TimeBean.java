@@ -1,5 +1,6 @@
 package at.qe.sepm.skeleton.ui.beans;
 
+import at.qe.sepm.skeleton.ui.controllers.StatisticsController;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -21,10 +22,7 @@ public class TimeBean {
     }
 
     public Calendar setNull (Calendar calendar) {
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
+        StatisticsController.setDayToBeginning(calendar);
         return calendar;
     }
 

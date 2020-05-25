@@ -4,6 +4,7 @@ package at.qe.sepm.skeleton.ui.controllers;
 import at.qe.sepm.skeleton.model.TaskEnum;
 import at.qe.sepm.skeleton.services.TaskService;
 import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
+import at.qe.sepm.skeleton.utils.MessagesView;
 import org.primefaces.model.chart.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -37,7 +38,7 @@ public class StatisticsController implements Serializable {
     private BarChartModel monthBarTeamModel;
     private BarChartModel monthBarDepartmentModel;
 
-    private Instant chosenDate;
+    private Date chosenDate;
 
     /**
      * Calls the functions to initialize the Charts
@@ -54,7 +55,6 @@ public class StatisticsController implements Serializable {
         teamTasksLastMonth();
 
         departmentTasksLastMonth();
-
     }
 
 
@@ -131,6 +131,13 @@ public class StatisticsController implements Serializable {
         this.monthBarDepartmentModel = monthBarDepartmentModel;
     }
 
+    public Date getChosenDate() {
+        return chosenDate;
+    }
+
+    public void setChosenDate(Date chosenDate) {
+        this.chosenDate = chosenDate;
+    }
 
     /**
      * Functions that initialize the Charts needed for Statistics
@@ -231,10 +238,7 @@ public class StatisticsController implements Serializable {
 
     private Calendar getToday() {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
+        setDayToBeginning(calendar);
         return calendar;
     }
 
@@ -343,6 +347,130 @@ public class StatisticsController implements Serializable {
         model.setBarWidth(100);
         model.setShadow(false);
         return model;
+    }
+
+    /**
+     * function that rebuilds the Charts based on the selected Date
+     */
+
+    public void rebuildChartsUser(){
+        Calendar date = toCalendar(chosenDate);
+
+        if(date.after(getToday())){
+            MessagesView.warnMessage("date selection", "You can't select this date");
+        }
+        else{
+            setDayToBeginning(date);
+
+            Instant start = date.toInstant();
+
+            date.add(Calendar.DATE, 1);
+            Instant end;
+            end = date.toInstant();
+            todayUserModel = initUserModel(todayUserModel, "Daily Stats", start, end);
+            date.add(Calendar.DATE, -1);
+
+            setWeekDates(date, start, end);
+            weekUserModel = initUserModel(weekUserModel, "Weekly Stats", start, end);
+
+            date.set(Calendar.DAY_OF_MONTH, 1);
+            start = date.toInstant();
+            date.set(Calendar.DAY_OF_MONTH, date.getActualMaximum(Calendar.DAY_OF_MONTH));
+            end = date.toInstant();
+            monthUserModel = initUserModel(monthUserModel, "Monthly Stats", start, end);
+            monthBarUserModel = initBarUserModel(monthBarUserModel, "Monthly Stats", start, end);
+
+        }
+
+    }
+
+    public static void setWeekDates(Calendar date, Instant start, Instant end) {
+        Calendar dateForWeek = (Calendar) date.clone();
+        dateForWeek.set(Calendar.DAY_OF_WEEK, dateForWeek.getFirstDayOfWeek());
+        start = dateForWeek.toInstant();
+        dateForWeek.add(Calendar.DATE, 7);
+        end = dateForWeek.toInstant();
+    }
+
+    public void rebuildChartsTeam(){
+        Calendar date = toCalendar(chosenDate);
+        Calendar today = getToday();
+
+        if(today.get(Calendar.MONTH) == date.get(Calendar.MONTH) && today.get(Calendar.YEAR) == date.get(Calendar.YEAR) && today.get(Calendar.WEEK_OF_MONTH) == date.get(Calendar.WEEK_OF_MONTH )){
+            MessagesView.warnMessage("date selection", "You can't select this date");
+        }
+        else if (date.after(getToday())){
+            MessagesView.warnMessage("date selection", "You can't select this date");
+        }
+        else{
+            setDayToBeginning(date);
+
+            Instant start = date.toInstant();
+            Instant end = date.toInstant();
+
+            setWeekDates(date, start, end);
+            weekTeamModel = initTeamModel(weekTeamModel, "Weekly Stats", start, end);
+
+            date.set(Calendar.DAY_OF_MONTH, 1);
+            start = date.toInstant();
+            date.set(Calendar.DAY_OF_MONTH, date.getActualMaximum(Calendar.DAY_OF_MONTH));
+            end = date.toInstant();
+            monthTeamModel = initTeamModel(monthTeamModel, "Monthly Stats", start, end);
+            monthBarTeamModel = initBarTeamModel(monthBarTeamModel, "Monthly Stats", start, end);
+
+        }
+
+    }
+
+    public void rebuildChartsDepartment(){
+        Calendar date = toCalendar(chosenDate);
+        Calendar today = getToday();
+
+        if(today.get(Calendar.MONTH) == date.get(Calendar.MONTH) && today.get(Calendar.YEAR) == date.get(Calendar.YEAR)){
+            MessagesView.warnMessage("date selection", "You can't select this date");
+        }
+        else if (date.after(getToday())){
+            MessagesView.warnMessage("date selection", "You can't select this date");
+        }
+        else{
+            setDayToBeginning(date);
+
+            Instant start;
+            Instant end;
+
+            date.set(Calendar.DAY_OF_MONTH, 1);
+            start = date.toInstant();
+            date.set(Calendar.DAY_OF_MONTH, date.getActualMaximum(Calendar.DAY_OF_MONTH));
+            end = date.toInstant();
+            monthDepartmentModel = initDepartmentModel(monthDepartmentModel, "Monthly Stats", start, end);
+            monthBarDepartmentModel = initBarDepartmentModel(monthBarDepartmentModel, "Monthly Stats", start, end);
+        }
+
+    }
+
+    /**
+     * sets the hours, minutes, seconds and milliseconds of a date to zero
+     * @param date
+     */
+
+    public static void setDayToBeginning(Calendar date) {
+        date.set(Calendar.HOUR_OF_DAY, 0);
+        date.set(Calendar.MINUTE, 0);
+        date.set(Calendar.SECOND, 0);
+        date.set(Calendar.MILLISECOND, 0);
+    }
+
+    /**
+     * turns Calendar into Date, needed for choosing date
+     * @param date
+     * @return calendar
+     */
+
+
+    private static Calendar toCalendar(Date date){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar;
     }
 
 
