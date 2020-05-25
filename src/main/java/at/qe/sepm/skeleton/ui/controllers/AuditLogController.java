@@ -29,4 +29,9 @@ public class AuditLogController implements Serializable {
     public Collection<LogEntry> getEntries() {
         return auditLogService.getAllEntries();
     }
+
+    public void resetFilter() {
+        this.logEntry = null;
+
+    }
 }
