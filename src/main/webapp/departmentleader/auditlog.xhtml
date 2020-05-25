@@ -1,0 +1,56 @@
+<ui:composition xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="/WEB-INF/template.xhtml">
+
+    <h:outputStylesheet library="webjars" name="font-awesome/4.6.3/css/font-awesome-jsf.css"/>
+
+    <ui:define name="title">AuditLog</ui:define>
+
+    <ui:define name="viewname">
+        <li>Pages</li>
+        <li>/</li>
+        <li>
+            <p:link outcome="/departmentleader/auditlog.xhtml">Auditlog</p:link>
+        </li>
+    </ui:define>
+
+
+    <ui:define name="content">
+    <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card">
+                    <h1>AuditLog</h1>
+
+                    <h:form id="userForm">
+                        <p:messages id="messages" showDetail="true" closable="true">
+                            <p:autoUpdate/>
+                        </p:messages>
+                        <p:dataTable id="auditlog" var="log" value="#{auditLogController.entries}" scrollable="true">
+                            <p:column headerText="ID">
+                                <h:outputText value="#{log.id}"/>
+                            </p:column>
+                            <p:column headerText="Log Type">
+                                <h:outputText value="#{log.logActionType}"/>
+                            </p:column>
+                            <p:column headerText="Log Date">
+                                <h:outputText value="#{log.logDate}"/>
+                            </p:column>
+                            <p:column headerText="Message">
+                                <h:outputText value="#{log.message}"/>
+                            </p:column>
+                            <p:column headerText="Changing User">
+                                <h:outputText value="#{log.changingUser}"/>
+                            </p:column>
+                        </p:dataTable>
+
+                    </h:form>
+
+                </div>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>
+
+

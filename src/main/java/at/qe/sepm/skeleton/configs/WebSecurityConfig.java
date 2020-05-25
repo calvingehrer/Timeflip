@@ -37,6 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
                 .logoutSuccessUrl("/login.xhtml");
 
+
         http.authorizeRequests().antMatchers("/messages**").authenticated().and().httpBasic();
 
         http.authorizeRequests()

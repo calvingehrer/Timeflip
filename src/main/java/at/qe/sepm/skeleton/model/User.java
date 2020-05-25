@@ -67,7 +67,7 @@ public class User implements Persistable<String>, Serializable {
     @JoinColumn(name="department_id")
     private Department department;
 
-
+    private long vacationDays;
 
     public Set<Vacation> getVacations() {
         return vacations;
@@ -190,6 +190,14 @@ public class User implements Persistable<String>, Serializable {
 
     public void setDepartment(Department department) {
         this.department = department;
+    }
+
+    public long getVacationDays() {
+        return vacationDays;
+    }
+
+    public void setVacationDays(long vacationDays) {
+        this.vacationDays = vacationDays;
     }
 
     @Override

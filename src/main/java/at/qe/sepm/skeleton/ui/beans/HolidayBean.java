@@ -7,6 +7,8 @@ import de.jollyday.HolidayManager;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -32,10 +34,8 @@ public class HolidayBean {
      *
      * @return only the dates of the public holidays
      */
-    public Collection<Date> getDatesOfPublicHolidays() {
+    public Collection<Instant> getDatesOfPublicHolidays() {
         Collection<Holiday> holidays = getPublicHolidays();
-        Collection<Date> datesOfHolidays = new HashSet<>();
-        datesOfHolidays = holidays.stream().map(holiday -> holiday.getDate().toDate()).collect(Collectors.toSet());
-        return datesOfHolidays;
+        return holidays.stream().map(holiday -> holiday.getDate().toDate().toInstant().truncatedTo(ChronoUnit.DAYS)).collect(Collectors.toSet());
     }
 }

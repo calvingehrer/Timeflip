@@ -3,6 +3,7 @@ package at.qe.sepm.skeleton.services;
 import at.qe.sepm.skeleton.model.Interval;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.MailRepository;
+import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import at.qe.sepm.skeleton.ui.beans.TimeBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;

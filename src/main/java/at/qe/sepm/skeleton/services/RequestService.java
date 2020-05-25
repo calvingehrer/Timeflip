@@ -4,6 +4,7 @@ import at.qe.sepm.skeleton.model.*;
 import at.qe.sepm.skeleton.repositories.RequestRepository;
 import at.qe.sepm.skeleton.repositories.TaskRepository;
 import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
+import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;

@@ -3,10 +3,10 @@ package at.qe.sepm.skeleton.services;
 import at.qe.sepm.skeleton.model.Raspberry;
 import at.qe.sepm.skeleton.model.Room;
 import at.qe.sepm.skeleton.model.User;
-import at.qe.sepm.skeleton.repositories.RaspberryRepository;
 import at.qe.sepm.skeleton.repositories.RoomRepository;
 import at.qe.sepm.skeleton.repositories.UserRepository;
 import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
+import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -63,7 +63,7 @@ public class RoomService {
         newRoom.setRoomNumber(room.getRoomNumber());
         newRoom.setRaspberry(null);
         saveRoom(newRoom);
-        logger.logCreation(room.toString(), currentUserBean.getCurrentUser());
+        logger.logCreation(room.getRoomNumber(), currentUserBean.getCurrentUser());
     }
 
     public User getAuthenticatedUser() {
@@ -82,7 +82,7 @@ public class RoomService {
             room.setCreateDate(new Date());
             room.setCreateUser(getAuthenticatedUser());
         }
-        logger.logUpdate(room.toString(), currentUserBean.getCurrentUser());
+        logger.logUpdate(room.getRoomNumber(), currentUserBean.getCurrentUser());
         return roomRepository.save(room);
     }
 
@@ -98,7 +98,7 @@ public class RoomService {
             raspberryService.deleteRaspberry(raspberry);
         }
         roomRepository.delete(room);
-        logger.logDeletion(room.toString(), currentUserBean.getCurrentUser());
+        logger.logDeletion(room.getId(), currentUserBean.getCurrentUser());
     }
 
 

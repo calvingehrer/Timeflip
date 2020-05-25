@@ -1,4 +1,4 @@
-package at.qe.sepm.skeleton.services;
+package at.qe.sepm.skeleton.utils.auditlog;
 
 
 /**
@@ -40,10 +40,24 @@ public interface Logger<T, C> {
     /**
      * Logs an error
      *
-     * @param the     exception that was thrown
-     * @param changer the executor of the operation which threw an error
+     * @param e        exception that was thrown
+     * @param executor the executor of the operation which threw an error
      */
     void logError(Exception e, C executor);
 
+    /**
+     * Logs Login of User
+     *
+     * @param objectIdentifier the name of the object
+     */
+    void logLogin(T objectIdentifier);
+
+    /**
+     * Logs Logout of User
+     *
+     * @param objectIdentifier the name of the object
+     *
+     */
+    void logLogout(T objectIdentifier);
 
 }

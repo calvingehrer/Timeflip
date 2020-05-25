@@ -2,11 +2,11 @@ package at.qe.sepm.skeleton.ui.controllers;
 
 import at.qe.sepm.skeleton.model.Interval;
 import at.qe.sepm.skeleton.model.User;
-import at.qe.sepm.skeleton.services.Logger;
 import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import at.qe.sepm.skeleton.ui.beans.SessionInfoBean;
 import at.qe.sepm.skeleton.utils.MessagesView;
+import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.crypto.password.PasswordEncoder;
