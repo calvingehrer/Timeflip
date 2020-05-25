@@ -25,21 +25,18 @@
 
                     <h:form id="selection">
                         <h:panelGrid columns="7">
-                            <h:panelGrid columns="2">
-                                <p:outputLabel value="ID: "/>
-                                <p:inputText value="#{auditLogController.logEntry.getId}"/>
-                            </h:panelGrid>
+
                             <h:panelGrid columns="2">
                                 <p:outputLabel value="Type: "/>
-                                <p:inputText value="#{auditLogController.logEntry.getlogActionType}"/>
+                                <p:inputText value="#{auditLogController.type}"/>
                             </h:panelGrid>
                             <h:panelGrid columns="2">
                                 <p:outputLabel value="Date: "/>
-                                <p:inputText value="#{auditLogController.logEntry.getlogDate}"/>
+                                <p:inputText value="#{auditLogController.date}"/>
                             </h:panelGrid>
                             <h:panelGrid columns="3">
                                 <p:outputLabel value="Changing User: "/>
-                                <p:inputText value="#{auditLogController.logEntry.getchangingUser}"/>
+                                <p:inputText value="#{auditLogController.changingUser}"/>
                                 <p:commandButton value="Filter" update=":userForm"/>
                             </h:panelGrid>
 
