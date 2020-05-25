@@ -37,6 +37,8 @@ public class StatisticsController implements Serializable {
     private BarChartModel monthBarTeamModel;
     private BarChartModel monthBarDepartmentModel;
 
+    private Instant chosenDate;
+
     /**
      * Calls the functions to initialize the Charts
      */
