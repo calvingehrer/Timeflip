@@ -25,7 +25,6 @@ class StatisticsControllerTest {
     @Autowired
     CurrentUserBean currentUserBean;
 
-    @DirtiesContext
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     void init() {
