@@ -81,7 +81,10 @@ public class AuditLogController implements Serializable {
     }
 
     public void resetFilter() {
-        this.logEntry = null;
+        this.id = "";
+        this.changingUser = "";
+        this.type = "";
+        this.date = "";
 
 
     }
