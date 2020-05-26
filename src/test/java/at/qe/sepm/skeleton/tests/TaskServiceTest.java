@@ -73,6 +73,14 @@ class TaskServiceTest {
     void getDuration() {
         Task task = new Task();
 
+        Calendar startDate = Calendar.getInstance();
+
+        Calendar endDate = Calendar.getInstance();
+
+        startDate.set(2020, 5, 9, 17, 30);
+
+        endDate.set(2020, 5, 9, 17, 30);
+
     }
 
     @Test
