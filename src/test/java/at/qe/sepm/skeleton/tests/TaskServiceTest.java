@@ -1,5 +1,6 @@
 package at.qe.sepm.skeleton.tests;
 
+import at.qe.sepm.skeleton.model.Task;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.TaskRepository;
 import at.qe.sepm.skeleton.services.Logger;
@@ -33,7 +34,12 @@ class TaskServiceTest {
     TaskService taskService;
 
     @Autowired
-    private TaskRepository taskRepository;
+    CurrentUserBean currentUserBean;
+
+    @Autowired
+    TaskRepository taskRepository;
+
+
 
 
     @Test
@@ -54,13 +60,19 @@ class TaskServiceTest {
         endDate.set(Calendar.DAY_OF_MONTH, 31);
 
         Instant start = startDate.toInstant();
-        Instant end =endDate.toInstant();
+        Instant end = endDate.toInstant();
+
+        User user = currentUserBean.getCurrentUser();
+
+        Assert.assertEquals(taskService.getAllTasksBetweenDates(user, start, end), taskRepository.findUserTasksBetweenDates(user, start, end));
 
 
     }
 
     @Test
     void getDuration() {
+        Task task = new Task();
+
     }
 
     @Test
