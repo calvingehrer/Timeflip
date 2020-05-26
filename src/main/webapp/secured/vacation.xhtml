@@ -72,7 +72,7 @@
                     <p:calendar id="end" mode="inline" value="#{vacationController.endOfVacation}" timeZone="#{timeBean.getUtcTimeZone()}"
                     />
 
-                    <p:commandButton value="Save" action="#{vacationController.addVacation}"
+                    <p:commandButton value="Request" action="#{vacationController.addVacation}"
                                      oncomplete="PF('addVacationDialog').hide()"
                                      update="vacationListForm growl addVacationMessages "/>
                 </p:panelGrid>
