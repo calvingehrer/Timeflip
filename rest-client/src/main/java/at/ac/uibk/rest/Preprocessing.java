@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-/*
+/**
  * Utility class to convert and format history
  */
 public class Preprocessing {
@@ -38,7 +38,7 @@ public class Preprocessing {
         return new Timestamp(time);
     }
 
-    public static List<HistoryEntry> calculateStartEndTimes(List<HistoryEntry> historyEntries, Date current){
+    public static void calculateStartEndTimes(List<HistoryEntry> historyEntries, Date current){
         Collections.reverse(historyEntries);
         Date end = current;
 
@@ -53,8 +53,6 @@ public class Preprocessing {
 
             end = start;
         }
-
-        return historyEntries;
     }
     
 }
