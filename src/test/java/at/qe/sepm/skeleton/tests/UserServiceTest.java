@@ -32,7 +32,7 @@ public class UserServiceTest {
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void testDatainitialization() {
-        Assert.assertEquals("Insufficient amount of users initialized for test data source", 3, userService.getAllUsers().size());
+        Assert.assertEquals("Insufficient amount of users initialized for test data source", 35, userService.getAllUsers().size());
         for (User user : userService.getAllUsers()) {
             if ("admin".equals(user.getUsername())) {
                 Assert.assertTrue("User \"admin\" does not have role ADMIN", user.getRoles().contains(UserRole.ADMIN));
