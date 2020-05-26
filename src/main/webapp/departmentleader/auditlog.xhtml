@@ -23,6 +23,26 @@
                 <div class="card">
                     <h1>AuditLog</h1>
 
+                    <h:form id="selection">
+                        <h:panelGrid columns="7">
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="Type: "/>
+                                <p:inputText value="#{auditLogController.type}"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="Date: "/>
+                                <p:inputText value="#{auditLogController.date}"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="3">
+                                <p:outputLabel value="Changing User: "/>
+                                <p:inputText value="#{auditLogController.changingUser}"/>
+                            </h:panelGrid>
+                            <p:commandButton value="Filter" update=":userForm"/>
+                            <p:commandButton value="Reset" action="#{auditLogController.resetFilter}"
+                                             update=":selection :userForm:auditlog"/>
+                        </h:panelGrid>
+                    </h:form>
+
                     <h:form id="userForm">
                         <p:messages id="messages" showDetail="true" closable="true">
                             <p:autoUpdate/>
