@@ -49,16 +49,20 @@ public class TaskService {
         return taskRepository.findUserTasksBetweenDates(user, start, end);
     }
 
-    @PreAuthorize("hasAuthority('TEAMLEADER')")
-    public List<Task> getAllTasksFromTeam(Team team) {
-        return taskRepository.findTasksFromTeam(team);
-    }
-
-
     public long getDuration(Task task) {
         long duration = Duration.between(task.getStartTime(), task.getEndTime()).toMinutes();
         return duration;
     }
+
+    /**
+     * Functions that return a HashMap of the Task Type with their total time between a start and end of a user, team
+     * or department. At first the tasks between start and end date get saved in a List. To fill the HashMap a additional
+     * function gets called.
+     * @param user
+     * @param start
+     * @param end
+     * @return taskList
+     */
 
     public HashMap<TaskEnum, Long> getUserTasksBetweenDates(User user, Instant start, Instant end) {
 
@@ -78,6 +82,10 @@ public class TaskService {
         List<Task> tasks = taskRepository.findDepartmentTasksBetweenDates(department, start, end);
         return fillTaskList(dailyTasks, tasks);
     }
+
+    /**
+     * Adds up the total time a Task Type was executed and saves it in a HashMap.
+     */
 
     private HashMap<TaskEnum, Long> fillTaskList(HashMap<TaskEnum, Long> dailyTasks, List<Task> tasks) {
         tasks.forEach(t -> {

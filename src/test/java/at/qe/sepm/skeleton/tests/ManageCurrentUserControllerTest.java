@@ -2,6 +2,7 @@ package at.qe.sepm.skeleton.tests;
 
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.UserService;
+import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import at.qe.sepm.skeleton.ui.controllers.ManageCurrentUserController;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -22,33 +23,38 @@ class ManageCurrentUserControllerTest {
     @Autowired
     ManageCurrentUserController manageCurrentUserController;
 
+    @Autowired
+    CurrentUserBean currentUserBean;
+
+    @Autowired
+    UserService userService;
+
     @Test
-    void init() {
+    void initTest() {
     }
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     void getFullNameTest() {
-        User user = manageCurrentUserController.getCurrentUser();
 
-        String fullname = manageCurrentUserController.getFullName();
+        String fullName = manageCurrentUserController.getFullName();
 
-        Assert.assertEquals("Admin Istrator", fullname);
+        Assert.assertEquals("Admin Istrator", fullName);
     }
 
     @Test
-    void checkOldPassword() {
+    void checkOldPasswordTest() {
     }
 
     @Test
-    void checkConfirmedPassword() {
+    void checkConfirmedPasswordTest() {
     }
 
     @Test
-    void changePassword() {
+    void changePasswordTest() {
     }
 
     @Test
-    void saveUserDetails() {
+    void saveUserDetailsTest() {
     }
 }

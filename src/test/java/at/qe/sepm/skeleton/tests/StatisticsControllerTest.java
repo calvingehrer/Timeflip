@@ -39,8 +39,6 @@ class StatisticsControllerTest {
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     void testRebuildChartsUser() {
-        StatisticsController statisticsController = new StatisticsController();
-
 
     }
 
