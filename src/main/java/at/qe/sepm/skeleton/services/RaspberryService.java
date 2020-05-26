@@ -42,9 +42,6 @@ public class RaspberryService {
     @Autowired
     CurrentUserBean currentUserBean;
 
-    /**
-     * A Function to get the current user
-     */
 
     @PostConstruct
     public void init() {
@@ -104,6 +101,7 @@ public class RaspberryService {
         for (Timeflip t: timeflipRepository.findTimeflipsOfRaspberrys(raspberry)) {
             t.setRaspberry(null);
         }
+        raspberryRepository.delete(raspberry);
         logger.logDeletion(raspberry.getId(), currentUserBean.getCurrentUser());
     }
 
