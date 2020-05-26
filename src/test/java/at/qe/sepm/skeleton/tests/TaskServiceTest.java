@@ -3,7 +3,6 @@ package at.qe.sepm.skeleton.tests;
 import at.qe.sepm.skeleton.model.Task;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.TaskRepository;
-import at.qe.sepm.skeleton.services.Logger;
 import at.qe.sepm.skeleton.services.TaskService;
 import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
