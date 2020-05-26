@@ -1,4 +1,4 @@
-package com.example.setup;
+package at.ac.uibk.rest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,6 +19,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 public class Client implements Runnable {
@@ -48,9 +49,9 @@ public class Client implements Runnable {
                     e.printStackTrace();
                 }
             }
-
+            System.out.println("(" + new Date() + ") Done.");
         } catch (IOException e) {
-            // ignore
+            e.printStackTrace();
         }
     }
 
@@ -70,21 +71,11 @@ public class Client implements Runnable {
 
         HttpResponse response = httpClient.execute(httpPost);
 
-        if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-
-            HttpEntity entity = response.getEntity();
-            String responseString = IOUtils.toString(entity.getContent());
-            JSONObject responseJson = new JSONObject(responseString);
-
-            Long id = responseJson.getLong("id");
-            String macAddress = responseJson.getString("macAddress");
-            //String hist = responseJson.getString("history");
-
-            System.out.printf("Id: #%d, MAC-Address: %s\n", id, macAddress);
-            return true;
-        } else {
-            System.err.printf("Error posting message, service returned status code %d\n", response.getStatusLine().getStatusCode());
+        if (!(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK)) {
+            System.err.printf("Error sending data, service returned status code %d\n", response.getStatusLine().getStatusCode());
             return false;
+        } else {
+            return true;
         }
     }
 

@@ -1,4 +1,4 @@
-package com.example.setup;
+package at.ac.uibk.rest;
 
 import java.sql.DatabaseMetaData;
 import java.util.Date;

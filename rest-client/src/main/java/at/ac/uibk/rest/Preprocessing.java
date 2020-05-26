@@ -1,4 +1,4 @@
-package com.example.setup;
+package at.ac.uibk.rest;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-/*
+/**
  * Utility class to convert and format history
  */
 public class Preprocessing {
@@ -35,12 +35,10 @@ public class Preprocessing {
     public static Timestamp getCurrentTimestamp(){
         Date date = new Date();
         long time = date.getTime();
-        Timestamp current = new Timestamp(time);
-
-        return current;
+        return new Timestamp(time);
     }
 
-    public static List<HistoryEntry> calculateStartEndTimes(List<HistoryEntry> historyEntries, Date current){
+    public static void calculateStartEndTimes(List<HistoryEntry> historyEntries, Date current){
         Collections.reverse(historyEntries);
         Date end = current;
 
@@ -55,8 +53,6 @@ public class Preprocessing {
 
             end = start;
         }
-
-        return historyEntries;
     }
     
 }

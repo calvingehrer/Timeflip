@@ -1,9 +1,6 @@
 package at.qe.sepm.skeleton.rest;
 
-import at.qe.sepm.skeleton.model.HistoryItem;
-import at.qe.sepm.skeleton.model.Task;
-import at.qe.sepm.skeleton.model.Timeflip;
-import at.qe.sepm.skeleton.model.User;
+import at.qe.sepm.skeleton.model.*;
 import at.qe.sepm.skeleton.repositories.HistoryRepository;
 
 import java.util.ArrayList;
@@ -15,7 +12,6 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import at.qe.sepm.skeleton.repositories.TaskRepository;
 import at.qe.sepm.skeleton.repositories.TimeflipRepository;
-import at.qe.sepm.skeleton.utils.MessagesView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -64,7 +60,7 @@ public class HistoryService {
         return new ArrayList<>(HISTORY_QUEUE);
     }
 
-    public HistoryEntry findHistoryItems(Long id) {
+    public HistoryEntry findHistoryEntry(Long id) {
         HistoryEntry retval = null;
         try {
             retval = HISTORY_QUEUE.stream().filter(msg -> msg.getId().equals(id)).findFirst().get();
@@ -74,7 +70,7 @@ public class HistoryService {
         return retval;
     }
 
-    public void addAsTask(HistoryEntry historyEntry){
+    public Task addAsTask(HistoryEntry historyEntry){
         Task task = new Task();
         Timeflip timeflip = timeflipRepository.findByMacAddress(historyEntry.getMacAddress());
         if(timeflip != null){
@@ -82,6 +78,8 @@ public class HistoryService {
             task.setTeam(user.getTeam());
             task.setDepartment(user.getDepartment());
             task.setUser(user);
+            int facet = historyEntry.getFacet();
+            task.setTask(TaskEnum.values()[facet-1]);
         }
         task.setStartTime(historyEntry.getStart().toInstant());
         task.setEndTime(historyEntry.getEnd().toInstant());
@@ -89,18 +87,13 @@ public class HistoryService {
         task.setCreateDate(new Date());
 
         taskRepository.save(task);
+        return task;
     }
 
-    public void deleteHistory(Long id) {
-        HistoryEntry historyEntry = findHistoryItems(id);
+    public void deleteHistoryEntry(Long id) {
+        HistoryEntry historyEntry = findHistoryEntry(id);
         if (historyEntry != null) {
             HISTORY_QUEUE.removeIf(msg -> msg.getId().equals(id));
         }
     }
-
-    private String getUserName() {
-        SecurityContext context = SecurityContextHolder.getContext();
-        return context.getAuthentication().getName();
-    }
-
 }
