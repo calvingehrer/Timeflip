@@ -13,40 +13,45 @@ import java.util.*;
 
 public class ClientApplication {
     private static final String DEFAULT_MESSAGING_SERVICE_URI = "http://localhost:8080/history";
+    private static final float SCALE_LSB = 0.03125f;
 
-    public static void main(String[] args) {
+
+    public static void main(String[] args) throws InterruptedException {
+
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                System.out.println("(" + new Date() + ") Sending...");
-
                 BluetoothManager manager = BluetoothManager.getBluetoothManager();
+
                 manager.startDiscovery();
-                
+
+                System.out.println("\nDiscovery started...");
                 List<BluetoothDevice> sensors = null;
                 try {
                     sensors = TimeFlipService.getTimeFlipDevices();
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    System.out.println("InterruptedException");
                 }
 
                 try {
                     manager.stopDiscovery();
                 } catch (BluetoothException e) {
-                    System.err.println("Discovery could not be stopped.");
+                    //ignore
                 }
-
 
                 if (sensors == null) {
+                    System.err.println("No sensor found with the provided name.");
                     System.exit(-1);
                 }
+
+                System.out.println("Found devices");
 
                 JSONArray historyObjects = null;
                 try {
                     historyObjects = TimeFlipService.getHistoryObjects(sensors);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    System.out.println("InterruptedException");
                 }
 
                 String uri = DEFAULT_MESSAGING_SERVICE_URI;
@@ -59,8 +64,8 @@ public class ClientApplication {
                 t.start();
             }
         };
-
-        timer.schedule(task, 1, 1000*60);
+        timer.schedule(task, 1, 1000*61);
     }
 }
+
 

@@ -16,14 +16,13 @@ import java.util.concurrent.locks.ReentrantLock;
 public class TimeFlipService {
     static boolean running = true;
 
-
     /**
      * Detects all bluetooth devices with "timeflip" (case insensitive) in its name.
      *
      * @return list of all detected TimeFlip devices
      * @throws InterruptedException
      */
-    public static List<BluetoothDevice> getTimeFlipDevices() throws InterruptedException {
+    static List<BluetoothDevice> getTimeFlipDevices() throws InterruptedException {
         BluetoothManager manager = BluetoothManager.getBluetoothManager();
         List <BluetoothDevice> sensors = new ArrayList<>();
         for (int i = 0; (i < 15) && running; ++i) {
@@ -46,6 +45,7 @@ public class TimeFlipService {
     }
 
 
+
     /**
      * Reads the list of services of a given bluetooth device and searches the needed service.
      *
@@ -54,9 +54,9 @@ public class TimeFlipService {
      * @return the requested service, Null if service does not exist
      * @throws InterruptedException
      */
-    public static BluetoothGattService getService(BluetoothDevice device, String UUID) throws InterruptedException {
+    static BluetoothGattService getService(BluetoothDevice device, String UUID) throws InterruptedException {
         BluetoothGattService tempService = null;
-        List<BluetoothGattService> bluetoothServices;
+        List<BluetoothGattService> bluetoothServices = null;
         do
         {
             bluetoothServices = device.getServices();
@@ -73,6 +73,7 @@ public class TimeFlipService {
     }
 
 
+
     /**
      * Reads the list of characteristics of a given service and searches the needed characteristics.
      *
@@ -80,7 +81,7 @@ public class TimeFlipService {
      * @param UUID the UUID of the requested characteristics
      * @return the requested characteristics, null if characteristic does not exist
      */
-    public static BluetoothGattCharacteristic getCharacteristic(BluetoothGattService service, String UUID) {
+    static BluetoothGattCharacteristic getCharacteristic(BluetoothGattService service, String UUID) {
         List<BluetoothGattCharacteristic> characteristics = service.getCharacteristics();
         if (characteristics == null)
             return null;
@@ -90,47 +91,6 @@ public class TimeFlipService {
                 return characteristic;
         }
         return null;
-    }
-
-
-    /**
-     * Separates a package of bytes into blocks (each block for a facet time period) and
-     * converts raw history data to human readable history blocks with format: [facet, time].
-     * After converting, the ready HistoryEntry is added to the list
-     *
-     * @param entries the list of HistoryEntries
-     * @param historyRaw the raw history as byte array comming from the TimeFlip device
-     * @param sensor the TimeFlip device
-     */
-    public static void transformEntriesAndAddToList(List<HistoryEntry> entries, byte[] historyRaw, BluetoothDevice sensor){
-        byte[][] historyRawFormatted = new byte[7][3];
-        int index = 0;
-
-        for (int i = 0; i < 7; i++) {
-            for (int j = 0; j < 3; j++) {
-                historyRawFormatted[i][j] = historyRaw[index++];
-            }
-            HistoryEntry entry = new HistoryEntry();
-            entry.setMacAddress(sensor.getAddress());
-            entry.setFacet(Converter.getFacetNumber(Converter.hexToBinary(historyRawFormatted[i])));
-            entry.setSeconds(Converter.getTimeInSeconds(Converter.hexToBinary(historyRawFormatted[i])));
-
-            if (entry.getFacet() != 0) {
-                entries.add(entry);
-            }
-        }
-    }
-
-
-    /**
-     * Writes a command as byte array to the given characteristics to manipulate the
-     * behaviour of the characteristics
-     *
-     * @param characteristic the characteristics to be manipulated
-     * @param bytes the command to be written to the characteristics
-     */
-    public static void write(BluetoothGattCharacteristic characteristic, byte[] bytes){
-        characteristic.writeValue(bytes);
     }
 
     
@@ -146,16 +106,15 @@ public class TimeFlipService {
     public static JSONArray getHistoryObjects(List<BluetoothDevice> sensors) throws InterruptedException {
         JSONArray historyEntries = new JSONArray();
         List<HistoryEntry> entries = new ArrayList<>();
-        
+
         for(BluetoothDevice sensor : sensors) {
 
             if (sensor.connect())
-                System.out.println("Sensor with the provided name connected");
+                System.out.println("Sensor " + sensor.getAddress() + " connected");
             else {
-                System.out.println("Could not connect device.");
-                System.exit(-1);
+                System.out.println("Could not connect device with address " + sensor.getAddress());
+                continue;
             }
-
 
             Lock lock = new ReentrantLock();
             Condition cv = lock.newCondition();
@@ -169,9 +128,10 @@ public class TimeFlipService {
                     } finally {
                         lock.unlock();
                     }
+
                 }
             });
-            
+
             BluetoothGattService timeflipService = getService(sensor, "f1196f50-71a4-11e6-bdf4-0800200c9a66");
 
             if (timeflipService == null) {
@@ -184,21 +144,34 @@ public class TimeFlipService {
             BluetoothGattCharacteristic command = getCharacteristic(timeflipService, "f1196f54-71a4-11e6-bdf4-0800200c9a66");
             BluetoothGattCharacteristic commandResult = getCharacteristic(timeflipService, "f1196f53-71a4-11e6-bdf4-0800200c9a66");
 
+
             if (facet == null || password == null || command == null || commandResult == null) {
+                System.err.println("Could not find the correct characteristics.");
                 sensor.disconnect();
                 System.exit(-1);
             }
 
-            write(password, new byte[]{0x30, 0x30, 0x30, 0x30, 0x30, 0x30});  //set password
-            write(command, new byte[]{0x01});  //receive history data
+
+            // before getting output of TimeFlip characteristics, a password must be send to the cube (just once and at every re-connect)
+            byte[] passwd = {0x30, 0x30, 0x30, 0x30, 0x30, 0x30};
+            password.writeValue(passwd);
+
+            // write command 0X01 to receive history data
+            byte[] history = {0x01};
+            command.writeValue(history);
 
             while (running) {
                 byte[] historyRaw = commandResult.readValue();
 
+                // finish reading when first package full of zeros appears
                 if (historyRaw[2] == 0x00) {
                     break;
                 }
 
+                /*
+                 * separate package into blocks (each block for a facet time period) and convert
+                 * raw history data to human readable history blocks with format: [facet, time]
+                 */
                 byte[][] historyRawFormatted = new byte[7][3];
                 int index = 0;
 
@@ -224,10 +197,15 @@ public class TimeFlipService {
             }
 
             entries.clear();
-            write(command, new byte[]{0x02});  //delete history
+
+            // write command 0X02 to delete history
+            byte[] deleteHistory = {0x02};
+            command.writeValue(deleteHistory);
+
             sensor.disconnect();
         }
-        
+
         return historyEntries;
     }
+
 }

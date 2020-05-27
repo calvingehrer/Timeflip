@@ -107,9 +107,11 @@ public class HistoryService {
         Timeflip timeflip = timeflipRepository.findByMacAddress(historyEntry.getMacAddress());
         if(timeflip != null){
             User user = timeflip.getUser();
-            task.setTeam(user.getTeam());
-            task.setDepartment(user.getDepartment());
-            task.setUser(user);
+            if(user != null){
+                task.setTeam(user.getTeam());
+                task.setDepartment(user.getDepartment());
+                task.setUser(user);
+            }
             int facet = historyEntry.getFacet();
             task.setTask(TaskEnum.values()[facet-1]);
         }

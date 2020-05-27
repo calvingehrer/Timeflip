@@ -22,18 +22,22 @@
                             <p:autoUpdate />
                         </p:messages>
 
-                        <p:dataTable id="Tasks" var="task" value="#{taskListController.tasksFromUser}" scrollable="true">
+                        <p:dataTable id="Tasks" var="task" value="#{taskListController.sortedTasksFromUser}" scrollable="true">
                             <f:facet name="header">
                                 My Tasks
                             </f:facet>
                             <p:column headerText="Task">
                                 <h:outputText value="#{task.task}"/>
                             </p:column>
-                            <p:column headerText="Start">
-                                <h:outputText value="#{task.startTime}"/>
+                            <p:column headerText="Start" sortBy="#{task.startTime}" >
+                                <h:outputText value="#{task.startTime}">
+                                    <f:convertDateTime timeZone="GMT+1" pattern="dd/MM/yyyy, HH:mm"/>
+                                </h:outputText>
                             </p:column>
                             <p:column headerText="End">
-                                <h:outputText value="#{task.endTime}"/>
+                                <h:outputText value="#{task.endTime}">
+                                    <f:convertDateTime timeZone="GMT+1" pattern="dd/MM/yyyy, HH:mm"/>
+                                </h:outputText>
                             </p:column>
                             <p:column headerText="Duration[min]">
                                 <h:outputText value="#{taskController.duration(task)}"/>

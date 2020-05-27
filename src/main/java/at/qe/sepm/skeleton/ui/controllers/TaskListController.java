@@ -13,9 +13,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 
 @Component
@@ -110,10 +108,20 @@ public class TaskListController implements Serializable {
         return taskService.getAllTasksBetweenDates(currentUserBean.getCurrentUser(), this.getStartOfTimeRange().toInstant(), this.getEndOfTimeRange().toInstant());
     }
 
+    public List<Task> getSortedTasksFromUser(){
+        List<Task> sorted = getTasksFromUser();
+        Collections.sort(sorted, new Comparator<Task>() {
+            @Override
+            public int compare(Task task1, Task task2) {
+                return task2.getStartTime().compareTo(task1.getStartTime());
+            }
+        });
+        return sorted;
+    }
+
     /**
      * resets the filter so that all tasks are displayed
      */
-
     public void resetFilter() {
         this.setInterval(Interval.NONE);
         this.setStartOfTimeRange(null);
