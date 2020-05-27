@@ -6,6 +6,7 @@ import at.qe.sepm.skeleton.model.*;
 import at.qe.sepm.skeleton.repositories.TaskRepository;
 import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import at.qe.sepm.skeleton.ui.beans.TimeBean;
+import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.time.Duration;
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -242,7 +242,6 @@ public class TaskService {
      * @param date
      * @throws TaskException
      */
-
     public void checkIfAfterToday(Instant date) throws TaskException {
         Calendar calendar = Calendar.getInstance();
         Instant today = calendar.toInstant();
@@ -281,4 +280,11 @@ public class TaskService {
         taskRepository.delete(task);
         logger.logDeletion(task.getTask().toString(), currentUserBean.getCurrentUser());
     }
+
+    public void deleteTaskOfUser (User user) {
+        for (Task t: taskRepository.findTasksFromUser(user)) {
+            deleteTask(t);
+        }
+    }
+
 }

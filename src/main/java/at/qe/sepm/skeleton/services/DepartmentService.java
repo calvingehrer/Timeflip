@@ -5,8 +5,8 @@ import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.DepartmentRepository;
 import at.qe.sepm.skeleton.repositories.TeamRepository;
-import at.qe.sepm.skeleton.repositories.UserRepository;
 import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
+import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -74,6 +74,7 @@ public class DepartmentService {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteDepartment(Department department){
+        logger.logDeletion(department.getDepartmentName(), currentUserBean.getCurrentUser());
         departmentRepository.delete(department);
     }
 

@@ -144,6 +144,10 @@ public class TaskController implements Serializable  {
                 return;
             }
         }
+        trySavingTasks();
+    }
+
+    private void trySavingTasks() {
         try {
             taskService.saveEditedTask(currentUserBean.getCurrentUser(), this.getTask(), this.getRequestedDate(), this.getStartHour(), this.getEndHour(), this.getStartMinute(), this.getEndMinute());
         }
@@ -179,13 +183,7 @@ public class TaskController implements Serializable  {
      */
 
     public void editDate () {
-        try {
-            taskService.saveEditedTask(currentUserBean.getCurrentUser(), this.getTask(), this.getRequestedDate(), this.getStartHour(), this.getEndHour(), this.getStartMinute(), this.getEndMinute());
-        }
-        catch (Exception e) {
-            MessagesView.errorMessage("Edit Tasks", e.getMessage());
-
-        }
+        trySavingTasks();
 
     }
 

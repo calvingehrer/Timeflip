@@ -6,19 +6,20 @@ import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.model.Vacation;
 import at.qe.sepm.skeleton.repositories.UserRepository;
 import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
+import at.qe.sepm.skeleton.ui.beans.HolidayBean;
 import at.qe.sepm.skeleton.utils.TimeConverter;
+import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Set;
 
 @Service
@@ -36,6 +37,10 @@ public class VacationService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    HolidayBean holidayBean;
+
 
     /**
      * A Function to get the current user
@@ -68,9 +73,22 @@ public class VacationService {
 
         User managedUser = userService.getManagedUser(user);
 
-        logger.logCreation(vacation.toString(), managedUser);
+        long lengthNewVacation = Duration.between(vacation.getStart(), vacation.getEnd()).toDays();
+
+        for (Instant i = vacation.getStart(); i.isBefore(vacation.getEnd()); i = i.plusSeconds(86400)) {
+            if (holidayBean.getDatesOfPublicHolidays().contains(i.truncatedTo(ChronoUnit.DAYS))) {
+                lengthNewVacation = lengthNewVacation - 1;
+            }
+        }
+
+        long totalDays = managedUser.getVacationDays() + lengthNewVacation;
+
+
+        managedUser.setVacationDays(totalDays);
         managedUser.addVacation(vacation);
         userRepository.save(managedUser);
+        logger.logCreation("Vacation of " + user.getUsername(), currentUserBean.getCurrentUser());
+        user.addVacation(vacation);
     }
 
     /**
@@ -114,7 +132,15 @@ public class VacationService {
 
         long lengthNewVacation = Duration.between(startDate, endDate).toDays();
 
-        long totalDays = user.getVacations().stream().filter(x -> TimeConverter.getYear(x.getStart()) == beginYear).map(x -> Duration.between(x.getStart(), x.getEnd()).toDays()).mapToLong(Long::valueOf).sum();
+
+        for (Instant i = startDate; i.isBefore(endDate); i = i.plusSeconds(86400)) {
+            if (holidayBean.getPublicHolidays().contains(i.truncatedTo(ChronoUnit.DAYS))) {
+                lengthNewVacation = lengthNewVacation - 1;
+            }
+        }
+
+
+        long totalDays = user.getVacationDays();
 
         if (totalDays + lengthNewVacation > Vacation.MAX_VACATION_DAYS_PER_YEAR) {
             throw new VacationException("Limit exceeded .You can't take vacation that long.");

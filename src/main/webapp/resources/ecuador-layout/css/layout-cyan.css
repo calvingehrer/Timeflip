@@ -1525,7 +1525,7 @@ body .layout-wrapper .layout-main {
   height: 100vh; }
   .login-body .login-image {
     height: 100%;
-    background: url("#{resource['ecuador-layout:images/bg-image-login.jpg']}") no-repeat;
+    background: url("#{resource['ecuador-layout:images/office2.jpg']}") no-repeat;
     background-size: cover;
     background-position: center; }
   .login-body .login-topbar {

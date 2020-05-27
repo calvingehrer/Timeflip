@@ -1,8 +1,10 @@
-package com.example.setup;
+package at.ac.uibk.rest;
 
-import java.sql.DatabaseMetaData;
 import java.util.Date;
 
+/**
+ * DTO to be send to the backend server
+ */
 
 public class HistoryEntry {
     private String macAddress;

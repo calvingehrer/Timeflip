@@ -17,62 +17,62 @@
         <div class="ui-g">
             <div class="ui-g-12">
                 <div class="card">
-                        <h:form id="TaskForm">
-                            <p:messages id="messages" showDetail="true" closable="true">
-                                <p:autoUpdate />
-                            </p:messages>
+                    <h:form id="TaskForm">
+                        <p:messages id="messages" showDetail="true" closable="true">
+                            <p:autoUpdate />
+                        </p:messages>
 
-                            <p:dataTable id="Tasks" var="task" value="#{taskListController.tasksFromUser}" scrollable="true">
-                                <f:facet name="header">
-                                    My Tasks
-                                </f:facet>
-                                <p:column headerText="Task">
-                                    <h:outputText value="#{task.task}"/>
-                                </p:column>
-                                <p:column headerText="Start">
-                                    <h:outputText value="#{task.startTime}"/>
-                                </p:column>
-                                <p:column headerText="End">
-                                    <h:outputText value="#{task.endTime}"/>
-                                </p:column>
-                                <p:column headerText="Duration[min]">
-                                    <h:outputText value="#{taskController.duration(task)}"/>
-                                </p:column>
+                        <p:dataTable id="Tasks" var="task" value="#{taskListController.tasksFromUser}" scrollable="true">
+                            <f:facet name="header">
+                                My Tasks
+                            </f:facet>
+                            <p:column headerText="Task">
+                                <h:outputText value="#{task.task}"/>
+                            </p:column>
+                            <p:column headerText="Start">
+                                <h:outputText value="#{task.startTime}"/>
+                            </p:column>
+                            <p:column headerText="End">
+                                <h:outputText value="#{task.endTime}"/>
+                            </p:column>
+                            <p:column headerText="Duration[min]">
+                                <h:outputText value="#{taskController.duration(task)}"/>
+                            </p:column>
 
-                            </p:dataTable>
+                        </p:dataTable>
 
 
-                            <p:commandButton update=":TaskForm:Tasks" value="Edit Tasks" styleClass="addButton" oncomplete="PF('editTasksWithinTimeFrameDialog').show()"/>
-                            <p:commandButton update=":TaskForm:acceptedRequestsTable" value="Request Date" styleClass="addButton" oncomplete="PF('requestDateDialog').show()" rendered="#{!sessionInfoBean.hasRole('DEPARTMENTLEADER') and !sessionInfoBean.hasRole('ADMIN')}"/>
-                            <p:commandButton update=":TaskForm:Tasks" value="Filter Tasks" styleClass="addButton" oncomplete="PF('filterTaskDialog').show()"/>
+                        <p:commandButton update=":TaskForm:Tasks" value="Edit Tasks" styleClass="addButton" oncomplete="PF('editTasksWithinTimeFrameDialog').show()"/>
+                        <p:commandButton update=":TaskForm:acceptedRequestsTable" value="Request Date" styleClass="addButton" oncomplete="PF('requestDateDialog').show()" rendered="#{!sessionInfoBean.hasRole('DEPARTMENTLEADER') and !sessionInfoBean.hasRole('ADMIN')}"/>
+                        <p:commandButton update=":TaskForm:Tasks" value="Filter Tasks" styleClass="addButton" oncomplete="PF('filterTaskDialog').show()"/>
 
-                            <p:separator/>
-                            <p:dataTable id="acceptedRequestsTable" var="acceptedRequest" value="#{requestController.acceptedTaskRequestsEmployee}" scrollable="true" rendered="#{!sessionInfoBean.hasRole('DEPARTMENTLEADER') and !sessionInfoBean.hasRole('ADMIN')}">
-                                <f:facet name="header">
-                                    Editable Dates
-                                </f:facet>
-                                <p:column headerText="Description">
-                                    <h:outputText value="#{acceptedRequest.description}"/>
-                                </p:column>
-                                <p:column headerText="Status">
-                                    <h:outputText value="#{acceptedRequest.status}"/>
-                                </p:column>
-                                <p:column headerText="Date">
-                                    <h:outputText value="#{acceptedRequest.requestedDate}">
-                                        <f:convertDateTime pattern="yyyy-dd-MM"/>
-                                    </h:outputText>
-                                </p:column>
-                                <p:column style="width:200px;text-align: center">
-                                    <p:commandButton update=":TaskForm:acceptedRequestsTable" oncomplete="PF('editTasksDialog').show()"
-                                                     value="Edit" icon="fa fa-edit" title="Edit">
-                                        <f:setPropertyActionListener value="#{acceptedRequest.requestedDate}" target="#{taskController.requestedDate}" />
-                                    </p:commandButton>
-                                    <p:commandButton update=":TaskForm:acceptedRequestsTable" action="#{requestController.deleteRequest(acceptedRequest)}" value="Delete" icon="fa fa-trash" title="Delete"/>
+                        <p:separator/>
+                        <p:dataTable id="acceptedRequestsTable" var="acceptedRequest" value="#{requestController.acceptedTaskRequestsEmployee}" scrollable="true" rendered="#{!sessionInfoBean.hasRole('DEPARTMENTLEADER') and !sessionInfoBean.hasRole('ADMIN')}">
+                            <f:facet name="header">
+                                Editable Dates
+                            </f:facet>
+                            <p:column headerText="Description">
+                                <h:outputText value="#{acceptedRequest.description}"/>
+                            </p:column>
+                            <p:column headerText="Status">
+                                <h:outputText value="#{acceptedRequest.status}"/>
+                            </p:column>
+                            <p:column headerText="Date">
+                                <h:outputText value="#{acceptedRequest.requestedDate}">
+                                    <f:convertDateTime pattern="yyyy-dd-MM"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column style="width:200px;text-align: center">
+                                <p:commandButton update=":TaskForm:acceptedRequestsTable" oncomplete="PF('editTasksDialog').show()"
+                                                 value="Edit" icon="fa fa-edit" title="Edit">
+                                    <f:setPropertyActionListener value="#{acceptedRequest.requestedDate}" target="#{taskController.requestedDate}" />
+                                </p:commandButton>
+                                <p:commandButton update=":TaskForm:acceptedRequestsTable" action="#{requestController.deleteRequest(acceptedRequest)}" value="Delete" icon="fa fa-trash" title="Delete"/>
 
-                                </p:column>
-                            </p:dataTable>
+                            </p:column>
+                        </p:dataTable>
 
-                        </h:form>
+                    </h:form>
 
                     <p:dialog header="Edit Tasks" id="editTasksWithinTimeFrameDialog" widgetVar="editTasksWithinTimeFrameDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
                         <p:outputPanel>
@@ -106,50 +106,50 @@
                     </p:dialog>
 
                     <p:dialog header="Request Date" id="requestDateDialog" widgetVar="requestDateDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-                            <p:outputPanel>
-                                <h:form>
-                                    <h:panelGrid columns="2">
-                                        <h:outputText value="Select the requested date"/>
-                                        <p:calendar id="start" mode="inline" value="#{taskController.requestedDate}" timeZone="#{timeBean.utcTimeZone}"/>
+                        <p:outputPanel>
+                            <h:form>
+                                <h:panelGrid columns="2">
+                                    <h:outputText value="Select the requested date"/>
+                                    <p:calendar id="start" mode="inline" value="#{taskController.requestedDate}" timeZone="#{timeBean.utcTimeZone}"/>
 
-                                    </h:panelGrid>
-                                    <h:panelGrid columns="2">
-                                        <p:commandButton update="@form :TaskForm:" value="Request" action="#{taskController.checkRequestedDate()}" oncomplete="PF('requestDateDialog').hide()" />
-                                        <p:commandButton value="Abort" type="reset" onclick="PF('editTasksDialog').hide()"/>
-                                    </h:panelGrid>
-                                </h:form>
-                            </p:outputPanel>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2">
+                                    <p:commandButton update="@form :TaskForm:" value="Request" action="#{taskController.checkRequestedDate()}" oncomplete="PF('requestDateDialog').hide()" />
+                                    <p:commandButton value="Abort" type="reset" onclick="PF('editTasksDialog').hide()"/>
+                                </h:panelGrid>
+                            </h:form>
+                        </p:outputPanel>
 
-                        </p:dialog>
+                    </p:dialog>
 
-                        <p:dialog header="Edit Tasks" id="editTasksDialog" widgetVar="editTasksDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-                            <p:outputPanel>
-                                <h:form>
-                                    <h:panelGrid columns="2">
-                                        <h:outputText value="Select the Task"/>
-                                        <p:autoComplete id="task" dropdown="true" value="#{taskController.task}" completeMethod="#{completeMethodBean.completeTask}"/>
-                                    </h:panelGrid>
-                                    <h4>start time</h4>
-                                    <h:panelGrid columns="2">
-                                        <h:outputText value="hour"/>
-                                        <h:inputText id="startTimeh" value="#{taskController.startHour}"/>
-                                        <h:outputText value="minute"/>
-                                        <h:inputText id="startTimem" value="#{taskController.startMinute}"/>
-                                    </h:panelGrid>
-                                    <h4>end time</h4>
-                                    <h:panelGrid columns="2">
-                                        <h:outputText value="hour"/>
-                                        <h:inputText id="endTimeh" value="#{taskController.endHour}"/>
-                                        <h:outputText value="minute"/>
-                                        <h:inputText id="endTimem" value="#{taskController.endMinute}"/>
-                                    </h:panelGrid>
-                                    <h:panelGrid columns="2">
-                                        <p:commandButton value="Request" action="#{taskController.editDate()}" oncomplete="PF('editTasksDialog').hide()" update=":TaskForm:Tasks"/>
-                                        <p:commandButton value="Abort" type="reset" onclick="PF('editTasksDialog').hide()"/>
-                                    </h:panelGrid>
-                                </h:form>
-                            </p:outputPanel>
-                        </p:dialog>
+                    <p:dialog header="Edit Tasks" id="editTasksDialog" widgetVar="editTasksDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                        <p:outputPanel>
+                            <h:form>
+                                <h:panelGrid columns="2">
+                                    <h:outputText value="Select the Task"/>
+                                    <p:autoComplete id="task" dropdown="true" value="#{taskController.task}" completeMethod="#{completeMethodBean.completeTask}"/>
+                                </h:panelGrid>
+                                <h4>start time</h4>
+                                <h:panelGrid columns="2">
+                                    <h:outputText value="hour"/>
+                                    <h:inputText id="startTimeh" value="#{taskController.startHour}"/>
+                                    <h:outputText value="minute"/>
+                                    <h:inputText id="startTimem" value="#{taskController.startMinute}"/>
+                                </h:panelGrid>
+                                <h4>end time</h4>
+                                <h:panelGrid columns="2">
+                                    <h:outputText value="hour"/>
+                                    <h:inputText id="endTimeh" value="#{taskController.endHour}"/>
+                                    <h:outputText value="minute"/>
+                                    <h:inputText id="endTimem" value="#{taskController.endMinute}"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2">
+                                    <p:commandButton value="Request" action="#{taskController.editDate()}" oncomplete="PF('editTasksDialog').hide()" update=":TaskForm:Tasks"/>
+                                    <p:commandButton value="Abort" type="reset" onclick="PF('editTasksDialog').hide()"/>
+                                </h:panelGrid>
+                            </h:form>
+                        </p:outputPanel>
+                    </p:dialog>
 
 
 

@@ -9,7 +9,7 @@ Build the project
         
 Execute 
 
-        sudo java -cp target/rest-client-0.0.1-SNAPSHOT.jar:./lib/tinyb.jar:./target/lib/* com.example.setup.ClientApplication username password
+        sudo java -cp target/rest-client-0.0.1-SNAPSHOT.jar:./lib/tinyb.jar:./target/lib/* at.ac.uibk.rest.ClientApplication admin passwd
 
 ## Sources
 * [Raspberry Pi Bluetooth Manager TinyB - Building bluez 5.47 from sources](https://github.com/sputnikdev/bluetooth-manager-tinyb)
