@@ -3,6 +3,8 @@ package at.ac.uibk.rest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.auth.AuthScope;
@@ -82,6 +84,16 @@ public class Client implements Runnable {
         HttpResponse response = httpClient.execute(httpPost);
 
         if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+            HttpEntity entity = response.getEntity();
+            String responseString = IOUtils.toString(entity.getContent());
+            JSONObject responseJson = new JSONObject(responseString);
+
+            Long id = responseJson.getLong("id");
+            String macAddress = responseJson.getString("macAddress");
+            //String hist = responseJson.getString("history");
+
+            System.out.printf("Id: #%d, MAC-Address: %s\n", id, macAddress);
+
             return true;
         } else {
             System.err.printf("Error sending data, service returned status code %d\n", response.getStatusLine().getStatusCode());
