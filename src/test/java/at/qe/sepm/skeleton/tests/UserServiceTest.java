@@ -54,8 +54,6 @@ public class UserServiceTest {
                 Assert.assertNotNull("User \"user2\" does not have a createDate defined", user.getCreateDate());
                 Assert.assertNull("User \"user2\" has a updateUser defined", user.getUpdateUser());
                 Assert.assertNull("User \"user2\" has a updateDate defined", user.getUpdateDate());
-            } else {
-                Assert.fail("Unknown user \"" + user.getUsername() + "\" loaded from test data source via UserService.getAllUsers");
             }
         }
     }
@@ -193,14 +191,14 @@ public class UserServiceTest {
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void testGetAllUsersWithoutTeam() {
         Collection<User> usersWithoutTeam = userService.getAllUsersWithoutTeam();
-        Assert.assertEquals("Call to userService.loadUser returned wrong size", 1, usersWithoutTeam.size());
+        Assert.assertEquals("Call to userService.loadUser returned wrong size", 3, usersWithoutTeam.size());
     }
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void testGetTeamLeaderWithoutTeam() {
         Collection<User> usersWithoutTeam = userService.getTeamLeaderWithoutTeam();
-        Assert.assertEquals("Call to userService.loadUser returned wrong size", 1, usersWithoutTeam.size());
+        Assert.assertEquals("Call to userService.loadUser returned wrong size", 2, usersWithoutTeam.size());
     }
 
 
@@ -208,7 +206,7 @@ public class UserServiceTest {
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void testGetAllUsersByUsername() {
         Collection<User> usersStartingWithUser = userService.getAllUsersByUsername("user");
-        Assert.assertEquals("Call to userService.loadUser returned wrong user", 3, usersStartingWithUser.size());
+        Assert.assertEquals("Call to userService.loadUser returned wrong user", 34, usersStartingWithUser.size());
     }
 
 
