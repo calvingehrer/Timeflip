@@ -22,14 +22,14 @@
                             <p:autoUpdate />
                         </p:messages>
 
-                        <p:dataTable id="Tasks" var="task" value="#{taskListController.tasksFromUser}" scrollable="true">
+                        <p:dataTable id="Tasks" var="task" value="#{taskListController.sortedTasksFromUser}" scrollable="true">
                             <f:facet name="header">
                                 My Tasks
                             </f:facet>
                             <p:column headerText="Task">
                                 <h:outputText value="#{task.task}"/>
                             </p:column>
-                            <p:column headerText="Start">
+                            <p:column headerText="Start" sortBy="#{task.startTime}" >
                                 <h:outputText value="#{task.startTime}"/>
                             </p:column>
                             <p:column headerText="End">

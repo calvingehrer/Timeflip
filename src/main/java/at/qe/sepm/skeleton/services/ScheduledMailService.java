@@ -16,8 +16,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 import java.time.Instant;
-import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Map;
 
 @Service
@@ -41,7 +39,7 @@ public class ScheduledMailService {
      */
 
 
-    @Scheduled(cron = "* */5 * * * *", zone = "Europe/Vienna")
+    @Scheduled(cron = "* */1 * * * *", zone = "Europe/Vienna")
     public void sendDailyStatistics () {
         for (User u: mailRepository.findByInterval(Interval.DAILY)) {
             mailService.sendEmailTo(u, "your daily stats", generateStatisticsMessage(u, Interval.DAILY));

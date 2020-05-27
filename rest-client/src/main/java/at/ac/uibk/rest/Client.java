@@ -2,7 +2,6 @@ package at.ac.uibk.rest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -17,9 +16,7 @@ import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.io.IOException;
-import java.util.Date;
 
 /**
  * Client class to execute http requests
@@ -39,6 +36,7 @@ public class Client implements Runnable {
         credentialsProvider.setCredentials(AuthScope.ANY, credentials);
     }
 
+
     /**
      * Send every HistoryEntry in the list to the backend server
      */
@@ -54,11 +52,12 @@ public class Client implements Runnable {
                     e.printStackTrace();
                 }
             }
-            System.out.println("(" + new Date() + ") Done.");
+
         } catch (IOException e) {
-            e.printStackTrace();
+            // ignore
         }
     }
+
 
     /**
      * Takes a HistoryEntry Object as input and creates JSONObject for transmission.
@@ -81,9 +80,11 @@ public class Client implements Runnable {
         requestJson.put("history", historyEntries);
 
         httpPost.setEntity(new StringEntity(historyEntry.toString()));
+
         HttpResponse response = httpClient.execute(httpPost);
 
         if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+
             HttpEntity entity = response.getEntity();
             String responseString = IOUtils.toString(entity.getContent());
             JSONObject responseJson = new JSONObject(responseString);
@@ -93,12 +94,12 @@ public class Client implements Runnable {
             //String hist = responseJson.getString("history");
 
             System.out.printf("Id: #%d, MAC-Address: %s\n", id, macAddress);
-
             return true;
         } else {
-            System.err.printf("Error sending data, service returned status code %d\n", response.getStatusLine().getStatusCode());
+            System.err.printf("Error posting message, service returned status code %d\n", response.getStatusLine().getStatusCode());
             return false;
         }
     }
 
 }
+

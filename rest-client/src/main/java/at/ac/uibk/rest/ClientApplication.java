@@ -13,54 +13,49 @@ import java.util.*;
 
 public class ClientApplication {
     private static final String DEFAULT_MESSAGING_SERVICE_URI = "http://localhost:8080/history";
-
-    public static void main(String[] args) {
-        Timer timer = new Timer();
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                System.out.println("(" + new Date() + ") Sending...");
-
-                BluetoothManager manager = BluetoothManager.getBluetoothManager();
-                manager.startDiscovery();
-                
-                List<BluetoothDevice> sensors = null;
-                try {
-                    sensors = TimeFlipService.getTimeFlipDevices();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                try {
-                    manager.stopDiscovery();
-                } catch (BluetoothException e) {
-                    System.err.println("Discovery could not be stopped.");
-                }
+    private static final float SCALE_LSB = 0.03125f;
 
 
-                if (sensors == null) {
-                    System.exit(-1);
-                }
+    public static void main(String[] args) throws InterruptedException {
 
-                JSONArray historyObjects = null;
-                try {
-                    historyObjects = TimeFlipService.getHistoryObjects(sensors);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+        BluetoothManager manager = BluetoothManager.getBluetoothManager();
 
-                String uri = DEFAULT_MESSAGING_SERVICE_URI;
+        boolean discoveryStarted = manager.startDiscovery();
 
-                if (args.length > 0) {
-                    uri = args[0];
-                }
+        System.out.println("The discovery started: " + (discoveryStarted ? "true" : "false"));
+        List<BluetoothDevice> sensors = TimeFlipService.getTimeFlipDevices();
 
-                Thread t = new Thread(new Client("admin", "passwd", historyObjects, uri));
-                t.start();
-            }
-        };
+        try {
+            manager.stopDiscovery();
+        } catch (BluetoothException e) {
+            System.err.println("Discovery could not be stopped.");
+        }
 
-        timer.schedule(task, 1, 1000*60);
+        if (sensors == null) {
+            System.err.println("No sensor found with the provided name.");
+            System.exit(-1);
+        }
+
+        System.out.println("Found devices ... ");
+
+        JSONArray historyObjects = TimeFlipService.getHistoryObjects(sensors);
+
+        if (args.length < 2) {
+            System.out.println("No username and/or password provided, exiting ...");
+            System.exit(1);
+        }
+        String username = args[0];
+        String psswd = args[1];
+        String uri = DEFAULT_MESSAGING_SERVICE_URI;
+
+        if (args.length > 2) {
+            uri = args[2];
+        }
+
+        Thread t = new Thread(new Client(username, psswd, historyObjects, uri));
+        t.start();
+
     }
 }
+
 
