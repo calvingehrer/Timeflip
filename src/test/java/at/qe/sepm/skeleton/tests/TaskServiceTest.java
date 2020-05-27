@@ -234,7 +234,7 @@ class TaskServiceTest{
 
     @Test
     @WithMockUser(username="admin",roles={"USER","ADMIN"})
-    void checkIfEarlierThanTwoWeeks() {
+    void checkIfEarlierThanTwoWeeksTest() {
 
         Calendar inTime = Calendar.getInstance(timeBean.getUtcTimeZone());
         Calendar earlierDate = Calendar.getInstance(timeBean.getUtcTimeZone());
@@ -251,7 +251,7 @@ class TaskServiceTest{
 
     @Test
     @WithMockUser(username="admin",roles={"USER","ADMIN"})
-    void checkIfAfterToday() {
+    void checkIfAfterTodayTest() {
         Calendar afterToday = Calendar.getInstance();
 
         afterToday.add(Calendar.DATE, 2);
@@ -261,7 +261,7 @@ class TaskServiceTest{
 
     @Test
     @WithMockUser(username="admin",roles={"USER","ADMIN"})
-    void checkTime() {
+    void checkTimeTest() {
 
 
         Assertions.assertThrows(TaskException.class, () -> taskService.checkTime(25L, 10L, 0L, 50L));
@@ -275,7 +275,7 @@ class TaskServiceTest{
 
     @Test
     @WithMockUser(username="admin",roles={"USER","ADMIN"})
-    void deleteTask() {
+    void deleteTaskTest() {
         User user = userRepository.findFirstByUsername("admin");
         currentUserBean.setCurrentUser(user);
 
@@ -288,5 +288,21 @@ class TaskServiceTest{
         Assert.assertNotEquals("Tasks should not be the same after deleting one",taskList, newTaskList);
         taskList.remove(1);
         Assert.assertEquals("After deleting the same Task from the taskList both list should be the same", taskList, newTaskList);
+    }
+
+
+    @Test
+    @WithMockUser(username="admin",roles={"USER","ADMIN"})
+    void deleteTaskOfUser() {
+        User user = userRepository.findFirstByUsername("user23");
+        currentUserBean.setCurrentUser(user);
+
+        List<Task> taskList = taskRepository.findTasksFromUser(user);
+        Assert.assertTrue("user23 should have at least 2 tasks",!taskList.isEmpty());
+
+        taskService.deleteTasksOfUser(user);
+
+        List<Task> newTaskList = taskRepository.findTasksFromUser(user);
+        Assert.assertTrue("user23 should have no tasks anymore",newTaskList.isEmpty());
     }
 }

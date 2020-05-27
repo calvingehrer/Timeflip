@@ -69,9 +69,9 @@ public class BadgeServiceTest {
         List<Task> taskList = new ArrayList<>();
 
         Calendar calendar = Calendar.getInstance(timeBean.getUtcTimeZone());
-        calendar.set(2020, Calendar.MAY, 20, 10, 00);
+        calendar.set(2021, Calendar.MARCH, 20, 10, 00);
         Instant taskStart = calendar.toInstant();
-        calendar.set(2020, Calendar.MAY, 20, 11, 00);
+        calendar.set(2021, Calendar.MARCH, 20, 11, 00);
         Instant taskEnd = calendar.toInstant();
 
         for (int i = 1; i < 7; i++){
@@ -85,9 +85,9 @@ public class BadgeServiceTest {
             taskList.add(task);
         }
 
-        calendar.set(2020, Calendar.MAY, 27, 21, 00);
+        calendar.set(2021, Calendar.MARCH, 27, 21, 00);
         taskStart = calendar.toInstant();
-        calendar.set(2020, Calendar.MAY, 27, 22, 00);
+        calendar.set(2021, Calendar.MARCH, 27, 22, 00);
         taskEnd = calendar.toInstant();
 
         taskList.get(0).setUser(userRepository.findFirstByUsername("user1"));
@@ -111,16 +111,16 @@ public class BadgeServiceTest {
 
 
 
-        calendar.set(2020, Calendar.MAY, 25, 00, 00);
+        calendar.set(2021, Calendar.MARCH, 25, 00, 00);
         Instant weekStart = calendar.toInstant();
-        calendar.set(2020, Calendar.MAY, 31, 23, 59);
+        calendar.set(2021, Calendar.MARCH, 31, 23, 59);
         Instant weekEnd = calendar.toInstant();
         userRepository.findFirstByUsername("user4").getId();
 
 
         badgeService.evaluateWeeklyBadges(weekStart, weekEnd);
 
-        calendar.set(2020, Calendar.MAY, 23, 00, 00);
+        calendar.set(2021, Calendar.MARCH, 23, 00, 00);
         Instant beforeBadges = calendar.toInstant();
 
         List<Badge> badges = badgeRepository.findBadgesAfterDate(beforeBadges);

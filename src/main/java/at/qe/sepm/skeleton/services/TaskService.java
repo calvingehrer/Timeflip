@@ -281,7 +281,7 @@ public class TaskService {
         logger.logDeletion(task.getTask().toString(), currentUserBean.getCurrentUser());
     }
 
-    public void deleteTaskOfUser (User user) {
+    public void deleteTasksOfUser (User user) {
         for (Task t: taskRepository.findTasksFromUser(user)) {
             deleteTask(t);
         }
