@@ -1,9 +1,14 @@
 package at.qe.sepm.skeleton.ui.controllers;
 
 import at.qe.sepm.skeleton.model.Request;
-import at.qe.sepm.skeleton.model.User;
+import at.qe.sepm.skeleton.model.TaskRequest;
+import at.qe.sepm.skeleton.model.Vacation;
+import at.qe.sepm.skeleton.model.VacationRequest;
 import at.qe.sepm.skeleton.services.RequestService;
 import at.qe.sepm.skeleton.services.UserService;
+import at.qe.sepm.skeleton.services.VacationService;
+import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
+import at.qe.sepm.skeleton.utils.MessagesView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -11,6 +16,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @Scope("view")
@@ -19,43 +25,32 @@ public class RequestController implements Serializable  {
     RequestService requestService;
 
     @Autowired
+    VacationService vacationService;
+
+    @Autowired
     UserService userService;
 
-    private Request request;
+    @Autowired
+    CurrentUserBean currentUserBean;
 
-    private User currentUser;
+    private TaskRequest taskRequest;
+
 
     /**
      * A Function to get the current user
      */
     @PostConstruct
     public void init() {
-        this.setCurrentUser(userService.getAuthenticatedUser());
-    }
-
-    public User getCurrentUser() {
-        return currentUser;
-    }
-
-    public void setCurrentUser(User currentUser) {
-        this.currentUser = currentUser;
-    }
-
-    public Request getRequest() {
-        return request;
-    }
-
-    public void setRequest(Request request) {
-        this.request = request;
+        currentUserBean.init();
     }
 
     /**
-     * Function to get open requests of request handler
+     * Function to get open requests of taskRequest handler
      * @return all the requests the leader has yet to edit
      */
 
     public List<Request> getOpenRequestsLeader() {
-        return requestService.getAllOpenRequestsOfLeader(getCurrentUser());
+        return requestService.getAllOpenRequestsOfLeader(currentUserBean.getCurrentUser());
     }
 
     /**
@@ -63,32 +58,45 @@ public class RequestController implements Serializable  {
      * @return all the requests of the employee that have yet to be edited
      */
 
-    public List<Request> getOpenRequestsEmployee() { return requestService.getOpenRequestsOfEmployee(getCurrentUser()); }
+    public List<Request> getOpenRequestsEmployee() { return requestService.getOpenRequestsOfEmployee(currentUserBean.getCurrentUser()); }
 
     /**
      * Function to get accepted requests of requester
      * @return all accepted requests of user
      */
 
-    public List<Request> getAcceptedRequestsEmployee() { return requestService.getAcceptedRequestsOfEmployee(getCurrentUser()); }
+    public List<Request> getAcceptedRequestsEmployee() { return requestService.getAcceptedRequestsOfEmployee(currentUserBean.getCurrentUser()); }
 
     /**
      * Function to get declined requests of requester
      * @return all declined requests of user
      */
 
-    public List<Request> getDeclinedRequestsEmployee() { return requestService.getDeclinedRequestsOfEmployee(getCurrentUser()); }
+    public List<Request> getDeclinedRequestsEmployee() { return requestService.getDeclinedRequestsOfEmployee(currentUserBean.getCurrentUser()); }
 
     /**
-     * Function to accept a request
+     * Function to accept a taskRequest
      * @param request
      */
     public void acceptRequest(Request request) {
         requestService.acceptRequest(request);
+        if (request.getDiscriminatorValue() == 2) {
+            VacationRequest vr = (VacationRequest) request;
+            Vacation vacation = new Vacation();
+            vacation.setStart(vr.getRequestedStartDate().toInstant());
+            vacation.setEnd(vr.getRequestedEndDate().toInstant());
+            try {
+                vacationService.addVacation(vr.getRequester(), vacation);
+            }
+            catch (Exception e) {
+                MessagesView.errorMessage("Vacation", "The granted vacation ist not valid, it is denied");
+                requestService.declineRequest(request);
+            }
+        }
     }
 
     /**
-     * Function to decline a request
+     * Function to decline a taskRequest
      * @param request
      */
     public void declineRequest(Request request) {
@@ -96,10 +104,15 @@ public class RequestController implements Serializable  {
     }
 
     /**
-     * If a request is declined or was already used the user can delete it to keep an overview
+     * If a taskRequest is declined or was already used the user can delete it to keep an overview
+     * @param request
      */
     public void deleteRequest(Request request) {
         requestService.deleteRequest(request);
     }
 
+    public List<Request> getAcceptedTaskRequestsEmployee() { return requestService.getAcceptedRequestsOfEmployee(currentUserBean.getCurrentUser())
+            .stream()
+            .filter(request -> request.getDiscriminatorValue() == 1)
+            .collect(Collectors.toList()); }
 }

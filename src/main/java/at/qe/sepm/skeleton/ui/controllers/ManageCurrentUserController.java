@@ -3,8 +3,10 @@ package at.qe.sepm.skeleton.ui.controllers;
 import at.qe.sepm.skeleton.model.Interval;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.UserService;
+import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import at.qe.sepm.skeleton.ui.beans.SessionInfoBean;
 import at.qe.sepm.skeleton.utils.MessagesView;
+import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,12 +24,12 @@ public class ManageCurrentUserController implements Serializable {
     private static final long serialVersionUID = -5637562154142043652L;
 
     @Autowired
-    private SessionInfoBean sessionInfoBean;
+    CurrentUserBean currentUserBean;
 
     @Autowired
     private UserService userService;
 
-    private User currentUser;
+    private Logger<Exception, User> logger;
 
     private String intervall;
 
@@ -36,6 +38,8 @@ public class ManageCurrentUserController implements Serializable {
     private String newPassword;
 
     private String confirmNew;
+
+    private User currentUser;
 
 
     public String getOldPassword() {
@@ -78,27 +82,18 @@ public class ManageCurrentUserController implements Serializable {
         this.currentUser = currentUser;
     }
 
-    public void reloadUser() {
-        this.setCurrentUser(this.userService.loadUser(currentUser.getUsername()));
-    }
-
-
     @PostConstruct
     public void init() {
-        this.setCurrentUser(userService.getAuthenticatedUser());
+        currentUserBean.init();
+        this.setCurrentUser(currentUserBean.getCurrentUser());
     }
 
     public String getFullName() {
-        return currentUser.getFirstName() + " " + currentUser.getLastName();
-    }
-
-    public List<String> completeIntervall(String query) {
-        String upperQuery = query.toUpperCase();
-        return Interval.getAllIntervals().stream().filter(a -> a.contains(upperQuery)).collect(Collectors.toList());
+        return currentUserBean.getCurrentUser().getFirstName() + " " + currentUserBean.getCurrentUser().getLastName();
     }
 
     public boolean checkOldPassword(){
-        return passwordEncoder.matches(oldPassword, currentUser.getPassword());
+        return passwordEncoder.matches(oldPassword, currentUserBean.getCurrentUser().getPassword());
     }
 
     public boolean checkConfirmedPassword(){
@@ -106,17 +101,23 @@ public class ManageCurrentUserController implements Serializable {
         return passwordEncoder.matches(confirmNew, newPassword);
     }
 
+    /**
+     * method to change the password
+     */
+
 
     public void changePassword(){
         if(checkOldPassword()) {
             if (checkConfirmedPassword()){
                     MessagesView.successMessage("passwordControl", "The new password will be saved");
                 try {
-                    this.currentUser.setPassword(newPassword);
-                    this.userService.updateUser(currentUser);
-                    reloadUser();
+                    User cu = currentUserBean.getCurrentUser();
+                    cu.setPassword(newPassword);
+                    this.userService.updateUser(cu);
+                    currentUserBean.reloadUser();
                 } catch (Exception e) {
                     e.printStackTrace();
+                    logger.logError(e, currentUserBean.getCurrentUser());
                 }
             }
             else{
@@ -128,14 +129,19 @@ public class ManageCurrentUserController implements Serializable {
         }
     }
 
+    /**
+     * after a users details have been changed it updates the fields and saves them
+     */
+
 
     public void saveUserDetails() {
         try {
-            this.userService.updateUser(currentUser);
-            reloadUser();
+            this.userService.updateUser(currentUserBean.getCurrentUser());
+            currentUserBean.reloadUser();
             FacesContext.getCurrentInstance().getExternalContext().redirect("/employee/profile.xhtml");
         } catch (Exception e) {
             e.printStackTrace();
+            logger.logError(e, currentUserBean.getCurrentUser());
         }
     }
 

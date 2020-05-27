@@ -3,6 +3,7 @@ package at.qe.sepm.skeleton.ui.beans;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.model.UserRole;
 import at.qe.sepm.skeleton.services.UserService;
+import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.Authentication;
@@ -23,6 +24,8 @@ public class SessionInfoBean {
 
     @Autowired
     private UserService userService;
+
+    private Logger<String, User> logger;
 
     /**
      * Attribute to cache the current user.
@@ -94,6 +97,7 @@ public class SessionInfoBean {
             return false;
         }
     }
+
 
     /**
      * Checks if the user for this session has the given role (c.f.

@@ -1,0 +1,18 @@
+version: '3'
+services:
+  db:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=Timeflippers.123
+      - MYSQL_DATABASE=timeflip
+    restart: always
+    ports:
+      - 3307:3306
+
+  app:
+    build: .
+    image: app:latest
+    depends_on:
+      - db
+    ports:
+      - 8080:8080

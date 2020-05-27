@@ -32,16 +32,10 @@ public class TeamDetailController implements Serializable {
 
     private User newLeader;
 
-    private List<User> employees;
-
-
-
-
     public void setTeam(Team team) {
         this.team = team;
         doReloadTeam();
     }
-
 
     public Team getTeam(){
         return team;
@@ -55,9 +49,13 @@ public class TeamDetailController implements Serializable {
         team = this.teamService.saveTeam(team);
     }
 
+    /**
+     * deletes the team if it is empty
+     * displays a warn message if it is no possible
+     * otherwise it displays a success message
+     */
 
     public void doDeleteTeam(){
-        FacesMessage message;
         if (checkIfDeletionIsAllowed(team)) {
             try {
                 this.teamService.deleteTeam(team);
@@ -68,7 +66,6 @@ public class TeamDetailController implements Serializable {
             }
         }
         else {
-            System.out.println("hello");
             MessagesView.warnMessage("team deletion", "You can't delete this team");
             return;
         }
@@ -76,6 +73,12 @@ public class TeamDetailController implements Serializable {
         MessagesView.successMessage("team deletion", "Team deleted");
 
     }
+
+    /**
+     * checks if a deletion is allowed
+     * @param team
+     * @return
+     */
 
     public boolean checkIfDeletionIsAllowed (Team team){
         if (!userService.getUsersOfTeam(team).isEmpty()) {
@@ -87,8 +90,6 @@ public class TeamDetailController implements Serializable {
         return true;
     }
 
-
-
     public User getEmployee() {
         return employeeAdd;
     }
@@ -96,6 +97,10 @@ public class TeamDetailController implements Serializable {
     public void setEmployee(User employee){
         this.employeeAdd = employee;
     }
+
+    /**
+     * add employee to team
+     */
 
     public void addEmployee() {
         employeeAdd.setTeam(team);
@@ -119,18 +124,21 @@ public class TeamDetailController implements Serializable {
         this.newLeader = newLeader;
     }
 
+    /**
+     * removes employee from team
+     */
+
     public void removeEmployee() {
         this.employeeRemove.setTeam(null);
         this.employeeRemove.setDepartment(null);
         userService.saveUser(employeeRemove);
     }
 
-    public List<User> getEmployees() {
-        return teamService.getUsersOfTeam(this.team);
-    }
+    /**
+     * replaces the team leader
+     */
 
     public void replaceLeader() {
-
         User oldLeader = userService.getTeamLeader(team);
         if (oldLeader != null) {
             oldLeader.setTeam(null);

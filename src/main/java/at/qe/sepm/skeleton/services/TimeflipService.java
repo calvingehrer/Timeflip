@@ -5,13 +5,15 @@ import at.qe.sepm.skeleton.model.Raspberry;
 import at.qe.sepm.skeleton.model.Timeflip;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.TimeflipRepository;
+import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
+import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import javax.annotation.PostConstruct;
+import java.util.List;
 
 
 @Component
@@ -22,41 +24,65 @@ public class TimeflipService {
     @Autowired
     TimeflipRepository timeflipRepository;
 
-    @Autowired
-    private MailService mailService;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public Timeflip getTimeFlipByAddress(String macAddress){
         return timeflipRepository.findByMacAddress(macAddress);
     }
 
+    @Autowired
+    private Logger<String, User> logger;
+
+    @Autowired
+    CurrentUserBean currentUserBean;
+
+    /**
+     * A Function to get the current user
+     */
+
+    @PostConstruct
+    public void init() {
+        currentUserBean.init();
+    }
+
     @PreAuthorize("hasAuthority('ADMIN')")
-    public List<Timeflip> getAllTimeflips(){
+    public List<Timeflip> getAllTimeflips() {
         return timeflipRepository.findAll();
     }
 
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public List<Timeflip> getAllTimeflipsByMacAddress(String macAddress){
+    public List<Timeflip> getAllTimeflipsByMacAddress(String macAddress) {
         return timeflipRepository.findAllTimeflipsByMacAddress(macAddress);
     }
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DEPARTMENTLEADER')")
-    public void addNewTimeflip(Timeflip timeflip, User user, Raspberry raspberry) {
+    public void addNewTimeflip(Timeflip timeflip, User user) {
 
         Timeflip newTimeflip = new Timeflip();
         newTimeflip.setMacAddress(timeflip.getMacAddress());
         newTimeflip.setUser(user);
-        newTimeflip.setRaspberry(raspberry);
         saveTimeflip(newTimeflip);
+        logger.logCreation(timeflip.getId(), currentUserBean.getCurrentUser());
     }
 
     @PreAuthorize("hasAuthority('EMPLOYEE')")
     public Timeflip saveTimeflip(Timeflip timeflip) {
+        logger.logUpdate(timeflip.getId(), currentUserBean.getCurrentUser());
         return timeflipRepository.save(timeflip);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public void deleteTimeflip(Timeflip timeflip) {
+
+
+        timeflip.setRaspberry(null);
+        timeflip.setTasks(null);
+        timeflip.setUser(null);
+        timeflip.setCreateDate(null);
+
+        timeflipRepository.delete(timeflip);
+        logger.logDeletion(timeflip.getId(), currentUserBean.getCurrentUser());
     }
 
 
@@ -70,6 +96,7 @@ public class TimeflipService {
         return timeflipRepository.findTimeflipOfUser(currentUser);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteTimeFlipOfUser(User user) {
         Timeflip timeflip = timeflipRepository.findTimeflipOfUser(user);
         if (timeflip != null) {
@@ -77,6 +104,7 @@ public class TimeflipService {
             timeflipRepository.save(timeflip);
             timeflipRepository.delete(timeflip);
         }
+        logger.logDeletion(timeflip.getId(), user);
     }
 
 

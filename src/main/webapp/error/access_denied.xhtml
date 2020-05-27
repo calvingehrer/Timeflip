@@ -30,7 +30,10 @@
         <div class="bottom">
             <span class="exception-panel-header">Access Denied</span>
             <span class="exception-panel-subheader">You do not have access to the requested page.</span>
-            <p:commandButton type="button" value="Turn to home page" styleClass="raised-btn"/>
+            <h:form>
+                <p:commandButton ajax="false" value="TURN TO HOME PAGE" styleClass="raised-btn"
+                                 action="/secured/dashboard.xhtml?faces-redirect=true"/>
+            </h:form>
         </div>
     </div>
 

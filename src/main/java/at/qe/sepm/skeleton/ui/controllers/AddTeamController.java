@@ -4,6 +4,7 @@ import at.qe.sepm.skeleton.model.Department;
 import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.TeamService;
+import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -18,34 +19,33 @@ import java.util.Set;
 public class AddTeamController implements Serializable {
     @Autowired
     private TeamService teamService;
+    @Autowired
+    private Logger<String, User> logger;
+
+    private final Set<User> employees = new HashSet<>();
 
     private Team team = new Team();
 
     private User employee;
 
-    private Set<User> employees = new HashSet<>();
-
     private Department department;
 
-    boolean check;
-
-
-    public void add(){
-        teamService.addNewTeam(employees,team);
+    public void add() {
+        teamService.addNewTeam(employees, team);
         resetTeam();
     }
 
-    public void resetTeam(){
+    public void resetTeam() {
         this.team = new Team();
-        //this.employees = new HashSet<>();
     }
 
-    public Team getTeam(){return team;}
-
-    public TeamService getTeamService() {
-        return teamService;
+    public void addDepartment() {
+        this.team.setDepartment(this.department);
     }
 
+    public void addEmployee(){
+        this.employees.add(this.employee);
+    }
 
     public Department getDepartment() {
         return department;
@@ -55,12 +55,8 @@ public class AddTeamController implements Serializable {
         this.department = department;
     }
 
-    public void addDepartment() {
-        this.team.setDepartment(this.department);
-    }
-
-    public void setTeamService(TeamService teamService) {
-        this.teamService = teamService;
+    public Team getTeam() {
+        return team;
     }
 
     public void setTeam(Team team) {
@@ -73,10 +69,6 @@ public class AddTeamController implements Serializable {
 
     public void setEmployee(User employee){
         this.employee = employee;
-    }
-
-    public void addEmployee(){
-        this.employees.add(this.employee);
     }
 
 }

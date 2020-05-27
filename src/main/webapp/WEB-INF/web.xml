@@ -14,12 +14,12 @@
     </error-page>
     <error-page>
         <error-code>404</error-code>
-        <location>/404.xhtml</location>
+        <location>/error/404.xhtml</location>
     </error-page>
 
     <error-page>
         <error-code>500</error-code>
-        <location>/error.xhtml</location>
+        <location>/error/error.xhtml</location>
     </error-page>
 
     <context-param>

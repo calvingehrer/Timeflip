@@ -7,23 +7,25 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-public class Request implements Persistable<Long>, Serializable {
-
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="request_type", discriminatorType = DiscriminatorType.INTEGER)
+public abstract class Request implements Persistable<Long>, Serializable {
     private static final long serialVersionUID = 1543543567124567565L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="request_id")
     private Long Id;
 
-    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER, optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(name="requester")
     private User requester;
 
-    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER, optional = true)
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(name="request_handler_tl")
     private User requestHandlerTeamLeader;
 
-    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(name="request_handler_dl")
     private User requestHandlerDepartmentLeader;
 
@@ -34,7 +36,6 @@ public class Request implements Persistable<Long>, Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createDate;
 
-    private Date requestedDate;
 
     private String description;
 
@@ -91,14 +92,8 @@ public class Request implements Persistable<Long>, Serializable {
         this.createDate = createDate;
     }
 
-    public Date getRequestedDate() {
-        return requestedDate;
-    }
-
-    public void setRequestedDate(Date requestedDate) {
-        this.requestedDate = requestedDate;
-    }
-
     @Override
     public boolean isNew() { return null == createDate; }
+
+    public abstract int getDiscriminatorValue();
 }

@@ -10,14 +10,13 @@
                 <h:form id="menuform">
                     <div class="layout-menu-title">MAIN MENU</div>
                     <pe:menu widgetVar="me">
-
                         <p:menuitem value="Dashboard" url="/secured/dashboard.xhtml"
                                     rendered="#{sessionInfoBean.hasRole('EMPLOYEE')}"
                                     icon="fa fa-list-alt"/>
 
                         <p:menuitem value="My Timeflip" url="/employee/myTimeflip.xhtml"
                                     rendered="#{sessionInfoBean.hasRole('EMPLOYEE')}"
-                                    icon="fa fa-list-alt"/>
+                                    icon="fa fa-cube"/>
 
                         <p:submenu label="Statistics" rendered="#{sessionInfoBean.hasRole('EMPLOYEE')}"
                                    icon="fa fa-line-chart" >
@@ -33,18 +32,15 @@
                         <p:submenu label="Department" rendered="#{sessionInfoBean.hasRole('DEPARTMENTLEADER')}" icon="fa fa-users">
                             <p:menuitem value="My Department" url="/departmentleader/department.xhtml"/>
                             <p:menuitem value="Time Changes" url="/secured/change-requests.xhtml"/>
+                            <p:menuitem value="AuditLog" url="/departmentleader/auditlog.xhtml"/>
                         </p:submenu>
                         <p:submenu label="Badges" rendered="#{sessionInfoBean.hasRole('EMPLOYEE')}"
                             icon="fa fa-trophy">
                             <p:menuitem value="My Badges" url="/employee/badges.xhtml"/>
-                            <p:menuitem value="Team" url="/teamleader/team-badges.xhtml"
-                                        rendered="#{sessionInfoBean.hasRole('TEAMLEADER') or sessionInfoBean.hasRole('DEPARTMENTLEADER')}"/>
                             <p:menuitem value="Department" url="/departmentleader/department-badges.xhtml"
                                         rendered="#{sessionInfoBean.hasRole('DEPARTMENTLEADER')}"/>
-                            <p:menuitem value="Leaderboard" url="/employee/leaderboard.xhtml"/>
                             <p:menuitem value="Possible Badges" url="/employee/possible-badges.xhtml"/>
                         </p:submenu>
-
 
 
                         <p:submenu label="User" rendered="#{sessionInfoBean.hasRole('ADMIN')}"
@@ -63,7 +59,7 @@
                                     icon="fa fa-list-alt"/>
 
 
-                        <p:menuitem id="logout" value="Logout" rendered="#{sessionInfoBean.loggedIn}" outcome="/login" icon="fa fa-road"/>
+                        <p:menuitem id="logout" value="Logout" rendered="#{sessionInfoBean.loggedIn}" outcome="/login" icon="fa fa-sign-out"/>
                     </pe:menu>
                 </h:form>
             </div>

@@ -66,15 +66,15 @@
                     <h:outputText value="Select the start of the vacation"/>
                     <h:outputText value="Select the end of the vacation"/>
 
-                    <p:calendar id="start" mode="inline" value="#{vacationController.beginVacation}"
+                    <p:calendar id="start" mode="inline" value="#{vacationController.beginVacation}" timeZone="#{timeBean.getUtcTimeZone()}"
                     />
 
-                    <p:calendar id="end" mode="inline" value="#{vacationController.endOfVacation}"
+                    <p:calendar id="end" mode="inline" value="#{vacationController.endOfVacation}" timeZone="#{timeBean.getUtcTimeZone()}"
                     />
 
-                    <p:commandButton value="Save" action="#{vacationController.addVacation}"
+                    <p:commandButton value="Request" action="#{vacationController.addVacation}"
                                      oncomplete="PF('addVacationDialog').hide()"
-                                     update="vacationListForm growl addVacationMessages"/>
+                                     update="vacationListForm growl addVacationMessages "/>
                 </p:panelGrid>
             </h:form>
         </p:dialog>

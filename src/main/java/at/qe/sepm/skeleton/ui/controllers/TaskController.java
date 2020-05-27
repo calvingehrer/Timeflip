@@ -4,6 +4,7 @@ import at.qe.sepm.skeleton.model.*;
 import at.qe.sepm.skeleton.services.RequestService;
 import at.qe.sepm.skeleton.services.TaskService;
 import at.qe.sepm.skeleton.services.UserService;
+import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import at.qe.sepm.skeleton.utils.MessagesView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -25,15 +26,17 @@ import java.util.stream.Collectors;
 public class TaskController implements Serializable  {
 
     @Autowired
-    RequestService requestService;
+    private RequestService requestService;
 
     @Autowired
-    TaskService taskService;
+    private TaskService taskService;
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
-    private User currentUser;
+    @Autowired
+    CurrentUserBean currentUserBean;
+
 
     private TaskEnum task;
 
@@ -47,37 +50,17 @@ public class TaskController implements Serializable  {
 
     private int endMinute;
 
-    private Date startOfTimeRange;
-
-    private Date endOfTimeRange;
+    /**
+     * initialize the current user
+     */
 
     @PostConstruct
     public void init() {
-        this.setCurrentUser(userService.getAuthenticatedUser());
-    }
-
-    public User getCurrentUser() {
-        return currentUser;
-    }
-
-    public void setCurrentUser(User currentUser) {
-        this.currentUser = currentUser;
+        currentUserBean.init();
     }
 
     public long duration(Task task) {
         return taskService.getDuration(task);
-    }
-
-    public List<Task> getTasksFromUser() {
-        if (this.getStartOfTimeRange() == null || this.getEndOfTimeRange() == null) {
-            return taskService.getAllTasksBetweenDates(getCurrentUser(), null, null);
-        }
-        return taskService.getAllTasksBetweenDates(getCurrentUser(), this.getStartOfTimeRange().toInstant(), this.getEndOfTimeRange().toInstant());
-    }
-
-    public void resetFilter() {
-        this.setStartOfTimeRange(null);
-        this.setEndOfTimeRange(null);
     }
 
     public TaskEnum getTask() {
@@ -128,40 +111,24 @@ public class TaskController implements Serializable  {
         this.requestedDate = requestedDate;
     }
 
-    public TimeZone getUtcTimeZone() {
-        return TimeZone.getTimeZone(ZoneId.of("UTC"));
+
+    /**
+     * method is called when the user is requesting a date that is not in the current or the previous week
+     * does not check whether the user is a departmentleader because a depaartmentleader does not have to request
+     */
+
+    public void sendRequest() {
+        User u = currentUserBean.getCurrentUser();
+        requestService.addTaskRequest(u, this.getRequestedDate(), "Editing  " + this.getRequestedDate());
     }
 
-    public Date getStartOfTimeRange() {
-        return startOfTimeRange;
-    }
-
-    public void setStartOfTimeRange(Date startOfTimeRange) {
-        this.startOfTimeRange = startOfTimeRange;
-    }
-
-    public Date getEndOfTimeRange() {
-        return endOfTimeRange;
-    }
-
-    public void setEndOfTimeRange(Date endOfTimeRange) {
-        this.endOfTimeRange = endOfTimeRange;
-    }
-
-    public void sendRequest(RequestEnum status) {
-        User u = getCurrentUser();
-        User handler1 = userService.getTeamLeader(u.getTeam());
-        if (u.equals(handler1)) {
-            handler1 = null;
-        }
-        User handler2 = userService.getDepartmentLeader(u.getDepartment());
-        requestService.addRequest(u, handler1, handler2, this.requestedDate, status,"Editing  Tasks");
-    }
-
-    public List<String> completeTask(String query) {
-        String upperQuery = query.toUpperCase();
-        return TaskEnum.getAllTasks().stream().filter(a -> a.contains(upperQuery)).collect(Collectors.toList());
-    }
+    /**
+     * method to save a task that was within the current or the last week
+     * checks first if the date is in the right time frame
+     * when the user is a departmentleader or the admin he can edit every date
+     * also checks whether the date that was edited is after today
+     * when both checks went through it saves the task
+     */
 
     public void editDateWithinTimeFrame() {
         try {
@@ -171,21 +138,32 @@ public class TaskController implements Serializable  {
             MessagesView.errorMessage("Edit Tasks", e.getMessage());
             return;
         }
-        try {
-            taskService.checkIfEarlierThanTwoWeeks(this.getCurrentUser(), this.getRequestedDate().toInstant());
+        if (!currentUserBean.getCurrentUser().getRoles().contains(UserRole.DEPARTMENTLEADER) && !currentUserBean.getCurrentUser().getRoles().contains(UserRole.ADMIN)) {
+            if(taskService.checkIfEarlierThanTwoWeeks(this.getRequestedDate().toInstant())) {
+                MessagesView.errorMessage("Edit Tasks", "You need to request this date first");
+                return;
+            }
         }
-        catch (Exception e) {
-            MessagesView.errorMessage("Edit Tasks", e.getMessage());
-            return;
-        }
+        trySavingTasks();
+    }
+
+    private void trySavingTasks() {
         try {
-            taskService.saveEditedTask(this.getCurrentUser(), this.getTask(), this.getRequestedDate(), this.getStartHour(), this.getEndHour(), this.getStartMinute(), this.getEndMinute());
+            taskService.saveEditedTask(currentUserBean.getCurrentUser(), this.getTask(), this.getRequestedDate(), this.getStartHour(), this.getEndHour(), this.getStartMinute(), this.getEndMinute());
         }
         catch (Exception e) {
             MessagesView.errorMessage("Edit Tasks", e.getMessage());
         }
     }
-    public void editTasks() {
+
+    /**
+     * check if the requested date is not after the current date
+     * and if it is within the allowed time frame it tells the user to
+     * just edit it.
+     * if the given date is longer than two weeks before the current
+     * date it sends a request
+     */
+    public void checkRequestedDate() {
 
         try {
             taskService.checkIfAfterToday(this.getRequestedDate().toInstant());
@@ -194,22 +172,22 @@ public class TaskController implements Serializable  {
             MessagesView.errorMessage("Edit Tasks", e.getMessage());
             return;
         }
-        try {
-            taskService.checkIfEarlierThanTwoWeeks(this.getCurrentUser(), this.getRequestedDate().toInstant());
+        if(taskService.checkIfEarlierThanTwoWeeks(this.getRequestedDate().toInstant())) {
+            sendRequest();
+            MessagesView.successMessage("Editing Tasks", "Request has been sent");
         }
-        catch (Exception e) {
-            sendRequest(RequestEnum.OPEN);
+        else {
+            MessagesView.warnMessage("Editing Tasks", "You can edit this date without requesting it");
         }
+
     }
 
-    public void editDate () {
-        try {
-            taskService.saveEditedTask(this.getCurrentUser(), this.getTask(), this.getRequestedDate(), this.getStartHour(), this.getEndHour(), this.getStartMinute(), this.getEndMinute());
-        }
-        catch (Exception e) {
-            MessagesView.errorMessage("Edit Tasks", e.getMessage());
+    /**
+     * edit any date
+     */
 
-        }
+    public void editDate () {
+        trySavingTasks();
 
     }
 

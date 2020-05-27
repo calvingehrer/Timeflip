@@ -1,4 +1,4 @@
-package com.example.setup;
+package at.ac.uibk.rest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,11 +16,12 @@ import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.util.List;
+import java.util.Date;
 
+/**
+ * Client class to execute http requests
+ */
 public class Client implements Runnable {
 
     private final JSONArray historyEntries;
@@ -36,6 +37,10 @@ public class Client implements Runnable {
         credentialsProvider.setCredentials(AuthScope.ANY, credentials);
     }
 
+
+    /**
+     * Send every HistoryEntry in the list to the backend server
+     */
     @Override
     public void run() {
         try {
@@ -48,12 +53,21 @@ public class Client implements Runnable {
                     e.printStackTrace();
                 }
             }
-
+            System.out.println("\n -- Sending done!" + "(" + new Date() + ") --");
         } catch (IOException e) {
             // ignore
         }
     }
 
+
+    /**
+     * Takes a HistoryEntry Object as input and creates JSONObject for transmission.
+     * Executes http post.
+     *
+     * @param historyEntry the HistoryEntry to be transmitted
+     * @return true if transmission was successful, false otherwise
+     * @throws IOException
+     */
     public boolean transmitMessage(Object historyEntry) throws IOException {
         HttpClient httpClient = HttpClientBuilder.create()
                 .setDefaultCredentialsProvider(credentialsProvider)
@@ -78,9 +92,8 @@ public class Client implements Runnable {
 
             Long id = responseJson.getLong("id");
             String macAddress = responseJson.getString("macAddress");
-            //String hist = responseJson.getString("history");
 
-            System.out.printf("Id: #%d, MAC-Address: %s\n", id, macAddress);
+            System.out.printf("Sending... Id: #%d, MAC-Address: %s\n", id, macAddress);
             return true;
         } else {
             System.err.printf("Error posting message, service returned status code %d\n", response.getStatusLine().getStatusCode());
@@ -89,3 +102,4 @@ public class Client implements Runnable {
     }
 
 }
+

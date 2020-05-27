@@ -25,12 +25,13 @@ public class Raspberry implements Persistable<String>, Serializable {
     @ManyToOne(optional = true)
     private User createUser;
 
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(unique = true)
     private Room room;
 
-    @OneToMany
-    private Collection<Timeflip> timeflips;
+    //@OneToMany(fetch = FetchType.EAGER)
+    //private Collection<Timeflip> timeflips;
 
 
     public String getRaspberryId() {
@@ -74,14 +75,14 @@ public class Raspberry implements Persistable<String>, Serializable {
         this.room = room;
     }
 
-
+/*
     public Collection<Timeflip> getTimeflips() {
         return timeflips;
     }
 
     public void setTimeflips(Collection<Timeflip> timeflips) {
         this.timeflips = timeflips;
-    }
+    }*/
 
     @Override
     public String getId() {

@@ -1,17 +1,18 @@
 package at.qe.sepm.skeleton.services;
 
-import at.qe.sepm.skeleton.model.Request;
-import at.qe.sepm.skeleton.model.RequestEnum;
-import at.qe.sepm.skeleton.model.User;
-import at.qe.sepm.skeleton.model.UserRole;
+import at.qe.sepm.skeleton.model.*;
 import at.qe.sepm.skeleton.repositories.RequestRepository;
+import at.qe.sepm.skeleton.repositories.TaskRepository;
+import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
+import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import javax.annotation.PostConstruct;
 import java.util.Date;
+import java.util.List;
 
 @Component
 @Scope("application")
@@ -19,16 +20,59 @@ public class RequestService {
     @Autowired
     RequestRepository requestRepository;
 
-    public void addRequest(User requester, User requestHandler1, User requestHandler2, Date requestedDate, RequestEnum status, String message) {
-        Request r = new Request();
-        r.setStatus(status);
-        r.setDescription(message);
-        r.setRequester(requester);
-        r.setRequestHandlerTeamLeader(requestHandler1);
-        r.setRequestHandlerDepartmentLeader(requestHandler2);
-        r.setCreateDate(new Date());
+    @Autowired
+    CurrentUserBean currentUserBean;
+
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    MailService mailService;
+
+    @Autowired
+    private Logger<String, User> logger;
+
+    /**
+     * A Function to get the current user
+     */
+
+    @PostConstruct
+    public void init() {
+        currentUserBean.init();
+    }
+
+    public void addRequest(Request request, User requester, String message) {
+        User requestHandler1 = userService.getTeamLeader(requester.getTeam());
+        if (requester.equals(requestHandler1)) {
+            requestHandler1 = null;
+        }
+        User requestHandler2 = userService.getDepartmentLeader(requester.getDepartment());
+        request.setStatus(RequestEnum.OPEN);
+        request.setDescription(message);
+        request.setRequester(requester);
+        request.setRequestHandlerTeamLeader(requestHandler1);
+        request.setRequestHandlerDepartmentLeader(requestHandler2);
+        request.setCreateDate(new Date());
+        requestRepository.save(request);
+        logger.logCreation(request.getDescription(), requester);
+    }
+
+
+    public void addTaskRequest(User requester, Date requestedDate, String message) {
+        TaskRequest r = new TaskRequest();
         r.setRequestedDate(requestedDate);
-        requestRepository.save(r);
+        addRequest(r, requester, message);
+        mailService.sendEmailTo(requester, "Request sent", "Your request to edit " + requestedDate + " has been sent.");
+
+    }
+
+    public void addVacationRequest(User requester, Date requestedStartDate, Date requestedEndDate, String message) {
+        VacationRequest r = new VacationRequest();
+        r.setRequestedStartDate(requestedStartDate);
+        r.setRequestedEndDate(requestedEndDate);
+        addRequest(r, requester, message);
+        mailService.sendEmailTo(requester, "Request sent", "Your request to take a vacation from  " + requestedStartDate + " to  " + requestedEndDate + " has been sent.");
+
     }
 
     @PreAuthorize("hasAuthority('TEAMLEADER') or hasAuthority('DEPARTMENTLEADER')")
@@ -43,6 +87,7 @@ public class RequestService {
     }
 
 
+
     @PreAuthorize("hasAuthority('TEAMLEADER') or hasAuthority('DEPARTMENTLEADER')")
     public void declineRequest(Request request) {
         request.setStatus(RequestEnum.DECLINED);
@@ -55,43 +100,13 @@ public class RequestService {
 
     public List<Request> getDeclinedRequestsOfEmployee(User user) { return requestRepository.findAllRequestsOfUser(user, RequestEnum.DECLINED); }
 
-    public void deleteRequest (Request request) { requestRepository.delete(request);}
-
-    /**
-     * when deleting user delete all open requests
-     * when user is a team-leader and the field for department-leader is not null
-     * only set the field team-leader null
-     * vise versa for department-leader
-     * @param user
-     */
-
-    public void deleteRequestsOfUser(User user) {
-        for (Request r: requestRepository.findAllRequestsOfRequester(user)) {
-            deleteRequest(r);
-        }
-        if (user.getRoles().contains(UserRole.TEAMLEADER)) {
-            for (Request r : requestRepository.findAllRequestsOfRequestHandlerTL(user)) {
-                if (r.getRequestHandlerDepartmentLeader() == null) {
-                    deleteRequest(r);
-                }
-
-                else {
-                    r.setRequestHandlerTeamLeader(null);
-                    requestRepository.save(r);
-                }
-            }
-        }
-        if (user.getRoles().contains(UserRole.DEPARTMENTLEADER)) {
-            for (Request r : requestRepository.findAllRequestsOfRequestHandlerDL(user)) {
-                if (r.getRequestHandlerTeamLeader() == null) {
-                    deleteRequest(r);
-                }
-
-                else {
-                    r.setRequestHandlerDepartmentLeader(null);
-                    requestRepository.save(r);
-                }
-            }
-        }
+    public void deleteRequest (Request request) {
+        request.setRequester(null);
+        request.setRequestHandlerTeamLeader(null);
+        request.setRequestHandlerDepartmentLeader(null);
+        requestRepository.delete(request);
+        logger.logDeletion(request.getDescription(), currentUserBean.getCurrentUser());
     }
+
+
 }

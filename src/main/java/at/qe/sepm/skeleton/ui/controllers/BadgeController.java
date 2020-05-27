@@ -5,12 +5,14 @@ import at.qe.sepm.skeleton.model.BadgeEnum;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.BadgeService;
 import at.qe.sepm.skeleton.services.UserService;
+import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -20,28 +22,46 @@ import java.util.Set;
 public class BadgeController implements Serializable {
 
     @Autowired
-    private UserService userService;
+    private BadgeService badgeService;
 
     @Autowired
-    BadgeService badgeService;
+    private CurrentUserBean currentUserBean;
 
-    private User currentUser;
+    /**
+     *  initializes the current user and the Badges for that week that most of our test data is in
+     */
 
     @PostConstruct
     public void init() {
-        this.setCurrentUser(userService.getAuthenticatedUser());
+        currentUserBean.init();
     }
-
 
     public User getCurrentUser() {
-        return currentUser;
+        return currentUserBean.getCurrentUser();
     }
 
-    public void setCurrentUser(User currentUser) {
-        this.currentUser = currentUser;
-    }
 
     public List<Badge> getBadgesFromUser(){
-        return badgeService.getAllBadgesFromUser(getCurrentUser());
+        return badgeService.getAllBadgesFromUser(currentUserBean.getCurrentUser());
     }
+
+    public List<Badge> getBadgesFromDepartment(){
+        return badgeService.getAllBadgesFromDepartment(currentUserBean.getCurrentUser().getDepartment());
+    }
+
+    public List<Badge> getBadgesFromLastWeek(){
+
+        Calendar lastWeek = getWeekStart();
+        lastWeek.add(Calendar.DATE, -7);
+        return badgeService.getAllBadgesAfterDate(lastWeek.toInstant());
+    }
+
+    public static Calendar getWeekStart() {
+
+        Calendar lastWeek = Calendar.getInstance();
+        StatisticsController.setDayToBeginning(lastWeek);
+        lastWeek.getFirstDayOfWeek();
+        return lastWeek;
+    }
+
 }

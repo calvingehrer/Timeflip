@@ -13,12 +13,17 @@
                 <div class="card">
                     <h1>My Badges</h1>
 
-                    <p:dataTable id="myBadges" var="badge" value="#{badgeController.badgesFromUser}">
-                        <p:column headerText="Badge">
-                            <h:outputText value="#{badge.badgeType}"/>
-                        </p:column>
+                    <p:dataGrid id="myBadges" var="badge" value="#{badgeController.badgesFromUser}" columns="3">
 
-                    </p:dataTable>
+                    <p:panel header="#{badge.badgeType}" style="text-align:center">
+                        <h:panelGrid columns="1" style="width:100%">
+                            <h:graphicImage value="#{badge.imagePath}" width="200px" height="200px"/>
+                            <h:outputText value="#{badge.dateOfBadge}"/>
+                        </h:panelGrid>
+                    </p:panel>
+
+                    </p:dataGrid>
+
                 </div>
             </div>
         </div>

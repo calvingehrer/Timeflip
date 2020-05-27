@@ -6,6 +6,10 @@ import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
+
+/**
+ * inspired by messages view on https://www.primefaces.org/showcase/ui/message/messages.xhtml
+ */
 @Named
 @RequestScoped
 public class MessagesView {

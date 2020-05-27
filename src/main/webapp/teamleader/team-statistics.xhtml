@@ -19,9 +19,38 @@
         <div class="ui-g">
             <div class="ui-g-12">
                 <div class="card">
-                    <h1>Statistics of my Team</h1>
-                    <p:chart type="pie" model="#{statisticsController.weekTeamModel}" style="width:400px;height:300px"/>
-                    <p:chart type="pie" model="#{statisticsController.monthTeamModel}" style="width:400px;height:300px"/>
+                    <h1>Statistics of Team #{sessionInfoBean.currentUser.team}</h1>
+
+                    <h:form id="teamStatForm">
+
+                        <p:messages id="messages" showDetail="true" closable="true">
+                            <p:autoUpdate />
+                        </p:messages>
+
+                        <p:commandButton value="Choose a Date"
+                                         oncomplete="PF('dateDialog').show()"/>
+
+                        <p:dialog header="Choose a Date" id="chooseDate" widgetVar="dateDialog"
+                                  showEffect="fade"
+                                  hideEffect="fade" resizable="false">
+                            <h:form id="dates">
+                                <h:outputText value="Select the Date you want the statistics from"/>
+
+                                <p:calendar id="start" mode="inline" value="#{statisticsController.chosenDate}"/>
+
+                                <p:commandButton value="Apply" action="#{statisticsController.rebuildChartsTeam}" update="teamStatForm:teamStats"
+                                                 oncomplete="PF('dateDialog').hide()"/>
+                            </h:form>
+                        </p:dialog>
+
+                        <h:form id="teamStats">
+                            <h:panelGrid columns="2" style="width:66.6%">
+                                <p:chart type="pie" model="#{statisticsController.weekTeamModel}" style="width:400px;height:300px"/>
+                                <p:chart type="pie" model="#{statisticsController.monthTeamModel}" style="width:400px;height:300px"/>
+                            </h:panelGrid>
+                            <p:chart type="bar" model="#{statisticsController.monthBarTeamModel}" style="height:300px"/>
+                        </h:form>
+                    </h:form>
 
                 </div>
             </div>

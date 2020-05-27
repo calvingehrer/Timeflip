@@ -29,7 +29,11 @@
                         <h:outputText value="#{team.teamName}"/>
                     </p:column>
                     <p:column headerText="Employees">
-                        <h:outputText value="#{userListController.getEmployees(team)}"/>
+                        <p:dataList id="UsersOfTeam" var="user" value="#{userListController.getEmployees(team)}" type="definition">
+                            <p:column>
+                                <h:outputText value="#{user}"/>
+                            </p:column>
+                        </p:dataList>
                     </p:column>
                     <p:column headerText="Leader">
                         <h:outputText value="#{userListController.getTeamLeader(team)}"/>
@@ -41,7 +45,7 @@
                         <p:commandButton update=":teamForm:editTeamForm:teamEditDialog" value="Edit" oncomplete="PF('teamEditDialog').show()" icon="fa fa-fw fa-edit">
                             <f:setPropertyActionListener value="#{team}" target="#{teamDetailController.team}" />
                         </p:commandButton>
-                        <p:commandButton action="#{teamDetailController.doDeleteTeam()}" value="Delete" icon="fa fa-trash" title="Delete" update=":teamForm:TeamTable">
+                        <p:commandButton action="#{teamDetailController.doDeleteTeam}" value="Delete" icon="fa fa-trash" title="Delete" update=":teamForm:TeamTable">
                             <f:setPropertyActionListener value="#{team}" target="#{teamDetailController.team}" />
                         </p:commandButton>
 

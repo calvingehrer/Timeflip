@@ -28,25 +28,13 @@ public class AddTimeflipController implements Serializable {
 
     private User user;
 
-    private Raspberry raspberry;
 
 
 
 
 
     public void add(){
-        timeflipServicee.addNewTimeflip(timeflip, user, raspberry);
-    }
-
-
-
-
-    public TimeflipService getTimeflipServicee() {
-        return timeflipServicee;
-    }
-
-    public void setTimeflipServicee(TimeflipService timeflipServicee) {
-        this.timeflipServicee = timeflipServicee;
+        timeflipServicee.addNewTimeflip(timeflip, user);
     }
 
     public Timeflip getTimeflip() {
@@ -65,12 +53,4 @@ public class AddTimeflipController implements Serializable {
         this.user = user;
     }
 
-    public Raspberry getRaspberry() {
-        return raspberry;
-    }
-
-    public void setRaspberry(Raspberry raspberry) {
-
-        this.raspberry = raspberry;
-    }
 }

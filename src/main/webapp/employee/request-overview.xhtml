@@ -27,11 +27,6 @@
                         <p:column headerText="Status">
                             <h:outputText value="#{openRequest.status}"/>
                         </p:column>
-                        <p:column headerText="Date">
-                            <h:outputText value="#{openRequest.requestedDate}">
-                                <f:convertDateTime pattern="yyyy-dd-MM"/>
-                            </h:outputText>
-                        </p:column>
                     </p:dataTable>
                     <h2>Accepted Requests</h2>
                     <p:dataTable id="acceptedRequestsTable" var="acceptedRequest"
@@ -42,16 +37,8 @@
                         <p:column headerText="Status">
                             <h:outputText value="#{acceptedRequest.status}"/>
                         </p:column>
-                        <p:column headerText="Date">
-                            <h:outputText value="#{acceptedRequest.requestedDate}">
-                                <f:convertDateTime pattern="yyyy-dd-MM"/>
-                            </h:outputText>
-                        </p:column>
+
                         <p:column style="width:200px;text-align: center">
-                            <p:commandButton update=":acceptedRequestsTable" oncomplete="PF('editTasksDialog').show()"
-                                             value="Edit" icon="fa fa-edit" title="Edit">
-                                <f:setPropertyActionListener value="#{acceptedRequest.requestedDate}" target="#{taskController.requestedDate}" />
-                            </p:commandButton>
                             <p:commandButton update=":acceptedRequestsTable" action="#{requestController.deleteRequest(acceptedRequest)}"
                                              value="Delete" icon="fa fa-trash" title="Delete"/>
 
@@ -66,11 +53,7 @@
                         <p:column headerText="Status">
                             <h:outputText value="#{declinedRequest.status}"/>
                         </p:column>
-                        <p:column headerText="Date">
-                            <h:outputText value="#{declinedRequest.requestedDate}">
-                                <f:convertDateTime pattern="yyyy-dd-MM"/>
-                            </h:outputText>
-                        </p:column>
+
                         <p:column style="width:200px;text-align: center">
                             <p:commandButton update=":declinedRequestsTable" action="#{requestController.deleteRequest(declinedRequest)}"
                                              value="Delete" icon="fa fa-trash" title="Delete"/>
