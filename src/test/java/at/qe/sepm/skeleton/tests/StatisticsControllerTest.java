@@ -7,7 +7,7 @@ import at.qe.sepm.skeleton.services.TaskService;
 import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import at.qe.sepm.skeleton.ui.controllers.StatisticsController;
 import org.junit.Assert;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.primefaces.model.chart.PieChartModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +26,9 @@ import static org.junit.jupiter.api.Assertions.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 @WebAppConfiguration
-class StatisticsControllerTest {
+public class StatisticsControllerTest {
 
-    @Autowired
+    @MockBean
     StatisticsController statisticsController;
 
     @Autowired
@@ -43,11 +43,18 @@ class StatisticsControllerTest {
     @MockBean
     CurrentUserBean currentUserBean;
 
+
+
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
-    void init() {
+    public void init() {
         User user = userRepository.findFirstByUsername("admin");
         currentUserBean.setCurrentUser(user);
+        currentUserBean.init();
+
+        statisticsController.init();
+
+        System.out.println(statisticsController);
 
         Assert.assertNotNull(statisticsController.getTodayUserModel());
         Assert.assertNull(statisticsController.getChosenDate());
@@ -55,7 +62,7 @@ class StatisticsControllerTest {
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
-    void testRebuildChartsUser() {
+    public void testRebuildChartsUser() {
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(2020, Calendar.MAY, 7);
@@ -75,16 +82,16 @@ class StatisticsControllerTest {
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
-    void rebuildChartsTeam() {
+    public void rebuildChartsTeam() {
     }
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
-    void rebuildChartsDepartment() {
+    public void rebuildChartsDepartment() {
     }
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
-    void setDayToBeginning() {
+    public void setDayToBeginning() {
     }
 }
