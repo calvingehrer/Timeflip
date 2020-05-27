@@ -60,13 +60,6 @@ public class VacationServiceTest {
     @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
     public void addVacationCheckValidationTest() {
         User user = userRepository.findFirstByUsername("user5");
-        currentUserBean.setCurrentUser(user);
-
-
-        Set<Vacation> vacationList = vacationService.getVacationFromUser(user);
-
-        Assert.assertTrue("should have no vacation", vacationList.isEmpty());
-
 
         Vacation vacation = new Vacation();
 
@@ -95,10 +88,6 @@ public class VacationServiceTest {
         } catch (Exception e) {
             MessagesView.errorMessage("Test adding vacation", e.getMessage());
         }
-
-        //Set<Vacation> newVacationList = vacationService.getVacationFromUser(user);
-
-        //Assert.assertTrue("should have one vacation", !newVacationList.isEmpty());
 
     }
 }
