@@ -7,7 +7,9 @@ import at.qe.sepm.skeleton.repositories.MailRepository;
 import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import at.qe.sepm.skeleton.ui.beans.TimeBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
@@ -19,6 +21,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
+@Component
+@Scope("application")
 public class ScheduledMailService {
     @Autowired
     private MailService mailService;
