@@ -6,7 +6,6 @@ import at.qe.sepm.skeleton.model.*;
 import at.qe.sepm.skeleton.repositories.TaskRepository;
 import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import at.qe.sepm.skeleton.ui.beans.TimeBean;
-import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -49,19 +49,33 @@ public class TaskService {
         return taskRepository.findUserTasksBetweenDates(user, start, end);
     }
 
+    /**
+     * @param team
+     * @return all Tasks from the Team
+     */
+
+    @PreAuthorize("hasAuthority('TEAMLEADER')")
+    public List<Task> getAllTasksFromTeam(Team team) {
+        return taskRepository.findTasksFromTeam(team);
+    }
+
+    /**
+     *
+     * @param task
+     * @return duration of the task in minutes
+     */
+
     public long getDuration(Task task) {
         long duration = Duration.between(task.getStartTime(), task.getEndTime()).toMinutes();
         return duration;
     }
 
     /**
-     * Functions that return a HashMap of the Task Type with their total time between a start and end of a user, team
-     * or department. At first the tasks between start and end date get saved in a List. To fill the HashMap a additional
-     * function gets called.
+     *
      * @param user
      * @param start
      * @param end
-     * @return taskList
+     * @return Map of all user task types between two Dates with duration of each task type
      */
 
     public HashMap<TaskEnum, Long> getUserTasksBetweenDates(User user, Instant start, Instant end) {
@@ -71,11 +85,27 @@ public class TaskService {
         return fillTaskList(dailyTasks, tasks);
     }
 
+    /**
+     *
+     * @param team
+     * @param start
+     * @param end
+     * @return Map of all team task types between two Dates with duration of each task type
+     */
+
     public HashMap<TaskEnum, Long> getTeamTasksBetweenDates(Team team, Instant start, Instant end) {
         HashMap<TaskEnum, Long> dailyTasks = new HashMap<>();
         List<Task> tasks = taskRepository.findTeamTasksBetweenDates(team, start, end);
         return fillTaskList(dailyTasks, tasks);
     }
+
+    /**
+     *
+     * @param department
+     * @param start
+     * @param end
+     * @return Map of all department task types between two Dates with duration of each task type
+     */
 
     public HashMap<TaskEnum, Long> getDepartmentTasksBetweenDates(Department department, Instant start, Instant end) {
         HashMap<TaskEnum, Long> dailyTasks = new HashMap<>();
@@ -84,7 +114,10 @@ public class TaskService {
     }
 
     /**
-     * Adds up the total time a Task Type was executed and saves it in a HashMap.
+     * fills the list of task types with duration
+     * @param dailyTasks
+     * @param tasks
+     * @return filled list
      */
 
     private HashMap<TaskEnum, Long> fillTaskList(HashMap<TaskEnum, Long> dailyTasks, List<Task> tasks) {
@@ -220,11 +253,12 @@ public class TaskService {
 
     /**
      * check if something is earlier than the current or the last week
+     * @param user
      * @param date
      * @throws TaskException
      */
 
-    public boolean checkIfEarlierThanTwoWeeks (Instant date) {
+    public boolean checkIfEarlierThanTwoWeeks (User user, Instant date) {
         Calendar calendar = Calendar.getInstance(timeBean.getUtcTimeZone());
         calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
         calendar.add(Calendar.DATE, -7);
@@ -242,6 +276,7 @@ public class TaskService {
      * @param date
      * @throws TaskException
      */
+
     public void checkIfAfterToday(Instant date) throws TaskException {
         Calendar calendar = Calendar.getInstance();
         Instant today = calendar.toInstant();
@@ -274,17 +309,10 @@ public class TaskService {
      */
 
     public void deleteTask(Task task) {
-        task.setUser(null);
-        task.setTeam(null);
-        task.setDepartment(null);
         taskRepository.delete(task);
         logger.logDeletion(task.getTask().toString(), currentUserBean.getCurrentUser());
     }
 
-    public void deleteTasksOfUser (User user) {
-        for (Task t: taskRepository.findTasksFromUser(user)) {
-            deleteTask(t);
-        }
-    }
+
 
 }

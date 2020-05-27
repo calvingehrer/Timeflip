@@ -14,6 +14,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.util.Collection;
+
 /**
  * Some very basic tests for {@link UserService}.
  *
@@ -186,5 +188,28 @@ public class UserServiceTest {
         Assert.assertEquals("Call to userService.loadUser returned wrong user", "user1", user.getUsername());
         userService.deleteUser(user);
     }
+
+    @Test
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    public void testGetAllUsersWithoutTeam() {
+        Collection<User> usersWithoutTeam = userService.getAllUsersWithoutTeam();
+        Assert.assertEquals("Call to userService.loadUser returned wrong size", 1, usersWithoutTeam.size());
+    }
+
+    @Test
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    public void testGetTeamLeaderWithoutTeam() {
+        Collection<User> usersWithoutTeam = userService.getTeamLeaderWithoutTeam();
+        Assert.assertEquals("Call to userService.loadUser returned wrong size", 1, usersWithoutTeam.size());
+    }
+
+
+    @Test
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    public void testGetAllUsersByUsername() {
+        Collection<User> usersStartingWithUser = userService.getAllUsersByUsername("user");
+        Assert.assertEquals("Call to userService.loadUser returned wrong user", 3, usersStartingWithUser.size());
+    }
+
 
 }

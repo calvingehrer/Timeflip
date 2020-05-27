@@ -44,11 +44,21 @@ public class TeamService {
         currentUserBean.init();
     }
 
+    /**
+     *
+     * @return all teams
+     */
+
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<Team> getAllTeams() {
         return teamRepository.findAll();
     }
 
+    /**
+     *
+     * @param team
+     * @return saved Team
+     */
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public Team saveTeam(Team team) {
@@ -58,6 +68,12 @@ public class TeamService {
 
 
     }
+
+    /**
+     * adds a new Team
+     * @param employees
+     * @param team
+     */
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DEPARTMENTLEADER')")
     public void addNewTeam(Set<User> employees, Team team) {
@@ -76,10 +92,21 @@ public class TeamService {
         logger.logCreation(team.getTeamName(), currentUserBean.getCurrentUser());
     }
 
+    /**
+     *
+     * @param teamName
+     * @return team by team name
+     */
+
     @PreAuthorize("hasAuthority('ADMIN') or principal.username eq #username")
     public Team loadTeam(String teamName) {
         return teamRepository.findByTeamName(teamName);
     }
+
+    /**
+     * deletes Team
+     * @param team
+     */
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteTeam(Team team) {
@@ -87,18 +114,42 @@ public class TeamService {
         logger.logDeletion(team.toString(), currentUserBean.getCurrentUser());
     }
 
+    /**
+     *
+     * @param teamName
+     * @return Teams starting with the given string
+     */
+
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<Team> getAllTeamsByTeamName (String teamName) { return this.teamRepository.getAllTeamsByTeamPrefix(teamName); }
 
+    /**
+     *
+     * @return teams without department
+     */
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<Team> getTeamsWithoutDepartment() { return this.teamRepository.getTeamsWithoutDepartment();}
 
+    /**
+     *
+     * @return users without team
+     */
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<User> getAllUsersWithoutTeam() { return userService.getAllUsersWithoutTeam(); }
 
+    /**
+     *
+     * @param team
+     * @return users of the given team
+     */
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DEPARTMENTLEADER') or hasAuthority('TEAMLEADER')")
     public List<User> getUsersOfTeam(Team team) { return userService.getUsersOfTeam(team); }
 
+    /**
+     *
+     * @param department
+     * @return teams of the department
+     */
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<Team> getTeamsOfDepartment(Department department) { return teamRepository.findByDepartment(department); }
 

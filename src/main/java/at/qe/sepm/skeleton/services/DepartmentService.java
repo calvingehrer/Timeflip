@@ -41,10 +41,21 @@ public class DepartmentService {
         currentUserBean.init();
     }
 
+    /**
+     *
+     * @return all departments
+     */
+
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<Department> getAllDepartments() {
         return departmentRepository.findAll();
     }
+
+    /**
+     * saves a new department
+     * @param department
+     * @return saved Department
+     */
 
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -54,6 +65,11 @@ public class DepartmentService {
 
     }
 
+    /**
+     *
+     * @param headOfDepartment
+     * @param department
+     */
     @PreAuthorize("hasAuthority('ADMIN')")
     public void addNewDepartment(User headOfDepartment, Department department) {
         Department newDepartment = new Department();
@@ -67,10 +83,21 @@ public class DepartmentService {
         logger.logCreation(headOfDepartment.toString(), currentUserBean.getCurrentUser());
     }
 
+    /**
+     *
+     * @param departmentName
+     * @return department by department name
+     */
+
     @PreAuthorize("hasAuthority('ADMIN') or principal.username eq #username")
     public Department loadDepartment(String departmentName) {
         return departmentRepository.findByDepartmentName(departmentName);
     }
+
+    /**
+     * deletes department
+     * @param department
+     */
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteDepartment(Department department){
@@ -78,17 +105,22 @@ public class DepartmentService {
         logger.logDeletion(department.getDepartmentName(), currentUserBean.getCurrentUser());
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public void removeTeamfromDepartment(Team team, Department department) {
-        Set<Team> teams = new HashSet<>();
-        teams.remove(team);
-        team.setDepartment(null);
-    }
+    /**
+     * find  teams of department
+     * @param department
+     * @return Teams of the department
+     */
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DEPARTMENTLEADER')")
     public List<Team> getTeamsOfDepartment (Department department) {
         return teamRepository.findByDepartment(department);
     }
+
+    /**
+     * find department leader
+     * @param department
+     * @return Department leader
+     */
 
     public User getDepartmentLeader(Department department) {
         return userService.getDepartmentLeader(department);

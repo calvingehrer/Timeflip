@@ -1,23 +1,26 @@
 package at.qe.sepm.skeleton.services;
 
-import at.qe.sepm.skeleton.model.TaskEnum;
 import at.qe.sepm.skeleton.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
+/**
+ * source: https://www.baeldung.com/spring-email
+ */
 
 @Service
 public class MailService {
     @Autowired
     private JavaMailSender mailSender;
 
-
+    /**
+     * sends mail to
+     * @param toAddress
+     * @param subject
+     * @param text
+     */
     public void sendMail(String toAddress, String subject, String text) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(toAddress);

@@ -52,9 +52,10 @@ public class VacationService {
     }
 
     /**
+     * Add a new Vacation
      * @param user
      * @param vacation
-     * @throws VacationException Add a new Vacation
+     * @throws VacationException
      */
     public void addVacation(User user, Vacation vacation) throws VacationException {
 

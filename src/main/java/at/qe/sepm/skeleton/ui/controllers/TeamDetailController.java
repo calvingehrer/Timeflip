@@ -74,6 +74,12 @@ public class TeamDetailController implements Serializable {
 
     }
 
+    /**
+     * checks if a deletion is allowed
+     * @param team
+     * @return
+     */
+
     public boolean checkIfDeletionIsAllowed (Team team){
         if (!userService.getUsersOfTeam(team).isEmpty()) {
             return false;
@@ -91,6 +97,10 @@ public class TeamDetailController implements Serializable {
     public void setEmployee(User employee){
         this.employeeAdd = employee;
     }
+
+    /**
+     * add employee to team
+     */
 
     public void addEmployee() {
         employeeAdd.setTeam(team);
@@ -114,14 +124,21 @@ public class TeamDetailController implements Serializable {
         this.newLeader = newLeader;
     }
 
+    /**
+     * removes employee from team
+     */
+
     public void removeEmployee() {
         this.employeeRemove.setTeam(null);
         this.employeeRemove.setDepartment(null);
         userService.saveUser(employeeRemove);
     }
 
-     public void replaceLeader() {
+    /**
+     * replaces the team leader
+     */
 
+    public void replaceLeader() {
         User oldLeader = userService.getTeamLeader(team);
         if (oldLeader != null) {
             oldLeader.setTeam(null);

@@ -91,16 +91,32 @@ public class UserService {
         }
     }
 
+    /**
+     *
+     * @param username
+     * @return users whose username starts with given string
+     */
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<User> getAllUsersByUsername(String username) {
         return userRepository.findByUsernamePrefix(username);
     }
 
+    /**
+     *
+     * @param teamname
+     * @return users whose teamname starts with given string
+     */
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<User> getAllUsersOfTeamByTeamname(String teamname) {
         return userRepository.findByTeamnamePrefix(teamname);
     }
+
+    /**
+     *
+     * @param department
+     * @return  users whose departmentname starts with given string
+     */
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<User> getAllUsersOfDepartmentByDepartmentname(String department) {
@@ -142,6 +158,11 @@ public class UserService {
         logger.logUpdate(user.getUsername(), getAuthenticatedUser());
         return userRepository.save(user);
     }
+
+    /**
+     * adds a new user
+     * @param user
+     */
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DEPARTMENTLEADER')")
     public void addNewUser(User user) {
@@ -201,40 +222,83 @@ public class UserService {
         return toSave;
     }
 
+    /**
+     * updates user
+     * @param toSave
+     * @return
+     */
+
     @Transactional
     public User updateUser(User toSave) {
         logger.logUpdate(toSave.getUsername(), getAuthenticatedUser());
         return userRepository.save(setUpdatingFieldsBeforePersist(toSave));
     }
 
+    /**
+     *
+     * @param team
+     * @return teamleader of team
+     */
+
     public User getTeamLeader(Team team) {
         return userRepository.findTeamLeader(team);
     }
+
+    /**
+     *
+     * @return users who are currently not in a team
+     */
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<User> getAllUsersWithoutTeam() {
         return userRepository.findEmployeesWithoutTeam();
     }
 
+    /**
+     *
+     * @param team
+     * @return users in given team
+     */
+
 
     public List<User> getUsersOfTeam(Team team) {
         return userRepository.findUsersOfTeam(team);
     }
 
+    /**
+     *
+     * @param department
+     * @return departmentleader of department
+     */
 
     public User getDepartmentLeader(Department department) {
         return userRepository.findDepartmentLeader(department);
     }
+
+    /**
+     *
+     * @return teamleaders who have no team
+     */
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<User> getTeamLeaderWithoutTeam() {
         return userRepository.findTeamLeadersWithoutTeam();
     }
 
+    /**
+     *
+     * @return departmemtleader withour department
+     */
+
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<User> getDepartmentLeaderWithoutDepartment() {
         return userRepository.findDepartmentLeadersWithoutDepartment();
     }
+
+    /**
+     *
+     * @return users who have no timeflip
+     */
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<User> getUsersWithoutTimeflip() {
