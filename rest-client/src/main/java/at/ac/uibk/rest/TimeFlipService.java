@@ -10,13 +10,18 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * Service class containing all the utility methods to receive data from TimeFlip devices
+ */
 public class TimeFlipService {
     static boolean running = true;
 
-    /*
-     * After discovery is started, new devices will be detected. We can get a list of all devices through the manager's
-     * getDevices method. We can the look through the list of devices to find the device with the substring "timeflip" in its name.
-     * We continue looking until we find it, or we try 15 times (1 minutes).
+
+    /**
+     * Detects all bluetooth devices with "timeflip" (case insensitive) in its name.
+     *
+     * @return list of all detected TimeFlip devices
+     * @throws InterruptedException
      */
     public static List<BluetoothDevice> getTimeFlipDevices() throws InterruptedException {
         BluetoothManager manager = BluetoothManager.getBluetoothManager();
@@ -40,9 +45,18 @@ public class TimeFlipService {
         return null;
     }
 
+
+    /**
+     * Reads the list of services of a given bluetooth device and searches the needed service.
+     *
+     * @param device the device where to look for the service
+     * @param UUID the UUID of the requested service
+     * @return the requested service, Null if service does not exist
+     * @throws InterruptedException
+     */
     public static BluetoothGattService getService(BluetoothDevice device, String UUID) throws InterruptedException {
         BluetoothGattService tempService = null;
-        List<BluetoothGattService> bluetoothServices = null;
+        List<BluetoothGattService> bluetoothServices;
         do
         {
             bluetoothServices = device.getServices();
@@ -58,6 +72,14 @@ public class TimeFlipService {
         return tempService;
     }
 
+
+    /**
+     * Reads the list of characteristics of a given service and searches the needed characteristics.
+     *
+     * @param service the service where to look for the characteristics
+     * @param UUID the UUID of the requested characteristics
+     * @return the requested characteristics, null if characteristic does not exist
+     */
     public static BluetoothGattCharacteristic getCharacteristic(BluetoothGattService service, String UUID) {
         List<BluetoothGattCharacteristic> characteristics = service.getCharacteristics();
         if (characteristics == null)
@@ -70,9 +92,15 @@ public class TimeFlipService {
         return null;
     }
 
-    /*
-     * separate package into blocks (each block for a facet time period) and convert
-     * raw history data to human readable history blocks with format: [facet, time]
+
+    /**
+     * Separates a package of bytes into blocks (each block for a facet time period) and
+     * converts raw history data to human readable history blocks with format: [facet, time].
+     * After converting, the ready HistoryEntry is added to the list
+     *
+     * @param entries the list of HistoryEntries
+     * @param historyRaw the raw history as byte array comming from the TimeFlip device
+     * @param sensor the TimeFlip device
      */
     public static void transformEntriesAndAddToList(List<HistoryEntry> entries, byte[] historyRaw, BluetoothDevice sensor){
         byte[][] historyRawFormatted = new byte[7][3];
@@ -93,10 +121,28 @@ public class TimeFlipService {
         }
     }
 
+
+    /**
+     * Writes a command as byte array to the given characteristics to manipulate the
+     * behaviour of the characteristics
+     *
+     * @param characteristic the characteristics to be manipulated
+     * @param bytes the command to be written to the characteristics
+     */
     public static void write(BluetoothGattCharacteristic characteristic, byte[] bytes){
         characteristic.writeValue(bytes);
     }
 
+    
+    /**
+     * Detects all TimeFlip devices, reads services and characteristics and converts the output
+     * into the needed format. After that the formatted HistoryEntry object gets added to the list
+     * of HistoryEntries which gets converted to a JSONArray.
+     *
+     * @param sensors all detected TimeFlip devices
+     * @return list of all received and converted HistoryEntries as JSONArray
+     * @throws InterruptedException
+     */
     public static JSONArray getHistoryObjects(List<BluetoothDevice> sensors) throws InterruptedException {
         JSONArray historyEntries = new JSONArray();
         List<HistoryEntry> entries = new ArrayList<>();

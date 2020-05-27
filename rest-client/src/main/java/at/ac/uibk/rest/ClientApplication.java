@@ -4,11 +4,11 @@ import org.json.JSONArray;
 import tinyb.*;
 import java.util.*;
 
-/*
- * Client application
- * - receives data from the TimeFlip device
- * - coverts the data in a convenient and human readable format [facet, time]
- * - sends the data to the backend server
+/**
+ * Client application receives data from the TimeFlip device,
+ * coverts the data in a convenient and human readable format
+ * and sends the data to the backend server (in an interval
+ * of every 10 minutes)
  */
 
 public class ClientApplication {
@@ -59,7 +59,7 @@ public class ClientApplication {
             }
         };
 
-        timer.schedule(task, 1, 1000*30);
+        timer.schedule(task, 1, 1000*60*10);
     }
 }
 
