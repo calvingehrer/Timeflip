@@ -89,20 +89,5 @@ class RaspberryServiceTest {
         Assert.assertEquals(5, raspberryService.getAllRaspberries().size());
 
 
-
-
-        /*Raspberry raspberry = raspberryService.getAllRaspberries().get(0);
-        raspberryService.deleteRaspberry(raspberry);
-        Assert.assertEquals(4, raspberryService.getAllRaspberries().size());
-        //raspberry.setRoom(raspberry.getRoom());
-        //raspberry.getRoom().setRaspberry(raspberry);
-        //raspberryService.saveRaspberry(raspberry);
-        //Room room = raspberry.getRoom();
-        //room.setRaspberry(raspberry);
-        //roomService.saveRoom(room);
-        raspberryService.addNewRaspberry(raspberry, raspberry.getRoom());
-        Assert.assertEquals(5, raspberryService.getAllRaspberries().size());
-*/
-
     }
 }
