@@ -42,7 +42,7 @@ class DepartmentServiceTest {
         User headOfDepartment = new User();
         headOfDepartment.setUsername("headOdDepartment");
         Department department = new Department();
-        department.setDepartmentName("TestDEpartment");
+        department.setDepartmentName("TestDepartment");
 
         departmentService.addNewDepartment(headOfDepartment, department);
 
@@ -53,22 +53,22 @@ class DepartmentServiceTest {
         Assert.assertEquals(5, departmentService.getAllDepartments().size(), 0);
     }
 
-    /*@Test
+    @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     void getDepartmentByName() {
-        Assert.assertEquals("IT", departmentService.getDepartmentByName("IT").getDepartmentName());
+        Assert.assertEquals("IT", departmentService.loadDepartment("IT").getDepartmentName());
     }
 
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     void getTeamsOfDepartment() {
-        Assert.assertEquals(2, departmentService.getTeamsOfDepartment(departmentService.getDepartmentByName("IT")).size());
+        Assert.assertEquals(2, departmentService.getTeamsOfDepartment(departmentService.loadDepartment("IT")).size());
     }
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     void getDepartmentLeader() {
-        Assert.assertEquals("user3", departmentService.getDepartmentLeader(departmentService.getDepartmentByName("IT")).getUsername());
-    }*/
+        Assert.assertEquals("user3", departmentService.getDepartmentLeader(departmentService.loadDepartment("IT")).getUsername());
+    }
 }
