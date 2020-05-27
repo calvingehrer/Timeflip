@@ -248,7 +248,7 @@ public class TaskService {
      * @throws TaskException
      */
 
-    public boolean checkIfEarlierThanTwoWeeks (User user, Instant date) {
+    public boolean checkIfEarlierThanTwoWeeks (Instant date) {
         Calendar calendar = Calendar.getInstance(timeBean.getUtcTimeZone());
         calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
         calendar.add(Calendar.DATE, -7);
