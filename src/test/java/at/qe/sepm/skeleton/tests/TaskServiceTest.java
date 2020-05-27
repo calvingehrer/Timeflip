@@ -9,8 +9,10 @@ import at.qe.sepm.skeleton.repositories.UserRepository;
 import at.qe.sepm.skeleton.services.TaskService;
 import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import at.qe.sepm.skeleton.ui.beans.TimeBean;
+import at.qe.sepm.skeleton.utils.MessagesView;
 import nl.jqno.equalsverifier.internal.exceptions.AssertionException;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -25,6 +27,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import javax.validation.constraints.AssertTrue;
 import java.time.Instant;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -97,6 +100,7 @@ class TaskServiceTest{
         Assert.assertEquals("Duration should be 80 Minutes but is not",80, taskService.getDuration(task));
     }
 
+    @Before
     @Test
     @WithMockUser(username="admin",roles={"USER","ADMIN"})
     void getUserTasksBetweenDatesTest() {
@@ -189,13 +193,50 @@ class TaskServiceTest{
         User user = userRepository.findFirstByUsername("admin");
         currentUserBean.setCurrentUser(user);
 
+        int startHour = 8, endHour = 8, startMinute = 0, endMinute = 50;
+
+        Calendar date = Calendar.getInstance(timeBean.getUtcTimeZone());
+        date.set(2020, Calendar.MAY, 7);
+
+        Assertions.assertThrows(TaskException.class, () -> taskService.saveEditedTask(user, null, Date.from(date.toInstant()), startHour, endHour, startMinute, endMinute));
+
+
+        List<Task> adminOldTasks = taskRepository.findTasksFromUser(user);
+
+        Task oldTask = adminOldTasks.get(0);
+
+        TaskEnum newTaskType = TaskEnum.IMPLEMENTIERUNG;
+
+        try {
+            taskService.saveEditedTask(user, newTaskType, Date.from(date.toInstant()), startHour, endHour, startMinute, endMinute);
+        }
+        catch (Exception e) {
+            MessagesView.errorMessage("Test editing Tasks", e.getMessage());
+        }
+
+        List<Task> adminNewTasks = taskRepository.findTasksFromUser(user);
+
+        Task newTask = adminNewTasks.get(0);
+
+        Assert.assertNotEquals("Task should be IMPLEMENTIERUNG for newTask and DOKUMENTATION for oldTask", newTask.getTask(), oldTask.getTask());
+
+        oldTask.setTask(newTaskType);
+
+        Assert.assertEquals("Task should be equal now", oldTask , newTask);
+
+        //back to before else getUserTasksBetweenDatesTest() fails
+        try {
+            taskService.saveEditedTask(user, TaskEnum.DOKUMENTATION, Date.from(date.toInstant()), startHour, endHour, startMinute, endMinute);
+        }
+        catch (Exception e) {
+            MessagesView.errorMessage("Test editing Tasks", e.getMessage());
+        }
+
     }
 
     @Test
     @WithMockUser(username="admin",roles={"USER","ADMIN"})
     void checkIfEarlierThanTwoWeeks() {
-
-        User user = userRepository.findFirstByUsername("user6");
 
         Calendar inTime = Calendar.getInstance(timeBean.getUtcTimeZone());
         Calendar earlierDate = Calendar.getInstance(timeBean.getUtcTimeZone());
@@ -205,8 +246,8 @@ class TaskServiceTest{
 
         earlierDate.set(2020, Calendar.MAY, 8);
 
-        Assert.assertFalse("getInstant() - 3 days should not be longer ago than last week but is", taskService.checkIfEarlierThanTwoWeeks(user, inTime.toInstant()));
-        Assert.assertTrue("Something wrong with checkIfEarlierThanTwoWeeks Method", taskService.checkIfEarlierThanTwoWeeks(user, earlierDate.toInstant()));
+        Assert.assertFalse("getInstant() - 3 days should not be longer ago than last week but is", taskService.checkIfEarlierThanTwoWeeks(inTime.toInstant()));
+        Assert.assertTrue("Something wrong with checkIfEarlierThanTwoWeeks Method", taskService.checkIfEarlierThanTwoWeeks(earlierDate.toInstant()));
 
     }
 
@@ -242,7 +283,7 @@ class TaskServiceTest{
 
         List<Task> taskList = taskRepository.findTasksFromUser(user);
 
-        taskRepository.delete(taskList.get(1));
+        taskService.deleteTask(taskList.get(1));
 
         List<Task> newTaskList = taskRepository.findTasksFromUser(user);
 

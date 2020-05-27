@@ -220,12 +220,11 @@ public class TaskService {
 
     /**
      * check if something is earlier than the current or the last week
-     * @param user
      * @param date
      * @throws TaskException
      */
 
-    public boolean checkIfEarlierThanTwoWeeks (User user, Instant date) {
+    public boolean checkIfEarlierThanTwoWeeks (Instant date) {
         Calendar calendar = Calendar.getInstance(timeBean.getUtcTimeZone());
         calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
         calendar.add(Calendar.DATE, -7);
@@ -276,10 +275,10 @@ public class TaskService {
      */
 
     public void deleteTask(Task task) {
+        task.setUser(null);
+        task.setTeam(null);
+        task.setDepartment(null);
         taskRepository.delete(task);
         logger.logDeletion(task.getTask().toString(), currentUserBean.getCurrentUser());
     }
-
-
-
 }
