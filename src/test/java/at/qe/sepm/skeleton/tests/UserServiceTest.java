@@ -32,7 +32,7 @@ public class UserServiceTest {
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void testDatainitialization() {
-        Assert.assertEquals("Insufficient amount of users initialized for test data source", 35, userService.getAllUsers().size());
+        Assert.assertEquals("Insufficient amount of users initialized for test data source", 36, userService.getAllUsers().size());
         for (User user : userService.getAllUsers()) {
             if ("admin".equals(user.getUsername())) {
                 Assert.assertTrue("User \"admin\" does not have role ADMIN", user.getRoles().contains(UserRole.ADMIN));
@@ -67,9 +67,10 @@ public class UserServiceTest {
         User toBeDeletedUser = userService.loadUser("user1");
         Assert.assertNotNull("User1 could not be loaded from test data source", toBeDeletedUser);
 
+        Assert.assertEquals(36, userService.getAllUsers().size());
         userService.deleteUser(toBeDeletedUser);
 
-        Assert.assertEquals("No user has been deleted after calling UserService.deleteUser", 2, userService.getAllUsers().size());
+        Assert.assertEquals("No user has been deleted after calling UserService.deleteUser", 35, userService.getAllUsers().size());
         User deletedUser = userService.loadUser("user1");
         Assert.assertNull("Deleted User1 could still be loaded from test data source via UserService.loadUser", deletedUser);
 
