@@ -51,6 +51,8 @@ public class TaskService {
         return taskRepository.findUserTasksBetweenDates(user, start, end);
     }
 
+
+
     public long getDuration(Task task) {
         long duration = Duration.between(task.getStartTime(), task.getEndTime()).toMinutes();
         return duration;
@@ -245,7 +247,6 @@ public class TaskService {
      * @param date
      * @throws TaskException
      */
-
     public void checkIfAfterToday(Instant date) throws TaskException {
         Calendar calendar = Calendar.getInstance();
         Instant today = calendar.toInstant();
@@ -282,6 +283,10 @@ public class TaskService {
         logger.logDeletion(task.getTask().toString(), currentUserBean.getCurrentUser());
     }
 
-
+    public void deleteTaskOfUser (User user) {
+        for (Task t: taskRepository.findTasksFromUser(user)) {
+            deleteTask(t);
+        }
+    }
 
 }

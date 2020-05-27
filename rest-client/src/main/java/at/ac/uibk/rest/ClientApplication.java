@@ -4,18 +4,17 @@ import org.json.JSONArray;
 import tinyb.*;
 import java.util.*;
 
-/*
- * Client application
- * - receives data from the TimeFlip device
- * - coverts the data in a convenient and human readable format [facet, time]
- * - sends the data to the backend server
+/**
+ * Client application receives data from the TimeFlip device,
+ * coverts the data in a convenient and human readable format
+ * and sends the data to the backend server (in an interval
+ * of every 10 minutes)
  */
 
 public class ClientApplication {
     private static final String DEFAULT_MESSAGING_SERVICE_URI = "http://localhost:8080/history";
 
     public static void main(String[] args) {
-
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
             @Override
@@ -27,7 +26,7 @@ public class ClientApplication {
                 
                 List<BluetoothDevice> sensors = null;
                 try {
-                    sensors = TimeFlipUtils.getTimeFlipDevices();
+                    sensors = TimeFlipService.getTimeFlipDevices();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -44,7 +43,7 @@ public class ClientApplication {
 
                 JSONArray historyObjects = null;
                 try {
-                    historyObjects = TimeFlipUtils.getHistoryObjects(sensors);
+                    historyObjects = TimeFlipService.getHistoryObjects(sensors);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -60,7 +59,7 @@ public class ClientApplication {
             }
         };
 
-        timer.schedule(task, 1, 1000*30);
+        timer.schedule(task, 1, 1000*60*10);
     }
 }
 
