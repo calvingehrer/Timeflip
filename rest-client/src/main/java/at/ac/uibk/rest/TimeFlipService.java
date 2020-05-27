@@ -149,12 +149,13 @@ public class TimeFlipService {
         
         for(BluetoothDevice sensor : sensors) {
 
-            try{
-                sensor.connect();
-            }catch(BluetoothException e){
-                System.out.println(" (" + new Date() + ") Could not connect to sensor with MAC-Address " + sensor.getAddress());
-                continue;
+            if (sensor.connect())
+                System.out.println("Sensor with the provided name connected");
+            else {
+                System.out.println("Could not connect device.");
+                System.exit(-1);
             }
+
 
             Lock lock = new ReentrantLock();
             Condition cv = lock.newCondition();
@@ -198,7 +199,22 @@ public class TimeFlipService {
                     break;
                 }
 
-                transformEntriesAndAddToList(entries, historyRaw, sensor);
+                byte[][] historyRawFormatted = new byte[7][3];
+                int index = 0;
+
+                for (int i = 0; i < 7; i++) {
+                    for (int j = 0; j < 3; j++) {
+                        historyRawFormatted[i][j] = historyRaw[index++];
+                    }
+                    HistoryEntry entry = new HistoryEntry();
+                    entry.setMacAddress(sensor.getAddress());
+                    entry.setFacet(Converter.getFacetNumber(Converter.hexToBinary(historyRawFormatted[i])));
+                    entry.setSeconds(Converter.getTimeInSeconds(Converter.hexToBinary(historyRawFormatted[i])));
+
+                    if (entry.getFacet() != 0) {
+                        entries.add(entry);
+                    }
+                }
             }
 
             Converter.calculateStartEndTimes(entries, Converter.getCurrentTimestamp());

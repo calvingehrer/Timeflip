@@ -33,9 +33,10 @@ public class ClientApplication {
 
                 try {
                     manager.stopDiscovery();
-                }catch(BluetoothException e){
-                    System.out.println("(" + new Date() + ") Discovery could not be stopped");
+                } catch (BluetoothException e) {
+                    System.err.println("Discovery could not be stopped.");
                 }
+
 
                 if (sensors == null) {
                     System.exit(-1);
@@ -59,7 +60,7 @@ public class ClientApplication {
             }
         };
 
-        timer.schedule(task, 1, 1000*60*10);
+        timer.schedule(task, 1, 1000*60);
     }
 }
 
