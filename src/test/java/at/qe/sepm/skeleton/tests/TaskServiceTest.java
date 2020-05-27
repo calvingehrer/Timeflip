@@ -10,7 +10,6 @@ import at.qe.sepm.skeleton.services.TaskService;
 import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import at.qe.sepm.skeleton.ui.beans.TimeBean;
 import at.qe.sepm.skeleton.utils.MessagesView;
-import nl.jqno.equalsverifier.internal.exceptions.AssertionException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
@@ -24,7 +23,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import javax.validation.constraints.AssertTrue;
 import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
@@ -90,8 +88,8 @@ class TaskServiceTest{
         Calendar startDate = Calendar.getInstance();
         Calendar endDate = Calendar.getInstance();
 
-        startDate.set(2020, 5, 9, 17, 30);
-        endDate.set(2020, 5, 9, 18, 50);
+        startDate.set(2020, Calendar.MAY, 9, 17, 30);
+        endDate.set(2020, Calendar.MAY, 9, 18, 50);
 
         task.setStartTime(startDate.toInstant());
         task.setEndTime(endDate.toInstant());
