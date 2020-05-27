@@ -85,11 +85,8 @@ public class BadgeService {
         codeMonkey.setDateOfBadge(startDate);
         codeMonkey.setImagePath("/resources/badges/weekly_code_monkey.png");
 
-        System.out.println("Code Money goes to "+ codeMonkey.getUser().getId());
-
         badgeRepository.save(codeMonkey);
-
-        }
+    }
 
     /**
      * creates Badge for the Creative Mind (Person with most Design Time) of the given period
@@ -115,10 +112,7 @@ public class BadgeService {
         creativeMind.setDateOfBadge(startDate);
         creativeMind.setImagePath("/resources/badges/creative_mind.png");
 
-        System.out.println("Creative Mind goes to "+ creativeMind.getUser().getId());
-
         badgeRepository.save(creativeMind);
-
     }
 
 
@@ -147,8 +141,6 @@ public class BadgeService {
         friendAndHelper.setDateOfBadge(startDate);
         friendAndHelper.setImagePath("/resources/badges/friend_and_helper.png");
 
-        System.out.println("Friend and Helper goes to "+ friendAndHelper.getUser().getId());
-
         badgeRepository.save(friendAndHelper);
     }
 
@@ -166,7 +158,6 @@ public class BadgeService {
         List<Task> taskList;
 
         taskList = taskRepository.findTasksBetweenDates(startDate, endDate);
-
 
         HashMap<String, List<TaskEnum>> differentTasksPerUser = new HashMap<>();
 
@@ -206,11 +197,7 @@ public class BadgeService {
         allRounder.setDateOfBadge(startDate);
         allRounder.setImagePath("/resources/badges/all_rounder.png");
 
-        System.out.println("All-Rounder goes to "+ allRounder.getUser().getId());
-
         badgeRepository.save(allRounder);
-
-
     }
 
     /**
@@ -237,6 +224,7 @@ public class BadgeService {
             return;
         }
 
+
         String userWithMostSeconds = evaluateUserWithMostTime(nightTasks);
 
         if(userWithMostSeconds.isEmpty()){
@@ -250,10 +238,7 @@ public class BadgeService {
         nightOwl.setDateOfBadge(startDate);
         nightOwl.setImagePath("/resources/badges/night_owl.png");
 
-        System.out.println("Night owl goes to "+ nightOwl.getUser().getId());
-
         badgeRepository.save(nightOwl);
-
     }
 
     /**
@@ -279,8 +264,6 @@ public class BadgeService {
         wisdomSeeker.setUser(userRepository.findFirstByUsername(userWithMostSeconds));
         wisdomSeeker.setDateOfBadge(startDate);
         wisdomSeeker.setImagePath("/resources/badges/wisdom_seeker.png");
-
-        System.out.println("Wisdom seeker goes to "+ wisdomSeeker.getUser().getId());
 
         badgeRepository.save(wisdomSeeker);
     }

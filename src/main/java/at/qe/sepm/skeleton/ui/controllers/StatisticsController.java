@@ -20,7 +20,7 @@ import java.util.*;
 public class StatisticsController implements Serializable {
 
     @Autowired
-    private TaskService taskService;
+    TaskService taskService;
 
     @Autowired
     CurrentUserBean currentUserBean;
