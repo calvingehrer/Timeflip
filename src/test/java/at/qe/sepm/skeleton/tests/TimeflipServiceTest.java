@@ -1,8 +1,7 @@
 package at.qe.sepm.skeleton.tests;
 
 import at.qe.sepm.skeleton.model.*;
-import at.qe.sepm.skeleton.services.DepartmentService;
-import at.qe.sepm.skeleton.services.RaspberryService;
+
 import at.qe.sepm.skeleton.services.TimeflipService;
 import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
@@ -16,10 +15,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import javax.jws.soap.SOAPBinding;
-import java.sql.Time;
-import java.util.ArrayList;
-import java.util.List;
+
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
