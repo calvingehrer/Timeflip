@@ -34,10 +34,24 @@ public class HistoryService {
 
     private static final ConcurrentLinkedQueue<HistoryEntry> HISTORY_QUEUE = new ConcurrentLinkedQueue<>();
 
+    /**
+     * @return autoincremented ID
+     */
     static Long getNextId() {
         return ID_COUNTER.getAndIncrement();
     }
 
+
+    /**
+     * Creates a HistoryEntry object and adds it to the HISTORY_QUEUE.
+     *
+     * @param macAddress the mac address of the TimeFlip device
+     * @param facet the facet of the HistoryEntry object
+     * @param start the start date of the HistoryEntry object
+     * @param end the end date of the HistoryEntry object
+     * @param seconds the deuration in seconds of the HistoryEntry object
+     * @return the newly created HistoryEntry object
+     */
     public HistoryEntry postHistoryObject(String macAddress, int facet, Date start, Date end, int seconds) {
         if (!StringUtils.hasText(macAddress)){
             throw new IllegalArgumentException("content must not be null or empty");
@@ -56,10 +70,21 @@ public class HistoryService {
         return historyEntry;
     }
 
+
+    /**
+     * @return the HistoryEntry objects in HISTORY_QUEUE as a list.
+     */
     public List<HistoryEntry> getHistoryItems() {
         return new ArrayList<>(HISTORY_QUEUE);
     }
 
+
+    /**
+     * Finds HistoryEntry object based on the id.
+     *
+     * @param id the id of the HistoryEntry object
+     * @return the requested HistoryEntry object, null if not found
+     */
     public HistoryEntry findHistoryEntry(Long id) {
         HistoryEntry retval = null;
         try {
@@ -70,6 +95,13 @@ public class HistoryService {
         return retval;
     }
 
+
+    /**
+     * Creates Task object based on the given HistoryEntry and adds it to the database
+     *
+     * @param historyEntry
+     * @return the created Task object
+     */
     public Task addAsTask(HistoryEntry historyEntry){
         Task task = new Task();
         Timeflip timeflip = timeflipRepository.findByMacAddress(historyEntry.getMacAddress());
@@ -90,6 +122,12 @@ public class HistoryService {
         return task;
     }
 
+
+    /**
+     * Deletes the HistoryEntry with the given id
+     *
+     * @param id the id if the HistoryEntry
+     */
     public void deleteHistoryEntry(Long id) {
         HistoryEntry historyEntry = findHistoryEntry(id);
         if (historyEntry != null) {

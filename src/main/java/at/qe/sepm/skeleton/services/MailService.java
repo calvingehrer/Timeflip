@@ -1,10 +1,16 @@
 package at.qe.sepm.skeleton.services;
 
+import at.qe.sepm.skeleton.model.TaskEnum;
 import at.qe.sepm.skeleton.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+
+import java.time.Instant;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class MailService {

@@ -211,7 +211,6 @@ public class StatisticsController implements Serializable {
         return getPieChartModel(model, title, tasks);
     }
 
-
     private PieChartModel getPieChartModel (PieChartModel model, String title, HashMap <TaskEnum, Long> tasks){
         if (tasks.isEmpty()) {
             model.set("Keine Angaben", 100);

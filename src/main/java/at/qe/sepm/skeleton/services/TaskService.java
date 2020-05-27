@@ -160,7 +160,6 @@ public class TaskService {
      * @param date
      * @throws TaskException
      */
-
     public void checkIfEarlierThanTwoWeeks (User user, Instant date) throws TaskException {
         if (user.getRoles().contains(UserRole.DEPARTMENTLEADER)) {
             return;
@@ -185,7 +184,6 @@ public class TaskService {
      * @param date
      * @throws TaskException
      */
-
     public void checkIfAfterToday(Instant date) throws TaskException {
         Calendar calendar = Calendar.getInstance();
         Instant today = calendar.toInstant();
