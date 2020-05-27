@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -54,7 +55,18 @@ public class RoomService {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<Room> getRoomsWithoutRaspberry() {
-        return roomRepository.findRoomsWithoutRaspberry();
+        //return roomRepository.findRoomsWithoutRaspberry();
+        List<Room> rooms = roomRepository.findAllRooms();
+
+        List<Room> roomsToRemove = new ArrayList<>();
+
+        for(Room room : rooms){
+            if(room.getRaspberry() != null){
+                roomsToRemove.add(room);
+            }
+        }
+        rooms.removeAll(roomsToRemove);
+        return rooms;
     }
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DEPARTMENTLEADER')")
@@ -100,6 +112,4 @@ public class RoomService {
         roomRepository.delete(room);
         logger.logDeletion(room.getId(), currentUserBean.getCurrentUser());
     }
-
-
 }

@@ -45,6 +45,7 @@ class RaspberryServiceTest {
         raspberry.setRaspberryId("testRaspberry");
         Room room = new Room();
         room.setRoomNumber("12");
+        raspberry.setRoom(room);
         raspberryService.addNewRaspberry(raspberry, room);
         Assert.assertEquals(6, raspberryService.getAllRaspberries().size());
     }
