@@ -81,7 +81,6 @@ public class RequestController implements Serializable  {
     public void acceptRequest(Request request) {
         requestService.acceptRequest(request);
         if (request.getDiscriminatorValue() == 2) {
-            System.out.println("hello");
             VacationRequest vr = (VacationRequest) request;
             Vacation vacation = new Vacation();
             vacation.setStart(vr.getRequestedStartDate().toInstant());
