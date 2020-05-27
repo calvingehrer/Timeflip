@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Utility class to convert and format history
  */
-public class Preprocessing {
+public class Converter {
 
     /*
      * Converts an array of bytes of size 3 to a 24 bit binary string

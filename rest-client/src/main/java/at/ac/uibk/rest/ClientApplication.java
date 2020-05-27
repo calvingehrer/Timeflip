@@ -15,7 +15,6 @@ public class ClientApplication {
     private static final String DEFAULT_MESSAGING_SERVICE_URI = "http://localhost:8080/history";
 
     public static void main(String[] args) {
-
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
             @Override
@@ -27,7 +26,7 @@ public class ClientApplication {
                 
                 List<BluetoothDevice> sensors = null;
                 try {
-                    sensors = TimeFlipUtils.getTimeFlipDevices();
+                    sensors = TimeFlipService.getTimeFlipDevices();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -44,7 +43,7 @@ public class ClientApplication {
 
                 JSONArray historyObjects = null;
                 try {
-                    historyObjects = TimeFlipUtils.getHistoryObjects(sensors);
+                    historyObjects = TimeFlipService.getHistoryObjects(sensors);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
