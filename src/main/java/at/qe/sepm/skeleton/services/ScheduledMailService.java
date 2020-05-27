@@ -1,45 +1,40 @@
 package at.qe.sepm.skeleton.services;
 
 import at.qe.sepm.skeleton.model.Interval;
+import at.qe.sepm.skeleton.model.Task;
 import at.qe.sepm.skeleton.model.TaskEnum;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.MailRepository;
-import at.qe.sepm.skeleton.utils.auditlog.Logger;
-import at.qe.sepm.skeleton.ui.beans.TimeBean;
+import at.qe.sepm.skeleton.repositories.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.Calendar;
 import java.util.HashMap;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Map;
 
-@Service
 @Component
-@Scope("application")
 public class ScheduledMailService {
     @Autowired
     private MailService mailService;
 
     @Autowired
-    TaskService taskService;
+    TaskRepository taskRepository;
 
     @Autowired
     private MailRepository mailRepository;
-
-    @Autowired
-    private Logger<String, User> logger;
 
     /**
      * method to send mails with statistics from the last day
      */
 
 
-    @Scheduled(cron = "* */1 * * * *", zone = "Europe/Vienna")
+    @Scheduled(cron = "0 0 8 * * MON-FRI", zone = "Europe/Vienna")
     public void sendDailyStatistics () {
         for (User u: mailRepository.findByInterval(Interval.DAILY)) {
             mailService.sendEmailTo(u, "your daily stats", generateStatisticsMessage(u, Interval.DAILY));
@@ -78,7 +73,7 @@ public class ScheduledMailService {
             message.append(": ");
             message.append("\t");
             message.append(entry.getValue().toString());
-            message.append("\n");
+            message.append("min\n");
         }
         return message.toString();
     }
@@ -98,7 +93,7 @@ public class ScheduledMailService {
         calendar.add(Calendar.DATE, 1);
         Instant end = calendar.toInstant();
 
-        return  taskService.getUserTasksBetweenDates(user, start, end);
+        return  getUserTasksBetweenDates(user, start, end);
     }
 
     public HashMap<TaskEnum, Long> userTasksWeekly(User user) {
@@ -108,7 +103,7 @@ public class ScheduledMailService {
         calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
         Instant start = calendar.toInstant();
 
-        return  taskService.getUserTasksBetweenDates(user, start, end);
+        return  getUserTasksBetweenDates(user, start, end);
     }
 
     public HashMap<TaskEnum, Long> userTasksMonthly(User user) {
@@ -118,7 +113,33 @@ public class ScheduledMailService {
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         Instant start = calendar.toInstant();
 
-        return  taskService.getUserTasksBetweenDates(user, start, end);
+        return  getUserTasksBetweenDates(user, start, end);
+    }
+
+    public HashMap<TaskEnum, Long> getUserTasksBetweenDates(User user, Instant start, Instant end) {
+
+        HashMap<TaskEnum, Long> dailyTasks = new HashMap<>();
+        List<Task> tasks = taskRepository.findUserTasksBetweenDates(user, start, end);
+        return fillTaskList(dailyTasks, tasks);
+    }
+
+    private HashMap<TaskEnum, Long> fillTaskList(HashMap<TaskEnum, Long> dailyTasks, List<Task> tasks) {
+        tasks.forEach(t -> {
+                    long d = getDuration(t);
+                    if (dailyTasks.containsKey(t.getTask())) {
+                        dailyTasks.put(t.getTask(), dailyTasks.get(t.getTask()) + d);
+                    } else {
+                        dailyTasks.put(t.getTask(), d);
+                    }
+                }
+        );
+
+        return dailyTasks;
+    }
+
+    public long getDuration(Task task) {
+        long duration = Duration.between(task.getStartTime(), task.getEndTime()).toMinutes();
+        return duration;
     }
 
     public Calendar getToday () {

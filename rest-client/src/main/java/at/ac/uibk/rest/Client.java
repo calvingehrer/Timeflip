@@ -17,6 +17,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.IOException;
+import java.util.Date;
 
 /**
  * Client class to execute http requests
@@ -52,7 +53,7 @@ public class Client implements Runnable {
                     e.printStackTrace();
                 }
             }
-
+            System.out.println("\n -- Sending done!" + "(" + new Date() + ") --");
         } catch (IOException e) {
             // ignore
         }
@@ -91,9 +92,8 @@ public class Client implements Runnable {
 
             Long id = responseJson.getLong("id");
             String macAddress = responseJson.getString("macAddress");
-            //String hist = responseJson.getString("history");
 
-            System.out.printf("Id: #%d, MAC-Address: %s\n", id, macAddress);
+            System.out.printf("Sending... Id: #%d, MAC-Address: %s\n", id, macAddress);
             return true;
         } else {
             System.err.printf("Error posting message, service returned status code %d\n", response.getStatusLine().getStatusCode());

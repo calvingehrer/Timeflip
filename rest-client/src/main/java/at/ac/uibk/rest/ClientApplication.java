@@ -18,43 +18,53 @@ public class ClientApplication {
 
     public static void main(String[] args) throws InterruptedException {
 
-        BluetoothManager manager = BluetoothManager.getBluetoothManager();
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                BluetoothManager manager = BluetoothManager.getBluetoothManager();
 
-        boolean discoveryStarted = manager.startDiscovery();
+                manager.startDiscovery();
 
-        System.out.println("The discovery started: " + (discoveryStarted ? "true" : "false"));
-        List<BluetoothDevice> sensors = TimeFlipService.getTimeFlipDevices();
+                System.out.println("\nDiscovery started...");
+                List<BluetoothDevice> sensors = null;
+                try {
+                    sensors = TimeFlipService.getTimeFlipDevices();
+                } catch (InterruptedException e) {
+                    System.out.println("InterruptedException");
+                }
 
-        try {
-            manager.stopDiscovery();
-        } catch (BluetoothException e) {
-            System.err.println("Discovery could not be stopped.");
-        }
+                try {
+                    manager.stopDiscovery();
+                } catch (BluetoothException e) {
+                    //ignore
+                }
 
-        if (sensors == null) {
-            System.err.println("No sensor found with the provided name.");
-            System.exit(-1);
-        }
+                if (sensors == null) {
+                    System.err.println("No sensor found with the provided name.");
+                    System.exit(-1);
+                }
 
-        System.out.println("Found devices ... ");
+                System.out.println("Found devices");
 
-        JSONArray historyObjects = TimeFlipService.getHistoryObjects(sensors);
+                JSONArray historyObjects = null;
+                try {
+                    historyObjects = TimeFlipService.getHistoryObjects(sensors);
+                } catch (InterruptedException e) {
+                    System.out.println("InterruptedException");
+                }
 
-        if (args.length < 2) {
-            System.out.println("No username and/or password provided, exiting ...");
-            System.exit(1);
-        }
-        String username = args[0];
-        String psswd = args[1];
-        String uri = DEFAULT_MESSAGING_SERVICE_URI;
+                String uri = DEFAULT_MESSAGING_SERVICE_URI;
 
-        if (args.length > 2) {
-            uri = args[2];
-        }
+                if (args.length > 0) {
+                    uri = args[0];
+                }
 
-        Thread t = new Thread(new Client(username, psswd, historyObjects, uri));
-        t.start();
-
+                Thread t = new Thread(new Client("admin", "passwd", historyObjects, uri));
+                t.start();
+            }
+        };
+        timer.schedule(task, 1, 1000*61);
     }
 }
 

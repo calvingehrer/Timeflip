@@ -122,7 +122,6 @@ public class TaskListController implements Serializable {
     /**
      * resets the filter so that all tasks are displayed
      */
-
     public void resetFilter() {
         this.setInterval(Interval.NONE);
         this.setStartOfTimeRange(null);
