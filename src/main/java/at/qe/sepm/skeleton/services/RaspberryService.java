@@ -42,9 +42,6 @@ public class RaspberryService {
     @Autowired
     CurrentUserBean currentUserBean;
 
-    /**
-     * A Function to get the current user
-     */
 
     @PostConstruct
     public void init() {
