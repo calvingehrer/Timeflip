@@ -139,7 +139,7 @@ public class TaskController implements Serializable  {
             return;
         }
         if (!currentUserBean.getCurrentUser().getRoles().contains(UserRole.DEPARTMENTLEADER) && !currentUserBean.getCurrentUser().getRoles().contains(UserRole.ADMIN)) {
-            if(taskService.checkIfEarlierThanTwoWeeks(currentUserBean.getCurrentUser(), this.getRequestedDate().toInstant())) {
+            if(taskService.checkIfEarlierThanTwoWeeks(this.getRequestedDate().toInstant())) {
                 MessagesView.errorMessage("Edit Tasks", "You need to request this date first");
                 return;
             }
@@ -168,7 +168,7 @@ public class TaskController implements Serializable  {
             MessagesView.errorMessage("Edit Tasks", e.getMessage());
             return;
         }
-        if(taskService.checkIfEarlierThanTwoWeeks(currentUserBean.getCurrentUser(), this.getRequestedDate().toInstant())) {
+        if(taskService.checkIfEarlierThanTwoWeeks(this.getRequestedDate().toInstant())) {
             sendRequest();
             MessagesView.successMessage("Editing Tasks", "Request has been sent");
         }

@@ -20,8 +20,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-//import at.qe.sepm.skeleton.ui.beans.TimeZoneBean;
-
 @Service
 @Scope("application")
 public class TaskService {
@@ -50,8 +48,6 @@ public class TaskService {
         }
         return taskRepository.findUserTasksBetweenDates(user, start, end);
     }
-
-
 
     public long getDuration(Task task) {
         long duration = Duration.between(task.getStartTime(), task.getEndTime()).toMinutes();
@@ -224,12 +220,11 @@ public class TaskService {
 
     /**
      * check if something is earlier than the current or the last week
-     * @param user
      * @param date
      * @throws TaskException
      */
 
-    public boolean checkIfEarlierThanTwoWeeks (User user, Instant date) {
+    public boolean checkIfEarlierThanTwoWeeks (Instant date) {
         Calendar calendar = Calendar.getInstance(timeBean.getUtcTimeZone());
         calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
         calendar.add(Calendar.DATE, -7);
@@ -279,11 +274,14 @@ public class TaskService {
      */
 
     public void deleteTask(Task task) {
+        task.setUser(null);
+        task.setTeam(null);
+        task.setDepartment(null);
         taskRepository.delete(task);
         logger.logDeletion(task.getTask().toString(), currentUserBean.getCurrentUser());
     }
 
-    public void deleteTaskOfUser (User user) {
+    public void deleteTasksOfUser (User user) {
         for (Task t: taskRepository.findTasksFromUser(user)) {
             deleteTask(t);
         }

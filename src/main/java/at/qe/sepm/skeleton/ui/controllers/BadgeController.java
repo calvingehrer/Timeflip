@@ -34,11 +34,6 @@ public class BadgeController implements Serializable {
     @PostConstruct
     public void init() {
         currentUserBean.init();
-        /*Calendar start = Calendar.getInstance();
-        start.set(2020, Calendar.MAY, 4, 0, 0, 0);
-        Calendar end = Calendar.getInstance();
-        end.set(2020, Calendar.MAY, 10, 23, 59, 59);
-        badgeService.evaluateWeeklyBadges(start.toInstant(), end.toInstant());*/
     }
 
     public User getCurrentUser() {
