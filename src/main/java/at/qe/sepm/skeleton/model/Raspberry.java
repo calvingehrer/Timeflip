@@ -25,6 +25,7 @@ public class Raspberry implements Persistable<String>, Serializable {
     @ManyToOne(optional = true)
     private User createUser;
 
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(unique = true)
     private Room room;

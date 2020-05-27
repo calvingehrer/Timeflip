@@ -104,6 +104,7 @@ public class RaspberryService {
         for (Timeflip t: timeflipRepository.findTimeflipsOfRaspberrys(raspberry)) {
             t.setRaspberry(null);
         }
+        raspberryRepository.delete(raspberry);
         logger.logDeletion(raspberry.getId(), currentUserBean.getCurrentUser());
     }
 
