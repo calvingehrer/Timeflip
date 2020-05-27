@@ -30,14 +30,10 @@
                                 <h:outputText value="#{task.task}"/>
                             </p:column>
                             <p:column headerText="Start" sortBy="#{task.startTime}" >
-                                <h:outputText value="#{task.startTime}">
-                                    <f:convertDateTime timeZone="GMT+1" pattern="dd/MM/yyyy, HH:mm"/>
-                                </h:outputText>
+                                <h:outputText value="#{task.startTime}"/>
                             </p:column>
                             <p:column headerText="End">
-                                <h:outputText value="#{task.endTime}">
-                                    <f:convertDateTime timeZone="GMT+1" pattern="dd/MM/yyyy, HH:mm"/>
-                                </h:outputText>
+                                <h:outputText value="#{task.endTime}"/>
                             </p:column>
                             <p:column headerText="Duration[min]">
                                 <h:outputText value="#{taskController.duration(task)}"/>
