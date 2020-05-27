@@ -3,6 +3,7 @@ package at.qe.sepm.skeleton.tests;
 import at.qe.sepm.skeleton.model.Department;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.DepartmentService;
+import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import org.junit.*;
 import org.junit.jupiter.api.Test;
@@ -25,6 +26,9 @@ class DepartmentServiceTest {
     @MockBean
     CurrentUserBean currentUserBean;
 
+    @Autowired
+    UserService userService;
+
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     void getAllDepartments() {
@@ -35,9 +39,7 @@ class DepartmentServiceTest {
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
-    void addAndDeleteNewDepartment() {
-
-        Assert.assertEquals(5, departmentService.getAllDepartments().size(), 0);
+    void addAndDeleteDepartment() {
 
         User headOfDepartment = new User();
         headOfDepartment.setUsername("headOdDepartment");
@@ -46,11 +48,14 @@ class DepartmentServiceTest {
 
         departmentService.addNewDepartment(headOfDepartment, department);
 
-        Assert.assertEquals(6, departmentService.getAllDepartments().size(), 0);
+        Assert.assertEquals(6, departmentService.getAllDepartments().size());
+
+        headOfDepartment.setDepartment(null);
+        userService.saveUser(headOfDepartment);
 
         departmentService.deleteDepartment(department);
 
-        Assert.assertEquals(5, departmentService.getAllDepartments().size(), 0);
+        Assert.assertEquals(5, departmentService.getAllDepartments().size());
     }
 
     @Test

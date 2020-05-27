@@ -51,7 +51,7 @@ class RoomServiceTest {
         Assert.assertEquals(0, roomService.getRoomsWithoutRaspberry().size());
 
 
-    }
+}
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})

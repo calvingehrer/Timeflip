@@ -6,6 +6,8 @@ import at.qe.sepm.skeleton.model.Room;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.DepartmentService;
 import at.qe.sepm.skeleton.services.RaspberryService;
+import at.qe.sepm.skeleton.services.RoomService;
+import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import org.junit.*;
 import org.junit.jupiter.api.Test;
@@ -31,6 +33,12 @@ class RaspberryServiceTest {
     @MockBean
     CurrentUserBean currentUserBean;
 
+    @Autowired
+    RoomService roomService;
+
+    @Autowired
+    UserService userService;
+
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     void getAllRaspberries() {
@@ -43,11 +51,9 @@ class RaspberryServiceTest {
         Assert.assertEquals(5, raspberryService.getAllRaspberries().size());
         Raspberry raspberry = new Raspberry();
         raspberry.setRaspberryId("testRaspberry");
-        Room room = new Room();
-        room.setRoomNumber("12");
-        raspberry.setRoom(room);
-        raspberryService.addNewRaspberry(raspberry, room);
+        raspberryService.addNewRaspberry(raspberry, null);
         Assert.assertEquals(6, raspberryService.getAllRaspberries().size());
+
     }
 
     @Test
@@ -60,12 +66,12 @@ class RaspberryServiceTest {
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     void saveRaspberry() {
         Raspberry raspberry = raspberryService.loadRaspberry("2");
-        Room room = new Room();
-        room.setRoomNumber("6");
-        Assert.assertEquals("2", raspberry.getRoom().getRoomNumber());
-        raspberry.setRoom(room);
+        Assert.assertEquals("admin", raspberry.getCreateUser().getUsername());
+
+        raspberry.setCreateUser(userService.loadUser("user1"));
         raspberryService.saveRaspberry(raspberry);
-        Assert.assertEquals("6", raspberry.getRoom().getRoomNumber());
+
+        Assert.assertEquals("user1", raspberry.getCreateUser().getUsername());
 
     }
 
@@ -73,13 +79,30 @@ class RaspberryServiceTest {
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     void deleteRaspberry() {
         Assert.assertEquals(5, raspberryService.getAllRaspberries().size());
-        Raspberry raspberry = raspberryService.getAllRaspberries().get(0);
-        raspberryService.deleteRaspberry(raspberry);
-        Assert.assertEquals(4, raspberryService.getAllRaspberries().size());
-        raspberryService.addNewRaspberry(raspberry, raspberry.getRoom());
+        Raspberry raspberry = new Raspberry();
+        raspberry.setRaspberryId("testRaspberry");
+        raspberryService.addNewRaspberry(raspberry, null);
+        Assert.assertEquals(6, raspberryService.getAllRaspberries().size());
+
+        raspberryService.deleteRaspberry(raspberryService.loadRaspberry("testRaspberry"));
+
         Assert.assertEquals(5, raspberryService.getAllRaspberries().size());
 
 
+
+
+        /*Raspberry raspberry = raspberryService.getAllRaspberries().get(0);
+        raspberryService.deleteRaspberry(raspberry);
+        Assert.assertEquals(4, raspberryService.getAllRaspberries().size());
+        //raspberry.setRoom(raspberry.getRoom());
+        //raspberry.getRoom().setRaspberry(raspberry);
+        //raspberryService.saveRaspberry(raspberry);
+        //Room room = raspberry.getRoom();
+        //room.setRaspberry(raspberry);
+        //roomService.saveRoom(room);
+        raspberryService.addNewRaspberry(raspberry, raspberry.getRoom());
+        Assert.assertEquals(5, raspberryService.getAllRaspberries().size());
+*/
 
     }
 }

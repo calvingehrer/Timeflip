@@ -1,14 +1,10 @@
 package at.qe.sepm.skeleton.tests;
 
-import at.qe.sepm.skeleton.exceptions.VacationException;
-import at.qe.sepm.skeleton.model.Department;
-import at.qe.sepm.skeleton.model.Room;
+
 import at.qe.sepm.skeleton.model.User;
-import at.qe.sepm.skeleton.model.Vacation;
 import at.qe.sepm.skeleton.services.*;
 import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import at.qe.sepm.skeleton.utils.auditlog.LogEntry;
-import at.qe.sepm.skeleton.utils.auditlog.LogEnum;
 import org.junit.*;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;

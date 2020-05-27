@@ -95,8 +95,11 @@ public class RaspberryService {
     @Transactional
     public void deleteRaspberry(Raspberry raspberry) {
         Room room = raspberry.getRoom();
-        room.setRaspberry(null);
-        room.setEquipped(false);
+        if(room != null){
+            room.setRaspberry(null);
+            room.setEquipped(false);
+        }
+
         raspberry.setRoom(null);
         for (Timeflip t: timeflipRepository.findTimeflipsOfRaspberrys(raspberry)) {
             t.setRaspberry(null);

@@ -74,8 +74,8 @@ public class DepartmentService {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteDepartment(Department department){
-        logger.logDeletion(department.getDepartmentName(), currentUserBean.getCurrentUser());
         departmentRepository.delete(department);
+        logger.logDeletion(department.getDepartmentName(), currentUserBean.getCurrentUser());
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
