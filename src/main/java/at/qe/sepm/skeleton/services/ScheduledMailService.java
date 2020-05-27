@@ -24,7 +24,7 @@ public class ScheduledMailService {
     @Autowired
     private MailRepository mailRepository;
 
-    @Scheduled(cron = "0 0 8 * * MON-FRI", zone = "Europe/Vienna")
+    @Scheduled(cron = "* */5 * * * *", zone = "Europe/Vienna")
     public void sendDailyStatistics () {
         for (User u: mailRepository.findByInterval(Interval.DAILY)) {
             mailService.sendEmailTo(u, "your daily stats", generateStatisticsMessage(u, Interval.DAILY));
@@ -38,7 +38,7 @@ public class ScheduledMailService {
         }
     }
 
-    @Scheduled(cron = "* */5 * * * *", zone = "Europe/Vienna")
+    @Scheduled(cron = "0 0 8 1-7 * MON", zone = "Europe/Vienna")
     public void sendMonthlyStatistics () {
         for (User u: mailRepository.findByInterval(Interval.MONTHLY)) {
             mailService.sendEmailTo(u, "your monthly stats", generateStatisticsMessage(u, Interval.MONTHLY));
