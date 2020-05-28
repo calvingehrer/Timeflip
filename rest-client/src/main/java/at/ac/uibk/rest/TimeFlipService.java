@@ -117,7 +117,7 @@ public class TimeFlipService {
                     continue;
                 }
             }catch (Exception e){
-                System.out.println("Exception occurred, skip to next sensor if exists");
+                System.out.println("Connection abort - skip to next sensor if exists");
                 continue;
             }
 

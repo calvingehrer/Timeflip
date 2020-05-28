@@ -58,17 +58,9 @@ associate it with a user. Also check, if the devicename of your TimeFlip contain
 The client is meant to run permanently and send data every half an hour (just for now to get a better testing experience).
 If you wish to have a smaller or longer interval, you can change that in the last line of the main-method in ClientApplication.java. 
 
-It may happen that the client exits at some point with following exception: 
-
->Exception in thread "Timer-0" tinyb.BluetoothException: GDBus.Error:org.bluez.Error.Failed: Software caused connection abort\
->	at tinyb.BluetoothDevice.connect(Native Method)\
->	at at.ac.uibk.rest.TimeFlipService.getHistoryObjects(TimeFlipService.java:112)\
->	at at.ac.uibk.rest.ClientApplication$1.run(ClientApplication.java:52)\
->	at java.util.TimerThread.mainLoop(Timer.java:555)\
->	at java.util.TimerThread.run(Timer.java:505)\
-
-In this case, please restart the client (we still have to work on that issue)
-
+It may happen that the client outputs "Connection abort - skip to next sensor if exists". In this case there was a problem connecting 
+to the TimeFlip device so this sensor gets skipped for this synchronisation and is taken into account for the next synchronisation.
+ 
 ## Raspberry Installation-Script
 
 Execute the file "installation_script.sh" in the rest-client project with "./installation_script.sh". It could be that you have to set 
