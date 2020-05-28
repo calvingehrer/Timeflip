@@ -191,5 +191,12 @@ public class TaskController implements Serializable  {
 
     }
 
+    public Date startInstantToDate(Task task){
+        return Date.from(task.getStartTime());
+    }
+
+    public Date endInstantToDate(Task task){
+        return Date.from(task.getEndTime());
+    }
 
 }
