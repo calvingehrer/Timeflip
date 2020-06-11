@@ -73,11 +73,22 @@ public class StatisticsController implements Serializable {
         teamTasksLastMonth();
 
         departmentTasksLastMonth();
-        if(sessionInfoBean.hasRole("DEPARTMENTLEADER")){
+
+        if (sessionInfoBean.hasRole("EMPLOYEE")) {
+            Calendar calendar = getToday();
+            chosenDate = Date.from(calendar.toInstant());
+        }
+        if (sessionInfoBean.hasRole("TEAMLEADER")) {
+            Calendar calendar = getLastMonthEnd();
+            chosenDate = Date.from(calendar.toInstant());
+        }
+        if (sessionInfoBean.hasRole("DEPARTMENTLEADER")) {
+            Calendar calendar = getLastMonthEnd();
+            chosenDate = Date.from(calendar.toInstant());
             List<Team> teams = getTeamsOfCurrentDepartment();
-            if(!teams.isEmpty()){
+            if (!teams.isEmpty()) {
                 teamsOfDepartment = new ArrayList<>();
-                for(Team entry : teams){
+                for (Team entry : teams) {
                     teamsOfDepartment.add(entry.getTeamName());
                     System.out.println("team name:" + entry.getTeamName());
                 }
@@ -85,6 +96,7 @@ public class StatisticsController implements Serializable {
             }
         }
     }
+
 
 
     public PieChartModel getTodayUserModel() {
