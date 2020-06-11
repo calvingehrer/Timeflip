@@ -1,0 +1,75 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+
+    <ui:define name="title">Department Statistics</ui:define>
+
+    <ui:define name="viewname">
+        <li>Pages</li>
+        <li>/</li>
+        <li>
+            <p:link outcome="/departmentleader/department-statistics.xhtml">Department Statistics</p:link>
+        </li>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card">
+                    <h1>Statistics of Department #{sessionInfoBean.currentUser.department} on Team Basis</h1>
+
+
+                    <h:form id="departmentStatFormByTeam">
+
+                        <p:messages id="messages" showDetail="true" closable="true">
+                            <p:autoUpdate />
+                        </p:messages>
+
+                        <h:panelGrid columns="2" style="width:20%">
+
+                            <p:commandButton value="Choose Team and Date"
+                                             oncomplete="PF('teamDateDialog').show()"/>
+                        </h:panelGrid>
+
+
+
+                        <p:dialog header="Choose a Team" id="chooseTeam" widgetVar="teamDateDialog"
+                                  showEffect="fade"
+                                  hideEffect="fade" resizable="false">
+                            <h:form id="teams">
+
+                                <h:outputText value="Select the Date you want the statistics from"/>
+
+                                <p:calendar id="start" mode="inline" value="#{statisticsController.chosenDate}"/>
+
+                                <h:outputText value="Select the Team you want the statistics from"/>
+
+                                <h:selectOneMenu value="#{statisticsController.chosenTeam}" >
+                                    <p:ajax event="change" update="@this" />
+                                    <f:selectItems value="#{statisticsController.teamsOfDepartment}"/>
+                                </h:selectOneMenu>
+
+                                <h:outputText value="#{statisticsController.chosenTeam}"/>
+
+
+                                <p:commandButton value="Rebuild" action="#{statisticsController.rebuildChartsDepartmentTeamBasis}" update="departmentStatFormByTeam:teamStats"
+                                                 oncomplete="PF('teamDateDialog').hide()"/>
+                            </h:form>
+                        </p:dialog>
+
+                        <h:form id="teamStats">
+                            <h2>Team #{statisticsController.chosenTeam} </h2>
+                            <p:chart type="pie" model="#{statisticsController.monthTeamModel}" style="width:400px;height:300px"/>
+                            <p:chart type="bar" model="#{statisticsController.monthBarTeamModel}" style="height:300px"/>
+                        </h:form>
+                    </h:form>
+
+                </div>
+            </div>
+        </div>
+
+    </ui:define></ui:composition>
