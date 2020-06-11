@@ -15,6 +15,8 @@ import org.springframework.stereotype.Component;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Component
 @Scope("view")
@@ -29,12 +31,22 @@ public class DepartmentDetailController implements Serializable {
     @Autowired
     private TeamService teamService;
 
+    private Set<Team> addedTeams = new HashSet<>();
+
+    private Set<Team> removedTeams = new HashSet<>();
+
+    private Team addedTeam;
+
+    private Team removedTeam;
+
     @Autowired
     private Logger<String, User> logger;
 
-    private Department department = new Department();
+    private Department department;
 
-    public User newLeader;
+    private User newLeader;
+
+    private User oldLeader;
 
     public void setDepartment(Department department) {
         this.department = department;
@@ -49,8 +61,32 @@ public class DepartmentDetailController implements Serializable {
         this.newLeader = newLeader;
     }
 
+    public User getOldLeader() {
+        return oldLeader;
+    }
+
+    public void setOldLeader(User oldLeader) {
+        this.oldLeader = oldLeader;
+    }
+
     public Department getDepartment(){
         return department;
+    }
+
+    public Team getAddedTeam() {
+        return addedTeam;
+    }
+
+    public void setAddedTeam(Team addedTeam) {
+        this.addedTeam = addedTeam;
+    }
+
+    public Team getRemovedTeam() {
+        return removedTeam;
+    }
+
+    public void setRemovedTeam(Team removedTeam) {
+        this.removedTeam = removedTeam;
     }
 
     public void doReloadDepartment() {
@@ -58,7 +94,7 @@ public class DepartmentDetailController implements Serializable {
     }
 
     public void doSaveDepartment(){
-        department = this.departmentService.saveDepartment(department);
+        department = this.departmentService.saveDepartment(department, addedTeams, removedTeams, oldLeader, newLeader);
     }
 
     /**
@@ -107,12 +143,14 @@ public class DepartmentDetailController implements Serializable {
      */
 
     public void replaceLeader() {
-        User oldLeader = userService.getDepartmentLeader(department);
-        oldLeader.setDepartment(null);
-        userService.saveUser(oldLeader);
-        User newLeader = this.getNewLeader();
-        newLeader.setDepartment(department);
-        userService.saveUser(newLeader);
-        logger.logUpdate("New depatmentleader" + newLeader, userService.getAuthenticatedUser());
+        this.oldLeader = userService.getDepartmentLeader(department);
+    }
+
+    public void addTeam() {
+        this.addedTeams.add(this.addedTeam);
+    }
+
+    public void removeTeam(){
+        this.removedTeams.add(this.removedTeam);
     }
 }

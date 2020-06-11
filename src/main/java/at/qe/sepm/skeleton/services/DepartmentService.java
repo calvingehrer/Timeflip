@@ -59,7 +59,30 @@ public class DepartmentService {
 
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Department saveDepartment(Department department) {
+    public Department saveDepartment(Department department, Set<Team> addedTeams, Set<Team> removedTeams, User oldLeader, User newLeader) {
+        if(addedTeams !=  null) {
+            for (Team t:addedTeams) {
+                t.setDepartment(department);
+                teamRepository.save(t);
+            }
+        }
+        if(removedTeams !=  null) {
+            for (Team t:removedTeams) {
+                t.setDepartment(null);
+                teamRepository.save(t);
+            }
+        }
+
+        if (oldLeader !=  null) {
+            oldLeader.setDepartment(null);
+            userService.saveUser(oldLeader);
+        }
+
+        if (newLeader !=  null) {
+            newLeader.setDepartment(department);
+            userService.saveUser(newLeader);
+        }
+
         logger.logUpdate(department.toString(), currentUserBean.getCurrentUser());
         return departmentRepository.save(department);
 
@@ -76,10 +99,8 @@ public class DepartmentService {
 
         newDepartment.setDepartmentName(department.getDepartmentName());
 
-        saveDepartment(newDepartment);
-        headOfDepartment.setDepartment(newDepartment);
+        saveDepartment(newDepartment, null,null, null, headOfDepartment);
 
-        userService.saveUser(headOfDepartment);
         logger.logCreation(headOfDepartment.toString(), currentUserBean.getCurrentUser());
     }
 

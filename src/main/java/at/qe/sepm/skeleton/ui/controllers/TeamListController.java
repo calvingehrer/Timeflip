@@ -1,5 +1,6 @@
 package at.qe.sepm.skeleton.ui.controllers;
 
+import at.qe.sepm.skeleton.model.Department;
 import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.TeamService;
@@ -72,6 +73,10 @@ public class TeamListController implements Serializable {
             allTeams.remove(team);
         }
         return allTeams;
+    }
+
+    public Collection<Team> getTeamsInDepartment(Department department) {
+        return teamService.getTeamsOfDepartment(department);
     }
 
 
