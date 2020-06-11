@@ -2,7 +2,7 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:p="http://primefaces.org/ui"
+                xmlns:p="http://primefaces.org/ui" xmlns:f="http://xmlns.jcp.org/jsf/core"
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="title">My Vacations</ui:define>
@@ -45,10 +45,14 @@
                     <h:form id="vacationListForm" prependId="false">
                         <p:dataTable id="vacationsTable" var="vacation" value="#{vacationController.vacations}">
                             <p:column headerText="Begin"> <!--sortBy="#{vacation.start}"-->
-                                <h:outputText value="#{vacation.start}"/>
+                                <h:outputText value="#{timeBean.instantToDate(vacation.start)}">
+                                    <f:convertDateTime timeZone="#{timeBean.utcTimeZone}" pattern="dd.MM.yyyy"/>
+                                </h:outputText>
                             </p:column>
                             <p:column headerText="End">
-                                <h:outputText value="#{vacation.end}"/>
+                                <h:outputText value="#{timeBean.instantToDate(vacation.end)}">
+                                    <f:convertDateTime timeZone="#{timeBean.utcTimeZone}" pattern="dd.MM.yyyy"/>
+                                </h:outputText>
                             </p:column>
 
                         </p:dataTable>

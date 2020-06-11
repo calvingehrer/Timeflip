@@ -85,7 +85,7 @@ public class TaskService {
 
     public HashMap<TaskEnum, Long> getTeamTasksBetweenDates(Team team, Instant start, Instant end) {
         HashMap<TaskEnum, Long> dailyTasks = new HashMap<>();
-        List<Task> tasks = taskRepository.findTeamTasksBetweenDates(team, start, end);
+         List<Task> tasks = taskRepository.findTeamTasksBetweenDates(team, start, end);
         return fillTaskList(dailyTasks, tasks);
     }
 
@@ -132,25 +132,13 @@ public class TaskService {
      * 3. If the task before or the task after has the same task type as the given task
      * 4. If the task before or the task after falls into the exact same time frame it only changes the task type
      **/
-    public void saveEditedTask (User user, TaskEnum task, Date date, int startHour, int endHour, int startMinute, int endMinute) throws TaskException {
+    public void saveEditedTask (User user, TaskEnum task, Instant startTime, Instant endTime) throws TaskException {
         if (task == null) {
             throw new TaskException("Please enter a task");
         }
-        checkTime(startHour, endHour, startMinute, endMinute);
 
-        Calendar calendar = Calendar.getInstance(timeBean.getUtcTimeZone());
 
-        calendar.setTime(date);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
 
-        calendar.set(Calendar.HOUR_OF_DAY, startHour);
-        calendar.set(Calendar.MINUTE, startMinute);
-        Instant startTime = calendar.toInstant();
-
-        calendar.set(Calendar.HOUR_OF_DAY, endHour);
-        calendar.set(Calendar.MINUTE, endMinute);
-        Instant endTime = calendar.toInstant();
 
         Task toSave = new Task();
 
@@ -188,6 +176,7 @@ public class TaskService {
 
                 if (taskBefore.getTask() == task) {
                     taskBefore.setEndTime(endTime);
+
                     taskRepository.save(taskBefore);
                     return;
                 }
@@ -219,10 +208,7 @@ public class TaskService {
                     return;
                 }
                 else {
-
                     taskAfter.setStartTime(endTime);
-
-
                     taskRepository.save(taskAfter);
                 }
 
@@ -238,26 +224,25 @@ public class TaskService {
         toSave.setCreateDate(new Date());
 
         taskRepository.save(toSave);
+
         logger.logUpdate(task.toString(), currentUserBean.getCurrentUser());
     }
 
     /**
      * check if something is earlier than the current or the last week
-     * @param user
      * @param date
      * @throws TaskException
      */
 
     public boolean checkIfEarlierThanTwoWeeks (Instant date) {
         Calendar calendar = Calendar.getInstance(timeBean.getUtcTimeZone());
-        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-        calendar.add(Calendar.DATE, -7);
+        calendar.add(Calendar.DATE, -14);
         calendar.set(Calendar.HOUR_OF_DAY,0);
         calendar.set(Calendar.MINUTE,0);
         calendar.set(Calendar.SECOND,0);
 
-        Instant lastMonday = calendar.toInstant();
-        return date.isBefore(lastMonday);
+        Instant twoWeeks = calendar.toInstant();
+        return date.isBefore(twoWeeks);
     }
 
     /**

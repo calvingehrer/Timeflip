@@ -109,10 +109,15 @@ public class TimeFlipService {
 
         for(BluetoothDevice sensor : sensors) {
 
-            if (sensor.connect())
-                System.out.println("Sensor " + sensor.getAddress() + " connected");
-            else {
-                System.out.println("Could not connect device with address " + sensor.getAddress());
+            try{
+                if (sensor.connect())
+                    System.out.println("Sensor " + sensor.getAddress() + " connected");
+                else {
+                    System.out.println("Could not connect device with address " + sensor.getAddress());
+                    continue;
+                }
+            }catch (Exception e){
+                System.out.println("Connection abort - skip to next sensor if exists");
                 continue;
             }
 

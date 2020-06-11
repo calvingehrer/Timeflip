@@ -1,10 +1,8 @@
 package at.qe.sepm.skeleton.ui.controllers;
 
-import at.qe.sepm.skeleton.model.Request;
-import at.qe.sepm.skeleton.model.TaskRequest;
-import at.qe.sepm.skeleton.model.Vacation;
-import at.qe.sepm.skeleton.model.VacationRequest;
+import at.qe.sepm.skeleton.model.*;
 import at.qe.sepm.skeleton.services.RequestService;
+import at.qe.sepm.skeleton.services.TaskService;
 import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.services.VacationService;
 import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
@@ -33,7 +31,8 @@ public class RequestController implements Serializable  {
     @Autowired
     CurrentUserBean currentUserBean;
 
-    private TaskRequest taskRequest;
+    @Autowired
+    private TaskService taskService;
 
 
     /**
@@ -80,6 +79,15 @@ public class RequestController implements Serializable  {
      */
     public void acceptRequest(Request request) {
         requestService.acceptRequest(request);
+        if (request.getDiscriminatorValue() == 1) {
+            TaskRequest tr = (TaskRequest) request;
+            try {
+                taskService.saveEditedTask(tr.getRequester(), tr.getTaskType(), tr.getRequestedStartDate(), tr.getRequestedEndDate());
+            }
+            catch (Exception e) {
+                MessagesView.errorMessage("Edit Tasks", e.getMessage());
+            }
+        }
         if (request.getDiscriminatorValue() == 2) {
             VacationRequest vr = (VacationRequest) request;
             Vacation vacation = new Vacation();
