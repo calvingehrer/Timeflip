@@ -71,7 +71,9 @@
 
                             <h:panelGrid columns="2">
                                 <p:outputLabel value="Edit employees: "/>
-                                <p:commandButton value="Select" update="editTeamForm:editEmployeeForm:employeeTeamTable" oncomplete="PF('editEmployeesTeamDialog').show()"/>
+                                <p:commandButton value="Select" update=":editEmployeeForm:employeeTeamTable" oncomplete="PF('editEmployeesTeamDialog').show()"/>
+                                <p:outputLabel value="Change Department: "/>
+                                <p:commandButton value="Select" update=":editDepartmentTeamForm:editDepartmentTable" oncomplete="PF('editDepartmentTeamDialog').show()"/>
                             </h:panelGrid>
 
                         </h:panelGrid>
@@ -83,6 +85,8 @@
                         </h:panelGrid>
                     </p:outputPanel>
                 </p:dialog>
+
+            </h:form>
 
 
 
@@ -103,7 +107,7 @@
 
 
                             <p:column style="width:100px;text-align: center">
-                                <p:commandButton update="editTeamForm:editEmployeeForm:employeeTeamTable editTeamForm:editEmployeeForm:employeeTeamTable1" icon="fa fa-fw fa-minus" title="Select" action="#{teamDetailController.removeEmployee}">
+                                <p:commandButton update=":editEmployeeForm:employeeTeamTable :editEmployeeForm:employeeTeamTable1" icon="fa fa-fw fa-minus" title="Select" action="#{teamDetailController.removeEmployee}">
                                     <f:setPropertyActionListener value="#{employee}" target="#{teamDetailController.employeeRemove}"/>
                                 </p:commandButton>
                             </p:column>
@@ -123,7 +127,7 @@
 
 
                             <p:column style="width:100px;text-align: center">
-                                <p:commandButton update="editTeamForm:editEmployeeForm:employeeTeamTable editTeamForm:editEmployeeForm:employeeTeamTable1" icon="fa fa-plus" title="Select" action="#{teamDetailController.addEmployee}">
+                                <p:commandButton update=":editEmployeeForm:employeeTeamTable :editEmployeeForm:employeeTeamTable1" icon="fa fa-plus" title="Select" action="#{teamDetailController.addEmployee}">
                                     <f:setPropertyActionListener value="#{employee}" target="#{teamDetailController.employeeAdd}" />
                                 </p:commandButton>
                             </p:column>
@@ -144,7 +148,7 @@
 
 
                             <p:column style="width:100px;text-align: center">
-                                <p:commandButton update="editTeamForm:editEmployeeForm:employeeTeamTable editTeamForm:editEmployeeForm:teamLeaderTable" icon="fa fa-arrows-h" title="Select" action="#{teamDetailController.replaceLeader}">
+                                <p:commandButton update=":editEmployeeForm:employeeTeamTable :editEmployeeForm:teamLeaderTable" icon="fa fa-arrows-h" title="Select" action="#{teamDetailController.replaceLeader}">
                                     <f:setPropertyActionListener value="#{newLeader}" target="#{teamDetailController.newLeader}" />
                                 </p:commandButton>
                             </p:column>
@@ -152,8 +156,9 @@
 
                         </p:dataTable>
 
+                        <p:commandButton update=":teamForm:TeamTable" value="Done" type="submit" onclick="PF('editEmployeesTeamDialog').hide()"/>
+
                     </h:form>
-                    <p:commandButton update=":teamForm:TeamTable" value="Done" type="submit" onclick="PF('editEmployeesTeamDialog').hide()"/>
 
                 </p:dialog>
 
@@ -162,8 +167,25 @@
 
 
 
+                <p:dialog header="Select Department" id="editDepartmentTeamDialog" widgetVar="editDepartmentTeamDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                    <h:form id="editDepartmentTeamForm">
+                        <p:dataTable id="editDepartmentTable" var="department" styleClass="project-table" value="#{departmentListController.getDepartments()}" scrollable="true" scrollHeight="100%">
+                            <p:column headerText="Department ID">
+                                <h:outputText value="#{department.departmentName}"/>
+                            </p:column>
 
-            </h:form>
+                            <p:column style="width:100px;text-align: center">
+                                <p:commandButton update=":editDepartmentTeamForm:editDepartmentTable" icon="fa fa-fw fa-plus" title="Select" action="#{teamDetailController.changeDepartment}">
+                                    <f:setPropertyActionListener value="#{department}" target="#{teamDetailController.department}"/>
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                        <h:panelGrid columns="2">
+                            <p:commandButton value="Done" type="submit" onclick="PF('editDepartmentTeamDialog').hide()"/>
+                        </h:panelGrid>
+
+                    </h:form>
+                </p:dialog>
 
 
 

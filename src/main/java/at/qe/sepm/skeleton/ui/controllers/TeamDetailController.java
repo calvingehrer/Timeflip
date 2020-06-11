@@ -36,6 +36,8 @@ public class TeamDetailController implements Serializable {
 
     private User newLeader;
 
+    private Department department;
+
 
     private Set<User> addedEmployees = new HashSet<>();
 
@@ -57,6 +59,14 @@ public class TeamDetailController implements Serializable {
 
     public void setEmployeeAdd(User employeeAdd) {
         this.employeeAdd = employeeAdd;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 
     public User getEmployeeRemove() {
@@ -160,5 +170,9 @@ public class TeamDetailController implements Serializable {
         teamService.saveTeam(this.addedEmployees, this.removedEmployees, this.getTeam());
         this.addedEmployees.clear();
         this.removedEmployees.clear();
+    }
+
+    public void changeDepartment() {
+        this.team.setDepartment(this.department);
     }
 }
