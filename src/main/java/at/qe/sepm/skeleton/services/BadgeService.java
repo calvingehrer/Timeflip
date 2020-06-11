@@ -126,7 +126,7 @@ public class BadgeService {
     private void evaluateFriendAndHelper(Instant startDate, Instant endDate){
         List<Task> customerServiceList;
 
-        customerServiceList = taskRepository.findTypeTasksBetweenDates(TaskEnum.KUNDENBESPRECHNUNG, startDate, endDate);
+        customerServiceList = taskRepository.findTypeTasksBetweenDates(TaskEnum.KUNDENBESPRECHUNG, startDate, endDate);
 
         String userWithMostSeconds = evaluateUserWithMostTime(customerServiceList);
 

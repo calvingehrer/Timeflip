@@ -95,7 +95,7 @@ public class BadgeServiceTest {
         taskList.get(1).setUser(userRepository.findFirstByUsername("user2"));
         taskList.get(1).setTask(TaskEnum.DESIGN);
         taskList.get(2).setUser(userRepository.findFirstByUsername("user3"));
-        taskList.get(2).setTask(TaskEnum.KUNDENBESPRECHNUNG);
+        taskList.get(2).setTask(TaskEnum.KUNDENBESPRECHUNG);
         taskList.get(3).setUser(userRepository.findFirstByUsername("user4"));
         taskList.get(3).setTask(TaskEnum.DOKUMENTATION);
         taskList.get(4).setUser(userRepository.findFirstByUsername("user1"));

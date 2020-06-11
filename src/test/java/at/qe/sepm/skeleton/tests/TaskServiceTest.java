@@ -160,7 +160,7 @@ class TaskServiceTest{
 
         accounting.put(TaskEnum.MEETING, 60L);
         accounting.put(TaskEnum.IMPLEMENTIERUNG, 80L);
-        accounting.put(TaskEnum.KUNDENBESPRECHNUNG, 60L);
+        accounting.put(TaskEnum.KUNDENBESPRECHUNG, 60L);
         accounting.put(TaskEnum.DOKUMENTATION, 60L);
         accounting.put(TaskEnum.MEETING, accounting.get(TaskEnum.MEETING)+60L);
         accounting.put(TaskEnum.IMPLEMENTIERUNG, accounting.get(TaskEnum.IMPLEMENTIERUNG)+80L);
@@ -193,10 +193,21 @@ class TaskServiceTest{
 
         int startHour = 8, endHour = 8, startMinute = 0, endMinute = 50;
 
+
         Calendar date = Calendar.getInstance(timeBean.getUtcTimeZone());
+        date.set(Calendar.SECOND, 0);
+        date.set(Calendar.MILLISECOND, 0);
+
+        date.set(Calendar.HOUR_OF_DAY, startHour);
+        date.set(Calendar.MINUTE, startMinute);
+        Instant startTime = date.toInstant();
+
+        date.set(Calendar.HOUR_OF_DAY, endHour);
+        date.set(Calendar.MINUTE, endMinute);
+        Instant endTime = date.toInstant();
         date.set(2020, Calendar.MAY, 7);
 
-        Assertions.assertThrows(TaskException.class, () -> taskService.saveEditedTask(user, null, Date.from(date.toInstant()), startHour, endHour, startMinute, endMinute));
+        Assertions.assertThrows(TaskException.class, () -> taskService.saveEditedTask(user, null, startTime,endTime));
 
 
         List<Task> adminOldTasks = taskRepository.findTasksFromUser(user);
@@ -206,7 +217,7 @@ class TaskServiceTest{
         TaskEnum newTaskType = TaskEnum.IMPLEMENTIERUNG;
 
         try {
-            taskService.saveEditedTask(user, newTaskType, Date.from(date.toInstant()), startHour, endHour, startMinute, endMinute);
+            taskService.saveEditedTask(user, newTaskType, startTime, endTime);
         }
         catch (Exception e) {
             MessagesView.errorMessage("Test editing Tasks", e.getMessage());
@@ -224,7 +235,7 @@ class TaskServiceTest{
 
         //back to before else getUserTasksBetweenDatesTest() fails
         try {
-            taskService.saveEditedTask(user, TaskEnum.DOKUMENTATION, Date.from(date.toInstant()), startHour, endHour, startMinute, endMinute);
+            taskService.saveEditedTask(user, TaskEnum.DOKUMENTATION, startTime, endTime);
         }
         catch (Exception e) {
             MessagesView.errorMessage("Test editing Tasks", e.getMessage());

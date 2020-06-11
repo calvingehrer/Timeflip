@@ -9,18 +9,33 @@ import java.util.List;
  */
 public enum TaskEnum {
 
-    KONZEPTION,
-    DESIGN,
-    IMPLEMENTIERUNG,
-    TESTEN,
-    DOKUMENTATION,
-    FEHLERMANAGEMENT,
-    MEETING,
-    KUNDENBESPRECHNUNG,
-    FORTBILDUNG,
-    PROJEKTMANAGEMENT,
-    SONSTIGES,
-    AUSZEIT;
+    KONZEPTION ("Konzeption"),
+    DESIGN ("Design"),
+    IMPLEMENTIERUNG ("Implementierung"),
+    TESTEN ("Testen"),
+    DOKUMENTATION  ("Dokumentation"),
+    FEHLERMANAGEMENT ("Fehlermanagement"),
+    MEETING ("Meeting"),
+    KUNDENBESPRECHUNG ("Kundenbesprechung"),
+    FORTBILDUNG ("Fortbildung"),
+    PROJEKTMANAGEMENT ("Projektmanagement"),
+    SONSTIGES ("Sonstiges"),
+    AUSZEIT ("Auszeit");
+
+    private final String description;
+
+    TaskEnum(String description) {
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public String toString() {
+        return this.getDescription();
+    }
 
     public static List<String> getAllTasks() {
         List<String> tasks = new ArrayList();

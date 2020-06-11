@@ -20,7 +20,7 @@
                         <p:dataGrid id="myBadges" var="badge" value="#{badgeController.badgesFromLastWeek}" columns="6">
 
                             <p:panel header="#{badge.user}" style="text-align:center">
-                                <h:graphicImage value="#{badge.imagePath}" width="200px" height="200px"/>
+                                <h:graphicImage value="#{badge.imagePath}"/>
                             </p:panel>
 
                         </p:dataGrid>
@@ -31,9 +31,9 @@
                     <p:panel header="My Current Statistics" styleClass="tasks">
 
                         <h:panelGrid columns="3" style="width:100%">
-                            <p:chart type="pie" model="#{statisticsController.todayUserModel}" style="width:400px;height:300px"/>
-                            <p:chart type="pie" model="#{statisticsController.weekUserModel}" style="width:400px;height:300px"/>
-                            <p:chart type="pie" model="#{statisticsController.monthUserModel}" style="width:400px;height:300px"/>
+                            <p:chart type="pie" model="#{statisticsController.todayUserModel}"/>
+                            <p:chart type="pie" model="#{statisticsController.weekUserModel}"/>
+                            <p:chart type="pie" model="#{statisticsController.monthUserModel}"/>
                         </h:panelGrid>
                     </p:panel>
                 </div>

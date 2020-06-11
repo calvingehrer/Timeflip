@@ -1,5 +1,6 @@
 package at.qe.sepm.skeleton.ui.beans;
 
+import at.qe.sepm.skeleton.model.Task;
 import at.qe.sepm.skeleton.ui.controllers.StatisticsController;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -26,34 +27,11 @@ public class TimeBean {
         return calendar;
     }
 
-    public Calendar getStartOfDay(Calendar calendar) {
-        return setNull(calendar);
+    public Date instantToDate(Instant instant){
+        return Date.from(instant);
     }
 
-    public Calendar getEndOfDay(Calendar calendar) {
-        calendar.add(Calendar.DATE, 1);
-        return setNull(calendar);
-    }
 
-    public Calendar getStartOfWeek(Calendar calendar) {
-        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-        return setNull(calendar);
-    }
 
-    public Calendar getEndOfWeek(Calendar calendar) {
-        calendar.add(Calendar.DATE, 7);
-        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-        return setNull(calendar);
-    }
-
-    public Calendar getStartOfMonth(Calendar calendar) {
-        calendar.set(Calendar.DATE, 1);
-        return setNull(calendar);
-    }
-
-    public Calendar getEndOfMonth(Calendar calendar) {
-        calendar.set(Calendar.DATE, 1);
-        return setNull(calendar);
-    }
 
 }

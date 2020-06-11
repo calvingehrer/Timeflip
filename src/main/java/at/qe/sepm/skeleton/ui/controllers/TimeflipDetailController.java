@@ -150,11 +150,11 @@ public class TimeflipDetailController implements Serializable {
 
     public void setKundenbesprechung(boolean kundenbesprechung) {
         this.kundenbesprechung = kundenbesprechung;
-        if(!this.tasks.contains(TaskEnum.KUNDENBESPRECHNUNG) && kundenbesprechung){
-            this.tasks.add(TaskEnum.KUNDENBESPRECHNUNG);
+        if(!this.tasks.contains(TaskEnum.KUNDENBESPRECHUNG) && kundenbesprechung){
+            this.tasks.add(TaskEnum.KUNDENBESPRECHUNG);
         }else if(!this.kundenbesprechung){
-            if(tasks.contains(TaskEnum.KUNDENBESPRECHNUNG)){
-                tasks.remove(TaskEnum.KUNDENBESPRECHNUNG);
+            if(tasks.contains(TaskEnum.KUNDENBESPRECHUNG)){
+                tasks.remove(TaskEnum.KUNDENBESPRECHUNG);
             }
         }
     }

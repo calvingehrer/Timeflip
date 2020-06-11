@@ -4,6 +4,7 @@ import at.qe.sepm.skeleton.model.*;
 import at.qe.sepm.skeleton.repositories.RequestRepository;
 import at.qe.sepm.skeleton.repositories.TaskRepository;
 import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
+import at.qe.sepm.skeleton.ui.beans.TimeBean;
 import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -11,6 +12,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -28,6 +32,9 @@ public class RequestService {
 
     @Autowired
     MailService mailService;
+
+    @Autowired
+    TimeBean timeBean;
 
     @Autowired
     private Logger<String, User> logger;
@@ -58,20 +65,30 @@ public class RequestService {
     }
 
 
-    public void addTaskRequest(User requester, Date requestedDate, String message) {
+    public void addTaskRequest(User requester, Instant requestedStartDate, Instant requestedEndDate, TaskEnum type, String message) {
         TaskRequest r = new TaskRequest();
-        r.setRequestedDate(requestedDate);
+        r.setRequestedStartDate(requestedStartDate);
+        r.setRequestedEndDate(requestedEndDate);
+        r.setTaskType(type);
         addRequest(r, requester, message);
-        mailService.sendEmailTo(requester, "Request sent", "Your request to edit " + requestedDate + " has been sent.");
+        String pattern = "MM-dd-yyyy HH,mm";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        String startDate = simpleDateFormat.format(timeBean.instantToDate(requestedStartDate));
+        String endDate = simpleDateFormat.format(timeBean.instantToDate(requestedEndDate));
+        mailService.sendEmailTo(requester, "Request sent", "Your request to change the time between " + startDate + " and " + endDate + " to " + type.toString() + " has been sent.");
 
     }
 
     public void addVacationRequest(User requester, Date requestedStartDate, Date requestedEndDate, String message) {
         VacationRequest r = new VacationRequest();
+        String pattern = "MM-dd-yyyy";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        String startDate = simpleDateFormat.format(requestedStartDate);
+        String endDate = simpleDateFormat.format(requestedEndDate);
         r.setRequestedStartDate(requestedStartDate);
         r.setRequestedEndDate(requestedEndDate);
         addRequest(r, requester, message);
-        mailService.sendEmailTo(requester, "Request sent", "Your request to take a vacation from  " + requestedStartDate + " to  " + requestedEndDate + " has been sent.");
+        mailService.sendEmailTo(requester, "Request sent", "Your request to take a vacation from  " + startDate + " to  " + endDate + " has been sent.");
 
     }
 
