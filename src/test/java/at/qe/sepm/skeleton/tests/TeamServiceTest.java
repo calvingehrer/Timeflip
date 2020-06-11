@@ -56,7 +56,7 @@ class TeamServiceTest{
         Assert.assertEquals("Management", testTeam.getDepartment().getDepartmentName());
 
         testTeam.setDepartment(departmentService.loadDepartment("Accounting"));
-        teamService.saveTeam(testTeam);
+        teamService.saveTeam(null,null,testTeam);
         Assert.assertEquals("Accounting", testTeam.getDepartment().getDepartmentName());
         Assert.assertEquals(10, teamService.getAllTeams().size(), 0);
     }

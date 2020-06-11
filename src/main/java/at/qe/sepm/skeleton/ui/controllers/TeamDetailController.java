@@ -1,18 +1,22 @@
 package at.qe.sepm.skeleton.ui.controllers;
 
 
+import at.qe.sepm.skeleton.model.Department;
 import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.TeamService;
 import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.utils.MessagesView;
+import org.hibernate.criterion.IdentifierProjection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.faces.application.FacesMessage;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Component
 @Scope("view")
@@ -32,6 +36,12 @@ public class TeamDetailController implements Serializable {
 
     private User newLeader;
 
+
+    private Set<User> addedEmployees = new HashSet<>();
+
+    private Set<User> removedEmployees = new HashSet<>();
+
+
     public void setTeam(Team team) {
         this.team = team;
         doReloadTeam();
@@ -41,13 +51,41 @@ public class TeamDetailController implements Serializable {
         return team;
     }
 
+    public User getEmployeeAdd() {
+        return employeeAdd;
+    }
+
+    public void setEmployeeAdd(User employeeAdd) {
+        this.employeeAdd = employeeAdd;
+    }
+
+    public User getEmployeeRemove() {
+        return employeeRemove;
+    }
+
+    public void setEmployeeRemove(User employeeRemove) {
+        this.employeeRemove = employeeRemove;
+    }
+
+    public User getNewLeader() {
+        return newLeader;
+    }
+
+    public void setNewLeader(User newLeader) {
+        this.newLeader = newLeader;
+    }
+
+
+    /**
+     * loads team again and sets the changes to null
+     */
+
     public void doReloadTeam() {
+        addedEmployees.clear();
+        removedEmployees.clear();
         team = teamService.loadTeam(team.getTeamName());
     }
 
-    public void doSaveTeam(){
-        team = this.teamService.saveTeam(team);
-    }
 
     /**
      * deletes the team if it is empty
@@ -90,38 +128,14 @@ public class TeamDetailController implements Serializable {
         return true;
     }
 
-    public User getEmployee() {
-        return employeeAdd;
-    }
 
-    public void setEmployee(User employee){
-        this.employeeAdd = employee;
-    }
 
     /**
      * add employee to team
      */
 
     public void addEmployee() {
-        employeeAdd.setTeam(team);
-        employeeAdd.setDepartment(team.getDepartment());
-        userService.saveUser(employeeAdd);
-    }
-
-    public User getEmployeeRemove() {
-        return employeeRemove;
-    }
-
-    public void setEmployeeRemove(User employeeRemove) {
-        this.employeeRemove = employeeRemove;
-    }
-
-    public User getNewLeader() {
-        return newLeader;
-    }
-
-    public void setNewLeader(User newLeader) {
-        this.newLeader = newLeader;
+        this.addedEmployees.add(this.getEmployeeAdd());
     }
 
     /**
@@ -129,9 +143,8 @@ public class TeamDetailController implements Serializable {
      */
 
     public void removeEmployee() {
-        this.employeeRemove.setTeam(null);
-        this.employeeRemove.setDepartment(null);
-        userService.saveUser(employeeRemove);
+        this.removedEmployees.add(this.getEmployeeRemove());
+
     }
 
     /**
@@ -139,13 +152,13 @@ public class TeamDetailController implements Serializable {
      */
 
     public void replaceLeader() {
-        User oldLeader = userService.getTeamLeader(team);
-        if (oldLeader != null) {
-            oldLeader.setTeam(null);
-            userService.saveUser(oldLeader);
-        }
-        User newLeader = this.getNewLeader();
-        newLeader.setTeam(team);
-        userService.saveUser(newLeader);
+        this.addedEmployees.add(this.getNewLeader());
+        this.removedEmployees.add(userService.getTeamLeader(this.getTeam()));
+    }
+
+    public void doSaveTeam() {
+        teamService.saveTeam(this.addedEmployees, this.removedEmployees, this.getTeam());
+        this.addedEmployees.clear();
+        this.removedEmployees.clear();
     }
 }

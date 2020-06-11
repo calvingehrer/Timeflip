@@ -34,6 +34,16 @@ public class Department implements Persistable<String>, Serializable {
         return serialVersionDID;
     }
 
+
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
     @Override
     public String toString() {
         return this.getDepartmentName();
@@ -47,7 +57,7 @@ public class Department implements Persistable<String>, Serializable {
 
     @Override
     public boolean isNew() {
-        return false;
+        return null == createDate;
     }
 
 }

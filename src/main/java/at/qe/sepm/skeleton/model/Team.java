@@ -4,6 +4,7 @@ import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -17,12 +18,24 @@ public class Team implements Persistable<String>, Serializable {
 
 
     @Id
-    @Column(name="team_name",length = 100)
+    @Column(length = 100)
     private String teamName;
 
-    @ManyToOne(optional = true, fetch = FetchType.EAGER, targetEntity = Department.class)
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Department.class)
     @JoinColumn(name = "department_id")
     private Department department;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createDate;
+
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
 
 
     public static long getSerialVersionTID() {
@@ -57,7 +70,7 @@ public class Team implements Persistable<String>, Serializable {
 
     @Override
     public boolean isNew() {
-        return false;
+        return null == createDate;
     }
 
     @Override
