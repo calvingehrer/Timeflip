@@ -5,7 +5,6 @@ import at.qe.sepm.skeleton.model.BadgeEnum;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.BadgeService;
 import at.qe.sepm.skeleton.services.UserService;
-import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -25,28 +24,17 @@ public class BadgeController implements Serializable {
     private BadgeService badgeService;
 
     @Autowired
-    private CurrentUserBean currentUserBean;
+    private UserService userService;
 
-    /**
-     *  initializes the current user and the Badges for that week that most of our test data is in
-     */
 
-    @PostConstruct
-    public void init() {
-        currentUserBean.init();
-    }
-
-    public User getCurrentUser() {
-        return currentUserBean.getCurrentUser();
-    }
 
 
     public List<Badge> getBadgesFromUser(){
-        return badgeService.getAllBadgesFromUser(currentUserBean.getCurrentUser());
+        return badgeService.getAllBadgesFromUser(userService.getAuthenticatedUser());
     }
 
     public List<Badge> getBadgesFromDepartment(){
-        return badgeService.getAllBadgesFromDepartment(currentUserBean.getCurrentUser().getDepartment());
+        return badgeService.getAllBadgesFromDepartment(userService.getAuthenticatedUser().getDepartment());
     }
 
     public List<Badge> getBadgesFromLastWeek(){

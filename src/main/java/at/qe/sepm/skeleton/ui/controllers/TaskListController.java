@@ -2,9 +2,9 @@ package at.qe.sepm.skeleton.ui.controllers;
 
 import at.qe.sepm.skeleton.model.Interval;
 import at.qe.sepm.skeleton.model.Task;
+import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.TaskService;
 import at.qe.sepm.skeleton.services.UserService;
-import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import at.qe.sepm.skeleton.ui.beans.TimeBean;
 import com.sun.istack.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +26,6 @@ public class TaskListController implements Serializable {
     UserService userService;
     @Autowired
     TimeBean timeBean;
-    @Autowired
-    CurrentUserBean currentUserBean;
 
     private Date startOfTimeRange;
 
@@ -35,12 +33,8 @@ public class TaskListController implements Serializable {
 
     private Date chosenDate;
 
-    private Interval interval = Interval.NONE;
+    private String interval = "";
 
-    @PostConstruct
-    public void init() {
-        currentUserBean.init();
-    }
 
     public Date getStartOfTimeRange() {
         return startOfTimeRange;
@@ -66,11 +60,11 @@ public class TaskListController implements Serializable {
         this.chosenDate = chosenDate;
     }
 
-    public Interval getInterval() {
+    public String getInterval() {
         return interval;
     }
 
-    public void setInterval(Interval interval) {
+    public void setInterval(String interval) {
         this.interval = interval;
     }
 
@@ -85,27 +79,28 @@ public class TaskListController implements Serializable {
      */
 
     public List<Task> getTasksFromUser() {
-        if (this.getInterval()==Interval.NONE) {
-            return taskService.getAllTasksBetweenDates(currentUserBean.getCurrentUser(), null, null);
+        User currentUser = userService.getAuthenticatedUser();
+        if (this.getInterval()=="") {
+            return taskService.getAllTasksBetweenDates(currentUser, null, null);
         }
         Calendar calendar = Calendar.getInstance(timeBean.getUtcTimeZone());
         if (!this.getChosenDate().after(new Date())) {
             calendar.setTime(this.getChosenDate());
         }
 
-        if (this.getInterval()==Interval.DAILY) {
+        if (this.getInterval()=="Daily") {
             calendar.set(Calendar.HOUR_OF_DAY, 0);
             settingTimeRange(calendar, "day",1);
         }
-        else if (this.getInterval()==Interval.WEEKLY) {
+        else if (this.getInterval()=="Weekly") {
             calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
             settingTimeRange(calendar, "day", 7);
         }
-        else if (this.getInterval()==Interval.MONTHLY) {
+        else if (this.getInterval()=="Monthly") {
             calendar.set(Calendar.DAY_OF_MONTH, 1);
             settingTimeRange(calendar, "month", 1);
         }
-        return taskService.getAllTasksBetweenDates(currentUserBean.getCurrentUser(), this.getStartOfTimeRange().toInstant(), this.getEndOfTimeRange().toInstant());
+        return taskService.getAllTasksBetweenDates(currentUser, this.getStartOfTimeRange().toInstant(), this.getEndOfTimeRange().toInstant());
     }
 
     public List<Task> getSortedTasksFromUser(){
@@ -123,7 +118,7 @@ public class TaskListController implements Serializable {
      * resets the filter so that all tasks are displayed
      */
     public void resetFilter() {
-        this.setInterval(Interval.NONE);
+        this.setInterval("");
         this.setStartOfTimeRange(null);
         this.setEndOfTimeRange(null);
     }

@@ -5,7 +5,6 @@ import at.qe.sepm.skeleton.model.Room;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.DepartmentService;
 import at.qe.sepm.skeleton.services.RoomService;
-import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import org.junit.*;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -25,8 +24,6 @@ class RoomServiceTest {
     RoomService roomService;
 
 
-    @MockBean
-    CurrentUserBean currentUserBean;
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})

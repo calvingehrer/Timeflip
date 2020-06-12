@@ -5,7 +5,6 @@ import at.qe.sepm.skeleton.services.RequestService;
 import at.qe.sepm.skeleton.services.TaskService;
 import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.services.VacationService;
-import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import at.qe.sepm.skeleton.utils.MessagesView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -20,28 +19,19 @@ import java.util.stream.Collectors;
 @Scope("view")
 public class RequestController implements Serializable  {
     @Autowired
-    RequestService requestService;
+    private RequestService requestService;
 
     @Autowired
-    VacationService vacationService;
+    private VacationService vacationService;
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
-    @Autowired
-    CurrentUserBean currentUserBean;
 
     @Autowired
     private TaskService taskService;
 
 
-    /**
-     * A Function to get the current user
-     */
-    @PostConstruct
-    public void init() {
-        currentUserBean.init();
-    }
 
     /**
      * Function to get open requests of taskRequest handler
@@ -49,7 +39,7 @@ public class RequestController implements Serializable  {
      */
 
     public List<Request> getOpenRequestsLeader() {
-        return requestService.getAllOpenRequestsOfLeader(currentUserBean.getCurrentUser());
+        return requestService.getAllOpenRequestsOfLeader(userService.getAuthenticatedUser());
     }
 
     /**
@@ -57,21 +47,21 @@ public class RequestController implements Serializable  {
      * @return all the requests of the employee that have yet to be edited
      */
 
-    public List<Request> getOpenRequestsEmployee() { return requestService.getOpenRequestsOfEmployee(currentUserBean.getCurrentUser()); }
+    public List<Request> getOpenRequestsEmployee() { return requestService.getOpenRequestsOfEmployee(userService.getAuthenticatedUser()); }
 
     /**
      * Function to get accepted requests of requester
      * @return all accepted requests of user
      */
 
-    public List<Request> getAcceptedRequestsEmployee() { return requestService.getAcceptedRequestsOfEmployee(currentUserBean.getCurrentUser()); }
+    public List<Request> getAcceptedRequestsEmployee() { return requestService.getAcceptedRequestsOfEmployee(userService.getAuthenticatedUser()); }
 
     /**
      * Function to get declined requests of requester
      * @return all declined requests of user
      */
 
-    public List<Request> getDeclinedRequestsEmployee() { return requestService.getDeclinedRequestsOfEmployee(currentUserBean.getCurrentUser()); }
+    public List<Request> getDeclinedRequestsEmployee() { return requestService.getDeclinedRequestsOfEmployee(userService.getAuthenticatedUser()); }
 
     /**
      * Function to accept a taskRequest
@@ -119,7 +109,7 @@ public class RequestController implements Serializable  {
         requestService.deleteRequest(request);
     }
 
-    public List<Request> getAcceptedTaskRequestsEmployee() { return requestService.getAcceptedRequestsOfEmployee(currentUserBean.getCurrentUser())
+    public List<Request> getAcceptedTaskRequestsEmployee() { return requestService.getAcceptedRequestsOfEmployee(userService.getAuthenticatedUser())
             .stream()
             .filter(request -> request.getDiscriminatorValue() == 1)
             .collect(Collectors.toList()); }

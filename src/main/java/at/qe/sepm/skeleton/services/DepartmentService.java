@@ -5,7 +5,6 @@ import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.DepartmentRepository;
 import at.qe.sepm.skeleton.repositories.TeamRepository;
-import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -33,13 +32,6 @@ public class DepartmentService {
     @Autowired
     private Logger<String, User> logger;
 
-    @Autowired
-    CurrentUserBean currentUserBean;
-
-    @PostConstruct
-    public void init() {
-        currentUserBean.init();
-    }
 
     /**
      *
@@ -83,7 +75,7 @@ public class DepartmentService {
             userService.saveUser(newLeader);
         }
 
-        logger.logUpdate(department.toString(), currentUserBean.getCurrentUser());
+        logger.logUpdate(department.toString(), userService.getAuthenticatedUser());
         return departmentRepository.save(department);
 
     }
@@ -101,7 +93,7 @@ public class DepartmentService {
 
         saveDepartment(newDepartment, null,null, null, headOfDepartment);
 
-        logger.logCreation(headOfDepartment.toString(), currentUserBean.getCurrentUser());
+        logger.logCreation(headOfDepartment.toString(), userService.getAuthenticatedUser());
     }
 
     /**
@@ -123,7 +115,7 @@ public class DepartmentService {
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteDepartment(Department department){
         departmentRepository.delete(department);
-        logger.logDeletion(department.getDepartmentName(), currentUserBean.getCurrentUser());
+        logger.logDeletion(department.getDepartmentName(), userService.getAuthenticatedUser());
     }
 
     /**

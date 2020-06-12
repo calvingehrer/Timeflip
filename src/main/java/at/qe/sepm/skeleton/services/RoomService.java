@@ -5,7 +5,6 @@ import at.qe.sepm.skeleton.model.Room;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.RoomRepository;
 import at.qe.sepm.skeleton.repositories.UserRepository;
-import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -30,22 +29,13 @@ public class RoomService {
     UserRepository userRepository;
     @Autowired
     RaspberryService raspberryService;
+    @Autowired
+    private UserService userService;
 
 
     @Autowired
     private Logger<String, User> logger;
 
-    @Autowired
-    CurrentUserBean currentUserBean;
-
-    /**
-     * A Function to get the current user
-     */
-
-    @PostConstruct
-    public void init() {
-        currentUserBean.init();
-    }
 
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -75,7 +65,7 @@ public class RoomService {
         newRoom.setRoomNumber(room.getRoomNumber());
         newRoom.setRaspberry(null);
         saveRoom(newRoom);
-        logger.logCreation(room.getRoomNumber(), currentUserBean.getCurrentUser());
+        logger.logCreation(room.getRoomNumber(), userService.getAuthenticatedUser());
     }
 
     public User getAuthenticatedUser() {
@@ -94,7 +84,7 @@ public class RoomService {
             room.setCreateDate(new Date());
             room.setCreateUser(getAuthenticatedUser());
         }
-        logger.logUpdate(room.getRoomNumber(), currentUserBean.getCurrentUser());
+        logger.logUpdate(room.getRoomNumber(), userService.getAuthenticatedUser());
         return roomRepository.save(room);
     }
 
@@ -110,6 +100,6 @@ public class RoomService {
             raspberryService.deleteRaspberry(raspberry);
         }
         roomRepository.delete(room);
-        logger.logDeletion(room.getId(), currentUserBean.getCurrentUser());
+        logger.logDeletion(room.getId(), userService.getAuthenticatedUser());
     }
 }

@@ -17,10 +17,11 @@
         <div class="ui-g">
             <div class="ui-g-12">
                 <div class="card">
+
+
                     <h:form id="TaskForm">
-                        <p:messages id="messages" showDetail="true" closable="true">
-                            <p:autoUpdate />
-                        </p:messages>
+                        
+
 
                         <p:dataTable id="Tasks" var="task" value="#{taskListController.sortedTasksFromUser}" scrollable="true">
                             <f:facet name="header">
@@ -47,7 +48,6 @@
 
 
                         <p:commandButton update=":TaskForm:Tasks" value="Edit Tasks" styleClass="addButton" oncomplete="PF('editTasksWithinTimeFrameDialog').show()"/>
-                        <p:commandButton update=":TaskForm:Tasks" value="Filter Tasks" styleClass="addButton" oncomplete="PF('filterTaskDialog').show()"/>
 
                     </h:form>
 
@@ -83,24 +83,15 @@
                     </p:dialog>
 
 
-
-                    <p:dialog header="Filter Tasks" id="filterTaskDialog" widgetVar="filterTaskDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-                        <h:form id="timeRange">
-                            <h:panelGrid columns="5">
-                                <h:panelGrid columns="2">
-                                    <p:outputLabel value="Choose Interval "/>
-                                    <p:autoComplete id="view" dropdown="true"  value="#{taskListController.interval}" completeMethod="#{completeMethodBean.completeIntervall}"/>
-                                </h:panelGrid>
-                                <h:panelGrid columns="2">
-                                    <p:outputLabel value="Choose Day in Interval"/>
-                                    <p:calendar id="startTimeRange" mode="inline" value="#{taskListController.chosenDate}" timeZone="#{timeBean.utcTimeZone}"/>
-                                </h:panelGrid>
-
-                                <p:commandButton value="Find" update="TaskForm:Tasks" oncomplete="PF('filterTaskDialog').hide()"/>
-                                <p:commandButton value="Reset" action="#{taskListController.resetFilter}" update=":TaskForm:Tasks" oncomplete="PF('filterTaskDialog').hide()"/>
-                            </h:panelGrid>
+                    <p:dialog header="Choose Date" id="showCalendar" widgetVar="showCalendar" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                        <h:form>
+                            <p:calendar id="startTimeRange" mode="inline" value="#{taskListController.chosenDate}" timeZone="#{timeBean.utcTimeZone}"/>
+                            <p:commandButton value="Save" oncomplete="PF('showCalendar').hide()"/>
+                            <p:commandButton value="Abort" type="reset" onclick="PF('showCalendar').hide()"/>
                         </h:form>
+
                     </p:dialog>
+
 
                 </div>
             </div>

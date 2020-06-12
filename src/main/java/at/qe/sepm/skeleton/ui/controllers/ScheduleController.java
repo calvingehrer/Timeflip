@@ -1,8 +1,8 @@
 package at.qe.sepm.skeleton.ui.controllers;
 
 import at.qe.sepm.skeleton.model.Vacation;
+import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.services.VacationService;
-import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import at.qe.sepm.skeleton.ui.beans.HolidayBean;
 import at.qe.sepm.skeleton.ui.beans.TimeBean;
 import org.primefaces.event.SelectEvent;
@@ -46,7 +46,8 @@ public class ScheduleController implements Serializable {
     private VacationService vacationService;
 
     @Autowired
-    private CurrentUserBean currentUserBean;
+    private UserService userService;
+
 
     /**
      * method to initialize the calendar with vacation and public holidays
@@ -56,7 +57,6 @@ public class ScheduleController implements Serializable {
 
     @PostConstruct
     public void init() {
-        currentUserBean.init();
         this.lazyEventModel = new LazyScheduleModel() {
             private static final long serialVersionUID = 3580478297132439482L;
 
@@ -67,7 +67,7 @@ public class ScheduleController implements Serializable {
                 Instant endInstant = end.toInstant();
 
 
-                Collection<Vacation> vacations = vacationService.getVacationFromUser(currentUserBean.getCurrentUser());
+                Collection<Vacation> vacations = vacationService.getVacationFromUser(userService.getAuthenticatedUser());
 
 
                 vacations.forEach(f -> {

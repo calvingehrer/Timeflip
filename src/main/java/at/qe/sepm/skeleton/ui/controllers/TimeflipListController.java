@@ -4,7 +4,6 @@ package at.qe.sepm.skeleton.ui.controllers;
 import at.qe.sepm.skeleton.model.Timeflip;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.TimeflipService;
-import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import at.qe.sepm.skeleton.ui.beans.SessionInfoBean;
 import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.ui.beans.SessionInfoBean;
@@ -35,18 +34,10 @@ public class TimeflipListController implements Serializable {
 
     @Autowired
     ManageCurrentUserController manageCurrentUserController;
-    @Autowired
-    CurrentUserBean currentUserBean;
-
-    @PostConstruct
-    public void init() {
-        currentUserBean.init();
-    }
 
 
     public Timeflip getTimeflipOfUser() {
-        User currentUser = currentUserBean.getCurrentUser();
-        return timeflipService.getTimeflipOfUser(currentUser);
+        return timeflipService.getTimeflipOfUser(userService.getAuthenticatedUser());
     }
 
 

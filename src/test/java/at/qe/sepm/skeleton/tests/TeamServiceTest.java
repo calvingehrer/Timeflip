@@ -5,7 +5,6 @@ import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.services.DepartmentService;
 import at.qe.sepm.skeleton.services.TeamService;
 import at.qe.sepm.skeleton.services.UserService;
-import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import org.junit.*;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -34,8 +33,6 @@ class TeamServiceTest{
     @Autowired
     DepartmentService departmentService;
 
-    @MockBean
-    CurrentUserBean currentUserBean;
 
 
 

@@ -3,7 +3,6 @@ package at.qe.sepm.skeleton.tests;
 
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.*;
-import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import at.qe.sepm.skeleton.utils.auditlog.LogEntry;
 import org.junit.*;
 import org.junit.jupiter.api.Test;
@@ -28,8 +27,6 @@ class AuditLogServiceTest {
     @Autowired
     AuditLogService auditLogService;
 
-    @MockBean
-    CurrentUserBean currentUserBean;
 
     @Autowired
     UserService userService;

@@ -5,7 +5,6 @@ import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.TaskRepository;
 import at.qe.sepm.skeleton.repositories.TeamRepository;
-import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -34,19 +33,9 @@ public class TeamService {
     @Autowired
     private Logger<String, User> logger;
 
-    @Autowired
-    CurrentUserBean currentUserBean;
 
     @Autowired
     private TaskRepository taskRepository;
-    /**
-     * A Function to get the current user
-     */
-
-    @PostConstruct
-    public void init() {
-        currentUserBean.init();
-    }
 
     /**
      *
@@ -71,7 +60,7 @@ public class TeamService {
         newTeam.setDepartment(team.getDepartment());
         newTeam.setCreateDate(new Date());
         saveTeam(employees,null,newTeam);
-        logger.logCreation(team.getTeamName(), currentUserBean.getCurrentUser());
+        logger.logCreation(team.getTeamName(), userService.getAuthenticatedUser());
     }
 
     /**
@@ -105,7 +94,7 @@ public class TeamService {
                 userService.saveUser(u);
             }
         }
-        logger.logUpdate(team.getTeamName(), currentUserBean.getCurrentUser());
+        logger.logUpdate(team.getTeamName(), userService.getAuthenticatedUser());
 
     }
 
@@ -128,7 +117,7 @@ public class TeamService {
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteTeam(Team team) {
         teamRepository.delete(team);
-        logger.logDeletion(team.toString(), currentUserBean.getCurrentUser());
+        logger.logDeletion(team.toString(), userService.getAuthenticatedUser());
     }
 
     /**

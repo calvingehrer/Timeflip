@@ -4,7 +4,6 @@ package at.qe.sepm.skeleton.services;
 import at.qe.sepm.skeleton.exceptions.TaskException;
 import at.qe.sepm.skeleton.model.*;
 import at.qe.sepm.skeleton.repositories.TaskRepository;
-import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import at.qe.sepm.skeleton.ui.beans.TimeBean;
 import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,20 +27,11 @@ public class TaskService {
     @Autowired
     private TaskRepository taskRepository;
     @Autowired
-    TimeBean timeBean;
-    @Autowired
-    CurrentUserBean currentUserBean;
+    private TimeBean timeBean;
     @Autowired
     private Logger<String, User> logger;
-
-    /**
-     * A Function to get the current user
-     */
-
-    @PostConstruct
-    public void init() {
-        currentUserBean.init();
-    }
+    @Autowired
+    private UserService userService;
 
     public List<Task> getAllTasksBetweenDates(User user, Instant start, Instant end) {
         if (start == null || end == null) {
@@ -225,7 +215,7 @@ public class TaskService {
 
         taskRepository.save(toSave);
 
-        logger.logUpdate(task.toString(), currentUserBean.getCurrentUser());
+        logger.logUpdate(task.toString(), userService.getAuthenticatedUser());
     }
 
     /**
@@ -288,7 +278,7 @@ public class TaskService {
         task.setTeam(null);
         task.setDepartment(null);
         taskRepository.delete(task);
-        logger.logDeletion(task.getTask().toString(), currentUserBean.getCurrentUser());
+        logger.logDeletion(task.getTask().toString(), userService.getAuthenticatedUser());
     }
 
     public void deleteTasksOfUser (User user) {

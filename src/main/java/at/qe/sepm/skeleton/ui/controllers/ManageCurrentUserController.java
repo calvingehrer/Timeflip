@@ -3,7 +3,6 @@ package at.qe.sepm.skeleton.ui.controllers;
 import at.qe.sepm.skeleton.model.Interval;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.UserService;
-import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import at.qe.sepm.skeleton.ui.beans.SessionInfoBean;
 import at.qe.sepm.skeleton.utils.MessagesView;
 import at.qe.sepm.skeleton.utils.auditlog.Logger;
@@ -24,10 +23,35 @@ public class ManageCurrentUserController implements Serializable {
     private static final long serialVersionUID = -5637562154142043652L;
 
     @Autowired
-    CurrentUserBean currentUserBean;
+    UserService userService;
 
-    @Autowired
-    private UserService userService;
+    private User currentUser;
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
+
+    /**
+     * method to reload the user
+     */
+
+    public void reloadUser() {
+        this.setCurrentUser(this.userService.loadUser(currentUser.getUsername()));
+    }
+
+    /**
+     * method to load the current user
+     * has to be called in the function that uses the bean to load it when a new user is logged in
+     */
+    @PostConstruct
+    public void init() {
+        this.setCurrentUser(userService.getAuthenticatedUser());
+    }
+
 
     private Logger<Exception, User> logger;
 
@@ -39,7 +63,6 @@ public class ManageCurrentUserController implements Serializable {
 
     private String confirmNew;
 
-    private User currentUser;
 
 
     public String getOldPassword() {
@@ -74,26 +97,13 @@ public class ManageCurrentUserController implements Serializable {
 
     public void setIntervall(String intervall) { this.intervall = intervall; }
 
-    public User getCurrentUser() {
-        return currentUser;
-    }
-
-    public void setCurrentUser(User currentUser) {
-        this.currentUser = currentUser;
-    }
-
-    @PostConstruct
-    public void init() {
-        currentUserBean.init();
-        this.setCurrentUser(currentUserBean.getCurrentUser());
-    }
 
     public String getFullName() {
-        return currentUserBean.getCurrentUser().getFirstName() + " " + currentUserBean.getCurrentUser().getLastName();
+        return this.getCurrentUser().getFirstName() + " " + this.getCurrentUser().getLastName();
     }
 
     public boolean checkOldPassword(){
-        return passwordEncoder.matches(oldPassword, currentUserBean.getCurrentUser().getPassword());
+        return passwordEncoder.matches(oldPassword, this.getCurrentUser().getPassword());
     }
 
     public boolean checkConfirmedPassword(){
@@ -111,13 +121,13 @@ public class ManageCurrentUserController implements Serializable {
             if (checkConfirmedPassword()){
                     MessagesView.successMessage("passwordControl", "The new password will be saved");
                 try {
-                    User cu = currentUserBean.getCurrentUser();
+                    User cu = this.getCurrentUser();
                     cu.setPassword(newPassword);
                     this.userService.updateUser(cu);
-                    currentUserBean.reloadUser();
+                    this.reloadUser();
                 } catch (Exception e) {
                     e.printStackTrace();
-                    logger.logError(e, currentUserBean.getCurrentUser());
+                    logger.logError(e, this.getCurrentUser());
                 }
             }
             else{
@@ -136,12 +146,12 @@ public class ManageCurrentUserController implements Serializable {
 
     public void saveUserDetails() {
         try {
-            this.userService.updateUser(currentUserBean.getCurrentUser());
-            currentUserBean.reloadUser();
+            this.userService.updateUser(this.getCurrentUser());
+            this.reloadUser();
             FacesContext.getCurrentInstance().getExternalContext().redirect("/employee/profile.xhtml");
         } catch (Exception e) {
             e.printStackTrace();
-            logger.logError(e, currentUserBean.getCurrentUser());
+            logger.logError(e, this.getCurrentUser());
         }
     }
 
