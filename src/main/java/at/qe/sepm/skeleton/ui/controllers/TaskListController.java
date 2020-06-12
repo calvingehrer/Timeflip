@@ -35,6 +35,8 @@ public class TaskListController implements Serializable {
 
     private String interval = "";
 
+    private String taskType = "";
+
 
     public Date getStartOfTimeRange() {
         return startOfTimeRange;
@@ -68,6 +70,14 @@ public class TaskListController implements Serializable {
         this.interval = interval;
     }
 
+    public String getTaskType() {
+        return taskType;
+    }
+
+    public void setTaskType(String taskType) {
+        this.taskType = taskType;
+    }
+
     /**
      * filters tasks by interval and date
      * if interval is none as it is from default every task ever documented is displayed
@@ -80,37 +90,51 @@ public class TaskListController implements Serializable {
 
     public List<Task> getTasksFromUser() {
         User currentUser = userService.getAuthenticatedUser();
-        if (this.getInterval()=="") {
-            return taskService.getAllTasksBetweenDates(currentUser, null, null);
+        if (this.getInterval().equals("")) {
+            return taskService.getAllTasksByType(currentUser,taskType);
         }
         Calendar calendar = Calendar.getInstance(timeBean.getUtcTimeZone());
-        if (!this.getChosenDate().after(new Date())) {
-            calendar.setTime(this.getChosenDate());
+        if (this.chosenDate.before(new Date())) {
+            calendar.setTime(this.chosenDate);
+
+        }
+        Date startTimeRange  = new Date();
+        Date endTimeRange = new Date();
+
+        if (this.getInterval().equals("Daily")) {
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.HOUR_OF_DAY,0);
+            calendar.set(Calendar.MINUTE,0);
+            calendar.set(Calendar.SECOND,0);
+            startTimeRange = calendar.getTime();
+            calendar.add(Calendar.DATE, 1);
+            endTimeRange = calendar.getTime();
+        }
+        else if (this.getInterval().equals("Weekly")) {
+            calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+            calendar.set(Calendar.HOUR_OF_DAY,0);
+            calendar.set(Calendar.MINUTE,0);
+            calendar.set(Calendar.SECOND,0);
+            startTimeRange = calendar.getTime();
+            calendar.add(Calendar.DATE, 7);
+            endTimeRange = calendar.getTime();
+        }
+        else if (this.getInterval().equals("Monthly")) {
+            calendar.set(Calendar.DAY_OF_MONTH, 1);
+            calendar.set(Calendar.HOUR_OF_DAY,0);
+            calendar.set(Calendar.MINUTE,0);
+            calendar.set(Calendar.SECOND,0);
+            startTimeRange = calendar.getTime();
+            calendar.add(Calendar.MONTH, 1);
+            endTimeRange = calendar.getTime();
         }
 
-        if (this.getInterval()=="Daily") {
-            calendar.set(Calendar.HOUR_OF_DAY, 0);
-            settingTimeRange(calendar, "day",1);
-        }
-        else if (this.getInterval()=="Weekly") {
-            calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-            settingTimeRange(calendar, "day", 7);
-        }
-        else if (this.getInterval()=="Monthly") {
-            calendar.set(Calendar.DAY_OF_MONTH, 1);
-            settingTimeRange(calendar, "month", 1);
-        }
-        return taskService.getAllTasksBetweenDates(currentUser, this.getStartOfTimeRange().toInstant(), this.getEndOfTimeRange().toInstant());
+        return taskService.getAllTasksBetweenDates(currentUser, startTimeRange.toInstant(), endTimeRange.toInstant());
     }
 
     public List<Task> getSortedTasksFromUser(){
         List<Task> sorted = getTasksFromUser();
-        Collections.sort(sorted, new Comparator<Task>() {
-            @Override
-            public int compare(Task task1, Task task2) {
-                return task2.getStartTime().compareTo(task1.getStartTime());
-            }
-        });
+        Collections.sort(sorted, (task1, task2) -> task2.getStartTime().compareTo(task1.getStartTime()));
         return sorted;
     }
 
@@ -119,28 +143,9 @@ public class TaskListController implements Serializable {
      */
     public void resetFilter() {
         this.setInterval("");
+        this.setTaskType("");
         this.setStartOfTimeRange(null);
         this.setEndOfTimeRange(null);
-    }
-
-    /**
-     * method to standardize computation of first and last day of time range
-     * @param calendar
-     * @param field
-     * @param toAdd
-     */
-    public void settingTimeRange(@NotNull Calendar calendar, @NotNull String field, Integer toAdd) {
-        calendar.set(Calendar.HOUR_OF_DAY,0);
-        calendar.set(Calendar.MINUTE,0);
-        calendar.set(Calendar.SECOND,0);
-        this.setStartOfTimeRange(calendar.getTime());
-        if (field.equals("day")) {
-            calendar.add(Calendar.DATE, toAdd);
-        }
-        else if (field.equals("month")) {
-            calendar.add(Calendar.MONTH, toAdd);
-        }
-        this.setEndOfTimeRange(calendar.getTime());
     }
 
 
