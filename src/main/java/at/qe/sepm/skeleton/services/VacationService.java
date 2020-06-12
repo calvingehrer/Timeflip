@@ -61,11 +61,8 @@ public class VacationService {
      * Add a new Vacation
      * @param user
      * @param vacation
-     * @throws VacationException
      */
-    public void addVacation(User user, Vacation vacation) throws VacationException {
-
-        checkVacationDates(user, vacation.getStart(), vacation.getEnd());
+    public void addVacation(User user, Vacation vacation) {
 
         int beginYear = TimeConverter.getYear(vacation.getStart());
         int endYear = TimeConverter.getYear(vacation.getEnd());
@@ -83,7 +80,6 @@ public class VacationService {
         managedUser.addVacation(vacation);
         userRepository.save(managedUser);
         logger.logCreation("Vacation of " + user.getUsername(), currentUserBean.getCurrentUser());
-        user.addVacation(vacation);
     }
 
     /**
@@ -93,9 +89,8 @@ public class VacationService {
 
     @Transactional
     public Set<Vacation> getVacationFromUser(User user) {
-        User current = currentUserBean.getCurrentUser();
-        if (!current.getVacations().isEmpty()) {
-            return current.getVacations();
+        if (!user.getVacations().isEmpty()) {
+            return user.getVacations();
         } else {
             return Collections.emptySet();
         }
@@ -127,8 +122,6 @@ public class VacationService {
 
         long lengthNewVacation = Duration.between(startDate, endDate).toDays();
 
-
-
         lengthNewVacation -= checkPublicHolidays(startDate, endDate);
 
 
@@ -143,6 +136,7 @@ public class VacationService {
                 .mapToLong(value ->
                         Duration.between(value.getStart(), value.getEnd()).toDays() - checkPublicHolidays(value.getStart(), value.getEnd()))
                 .sum();
+
         if (totalDays + lengthNewVacation > Vacation.MAX_VACATION_DAYS_PER_YEAR) {
             throw new VacationException("Limit exceeded .You can't take vacation that long.");
         }

@@ -180,10 +180,11 @@ public class TaskController implements Serializable  {
             setStartAndEndTime();
             String pattern = "MM-dd-yyyy HH:mm";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+            simpleDateFormat.setTimeZone(timeBean.getUtcTimeZone());
             String startDate = simpleDateFormat.format(timeBean.instantToDate(this.getStartTime()));
             String endDate = simpleDateFormat.format(timeBean.instantToDate(this.getEndTime()));
 
-            requestService.addTaskRequest(u, this.getStartTime(), this.getEndTime(), this.getTask(),  "Changing to " + TaskEnum.DOKUMENTATION);
+            requestService.addTaskRequest(u, this.getStartTime(), this.getEndTime(), this.getTask(),  "Changing time frame from " + startDate + " to "  + endDate + " to  " + this.task.toString());
         }
         catch (Exception e){
             MessagesView.errorMessage("Edit Tasks", e.getMessage());

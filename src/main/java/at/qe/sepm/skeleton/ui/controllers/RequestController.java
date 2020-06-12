@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -74,33 +75,39 @@ public class RequestController implements Serializable  {
     public List<Request> getDeclinedRequestsEmployee() { return requestService.getDeclinedRequestsOfEmployee(currentUserBean.getCurrentUser()); }
 
     /**
-     * Function to accept a taskRequest
+     * Function to accept a request
      * @param request
      */
     public void acceptRequest(Request request) {
-        requestService.acceptRequest(request);
         if (request.getDiscriminatorValue() == 1) {
+            assert request instanceof TaskRequest;
             TaskRequest tr = (TaskRequest) request;
             try {
                 taskService.saveEditedTask(tr.getRequester(), tr.getTaskType(), tr.getRequestedStartDate(), tr.getRequestedEndDate());
             }
             catch (Exception e) {
                 MessagesView.errorMessage("Edit Tasks", e.getMessage());
+                requestService.declineRequest(request);
+                return;
             }
         }
         if (request.getDiscriminatorValue() == 2) {
+            assert request instanceof VacationRequest;
             VacationRequest vr = (VacationRequest) request;
             Vacation vacation = new Vacation();
             vacation.setStart(vr.getRequestedStartDate().toInstant());
             vacation.setEnd(vr.getRequestedEndDate().toInstant());
             try {
+                vacationService.checkVacationDates(vr.getRequester(), vacation.getStart(), vacation.getEnd());
                 vacationService.addVacation(vr.getRequester(), vacation);
             }
             catch (Exception e) {
                 MessagesView.errorMessage("Vacation", "The granted vacation ist not valid, it is denied");
                 requestService.declineRequest(request);
+                return;
             }
         }
+        requestService.acceptRequest(request);
     }
 
     /**

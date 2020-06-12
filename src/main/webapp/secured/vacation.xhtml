@@ -23,10 +23,10 @@
                 <div class="card">
                     <h1>Vacations</h1>
 
-                    <p:growl id="growl" rendered="#{not facesContext.validationFailed}" severity="info"/>
+                    <p:growl id="growl" rendered="#{not facesContext.validationFailed}" severity="info" showDetail="true"/>
 
                     <h:form id="addVacationButton" prependId="false">
-                        <p:messages id="addVacationMessages" severity="error">
+                        <p:messages id="addVacationMessages" severity="error" >
                             <p:autoUpdate/>
                         </p:messages>
                         <p:commandButton value="Add a Vacaction" update="vacationListForm growl"
@@ -41,6 +41,7 @@
             <div class="ui-g-12">
                 <div class="card">
                     <h2>My vacations</h2>
+
 
                     <h:form id="vacationListForm" prependId="false">
                         <p:dataTable id="vacationsTable" var="vacation" value="#{vacationController.vacations}">
