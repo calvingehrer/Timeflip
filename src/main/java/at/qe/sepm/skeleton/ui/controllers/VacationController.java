@@ -126,8 +126,6 @@ public class VacationController implements Serializable {
                 this.vacationService.checkVacationDates(currentUser, this.getBeginVacation().toInstant(), this.getEndOfVacation().toInstant());
             }
             catch (Exception e) {
-                this.vacationService.checkVacationDates(currentUserBean.getCurrentUser(), this.getBeginVacation().toInstant(), this.getEndOfVacation().toInstant());
-            } catch (Exception e) {
                 MessagesView.errorMessage("vacation", e.getMessage());
                 return;
             }
