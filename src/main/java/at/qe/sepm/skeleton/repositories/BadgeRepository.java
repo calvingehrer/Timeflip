@@ -25,5 +25,15 @@ public interface BadgeRepository extends AbstractRepository<Badge, String> {
     List<Badge> findBadgesFromUserInInterval(@Param("user") User user, @Param("startDate") Instant startDate,
                                              @Param("endDate") Instant endDate);
 
+    @Query("SELECT b FROM Badge b WHERE b.user.department=:department AND b.badgeType=:badgeType")
+    List<Badge> findBadgesFromDepartmentByType(@Param("department") Department department,
+                                               @Param("badgeType")BadgeEnum badgeType);
+
+    @Query("SELECT b FROM Badge b WHERE b.user.department=:department AND b.dateOfBadge>=:startDate AND b.dateOfBadge<=:endDate")
+    List<Badge> findBadgesFromDepartmentInIntervall(@Param("department") Department department,
+                                             @Param("startDate") Instant startDate,
+                                             @Param("endDate") Instant endDate);
+
+
 
 }

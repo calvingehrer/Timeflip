@@ -52,7 +52,7 @@ public class BadgeController implements Serializable {
         this.chosenDate = chosenDate;
     }
 
-    public List<Badge> getBadgesFromUser() {
+    public List<Badge> getBadges(boolean forUser) {
         Calendar calendar = Calendar.getInstance();
         if (chosenDate != null) {
             calendar.setTime(chosenDate);
@@ -68,7 +68,7 @@ public class BadgeController implements Serializable {
                 startTimeRange = calendar.getTime();
                 calendar.add(Calendar.DATE, 1);
                 endTimeRange = calendar.getTime();
-                return badgeService.getBadgesBetweenDates(userService.getAuthenticatedUser(),
+                return badgeService.getBadgesBetweenDates(userService.getAuthenticatedUser(), forUser,
                         startTimeRange.toInstant(), endTimeRange.toInstant());
             case("Weekly"):
                 calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
@@ -78,7 +78,7 @@ public class BadgeController implements Serializable {
                 startTimeRange = calendar.getTime();
                 calendar.add(Calendar.DATE, 7);
                 endTimeRange = calendar.getTime();
-                return badgeService.getBadgesBetweenDates(userService.getAuthenticatedUser(),
+                return badgeService.getBadgesBetweenDates(userService.getAuthenticatedUser(), forUser,
                         startTimeRange.toInstant(), endTimeRange.toInstant());
             case("Monthly"):
                 calendar.set(Calendar.DAY_OF_MONTH, 1);
@@ -88,15 +88,17 @@ public class BadgeController implements Serializable {
                 startTimeRange = calendar.getTime();
                 calendar.add(Calendar.MONTH, 1);
                 endTimeRange = calendar.getTime();
-                return badgeService.getBadgesBetweenDates(userService.getAuthenticatedUser(),
+                return badgeService.getBadgesBetweenDates(userService.getAuthenticatedUser(), forUser,
                         startTimeRange.toInstant(), endTimeRange.toInstant());
-            default: return badgeService.getUserBadgesOfType(userService.getAuthenticatedUser(), this.badgeType);
+            default: return badgeService.getBadgesOfType(userService.getAuthenticatedUser(), forUser, this.badgeType);
         }
 
     }
 
     public List<Badge> getBadgesFromDepartment(){
-        return badgeService.getAllBadgesFromDepartment(userService.getAuthenticatedUser().getDepartment());
+        List<Badge> sorted = getBadges(false);
+        Collections.sort(sorted, (task1, task2) -> task2.getDateOfBadge().compareTo(task1.getDateOfBadge()));
+        return sorted;
     }
 
     public List<Badge> getBadgesFromLastWeek(){
@@ -120,7 +122,7 @@ public class BadgeController implements Serializable {
     }
 
     public List<Badge> getSortedBadgesOfUser() {
-        List<Badge> sorted = getBadgesFromUser();
+        List<Badge> sorted = getBadges(true);
         Collections.sort(sorted, (task1, task2) -> task2.getDateOfBadge().compareTo(task1.getDateOfBadge()));
         return sorted;
     }

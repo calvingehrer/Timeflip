@@ -303,20 +303,50 @@ public class BadgeService {
         return userWithMostSeconds;
     }
 
-    public List<Badge> getUserBadgesOfType(User user, String type) {
+    public List<Badge> getBadgesOfType(User user, boolean isUser, String type) {
+        BadgeEnum badgeType;
         switch (type) {
-            case("WEEKLY_CODE_MONKEY"): return badgeRepository.findBadgeFromUserByType(user, BadgeEnum.WEEKLY_CODE_MONKEY);
-            case("ALL_ROUNDER"): return badgeRepository.findBadgeFromUserByType(user, BadgeEnum.ALL_ROUNDER);
-            case("CREATIVE_MIND"): return badgeRepository.findBadgeFromUserByType(user, BadgeEnum.CREATIVE_MIND);
-            case("FRIEND_AND_HELPER"): return badgeRepository.findBadgeFromUserByType(user, BadgeEnum.FRIEND_AND_HELPER);
-            case("NIGHT_OWL"): return badgeRepository.findBadgeFromUserByType(user, BadgeEnum.NIGHT_OWL);
-            case("WISDOM_SEEKER"): return badgeRepository.findBadgeFromUserByType(user, BadgeEnum.WISDOM_SEEKER);
-            default: return badgeRepository.findBadgesFromUser(user);
+            case("WEEKLY_CODE_MONKEY"):
+                badgeType = BadgeEnum.WEEKLY_CODE_MONKEY;
+                break;
+            case("ALL_ROUNDER"):
+                badgeType = BadgeEnum.ALL_ROUNDER;
+                break;
+            case("CREATIVE_MIND"):
+                badgeType = BadgeEnum.CREATIVE_MIND;
+                break;
+            case("FRIEND_AND_HELPER"):
+                badgeType = BadgeEnum.FRIEND_AND_HELPER;
+                break;
+            case("NIGHT_OWL"):
+                badgeType = BadgeEnum.NIGHT_OWL;
+                break;
+            case("WISDOM_SEEKER"):
+                badgeType = BadgeEnum.WISDOM_SEEKER;
+                break;
+            default:
+                if (isUser) {
+                    return badgeRepository.findBadgesFromUser(user);
+                }
+                else {
+                    return badgeRepository.findBadgesFromDepartment(user.getDepartment());
+                }
+        }
+        if(isUser) {
+            return badgeRepository.findBadgeFromUserByType(user, badgeType);
+        }
+        else {
+            return badgeRepository.findBadgesFromDepartmentByType(user.getDepartment(), badgeType);
         }
     }
 
-    public List<Badge> getBadgesBetweenDates(User user, Instant startDate, Instant endDate) {
-        return badgeRepository.findBadgesFromUserInInterval(user, startDate, endDate);
+    public List<Badge> getBadgesBetweenDates(User user, boolean forUser, Instant startDate, Instant endDate) {
+        if (forUser) {
+            return badgeRepository.findBadgesFromUserInInterval(user, startDate, endDate);
+        }
+        else {
+            return badgeRepository.findBadgesFromDepartmentInIntervall(user.getDepartment(), startDate, endDate);
+        }
     }
 
 }
