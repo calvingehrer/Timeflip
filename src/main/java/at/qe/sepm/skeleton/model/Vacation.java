@@ -58,7 +58,7 @@ public class Vacation implements Comparable<Vacation> {
         return Objects.hash(start, end);
     }
 
-   //@Override
+    @Override
     public int compareTo(Vacation o){
         return this.getEnd().compareTo(o.getEnd());
    }

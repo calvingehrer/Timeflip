@@ -18,7 +18,9 @@ import org.springframework.stereotype.Controller;
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @Scope("view")
@@ -111,8 +113,7 @@ public class VacationController implements Serializable {
         else {
             try {
                 this.vacationService.checkVacationDates(currentUserBean.getCurrentUser(), this.getBeginVacation().toInstant(), this.getEndOfVacation().toInstant());
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 MessagesView.errorMessage("vacation", e.getMessage());
                 return;
             }
@@ -121,5 +122,11 @@ public class VacationController implements Serializable {
         }
 
         init();
+    }
+
+    public List<Vacation> getSortedVacation() {
+        Set<Vacation> sorted = getVacations();
+        List<Vacation> sortedVacation = sorted.stream().collect(Collectors.toList());
+        return sortedVacation;
     }
 }
