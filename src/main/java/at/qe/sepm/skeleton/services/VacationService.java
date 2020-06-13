@@ -5,8 +5,8 @@ import at.qe.sepm.skeleton.exceptions.VacationException;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.model.Vacation;
 import at.qe.sepm.skeleton.repositories.UserRepository;
-import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import at.qe.sepm.skeleton.ui.beans.HolidayBean;
+import at.qe.sepm.skeleton.ui.beans.TimeBean;
 import at.qe.sepm.skeleton.utils.TimeConverter;
 import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +21,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Scope("application")
@@ -29,8 +30,6 @@ public class VacationService {
     @Autowired
     private Logger<String, User> logger;
 
-    @Autowired
-    CurrentUserBean currentUserBean;
 
     @Autowired
     UserService userService;
@@ -41,25 +40,16 @@ public class VacationService {
     @Autowired
     HolidayBean holidayBean;
 
+    @Autowired
+    TimeBean timeBean;
 
-    /**
-     * A Function to get the current user
-     */
-
-    @PostConstruct
-    public void init() {
-        currentUserBean.init();
-    }
 
     /**
      * Add a new Vacation
      * @param user
      * @param vacation
-     * @throws VacationException
      */
-    public void addVacation(User user, Vacation vacation) throws VacationException {
-
-        checkVacationDates(user, vacation.getStart(), vacation.getEnd());
+    public void addVacation(User user, Vacation vacation) {
 
         int beginYear = TimeConverter.getYear(vacation.getStart());
         int endYear = TimeConverter.getYear(vacation.getEnd());
@@ -74,22 +64,10 @@ public class VacationService {
 
         User managedUser = userService.getManagedUser(user);
 
-        long lengthNewVacation = Duration.between(vacation.getStart(), vacation.getEnd()).toDays();
-
-        for (Instant i = vacation.getStart(); i.isBefore(vacation.getEnd()); i = i.plusSeconds(86400)) {
-            if (holidayBean.getDatesOfPublicHolidays().contains(i.truncatedTo(ChronoUnit.DAYS))) {
-                lengthNewVacation = lengthNewVacation - 1;
-            }
-        }
-
-        long totalDays = managedUser.getVacationDays() + lengthNewVacation;
-
-
-        managedUser.setVacationDays(totalDays);
         managedUser.addVacation(vacation);
         userRepository.save(managedUser);
-        logger.logCreation("Vacation of " + user.getUsername(), currentUserBean.getCurrentUser());
-        user.addVacation(vacation);
+        logger.logCreation("Vacation of " + user.getUsername(), userService.getAuthenticatedUser());
+
     }
 
     /**
@@ -99,9 +77,8 @@ public class VacationService {
 
     @Transactional
     public Set<Vacation> getVacationFromUser(User user) {
-        User current = currentUserBean.getCurrentUser();
-        if (!current.getVacations().isEmpty()) {
-            return current.getVacations();
+        if (!user.getVacations().isEmpty()) {
+            return user.getVacations();
         } else {
             return Collections.emptySet();
         }
@@ -133,15 +110,20 @@ public class VacationService {
 
         long lengthNewVacation = Duration.between(startDate, endDate).toDays();
 
-
-        for (Instant i = startDate; i.isBefore(endDate); i = i.plusSeconds(86400)) {
-            if (holidayBean.getPublicHolidays().contains(i.truncatedTo(ChronoUnit.DAYS))) {
-                lengthNewVacation = lengthNewVacation - 1;
-            }
-        }
+        lengthNewVacation -= checkPublicHolidays(startDate, endDate);
 
 
-        long totalDays = user.getVacationDays();
+        Set<Vacation> vacations = getVacationFromUser(user);
+        vacations = vacations
+                .stream()
+                .filter(vacation -> timeBean.getYearOfInstant(vacation.getEnd()).equals(timeBean.getYearOfInstant(startDate)))
+                .collect(Collectors.toSet());
+
+        long totalDays = vacations
+                .stream()
+                .mapToLong(value ->
+                        Duration.between(value.getStart(), value.getEnd()).toDays() - checkPublicHolidays(value.getStart(), value.getEnd()))
+                .sum();
 
         if (totalDays + lengthNewVacation > Vacation.MAX_VACATION_DAYS_PER_YEAR) {
             throw new VacationException("Limit exceeded .You can't take vacation that long.");
@@ -150,5 +132,24 @@ public class VacationService {
             throw new VacationException("You can take Vacation in this time.");
         }
     }
+
+    /**
+     * check if the vacation falls into a public holiday as they do not count as vacation days
+     * @param startDate start of vacation
+     * @param endDate end of vacation
+     * @return the amount of public holidays in the time frame
+     */
+
+    public long checkPublicHolidays(Instant startDate, Instant endDate) {
+        long publicHolidays = 0;
+        for (Instant i = startDate; i.isBefore(endDate); i = i.plusSeconds(86400)) {
+            if (holidayBean.getDatesOfPublicHolidays(timeBean.getYearOfInstant(startDate)).contains(i.truncatedTo(ChronoUnit.DAYS))) {
+                publicHolidays++;
+            }
+        }
+        return publicHolidays;
+    }
+
+
 
 }

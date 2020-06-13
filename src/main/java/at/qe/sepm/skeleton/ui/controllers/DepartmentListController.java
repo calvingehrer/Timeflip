@@ -4,7 +4,7 @@ import at.qe.sepm.skeleton.model.Department;
 import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.DepartmentService;
-import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
+import at.qe.sepm.skeleton.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -21,12 +21,8 @@ public class DepartmentListController implements Serializable {
     private DepartmentService departmentService;
 
     @Autowired
-    private CurrentUserBean currentUserBean;
+    private UserService userService;
 
-    @PostConstruct
-    public void init() {
-        currentUserBean.init();
-    }
 
     /**
      * @return all department
@@ -55,6 +51,6 @@ public class DepartmentListController implements Serializable {
     }
 
     public List<Team> getTeamsOfLeadersDepartment() {
-        return getTeamsOfDepartment(currentUserBean.getCurrentUser().getDepartment());
+        return getTeamsOfDepartment(userService.getAuthenticatedUser().getDepartment());
     }
 }

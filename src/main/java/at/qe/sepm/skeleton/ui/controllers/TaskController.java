@@ -4,7 +4,6 @@ import at.qe.sepm.skeleton.model.*;
 import at.qe.sepm.skeleton.services.RequestService;
 import at.qe.sepm.skeleton.services.TaskService;
 import at.qe.sepm.skeleton.services.UserService;
-import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import at.qe.sepm.skeleton.ui.beans.TimeBean;
 import at.qe.sepm.skeleton.utils.MessagesView;
 import org.apache.commons.lang.time.DateUtils;
@@ -37,8 +36,6 @@ public class TaskController implements Serializable  {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    CurrentUserBean currentUserBean;
 
     @Autowired
     TimeBean timeBean;
@@ -60,14 +57,6 @@ public class TaskController implements Serializable  {
 
     private Instant endTime;
 
-    /**
-     * initialize the current user
-     */
-
-    @PostConstruct
-    public void init() {
-        currentUserBean.init();
-    }
 
     public long duration(Task task) {
         return taskService.getDuration(task);
@@ -121,38 +110,6 @@ public class TaskController implements Serializable  {
         this.requestedDate = requestedDate;
     }
 
-    public RequestService getRequestService() {
-        return requestService;
-    }
-
-    public void setRequestService(RequestService requestService) {
-        this.requestService = requestService;
-    }
-
-    public TaskService getTaskService() {
-        return taskService;
-    }
-
-    public void setTaskService(TaskService taskService) {
-        this.taskService = taskService;
-    }
-
-    public UserService getUserService() {
-        return userService;
-    }
-
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
-
-    public CurrentUserBean getCurrentUserBean() {
-        return currentUserBean;
-    }
-
-    public void setCurrentUserBean(CurrentUserBean currentUserBean) {
-        this.currentUserBean = currentUserBean;
-    }
-
     public Instant getStartTime() {
         return startTime;
     }
@@ -175,15 +132,16 @@ public class TaskController implements Serializable  {
      */
 
     public void sendRequest() {
-        User u = currentUserBean.getCurrentUser();
+        User u = userService.getAuthenticatedUser();
         try {
             setStartAndEndTime();
             String pattern = "MM-dd-yyyy HH:mm";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+            simpleDateFormat.setTimeZone(timeBean.getUtcTimeZone());
             String startDate = simpleDateFormat.format(timeBean.instantToDate(this.getStartTime()));
             String endDate = simpleDateFormat.format(timeBean.instantToDate(this.getEndTime()));
 
-            requestService.addTaskRequest(u, this.getStartTime(), this.getEndTime(), this.getTask(),  "Changing to " + TaskEnum.DOKUMENTATION);
+            requestService.addTaskRequest(u, this.getStartTime(), this.getEndTime(), this.getTask(),  "Changing time frame from " + startDate + " to "  + endDate + " to  " + this.task.toString());
         }
         catch (Exception e){
             MessagesView.errorMessage("Edit Tasks", e.getMessage());
@@ -207,7 +165,7 @@ public class TaskController implements Serializable  {
             MessagesView.errorMessage("Edit Tasks", e.getMessage());
             return;
         }
-        if (!currentUserBean.getCurrentUser().getRoles().contains(UserRole.DEPARTMENTLEADER) && !currentUserBean.getCurrentUser().getRoles().contains(UserRole.ADMIN)) {
+        if (!userService.getAuthenticatedUser().getRoles().contains(UserRole.DEPARTMENTLEADER) && !userService.getAuthenticatedUser().getRoles().contains(UserRole.ADMIN)) {
             if(taskService.checkIfEarlierThanTwoWeeks(this.getRequestedDate().toInstant())) {
                 sendRequest();
                 return;
@@ -219,7 +177,7 @@ public class TaskController implements Serializable  {
     private void trySavingTasks() {
         try {
             setStartAndEndTime();
-            taskService.saveEditedTask(currentUserBean.getCurrentUser(), this.getTask(), this.getStartTime(), this.getEndTime());
+            taskService.saveEditedTask(userService.getAuthenticatedUser(), this.getTask(), this.getStartTime(), this.getEndTime());
         }
         catch (Exception e) {
             MessagesView.errorMessage("Edit Tasks", e.getMessage());

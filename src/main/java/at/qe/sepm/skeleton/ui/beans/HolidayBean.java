@@ -24,9 +24,9 @@ public class HolidayBean {
      *
      * @return public holidays with description
      */
-    public Collection<Holiday> getPublicHolidays(){
+    public Collection<Holiday> getPublicHolidays(int year){
         HolidayManager m = HolidayManager.getInstance(HolidayCalendar.AUSTRIA);
-        Collection<Holiday> holidays = m.getHolidays(TimeConverter.getYear(new Date().toInstant()), "Austria");
+        Collection<Holiday> holidays = m.getHolidays(year, "Austria");
         return holidays;
     }
 
@@ -34,8 +34,8 @@ public class HolidayBean {
      *
      * @return only the dates of the public holidays
      */
-    public Collection<Instant> getDatesOfPublicHolidays() {
-        Collection<Holiday> holidays = getPublicHolidays();
+    public Collection<Instant> getDatesOfPublicHolidays(int year) {
+        Collection<Holiday> holidays = getPublicHolidays(year);
         return holidays.stream().map(holiday -> holiday.getDate().toDate().toInstant().truncatedTo(ChronoUnit.DAYS)).collect(Collectors.toSet());
     }
 }

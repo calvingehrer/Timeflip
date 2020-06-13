@@ -31,6 +31,12 @@ public class TimeBean {
         return Date.from(instant);
     }
 
+    public Integer getYearOfInstant(Instant instant){
+        Date date = instantToDate(instant);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.get(Calendar.YEAR);
+    }
 
 
 

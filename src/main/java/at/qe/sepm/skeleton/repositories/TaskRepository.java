@@ -38,5 +38,6 @@ public interface TaskRepository extends AbstractRepository<Task, String> {
     @Query("SELECT t FROM Task t WHERE t.startTime>=:startDate AND t.endTime<=:endDate")
     List<Task> findTasksBetweenDates(@Param("startDate") Instant startDate, @Param("endDate") Instant endDate);
 
-
+    @Query("SELECT t FROM Task t WHERE t.task=:taskType AND t.user=:user")
+    List<Task> findByType(@Param("user") User user, @Param("taskType") TaskEnum taskType);
 }

@@ -7,7 +7,6 @@ import at.qe.sepm.skeleton.model.Vacation;
 import at.qe.sepm.skeleton.repositories.UserRepository;
 import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.services.VacationService;
-import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import at.qe.sepm.skeleton.ui.beans.HolidayBean;
 import at.qe.sepm.skeleton.ui.beans.TimeBean;
 import at.qe.sepm.skeleton.utils.MessagesView;
@@ -43,18 +42,10 @@ public class VacationServiceTest {
     @Autowired
     HolidayBean holidayBean;
 
-    @MockBean
-    CurrentUserBean currentUserBean;
 
     @Autowired
     TimeBean timeBean;
 
-    @Test
-    @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
-    public void initTest() {
-        vacationService.init();
-        Assert.assertNotNull(currentUserBean);
-    }
 
     @Test
     @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
