@@ -78,7 +78,7 @@ public class ScheduleController implements Serializable {
                     addEvent(new DefaultScheduleEvent("Vacation", startVacation, endVacation, f));
                 });
 
-                holidayBean.getPublicHolidays().forEach(h ->{
+                holidayBean.getPublicHolidays(timeBean.getYearOfInstant(startInstant)).forEach(h ->{
                     Calendar calendar = Calendar.getInstance(timeBean.getUtcTimeZone());
                     calendar.setTime(h.getDate().toDate());
                     calendar.add(Calendar.DATE, 1);

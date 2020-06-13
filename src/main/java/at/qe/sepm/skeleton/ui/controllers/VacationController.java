@@ -8,6 +8,7 @@ import at.qe.sepm.skeleton.model.Vacation;
 import at.qe.sepm.skeleton.services.RequestService;
 import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.services.VacationService;
+import at.qe.sepm.skeleton.ui.beans.TimeBean;
 import at.qe.sepm.skeleton.utils.MessagesView;
 import at.qe.sepm.skeleton.utils.TimeConverter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Controller;
 
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
 
@@ -37,6 +39,9 @@ public class VacationController implements Serializable {
     @Autowired
     private RequestService requestService;
 
+
+    @Autowired
+    TimeBean timeBean;
 
     private Date beginVacation;
     private Date endOfVacation;
@@ -85,9 +90,14 @@ public class VacationController implements Serializable {
         this.setVacations(this.vacationService.getVacationFromUser(userService.getAuthenticatedUser()));
     }
 
+    /**
+     * adds a vacation
+     * if no dates are given it shows an error,
+     * if the user
+     */
+
 
     public void addVacation(){
-
         if(getBeginVacation() == null || getEndOfVacation() == null){
             MessagesView.errorMessage("vacation", "Please choose a date");
         }
@@ -116,7 +126,14 @@ public class VacationController implements Serializable {
                 MessagesView.errorMessage("vacation", e.getMessage());
                 return;
             }
-            requestService.addVacationRequest(currentUser, this.getBeginVacation(), this.getEndOfVacation(), "Requesting Vacation from " + this.getBeginVacation() + " to " + this.getEndOfVacation());
+
+
+            String pattern = "MM-dd-yyyy";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+            simpleDateFormat.setTimeZone(timeBean.getUtcTimeZone());
+            String startDate = simpleDateFormat.format(this.getBeginVacation());
+            String endDate = simpleDateFormat.format(this.getEndOfVacation());
+            requestService.addVacationRequest(currentUser, this.getBeginVacation(), this.getEndOfVacation(), "Requesting Vacation from " + startDate + " to " + endDate);
             MessagesView.successMessage("vacation", "Request sent");
         }
 
