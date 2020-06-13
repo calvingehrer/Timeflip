@@ -20,7 +20,9 @@ import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @Scope("view")
@@ -127,8 +129,6 @@ public class VacationController implements Serializable {
                 MessagesView.errorMessage("vacation", e.getMessage());
                 return;
             }
-
-
             String pattern = "MM-dd-yyyy";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
             simpleDateFormat.setTimeZone(timeBean.getUtcTimeZone());
@@ -139,5 +139,11 @@ public class VacationController implements Serializable {
         }
 
         init();
+    }
+
+    public List<Vacation> getSortedVacation() {
+        Set<Vacation> sorted = getVacations();
+        List<Vacation> sortedVacation = sorted.stream().collect(Collectors.toList());
+        return sortedVacation;
     }
 }
