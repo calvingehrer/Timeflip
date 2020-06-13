@@ -303,4 +303,16 @@ public class BadgeService {
         return userWithMostSeconds;
     }
 
+    public List<Badge> getUserBadgesOfType(User user, String type) {
+        switch (type) {
+            case("WEEKLY_CODE_MONKEY"): return badgeRepository.findBadgeFromUserByType(user, BadgeEnum.WEEKLY_CODE_MONKEY);
+            case("ALL_ROUNDER"): return badgeRepository.findBadgeFromUserByType(user, BadgeEnum.ALL_ROUNDER);
+            case("CREATIVE_MIND"): return badgeRepository.findBadgeFromUserByType(user, BadgeEnum.CREATIVE_MIND);
+            case("FRIEND_AND_HELPER"): return badgeRepository.findBadgeFromUserByType(user, BadgeEnum.FRIEND_AND_HELPER);
+            case("NIGHT_OWL"): return badgeRepository.findBadgeFromUserByType(user, BadgeEnum.NIGHT_OWL);
+            case("WISDOM_SEEKER"): return badgeRepository.findBadgeFromUserByType(user, BadgeEnum.WISDOM_SEEKER);
+            default: return badgeRepository.findBadgesFromUser(user);
+        }
+    }
+
 }

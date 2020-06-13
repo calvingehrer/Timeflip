@@ -26,11 +26,27 @@ public class BadgeController implements Serializable {
     @Autowired
     private UserService userService;
 
+    private String interval = "";
+    private String badgeType = "";
 
+    public String getInterval() {
+        return interval;
+    }
 
+    public void setInterval(String interval) {
+        this.interval = interval;
+    }
 
-    public List<Badge> getBadgesFromUser(){
-        return badgeService.getAllBadgesFromUser(userService.getAuthenticatedUser());
+    public String getBadgeType() {
+        return badgeType;
+    }
+
+    public void setBadgeType(String badgeType) {
+        this.badgeType = badgeType;
+    }
+
+    public List<Badge> getBadgesFromUser() {
+        return badgeService.getUserBadgesOfType(userService.getAuthenticatedUser(), this.badgeType);
     }
 
     public List<Badge> getBadgesFromDepartment(){
@@ -51,5 +67,6 @@ public class BadgeController implements Serializable {
         lastWeek.getFirstDayOfWeek();
         return lastWeek;
     }
+
 
 }

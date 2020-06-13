@@ -1,9 +1,6 @@
 package at.qe.sepm.skeleton.repositories;
 
-import at.qe.sepm.skeleton.model.Badge;
-import at.qe.sepm.skeleton.model.Department;
-import at.qe.sepm.skeleton.model.Team;
-import at.qe.sepm.skeleton.model.User;
+import at.qe.sepm.skeleton.model.*;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -20,6 +17,9 @@ public interface BadgeRepository extends AbstractRepository<Badge, String> {
 
     @Query("SELECT b FROM Badge b WHERE b.dateOfBadge>=:date")
     List<Badge> findBadgesAfterDate(@Param("date") Instant date);
+
+    @Query("SELECT b FROM Badge b WHERE b.user=:user AND b.badgeType=:badgeType")
+    List<Badge> findBadgeFromUserByType(@Param("user") User user, @Param("badgeType")BadgeEnum badgeType);
 
 
 }
