@@ -109,6 +109,7 @@ public class VacationController implements Serializable {
             vacation.setStart(getBeginVacation().toInstant());
             vacation.setEnd(TimeConverter.addTime(getEndOfVacation().toInstant(), 1440));
             try {
+                vacationService.checkVacationDates(userService.getAuthenticatedUser(), vacation.getStart(), vacation.getEnd());
                 vacationService.addVacation(currentUser, vacation);
             }
             catch (VacationException e){

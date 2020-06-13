@@ -66,7 +66,7 @@ public class VacationService {
 
         managedUser.addVacation(vacation);
         userRepository.save(managedUser);
-        logger.logCreation("Vacation of " + user.getUsername(), currentUserBean.getCurrentUser());
+        logger.logCreation("Vacation of " + user.getUsername(), userService.getAuthenticatedUser());
 
     }
 
