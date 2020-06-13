@@ -315,4 +315,8 @@ public class BadgeService {
         }
     }
 
+    public List<Badge> getBadgesBetweenDates(User user, Instant startDate, Instant endDate) {
+        return badgeRepository.findBadgesFromUserInInterval(user, startDate, endDate);
+    }
+
 }

@@ -101,32 +101,34 @@ public class TaskListController implements Serializable {
         Date startTimeRange  = new Date();
         Date endTimeRange = new Date();
 
-        if (this.getInterval().equals("Daily")) {
-            calendar.set(Calendar.HOUR_OF_DAY, 0);
-            calendar.set(Calendar.HOUR_OF_DAY,0);
-            calendar.set(Calendar.MINUTE,0);
-            calendar.set(Calendar.SECOND,0);
-            startTimeRange = calendar.getTime();
-            calendar.add(Calendar.DATE, 1);
-            endTimeRange = calendar.getTime();
-        }
-        else if (this.getInterval().equals("Weekly")) {
-            calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-            calendar.set(Calendar.HOUR_OF_DAY,0);
-            calendar.set(Calendar.MINUTE,0);
-            calendar.set(Calendar.SECOND,0);
-            startTimeRange = calendar.getTime();
-            calendar.add(Calendar.DATE, 7);
-            endTimeRange = calendar.getTime();
-        }
-        else if (this.getInterval().equals("Monthly")) {
-            calendar.set(Calendar.DAY_OF_MONTH, 1);
-            calendar.set(Calendar.HOUR_OF_DAY,0);
-            calendar.set(Calendar.MINUTE,0);
-            calendar.set(Calendar.SECOND,0);
-            startTimeRange = calendar.getTime();
-            calendar.add(Calendar.MONTH, 1);
-            endTimeRange = calendar.getTime();
+        switch (this.getInterval()) {
+            case "Daily":
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.SECOND, 0);
+                startTimeRange = calendar.getTime();
+                calendar.add(Calendar.DATE, 1);
+                endTimeRange = calendar.getTime();
+                break;
+            case "Weekly":
+                calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.SECOND, 0);
+                startTimeRange = calendar.getTime();
+                calendar.add(Calendar.DATE, 7);
+                endTimeRange = calendar.getTime();
+                break;
+            case "Monthly":
+                calendar.set(Calendar.DAY_OF_MONTH, 1);
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.SECOND, 0);
+                startTimeRange = calendar.getTime();
+                calendar.add(Calendar.MONTH, 1);
+                endTimeRange = calendar.getTime();
+                break;
         }
 
         return taskService.getAllTasksBetweenDates(currentUser, startTimeRange.toInstant(), endTimeRange.toInstant());

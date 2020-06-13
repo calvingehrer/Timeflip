@@ -2,6 +2,7 @@ package at.qe.sepm.skeleton.ui.controllers;
 
 import at.qe.sepm.skeleton.model.Badge;
 import at.qe.sepm.skeleton.model.BadgeEnum;
+import at.qe.sepm.skeleton.model.Task;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.BadgeService;
 import at.qe.sepm.skeleton.services.UserService;
@@ -11,10 +12,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
-import java.util.Calendar;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Component
 @Scope("view")
@@ -28,6 +26,7 @@ public class BadgeController implements Serializable {
 
     private String interval = "";
     private String badgeType = "";
+    private Date chosenDate;
 
     public String getInterval() {
         return interval;
@@ -45,8 +44,55 @@ public class BadgeController implements Serializable {
         this.badgeType = badgeType;
     }
 
+    public Date getChosenDate() {
+        return chosenDate;
+    }
+
+    public void setChosenDate(Date chosenDate) {
+        this.chosenDate = chosenDate;
+    }
+
     public List<Badge> getBadgesFromUser() {
-        return badgeService.getUserBadgesOfType(userService.getAuthenticatedUser(), this.badgeType);
+        Calendar calendar = Calendar.getInstance();
+        if (chosenDate != null) {
+            calendar.setTime(chosenDate);
+        }
+        Date startTimeRange;
+        Date endTimeRange;
+        switch(interval){
+            case("Daily"):
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.SECOND, 0);
+                startTimeRange = calendar.getTime();
+                calendar.add(Calendar.DATE, 1);
+                endTimeRange = calendar.getTime();
+                return badgeService.getBadgesBetweenDates(userService.getAuthenticatedUser(),
+                        startTimeRange.toInstant(), endTimeRange.toInstant());
+            case("Weekly"):
+                calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.SECOND, 0);
+                startTimeRange = calendar.getTime();
+                calendar.add(Calendar.DATE, 7);
+                endTimeRange = calendar.getTime();
+                return badgeService.getBadgesBetweenDates(userService.getAuthenticatedUser(),
+                        startTimeRange.toInstant(), endTimeRange.toInstant());
+            case("Monthly"):
+                calendar.set(Calendar.DAY_OF_MONTH, 1);
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.SECOND, 0);
+                startTimeRange = calendar.getTime();
+                calendar.add(Calendar.MONTH, 1);
+                endTimeRange = calendar.getTime();
+                return badgeService.getBadgesBetweenDates(userService.getAuthenticatedUser(),
+                        startTimeRange.toInstant(), endTimeRange.toInstant());
+            default: return badgeService.getUserBadgesOfType(userService.getAuthenticatedUser(), this.badgeType);
+        }
+
     }
 
     public List<Badge> getBadgesFromDepartment(){
@@ -68,5 +114,15 @@ public class BadgeController implements Serializable {
         return lastWeek;
     }
 
+    public void resetFilter() {
+        this.setInterval("");
+        this.setBadgeType("");
+    }
+
+    public List<Badge> getSortedBadgesOfUser() {
+        List<Badge> sorted = getBadgesFromUser();
+        Collections.sort(sorted, (task1, task2) -> task2.getDateOfBadge().compareTo(task1.getDateOfBadge()));
+        return sorted;
+    }
 
 }
