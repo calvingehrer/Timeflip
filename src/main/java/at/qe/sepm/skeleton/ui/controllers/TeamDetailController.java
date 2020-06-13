@@ -130,6 +130,7 @@ public class TeamDetailController implements Serializable {
 
     public boolean checkIfDeletionIsAllowed (Team team){
         if (!userService.getUsersOfTeam(team).isEmpty()) {
+            System.out.println("Teeeeeeeeeeeeeeest");
             return false;
         }
         else if (userService.getTeamLeader(team) != null) {

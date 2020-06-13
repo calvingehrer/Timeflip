@@ -116,6 +116,8 @@ public class TeamService {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteTeam(Team team) {
+        team.setDepartment(null);
+        team.setCreateDate(null);
         teamRepository.delete(team);
         logger.logDeletion(team.toString(), userService.getAuthenticatedUser());
     }

@@ -5,6 +5,7 @@ import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.services.DepartmentService;
 import at.qe.sepm.skeleton.services.TeamService;
 import at.qe.sepm.skeleton.services.UserService;
+import at.qe.sepm.skeleton.ui.controllers.TeamDetailController;
 import org.junit.*;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +18,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -33,6 +35,9 @@ class TeamServiceTest{
     @Autowired
     DepartmentService departmentService;
 
+    //@Autowired
+    TeamDetailController teamDetailController = new TeamDetailController();
+
 
 
 
@@ -40,6 +45,10 @@ class TeamServiceTest{
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     void getAllTeams() {
         List<Team> teams = new ArrayList<>(teamService.getAllTeams());
+        for(Team team : teams){
+            System.out.println(team.getTeamName());
+        }
+
         Assert.assertEquals(10, teams.size(), 0);
 
     }
@@ -48,6 +57,7 @@ class TeamServiceTest{
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     void saveTeam() {
+
 
         Team testTeam = teamService.loadTeam("Top-Management");
         Assert.assertEquals("Management", testTeam.getDepartment().getDepartmentName());
@@ -63,11 +73,13 @@ class TeamServiceTest{
     void addNewTeam() {
 
         Team newTeam1 = new Team();
-        newTeam1.setTeamName("Team1");
+        newTeam1.setTeamName("Teamadd");
         Assert.assertEquals(10,teamService.getAllTeams().size(), 0);
         teamService.addNewTeam(null, newTeam1);
         Assert.assertEquals(11, teamService.getAllTeams().size(), 0);
-        teamService.deleteTeam(newTeam1);
+        teamDetailController.setTeam(newTeam1);
+        teamDetailController.doDeleteTeam();
+        Assert.assertEquals(10,teamService.getAllTeams().size(), 0);
 
     }
 
@@ -77,7 +89,7 @@ class TeamServiceTest{
     void deleteTeam() {
 
         Team team = new Team();
-        team.setTeamName("Team1");
+        team.setTeamName("Teamdel");
         teamService.addNewTeam(null, team);
 
         Assert.assertEquals(11, teamService.getAllTeams().size(), 0);
@@ -105,7 +117,7 @@ class TeamServiceTest{
 
         Assert.assertEquals(0, teamService.getTeamsWithoutDepartment().size(), 0);
         Team newTeam = new Team();
-        newTeam.setTeamName("Team1");
+        newTeam.setTeamName("Teamwod");
         teamService.addNewTeam(null, newTeam);
         Assert.assertEquals(1, teamService.getTeamsWithoutDepartment().size(), 0);
         teamService.deleteTeam(newTeam);
@@ -123,15 +135,24 @@ class TeamServiceTest{
         List<Team> teams = new ArrayList<>(teamService.getTeamsOfDepartment(department));
         Assert.assertEquals(2, teamService.getTeamsOfDepartment(department).size(), 0);
 
-        Team newTeam = new Team();
-        newTeam.setTeamName("Team1");
+        /*Team newTeam = new Team();
+        newTeam.setTeamName("Teamod");
         newTeam.setDepartment(department);
 
+
         teamService.addNewTeam(null, newTeam);
+*/
+        teams.get(0).setDepartment(null);
+        teamService.saveTeam(null, null, teams.get(0));
+        Assert.assertEquals(1, teamService.getTeamsOfDepartment(departmentService.loadDepartment("Sales & Marketing")).size(), 0);
 
-        Assert.assertEquals(3, teamService.getTeamsOfDepartment(departmentService.loadDepartment("Sales & Marketing")).size(), 0);
+        teams.get(0).setDepartment(departmentService.loadDepartment("Sales & Marketing"));
+        teamService.saveTeam(null, null, teams.get(0));
 
-        teamService.deleteTeam(newTeam);
+        Assert.assertEquals(2, teamService.getTeamsOfDepartment(departmentService.loadDepartment("Sales & Marketing")).size(), 0);
+
+        //newTeam.setDepartment(null);
+        //teamService.deleteTeam(newTeam);
 
 
     }
