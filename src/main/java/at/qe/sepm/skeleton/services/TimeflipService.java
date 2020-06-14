@@ -83,7 +83,7 @@ public class TimeflipService {
         return timeflipRepository.findByMacAddress(timeflipId);
     }
 
-    @PreAuthorize("hasAuthority('EMPLOYEE')")
+    @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('ADMIN')")
     public Timeflip getTimeflipOfUser(User currentUser){
         return timeflipRepository.findTimeflipOfUser(currentUser);
     }
