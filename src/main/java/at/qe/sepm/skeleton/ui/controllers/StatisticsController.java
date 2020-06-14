@@ -67,13 +67,14 @@ public class StatisticsController implements Serializable {
         userTasksWeekly();
         userTasksMonthly();
 
+        teamTasksLastMonth();
+
         if (sessionInfoBean.hasRole("EMPLOYEE")) {
             Calendar calendar = getToday();
             chosenDate = Date.from(calendar.toInstant());
         }
         if (sessionInfoBean.hasRole("TEAMLEADER")) {
             teamTasksLastWeek();
-            teamTasksLastMonth();
             Calendar calendar = getLastMonthEnd();
             chosenDate = Date.from(calendar.toInstant());
         }

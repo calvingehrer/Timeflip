@@ -60,6 +60,8 @@ public class StatisticsControllerTest {
     public void init() {
         statisticsController.init();
         Assert.assertTrue(statisticsController.getTodayUserModel().isFill());
+        Assert.assertFalse(statisticsController.getTeamsOfCurrentDepartment().isEmpty());
+        Assert.assertTrue(statisticsController.getMonthDepartmentModel().isFill());
     }
 
     @Test
