@@ -7,6 +7,7 @@ import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.MailRepository;
 import at.qe.sepm.skeleton.repositories.TaskRepository;
 import at.qe.sepm.skeleton.ui.beans.TimeBean;
+import at.qe.sepm.skeleton.ui.controllers.StatisticsController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -153,10 +154,7 @@ public class ScheduledMailService {
 
     public Calendar getToday () {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
+        StatisticsController.setDayToBeginning(calendar);
         return calendar;
     }
 }
