@@ -22,6 +22,7 @@
                                    icon="fa fa-line-chart" >
                             <p:menuitem value="My Statistics" url="/employee/personal-statistics.xhtml"/>
                             <p:menuitem value="Team Statistics" url="/teamleader/team-statistics.xhtml" rendered="#{sessionInfoBean.hasRole('TEAMLEADER')}"/>
+                            <p:menuitem value="Team Statistics" url="/departmentleader/department-statistics-by-team.xhtml" rendered="#{sessionInfoBean.hasRole('DEPARTMENTLEADER')}"/>
                             <p:menuitem value="Department Statistics" url="/departmentleader/department-statistics.xhtml" rendered="#{sessionInfoBean.hasRole('DEPARTMENTLEADER')}"/>
                             <p:menuitem value="Collected Timedata" url="/employee/task.xhtml"/>
                         </p:submenu>
