@@ -39,6 +39,27 @@ public class TaskService {
         }
         return taskRepository.findUserTasksBetweenDates(user, start, end);
     }
+
+    public List<Task> getAllTasksByType(User user, String type) {
+        switch (type) {
+            case("KONZEPTION"): return taskRepository.findByType(user, TaskEnum.KONZEPTION);
+            case("DESIGN"): return taskRepository.findByType(user, TaskEnum.DESIGN);
+            case("IMPLEMENTIERUNG"): return taskRepository.findByType(user, TaskEnum.IMPLEMENTIERUNG);
+            case("TESTEN"): return taskRepository.findByType(user, TaskEnum.TESTEN);
+            case("FEHLERMANAGEMENT"): return taskRepository.findByType(user, TaskEnum.FEHLERMANAGEMENT);
+            case("MEETING"): return taskRepository.findByType(user, TaskEnum.MEETING);
+            case("KUNDENBESPRECHUNG"): return taskRepository.findByType(user, TaskEnum.KUNDENBESPRECHUNG);
+            case("FORTBILDUNG"): return taskRepository.findByType(user, TaskEnum.FORTBILDUNG);
+            case("PROJEKTMANAGEMENT"): return taskRepository.findByType(user, TaskEnum.PROJEKTMANAGEMENT);
+            case("SONSTIGES"): return taskRepository.findByType(user, TaskEnum.SONSTIGES);
+            case("AUSZEIT"): return taskRepository.findByType(user, TaskEnum.AUSZEIT);
+            case("DOKUMENTATION"): return taskRepository.findByType(user, TaskEnum.DOKUMENTATION);
+            default: return getAllTasksBetweenDates(user, null, null);
+
+        }
+
+    }
+
     /**
      *
      * @param task
