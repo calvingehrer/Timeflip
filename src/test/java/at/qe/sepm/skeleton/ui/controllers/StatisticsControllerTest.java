@@ -20,6 +20,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -56,6 +59,7 @@ public class StatisticsControllerTest {
     }
 
     @Test
+    @Before
     @WithMockUser(username = "user2", authorities = {"DEPARTMENTLEADER"})
     public void init() {
         statisticsController.init();
@@ -67,25 +71,48 @@ public class StatisticsControllerTest {
     @Test
     @WithMockUser(username = "user2", authorities = {"DEPARTMENTLEADER"})
     public void rebuildChartsUser() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2019, Calendar.MAY, 6);
+        Date date = Date.from(calendar.toInstant());
+        statisticsController.setChosenDate(date);
+        statisticsController.rebuildChartsUser();
     }
 
     @Test
     @WithMockUser(username = "user7", authorities = {"TEAMLEADER"})
     public void rebuildChartsTeam() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2019, Calendar.MAY, 6);
+        Date date = Date.from(calendar.toInstant());
+        statisticsController.setChosenDate(date);
+        statisticsController.rebuildChartsTeam();
     }
 
     @Test
     @WithMockUser(username = "user2", authorities = {"DEPARTMENTLEADER"})
     public void rebuildChartsDepartment() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2019, Calendar.MAY, 6);
+        Date date = Date.from(calendar.toInstant());
+        statisticsController.setChosenDate(date);
+        statisticsController.rebuildChartsDepartment();
     }
 
     @Test
     @WithMockUser(username = "user2", authorities = {"DEPARTMENTLEADER"})
     public void rebuildChartsDepartmentTeamBasis() {
+        statisticsController.init();
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2019, Calendar.MAY, 6);
+        Date date = Date.from(calendar.toInstant());
+        statisticsController.setChosenDate(date);
+        statisticsController.rebuildChartsDepartmentTeamBasis();
     }
 
     @Test
     @WithMockUser(username = "user2", authorities = {"DEPARTMENTLEADER"})
     public void setDayToBeginning() {
+        Calendar calendar = Calendar.getInstance();
+        StatisticsController.setDayToBeginning(calendar);
     }
 }
