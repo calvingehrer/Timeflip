@@ -27,6 +27,7 @@ public class TimeflipListController implements Serializable {
     private TimeflipService timeflipService;
 
     private String macAddress = "";
+    private String userName = "";
 
 
     @Autowired
@@ -44,6 +45,9 @@ public class TimeflipListController implements Serializable {
 
 
     public Collection<Timeflip> getTimeflips(){
+        if(!userName.equals("")) {
+            return timeflipService.getTimeflipsByUserPrefix(userName);
+        }
         if(!macAddress.equals("")){
             return timeflipService.getAllTimeflipsByMacAddress(macAddress);
         }
@@ -72,5 +76,13 @@ public class TimeflipListController implements Serializable {
 
     public void setMacId(String macId) {
         this.macAddress = macId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

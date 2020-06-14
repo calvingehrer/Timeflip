@@ -23,4 +23,7 @@ public interface TimeflipRepository extends AbstractRepository<Timeflip, String>
     @Query("SELECT t FROM Timeflip t WHERE t.raspberry = :raspberry")
     List<Timeflip> findTimeflipsOfRaspberrys(@Param("raspberry") Raspberry raspberry);
 
+    @Query("SELECT t FROM Timeflip t WHERE t.user.username LIKE CONCAT(:usernamePrefix, '%')")
+    List<Timeflip> findTimflipsByUserPrefix(@Param("userName") String name);
+
 }
