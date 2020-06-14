@@ -54,7 +54,6 @@
                             <p:commandButton value="Filter" update=":TaskForm:Tasks"/>
                             <p:commandButton value="Reset" action="#{taskListController.resetFilter}" update=":TaskForm:Tasks" oncomplete="PF('filterTaskDialog').hide()"/>
 
-                            <p:commandButton update=":TaskForm:Tasks" value="Edit Tasks" styleClass="addButton" oncomplete="PF('editTasksWithinTimeFrameDialog').show()"/>
                         </h:panelGrid>
 
 
@@ -88,6 +87,8 @@
                             </p:column>
 
                         </p:dataTable>
+
+                        <p:commandButton update=":TaskForm:Tasks" value="Edit Tasks" styleClass="addButton" oncomplete="PF('editTasksWithinTimeFrameDialog').show()"/>
 
 
 
