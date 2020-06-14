@@ -50,7 +50,7 @@ public class DepartmentDetailController implements Serializable {
 
     public void setDepartment(Department department) {
         this.department = department;
-        doReloadDepartment();
+//        doReloadDepartment();
     }
 
     public User getNewLeader() {
@@ -152,5 +152,13 @@ public class DepartmentDetailController implements Serializable {
 
     public void removeTeam(){
         this.removedTeams.add(this.removedTeam);
+    }
+
+    public Set<Team> getAddedTeams() {
+        return addedTeams;
+    }
+
+    public Set<Team> getRemovedTeams() {
+        return removedTeams;
     }
 }
