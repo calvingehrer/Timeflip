@@ -2,11 +2,16 @@ package at.qe.sepm.skeleton.tests;
 
 import at.qe.sepm.skeleton.model.Department;
 import at.qe.sepm.skeleton.model.Room;
+import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.DepartmentService;
 import at.qe.sepm.skeleton.services.RoomService;
+import at.qe.sepm.skeleton.services.TeamService;
 import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.ui.controllers.AddDepartmentController;
+import at.qe.sepm.skeleton.ui.controllers.DepartmentDetailController;
+import at.qe.sepm.skeleton.ui.controllers.DepartmentListController;
+import at.qe.sepm.skeleton.ui.controllers.RoomListController;
 import org.junit.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +28,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -30,52 +37,29 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 @WebAppConfiguration
-public class AddDepartmentControllerTest {
+public class RoomListControllerTest {
 
-   // @Autowired
-    private AddDepartmentController addDepartmentController;
-
-    @Autowired
-    private DepartmentService departmentService;
+    RoomListController roomListController;
 
     @Autowired
-    private UserService userService;
-
-    @Mock
-    private FacesContext facesContext;
-
-    @Mock
-    private ExternalContext externalContext;
+    RoomService roomService;
 
     @Before
-    public void init() throws IOException {
+    public void init(){
+        roomListController = new RoomListController();
 
-
-        addDepartmentController = new AddDepartmentController();
-        ReflectionTestUtils.setField(addDepartmentController, "departmentService", departmentService);
+        ReflectionTestUtils.setField(roomListController, "roomService", roomService);
     }
-
-
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
-    public void add() {
-        Department department = new Department();
-        department.setDepartmentName("dep1");
-
-        User testUser = new User();
-        testUser.setUsername("testUser");
-        departmentService.addNewDepartment(testUser, department);
-
-        addDepartmentController.setDepartment(department);
-        addDepartmentController.setHeadOfDepartment(testUser);
-
-        addDepartmentController.add();
-
-        System.out.println(addDepartmentController.getDepartment());
+    public void getRooms() {
+        Assert.assertEquals(5, roomListController.getRooms().size());
     }
 
     @Test
-    public void resetDepartment() {
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    public void getRoomsWithoutRaspberry() {
+        Assert.assertEquals(0, roomListController.getRoomsWithoutRaspberry().size());
     }
 }

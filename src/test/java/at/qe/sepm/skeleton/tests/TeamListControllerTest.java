@@ -2,11 +2,13 @@ package at.qe.sepm.skeleton.tests;
 
 import at.qe.sepm.skeleton.model.Department;
 import at.qe.sepm.skeleton.model.Room;
+import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.DepartmentService;
 import at.qe.sepm.skeleton.services.RoomService;
+import at.qe.sepm.skeleton.services.TeamService;
 import at.qe.sepm.skeleton.services.UserService;
-import at.qe.sepm.skeleton.ui.controllers.AddDepartmentController;
+import at.qe.sepm.skeleton.ui.controllers.*;
 import org.junit.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +25,9 @@ import org.springframework.test.util.ReflectionTestUtils;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import java.io.IOException;
+import java.sql.Ref;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -30,52 +35,48 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 @WebAppConfiguration
-public class AddDepartmentControllerTest {
+public class TeamListControllerTest {
 
-   // @Autowired
-    private AddDepartmentController addDepartmentController;
-
-    @Autowired
-    private DepartmentService departmentService;
+    TeamListController teamListController;
 
     @Autowired
-    private UserService userService;
+    TeamService teamService;
 
-    @Mock
-    private FacesContext facesContext;
 
-    @Mock
-    private ExternalContext externalContext;
+    @Autowired
+    DepartmentService departmentService;
 
     @Before
-    public void init() throws IOException {
+    public void init(){
 
+        teamListController = new TeamListController();
 
-        addDepartmentController = new AddDepartmentController();
-        ReflectionTestUtils.setField(addDepartmentController, "departmentService", departmentService);
+        ReflectionTestUtils.setField(teamListController, "teamService", teamService);
+
     }
-
-
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
-    public void add() {
-        Department department = new Department();
-        department.setDepartmentName("dep1");
-
-        User testUser = new User();
-        testUser.setUsername("testUser");
-        departmentService.addNewDepartment(testUser, department);
-
-        addDepartmentController.setDepartment(department);
-        addDepartmentController.setHeadOfDepartment(testUser);
-
-        addDepartmentController.add();
-
-        System.out.println(addDepartmentController.getDepartment());
+    public void getTeams() {
+        Assert.assertEquals(10, teamListController.getTeams().size());
     }
 
     @Test
-    public void resetDepartment() {
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    public void getTeamsWithoutDepartment() {
+        Assert.assertEquals(0, teamListController.getTeamsWithoutDepartment().size());
+    }
+
+    @Test
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    public void getUsersNotInTeam() {
+        Assert.assertEquals(3, teamListController.getUsersNotInTeam().size());
+    }
+
+    @Test
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    public void getTeamsInDepartment() {
+        Department department = departmentService.loadDepartment("IT");
+        Assert.assertEquals(2, teamListController.getTeamsInDepartment(department).size());
     }
 }
