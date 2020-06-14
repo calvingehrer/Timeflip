@@ -184,40 +184,6 @@ public class TaskController implements Serializable  {
         }
     }
 
-    /**
-     * check if the requested date is not after the current date
-     * and if it is within the allowed time frame it tells the user to
-     * just edit it.
-     * if the given date is longer than two weeks before the current
-     * date it sends a request
-     */
-    public void checkRequestedDate() {
-
-        try {
-            taskService.checkIfAfterToday(this.getRequestedDate().toInstant());
-        }
-        catch(Exception e) {
-            MessagesView.errorMessage("Edit Tasks", e.getMessage());
-            return;
-        }
-        if(taskService.checkIfEarlierThanTwoWeeks(this.getRequestedDate().toInstant())) {
-            sendRequest();
-            MessagesView.successMessage("Editing Tasks", "Request has been sent");
-        }
-        else {
-            MessagesView.warnMessage("Editing Tasks", "You can edit this date without requesting it");
-        }
-
-    }
-
-    /**
-     * edit any date
-     */
-
-    public void editDate () {
-        trySavingTasks();
-
-    }
 
     public void setStartAndEndTime(){
         try {

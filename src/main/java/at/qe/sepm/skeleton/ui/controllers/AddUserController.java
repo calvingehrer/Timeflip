@@ -66,7 +66,9 @@ public class AddUserController implements Serializable {
 
     public void resetUser(){
         this.user = new User();
-        roles.clear();
+        if (!roles.isEmpty()) {
+            roles.clear();
+        }
         employee = false;
         teamleader = false;
         departmentleader = false;

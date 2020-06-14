@@ -22,19 +22,14 @@ public class AddTimeflipController implements Serializable {
 
 
     @Autowired
-    private TimeflipService timeflipServicee;
+    private TimeflipService timeflipService;
 
     private Timeflip timeflip = new Timeflip();
 
     private User user;
 
-
-
-
-
-
     public void add(){
-        timeflipServicee.addNewTimeflip(timeflip, user);
+        timeflipService.addNewTimeflip(timeflip, user);
     }
 
     public Timeflip getTimeflip() {
@@ -51,6 +46,10 @@ public class AddTimeflipController implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public void gehHoam() {
+        System.out.println("du bisch a deppl");
     }
 
 }
