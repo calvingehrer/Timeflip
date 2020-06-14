@@ -67,20 +67,18 @@ public class StatisticsController implements Serializable {
         userTasksWeekly();
         userTasksMonthly();
 
-        teamTasksLastWeek();
-        teamTasksLastMonth();
-
-        departmentTasksLastMonth();
-
         if (sessionInfoBean.hasRole("EMPLOYEE")) {
             Calendar calendar = getToday();
             chosenDate = Date.from(calendar.toInstant());
         }
         if (sessionInfoBean.hasRole("TEAMLEADER")) {
+            teamTasksLastWeek();
+            teamTasksLastMonth();
             Calendar calendar = getLastMonthEnd();
             chosenDate = Date.from(calendar.toInstant());
         }
         if (sessionInfoBean.hasRole("DEPARTMENTLEADER")) {
+            departmentTasksLastMonth();
             Calendar calendar = getLastMonthEnd();
             chosenDate = Date.from(calendar.toInstant());
             List<Team> teams = getTeamsOfCurrentDepartment();
@@ -88,7 +86,6 @@ public class StatisticsController implements Serializable {
                 teamsOfDepartment = new ArrayList<>();
                 for (Team entry : teams) {
                     teamsOfDepartment.add(entry.getTeamName());
-                    System.out.println("team name:" + entry.getTeamName());
                 }
                 chosenTeam = teamsOfDepartment.get(0);
             }
@@ -515,9 +512,6 @@ public class StatisticsController implements Serializable {
 
         List<Team> teams= teamService.getAllTeamsByTeamName(chosenTeam);
         Team team = teams.get(0);
-
-        System.out.println(team);
-        System.out.println(date);
 
         if(today.get(Calendar.MONTH) == date.get(Calendar.MONTH) && today.get(Calendar.YEAR) == date.get(Calendar.YEAR)){
             MessagesView.warnMessage("date selection", "You can't select this date");
