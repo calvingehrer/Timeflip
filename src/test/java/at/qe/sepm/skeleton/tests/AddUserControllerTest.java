@@ -2,29 +2,21 @@ package at.qe.sepm.skeleton.tests;
 
 import at.qe.sepm.skeleton.model.*;
 import at.qe.sepm.skeleton.services.*;
-import at.qe.sepm.skeleton.ui.controllers.AddDepartmentController;
-import at.qe.sepm.skeleton.ui.controllers.AddTeamController;
-import at.qe.sepm.skeleton.ui.controllers.AddTimeflipController;
 import at.qe.sepm.skeleton.ui.controllers.AddUserController;
 import org.junit.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
 import java.io.IOException;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -67,8 +59,31 @@ public class AddUserControllerTest {
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void resetUser() {
-        Assert.assertEquals("testUser1", addUserController.getUser().getUsername());
+        addUserController.setUser(userService.loadUser("user10"));
+        Set<UserRole> roleSet = new HashSet<>();
+        roleSet.add(UserRole.EMPLOYEE);
+        addUserController.setRoles(roleSet);
+        addUserController.setDepartmentleader(true);
+        addUserController.setTeamleader(true);
+        addUserController.setEmployee(true);
+        addUserController.setAdmin(true);
+        addUserController.getUser().setEnabled(true);
+        Assert.assertEquals("user10", addUserController.getUser().getUsername());
+        Assert.assertTrue(addUserController.getUser().isEnabled());
+        Assert.assertEquals(1, addUserController.getRoles().size());
+        Assert.assertTrue(addUserController.isAdmin());
+        Assert.assertTrue(addUserController.isEmployee());
+        Assert.assertTrue(addUserController.isDepartmentleader());
+        Assert.assertTrue(addUserController.isTeamleader());
+
         addUserController.resetUser();
         Assert.assertNull(addUserController.getUser().getUsername());
+        Assert.assertEquals(null, addUserController.getUser().getUsername());
+        Assert.assertFalse(addUserController.getUser().isEnabled());
+        Assert.assertEquals(0, addUserController.getRoles().size());
+        Assert.assertFalse(addUserController.isAdmin());
+        Assert.assertFalse(addUserController.isEmployee());
+        Assert.assertFalse(addUserController.isDepartmentleader());
+        Assert.assertFalse(addUserController.isTeamleader());
     }
 }
