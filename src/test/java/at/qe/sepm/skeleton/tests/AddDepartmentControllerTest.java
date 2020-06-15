@@ -49,8 +49,6 @@ public class AddDepartmentControllerTest {
 
     @Before
     public void init() throws IOException {
-
-
         addDepartmentController = new AddDepartmentController();
         ReflectionTestUtils.setField(addDepartmentController, "departmentService", departmentService);
     }
@@ -65,14 +63,15 @@ public class AddDepartmentControllerTest {
 
         User testUser = new User();
         testUser.setUsername("testUser");
-        departmentService.addNewDepartment(testUser, department);
 
         addDepartmentController.setDepartment(department);
         addDepartmentController.setHeadOfDepartment(testUser);
+        Assert.assertEquals(5, departmentService.getAllDepartments().size());
 
         addDepartmentController.add();
 
-        System.out.println(addDepartmentController.getDepartment());
+        Assert.assertEquals(6, departmentService.getAllDepartments().size());
+        Assert.assertNull(addDepartmentController.getDepartment().getDepartmentName());
     }
 
     @Test
