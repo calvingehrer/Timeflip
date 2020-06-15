@@ -88,10 +88,10 @@
                                   hideEffect="fade" resizable="false">
                             <p:outputPanel id="userData" rendered="#{not empty userDetailController.user}">
                                 <h:panelGrid columns="2">
-                                    <p:outputLabel for="username" value="Username: " />
-                                    <p:inputText id="username" value="#{userDetailController.user.username}" disabled="true"/>
+                                    <p:outputLabel for="editUsername" value="Username: " />
+                                    <p:inputText id="editUsername" value="#{userDetailController.user.username}" disabled="true"/>
                                     <p:outputLabel for="password" value="Password: " />
-                                    <p:password id="password" value="#{userDetailController.user.password}" disabled="true"/>
+                                    <p:password id="editPassword" value="#{userDetailController.user.password}" disabled="true"/>
                                 </h:panelGrid>
                                 <p:separator />
                                 <h:panelGrid columns="2">
@@ -126,11 +126,16 @@
                     <p:dialog header="Add User" id="addUserDialog" widgetVar="addUserDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
                         <p:outputPanel>
                             <h:form>
+
+
+                                <p:messages id="msgs" />
+                                <p:message for="username" display="icon" />
+                                <p:message for="password" display="icon" />
                                 <h:panelGrid columns="2">
-                                    <p:outputLabel value="Username: " />
-                                    <p:inputText value="#{addUserController.user.username}" />
-                                    <p:outputLabel value="Password: " />
-                                    <p:password value="#{addUserController.user.password}" />
+                                    <p:outputLabel for="username" value="Username: " />
+                                    <p:inputText id="username" value="#{addUserController.user.username}" required="true"/>
+                                    <p:outputLabel for="password" value="Password: " />
+                                    <p:password id="password" value="#{addUserController.user.password}" required="true"/>
                                 </h:panelGrid>
                                 <p:separator />
                                 <p:outputLabel value="Roles: " />
@@ -147,7 +152,9 @@
                                 <p:separator />
                                 <h:panelGrid columns="2">
                                     <p:outputLabel value="First Name: " />
-                                    <p:inputText value="#{addUserController.user.firstName}"/>
+                                    <p:inputText value="#{addUserController.user.firstName}" required="true">
+                                    <f:validateLength minimum="2" />
+                                    </p:inputText>
                                     <p:outputLabel value="Last Name: " />
                                     <p:inputText value="#{addUserController.user.lastName}"/>
                                     <p:outputLabel value="E-Mail: " />
@@ -160,7 +167,7 @@
                                 </h:panelGrid>
                                 <p:separator />
                                 <h:panelGrid columns="2">
-                                    <p:commandButton update="@form :userForm:usersTable" value="Add" action="#{addUserController.add}" oncomplete="PF('addUserDialog').hide()" />
+                                    <p:commandButton update="@form :userForm:usersTable" value="Add" action="#{addUserController.add}" oncomplete="(msgs.messageOccured)? PF('addUserDialog').show(): PF('addUserDialog').hide()" />
                                     <p:commandButton value="Abort" type="reset" onclick="PF('addUserDialog').hide()"/>
                                 </h:panelGrid>
                             </h:form>

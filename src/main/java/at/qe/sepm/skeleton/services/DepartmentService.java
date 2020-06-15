@@ -1,10 +1,13 @@
 package at.qe.sepm.skeleton.services;
 
 import at.qe.sepm.skeleton.model.Department;
+import at.qe.sepm.skeleton.model.TaskRequest;
 import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.DepartmentRepository;
+import at.qe.sepm.skeleton.repositories.TaskRepository;
 import at.qe.sepm.skeleton.repositories.TeamRepository;
+import at.qe.sepm.skeleton.repositories.UserRepository;
 import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -12,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -25,6 +29,12 @@ public class DepartmentService {
 
     @Autowired
     private TeamRepository teamRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private TaskRepository taskRepository;
 
     @Autowired
     private UserService userService;
@@ -55,12 +65,25 @@ public class DepartmentService {
         departmentRepository.save(department);
         if(addedTeams !=  null) {
             for (Team t:addedTeams) {
+                userRepository.findUsersOfTeam(t)
+                        .stream()
+                        .forEach(user -> user.setDepartment(department));
+                taskRepository.findTasksFromTeam(t)
+                        .stream()
+                        .forEach(task -> task.setDepartment(department));
                 t.setDepartment(department);
                 teamRepository.save(t);
             }
         }
         if(removedTeams !=  null) {
             for (Team t:removedTeams) {
+                userRepository.findUsersOfTeam(t)
+                        .stream()
+                        .forEach(user -> user.setDepartment(null));
+
+                taskRepository.findTasksFromTeam(t)
+                        .stream()
+                        .forEach(task -> task.setDepartment(null));
                 t.setDepartment(null);
                 teamRepository.save(t);
             }
@@ -90,10 +113,11 @@ public class DepartmentService {
         Department newDepartment = new Department();
 
         newDepartment.setDepartmentName(department.getDepartmentName());
+        newDepartment.setCreateDate(new Date());
 
         saveDepartment(newDepartment, null,null, null, headOfDepartment);
 
-        logger.logCreation(headOfDepartment.toString(), userService.getAuthenticatedUser());
+        logger.logCreation(department.toString(), userService.getAuthenticatedUser());
     }
 
     /**
