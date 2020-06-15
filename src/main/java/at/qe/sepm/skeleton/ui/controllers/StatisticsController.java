@@ -2,10 +2,13 @@ package at.qe.sepm.skeleton.ui.controllers;
 
 
 import at.qe.sepm.skeleton.model.TaskEnum;
+import at.qe.sepm.skeleton.model.Team;
+import at.qe.sepm.skeleton.services.DepartmentService;
 import at.qe.sepm.skeleton.services.TaskService;
+import at.qe.sepm.skeleton.services.TeamService;
 import at.qe.sepm.skeleton.services.UserService;
+import at.qe.sepm.skeleton.ui.beans.SessionInfoBean;
 import at.qe.sepm.skeleton.utils.MessagesView;
-import com.fasterxml.jackson.annotation.JacksonAnnotationsInside;
 import org.primefaces.model.chart.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -22,6 +25,15 @@ public class StatisticsController implements Serializable {
 
     @Autowired
     TaskService taskService;
+
+    @Autowired
+    TeamService teamService;
+
+    @Autowired
+    SessionInfoBean sessionInfoBean;
+
+    @Autowired
+    DepartmentService departmentService;
 
     @Autowired
     private UserService userService;
@@ -41,6 +53,9 @@ public class StatisticsController implements Serializable {
     private BarChartModel monthBarDepartmentModel;
 
     private Date chosenDate;
+    private String chosenTeam;
+
+    private List<String> teamsOfDepartment;
 
     /**
      * Calls the functions to initialize the Charts
@@ -52,11 +67,32 @@ public class StatisticsController implements Serializable {
         userTasksWeekly();
         userTasksMonthly();
 
-        teamTasksLastWeek();
         teamTasksLastMonth();
 
-        departmentTasksLastMonth();
+        if (sessionInfoBean.hasRole("EMPLOYEE")) {
+            Calendar calendar = getToday();
+            chosenDate = Date.from(calendar.toInstant());
+        }
+        if (sessionInfoBean.hasRole("TEAMLEADER")) {
+            teamTasksLastWeek();
+            Calendar calendar = getLastMonthEnd();
+            chosenDate = Date.from(calendar.toInstant());
+        }
+        if (sessionInfoBean.hasRole("DEPARTMENTLEADER")) {
+            departmentTasksLastMonth();
+            Calendar calendar = getLastMonthEnd();
+            chosenDate = Date.from(calendar.toInstant());
+            List<Team> teams = getTeamsOfCurrentDepartment();
+            if (!teams.isEmpty()) {
+                teamsOfDepartment = new ArrayList<>();
+                for (Team entry : teams) {
+                    teamsOfDepartment.add(entry.getTeamName());
+                }
+                chosenTeam = teamsOfDepartment.get(0);
+            }
+        }
     }
+
 
 
     public PieChartModel getTodayUserModel() {
@@ -138,6 +174,26 @@ public class StatisticsController implements Serializable {
 
     public void setChosenDate(Date chosenDate) {
         this.chosenDate = chosenDate;
+    }
+
+    public String getChosenTeam() {
+        return chosenTeam;
+    }
+
+    public void setChosenTeam(String chosenTeam) {
+        this.chosenTeam = chosenTeam;
+    }
+
+    public List<Team>getTeamsOfCurrentDepartment(){
+        return departmentService.getTeamsOfDepartment(userService.getAuthenticatedUser().getDepartment());
+    }
+
+    public List<String> getTeamsOfDepartment() {
+        return teamsOfDepartment;
+    }
+
+    public void setTeamsOfDepartment(List<String> teamsOfDepartment) {
+        this.teamsOfDepartment = teamsOfDepartment;
     }
 
     /**
@@ -272,9 +328,21 @@ public class StatisticsController implements Serializable {
         return getPieChartModel(model, title, tasks);
     }
 
+    private PieChartModel initTeamModelByChosenTeam(PieChartModel model, Team team, String title, Instant start, Instant end){
+        model = new PieChartModel();
+        HashMap<TaskEnum, Long> tasks = taskService.getTeamTasksBetweenDates(team, start, end);
+        return getPieChartModel(model, title, tasks);
+    }
+
     private BarChartModel initBarTeamModel(BarChartModel model, String title, Instant start, Instant end){
         model = new BarChartModel();
         HashMap<TaskEnum, Long> tasks = taskService.getTeamTasksBetweenDates(userService.getAuthenticatedUser().getTeam(), start, end);
+        return getBarChartModel(model, title, tasks);
+    }
+
+    private BarChartModel initBarTeamModelByChosenTeam(BarChartModel model, Team team, String title, Instant start, Instant end){
+        model = new BarChartModel();
+        HashMap<TaskEnum, Long> tasks = taskService.getTeamTasksBetweenDates(team, start, end);
         return getBarChartModel(model, title, tasks);
     }
 
@@ -408,13 +476,11 @@ public class StatisticsController implements Serializable {
             end = lastDayOfMonth(date);
             monthTeamModel = initTeamModel(monthTeamModel, "Monthly Stats", start, end);
             monthBarTeamModel = initBarTeamModel(monthBarTeamModel, "Monthly Stats", start, end);
-
         }
-
     }
 
     /**
-     * function that rebuilds the Department-Charts based on the selected Date
+     * function that rebuilds the Department-Charts on user basis, based on the selected Date
      */
     public void rebuildChartsDepartment(){
         Calendar date = toCalendar(chosenDate);
@@ -434,6 +500,34 @@ public class StatisticsController implements Serializable {
 
             monthDepartmentModel = initDepartmentModel(monthDepartmentModel, "Monthly Stats", start, end);
             monthBarDepartmentModel = initBarDepartmentModel(monthBarDepartmentModel, "Monthly Stats", start, end);
+        }
+
+    }
+
+    /**
+     * function that rebuilds the Department-Charts on team basis, based on the selected Date and team
+     */
+    public void rebuildChartsDepartmentTeamBasis(){
+        Calendar date = toCalendar(chosenDate);
+        Calendar today = getToday();
+
+        List<Team> teams= teamService.getAllTeamsByTeamName(chosenTeam);
+        Team team = teams.get(0);
+
+        if(today.get(Calendar.MONTH) == date.get(Calendar.MONTH) && today.get(Calendar.YEAR) == date.get(Calendar.YEAR)){
+            MessagesView.warnMessage("date selection", "You can't select this date");
+        }
+        else if (date.after(getToday())){
+            MessagesView.warnMessage("date selection", "You can't select this date");
+        }
+        else{
+            setDayToBeginning(date);
+
+            Instant start = firstDayOfMonth(date);
+            Instant end = lastDayOfMonth(date);
+
+            monthTeamModel = initTeamModelByChosenTeam(monthTeamModel, team, "Monthly Stats", start, end);
+            monthBarTeamModel = initBarTeamModelByChosenTeam(monthBarTeamModel, team, "Monthly Stats", start, end);
         }
 
     }
