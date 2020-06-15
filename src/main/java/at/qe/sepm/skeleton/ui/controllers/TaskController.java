@@ -137,10 +137,11 @@ public class TaskController implements Serializable  {
             setStartAndEndTime();
             String pattern = "MM-dd-yyyy HH:mm";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+            simpleDateFormat.setTimeZone(timeBean.getUtcTimeZone());
             String startDate = simpleDateFormat.format(timeBean.instantToDate(this.getStartTime()));
             String endDate = simpleDateFormat.format(timeBean.instantToDate(this.getEndTime()));
 
-            requestService.addTaskRequest(u, this.getStartTime(), this.getEndTime(), this.getTask(),  "Changing to " + TaskEnum.DOKUMENTATION);
+            requestService.addTaskRequest(u, this.getStartTime(), this.getEndTime(), this.getTask(),  "Changing time frame from " + startDate + " to "  + endDate + " to  " + this.task.toString());
         }
         catch (Exception e){
             MessagesView.errorMessage("Edit Tasks", e.getMessage());
@@ -183,40 +184,6 @@ public class TaskController implements Serializable  {
         }
     }
 
-    /**
-     * check if the requested date is not after the current date
-     * and if it is within the allowed time frame it tells the user to
-     * just edit it.
-     * if the given date is longer than two weeks before the current
-     * date it sends a request
-     */
-    public void checkRequestedDate() {
-
-        try {
-            taskService.checkIfAfterToday(this.getRequestedDate().toInstant());
-        }
-        catch(Exception e) {
-            MessagesView.errorMessage("Edit Tasks", e.getMessage());
-            return;
-        }
-        if(taskService.checkIfEarlierThanTwoWeeks(this.getRequestedDate().toInstant())) {
-            sendRequest();
-            MessagesView.successMessage("Editing Tasks", "Request has been sent");
-        }
-        else {
-            MessagesView.warnMessage("Editing Tasks", "You can edit this date without requesting it");
-        }
-
-    }
-
-    /**
-     * edit any date
-     */
-
-    public void editDate () {
-        trySavingTasks();
-
-    }
 
     public void setStartAndEndTime(){
         try {

@@ -17,10 +17,53 @@
         <div class="ui-g">
             <div class="ui-g-12">
                 <div class="card">
+                    <h:form id="selection">
+                        <h:panelGrid columns="7">
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="Interval: "/>
+                                <p:selectOneMenu value="#{taskListController.interval}">
+                                    <f:selectItem itemLabel="All" itemValue=""/>
+                                    <f:selectItem itemLabel="Daily" itemValue="Daily"/>
+                                    <f:selectItem itemLabel="Weekly" itemValue="Weekly"/>
+                                    <f:selectItem itemLabel="Monthly" itemValue="Monthly"/>
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                                <p:outputLabel value="Choose Date in Interval: "/>
+                                <p:commandButton icon="fa fa-calendar-o" onclick="PF('filterTaskDialog').show()"/>
+
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="Type: "/>
+                                <p:selectOneMenu value="#{taskListController.taskType}">
+                                    <f:selectItem itemLabel="All" itemValue=""/>
+                                    <f:selectItem itemLabel="Konzeption" itemValue="KONZEPTION"/>
+                                    <f:selectItem itemLabel="Design" itemValue="DESIGN"/>
+                                    <f:selectItem itemLabel="Implementierung" itemValue="IMPLEMENTIERUNG"/>
+                                    <f:selectItem itemLabel="Testen" itemValue="TESTEN"/>
+                                    <f:selectItem itemLabel="Dokumentation" itemValue="DOKUMENTATION"/>
+                                    <f:selectItem itemLabel="Implementierung" itemValue="IMPLEMENTIERUNG"/>
+                                    <f:selectItem itemLabel="Fehlermanagement" itemValue="FEHLERMANAGEMENT"/>
+                                    <f:selectItem itemLabel="Meeting" itemValue="MEETING"/>
+                                    <f:selectItem itemLabel="Kundenbesprechung" itemValue="KUNDENBESPRECHUNG"/>
+                                    <f:selectItem itemLabel="Projektmanagement" itemValue="PROJEKTMANAGEMENT"/>
+                                    <f:selectItem itemLabel="Fortbildung" itemValue="FORTBILDUNG"/>
+                                    <f:selectItem itemLabel="Sonstiges" itemValue="SONSTIGES"/>
+                                    <f:selectItem itemLabel="Auszeit" itemValue="AUSZEIT"/>
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+
+                            <p:commandButton value="Filter" update=":TaskForm:Tasks"/>
+                            <p:commandButton value="Reset" action="#{taskListController.resetFilter}" update=":TaskForm:Tasks" oncomplete="PF('filterTaskDialog').hide()"/>
+
+                            <p:commandButton update=":TaskForm:Tasks" value="Edit Tasks" styleClass="addButton" oncomplete="PF('editTasksWithinTimeFrameDialog').show()"/>
+                        </h:panelGrid>
 
 
+                    </h:form>
                     <h:form id="TaskForm">
-                        
+                        <p:messages id="messages" showDetail="true" closable="true">
+                            <p:autoUpdate />
+                        </p:messages>
+
 
 
                         <p:dataTable id="Tasks" var="task" value="#{taskListController.sortedTasksFromUser}" scrollable="true">
@@ -30,14 +73,14 @@
                             <p:column headerText="Task">
                                 <h:outputText value="#{task.task.toString()}"/>
                             </p:column>
-                            <p:column headerText="Start" sortBy="#{task.startTime}" >
+                            <p:column headerText="Start" sortBy="#{timeBean.instantToDate(task.startTime)}" >
                                 <h:outputText value="#{timeBean.instantToDate(task.startTime)}">
-                                    <f:convertDateTime timeZone="#{timeBean.utcTimeZone}" pattern="dd.MM.yyyy, HH:mm"/>
+                                    <f:convertDateTime timeZone="GMT+1" pattern="dd.MM.yyyy, HH:mm"/>
                                 </h:outputText>
                             </p:column>
-                            <p:column headerText="End">
+                            <p:column headerText="End" sortBy="#{timeBean.instantToDate(task.endTime)}">
                                 <h:outputText value="#{timeBean.instantToDate(task.endTime)}">
-                                    <f:convertDateTime timeZone="#{timeBean.utcTimeZone}" pattern="dd.MM.yyyy, HH:mm"/>
+                                    <f:convertDateTime timeZone="GMT+1" pattern="dd.MM.yyyy, HH:mm"/>
                                 </h:outputText>
                             </p:column>
                             <p:column headerText="Duration[min]">
@@ -47,7 +90,6 @@
                         </p:dataTable>
 
 
-                        <p:commandButton update=":TaskForm:Tasks" value="Edit Tasks" styleClass="addButton" oncomplete="PF('editTasksWithinTimeFrameDialog').show()"/>
 
                     </h:form>
 
@@ -75,23 +117,21 @@
                                     <h:inputText id="endTimeMinute" value="#{taskController.endMinute}"/>
                                 </h:panelGrid>
                                 <h:panelGrid columns="2">
-                                    <p:commandButton value="Save" action="#{taskController.editDateWithinTimeFrame()}" oncomplete="PF('editTasksWithinTimeFrameDialog').hide()" update=":TaskForm:Tasks"/>
-                                    <p:commandButton value="Abort" type="reset" onclick="PF('editTasksWithinTimeFrameDialog').hide()"/>
+                                    <p:commandButton value="Request" action="#{taskController.editDateWithinTimeFrame()}" oncomplete="PF('editTasksWithinTimeFrameDialog').hide()" update=":TaskForm:Tasks"/>
+                                    <p:commandButton value="Abort" type="reset" onclick="PF('editTasksDialog').hide()"/>
                                 </h:panelGrid>
                             </h:form>
                         </p:outputPanel>
                     </p:dialog>
 
 
-                    <p:dialog header="Choose Date" id="showCalendar" widgetVar="showCalendar" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-                        <h:form>
+
+                    <p:dialog header="Filter Tasks" id="filterTaskDialog" widgetVar="filterTaskDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                        <h:form id="timeRange">
                             <p:calendar id="startTimeRange" mode="inline" value="#{taskListController.chosenDate}" timeZone="#{timeBean.utcTimeZone}"/>
-                            <p:commandButton value="Save" oncomplete="PF('showCalendar').hide()"/>
-                            <p:commandButton value="Abort" type="reset" onclick="PF('showCalendar').hide()"/>
+                            <p:commandButton value="Find" update="TaskForm:Tasks" oncomplete="PF('filterTaskDialog').hide()"/>
                         </h:form>
-
                     </p:dialog>
-
 
                 </div>
             </div>

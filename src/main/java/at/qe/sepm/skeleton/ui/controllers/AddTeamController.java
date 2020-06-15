@@ -4,6 +4,7 @@ import at.qe.sepm.skeleton.model.Department;
 import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.TeamService;
+import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -23,6 +24,10 @@ public class AddTeamController implements Serializable {
     private Logger<String, User> logger;
 
     private final Set<User> employees = new HashSet<>();
+
+    public Set<User> getEmployees() {
+        return employees;
+    }
 
     private Team team = new Team();
 

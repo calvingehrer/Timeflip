@@ -22,7 +22,7 @@ public class AddRaspberryController implements Serializable {
     private RaspberryService raspberryService;
 
     @Autowired
-    private RoomDetailController roomDetailController;
+    private RoomService roomService;
 
     private Raspberry raspberry = new Raspberry();
 
@@ -30,9 +30,6 @@ public class AddRaspberryController implements Serializable {
 
 
     public void add(){
-        if(room != null){
-            roomDetailController.setRoom(room);
-        }
         raspberryService.addNewRaspberry(raspberry, room);
         resetRaspberry();
     }

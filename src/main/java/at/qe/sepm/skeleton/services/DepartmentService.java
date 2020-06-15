@@ -51,7 +51,8 @@ public class DepartmentService {
 
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Department saveDepartment(Department department, Set<Team> addedTeams, Set<Team> removedTeams, User oldLeader, User newLeader) {
+    public void saveDepartment(Department department, Set<Team> addedTeams, Set<Team> removedTeams, User oldLeader, User newLeader) {
+        departmentRepository.save(department);
         if(addedTeams !=  null) {
             for (Team t:addedTeams) {
                 t.setDepartment(department);
@@ -76,7 +77,6 @@ public class DepartmentService {
         }
 
         logger.logUpdate(department.toString(), userService.getAuthenticatedUser());
-        return departmentRepository.save(department);
 
     }
 

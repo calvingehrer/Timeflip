@@ -14,6 +14,8 @@
         <div class="ui-g">
             <div class="ui-g-12">
                 <div class="card">
+                    <p:growl id="growl" rendered="#{not facesContext.validationFailed}" severity="info" showDetail="true"/>
+
                     <h1>User</h1>
 
                     <h:form id="selection">
@@ -47,9 +49,7 @@
                     </h:form>
 
                     <h:form id="userForm">
-                        <p:messages id="messages" showDetail="true" closable="true">
-                            <p:autoUpdate />
-                        </p:messages>
+
                         <p:dataTable id="usersTable" var="user" value="#{userListController.users}" scrollable="true">
                             <p:column headerText="Username">
                                 <h:outputText value="#{user.username}"/>
@@ -76,7 +76,7 @@
                                 <p:commandButton update=":userForm:userEditDialog" value="Edit" oncomplete="PF('userEditDialog').show()" icon="fa fa-fw fa-edit">
                                     <f:setPropertyActionListener value="#{user}" target="#{userDetailController.user}" />
                                 </p:commandButton>
-                                <p:commandButton action="#{userDetailController.doDeleteUser}" value="Delete" icon="fa fa-trash" title="Delete" update=":userForm:usersTable">
+                                <p:commandButton action="#{userDetailController.doDeleteUser}" value="Delete" icon="fa fa-trash" title="Delete" update=":userForm:usersTable growl">
                                     <f:setPropertyActionListener value="#{user}" target="#{userDetailController.user}" />
                                     <p:confirm header="Confirmation" message="Are you sure that you want to delete this user? You cannot undo this operation." icon="fa fa-warning" />
                                 </p:commandButton>

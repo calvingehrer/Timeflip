@@ -94,7 +94,7 @@ public class DepartmentDetailController implements Serializable {
     }
 
     public void doSaveDepartment(){
-        department = this.departmentService.saveDepartment(department, addedTeams, removedTeams, oldLeader, newLeader);
+        this.departmentService.saveDepartment(department, addedTeams, removedTeams, oldLeader, newLeader);
     }
 
     /**

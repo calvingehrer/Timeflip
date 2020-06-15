@@ -5,6 +5,7 @@ import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.services.VacationService;
 import at.qe.sepm.skeleton.ui.beans.HolidayBean;
 import at.qe.sepm.skeleton.ui.beans.TimeBean;
+import de.jollyday.Holiday;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.LazyScheduleModel;
@@ -20,6 +21,7 @@ import java.time.Instant;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Set;
 
 @Component
 @Scope("view")
@@ -78,7 +80,11 @@ public class ScheduleController implements Serializable {
                     addEvent(new DefaultScheduleEvent("Vacation", startVacation, endVacation, f));
                 });
 
-                holidayBean.getPublicHolidays().forEach(h ->{
+                Collection<Holiday> holidays =  holidayBean.getPublicHolidays(timeBean.getYearOfInstant(startInstant));
+                if (!timeBean.getYearOfInstant(startInstant).equals(timeBean.getYearOfInstant(endInstant))) {
+                    holidays.addAll(holidayBean.getPublicHolidays(timeBean.getYearOfInstant(endInstant)));
+                }
+                holidays.forEach(h ->{
                     Calendar calendar = Calendar.getInstance(timeBean.getUtcTimeZone());
                     calendar.setTime(h.getDate().toDate());
                     calendar.add(Calendar.DATE, 1);

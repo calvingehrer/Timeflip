@@ -31,11 +31,12 @@
                         <p:outputLabel value="Roles:"/>
                         <p:outputLabel id="roles" value="#{manageCurrentUserController.currentUser.roles}"/>
 
+                    </p:panelGrid>
+                    <br/>
 
                         <p:commandButton action="/secured/settings.xhtml" value="Edit" icon="fa fa-fw fa-edit"/>
                         <p:commandButton ajax="false" value="Request Overview" styleClass="raised-btn" action="/employee/request-overview.xhtml?faces-redirect=true" rendered="#{!sessionInfoBean.hasRole('DEPARTMENTLEADER') and !sessionInfoBean.hasRole('ADMIN')}"/>
 
-                    </p:panelGrid>
                 </div>
             </div>
         </div>
