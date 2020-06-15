@@ -59,22 +59,6 @@ public class TeamListController implements Serializable {
         return teamService.getAllUsersWithoutTeam();
     }
 
-    /**
-     *
-     * @param teamsInDepartment
-     * @return teams without department
-     */
-
-    public Collection<Team> getTeamsNotInDepartment(Set<Team> teamsInDepartment) {
-
-        Collection<Team> allTeams= teamService.getAllTeams();
-
-        for(Team team : teamsInDepartment){
-            allTeams.remove(team);
-        }
-        return allTeams;
-    }
-
     public Collection<Team> getTeamsInDepartment(Department department) {
         return teamService.getTeamsOfDepartment(department);
     }
