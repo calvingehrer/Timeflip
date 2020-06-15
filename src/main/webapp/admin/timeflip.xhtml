@@ -29,10 +29,10 @@
                         <p:inputText value="#{timeflipListController.userName}"/>
                     </h:panelGrid>
                     <h:panelGrid columns="2">
-                        <p:outputLabel value="Team: "/>
+                        <p:outputLabel value="Mac Adress: "/>
                         <p:inputText value="#{timeflipListController.macId}"/>
                     </h:panelGrid>
-                    <p:commandButton value="Filter" update=":timeFlipForm"/>
+                    <p:commandButton value="Filter" update=":timeflipForm:TimeflipTable"/>
                     <p:commandButton value="Reset" action="#{userListController.resetFilter}" update=":selection :timeflipForm:TimeflipTable"/>
                 </h:panelGrid>
             </h:form>
