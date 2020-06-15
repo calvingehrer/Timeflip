@@ -61,6 +61,8 @@ public class AddTeamControllerTest {
         addTeamController.add();
 
         Assert.assertEquals(11,teamService.getAllTeams().size());
+        teamService.deleteTeam(teamService.loadTeam("team1"));
+        Assert.assertEquals(10,teamService.getAllTeams().size());
     }
 
 

@@ -77,6 +77,12 @@ public class TeamService {
             for(User u: addedEmployees) {
                 u.setTeam(team);
                 u.setDepartment(team.getDepartment());
+                taskRepository.findTasksFromUser(u)
+                        .stream()
+                        .forEach(task -> {
+                            task.setTeam(team);
+                            task.setDepartment(team.getDepartment());
+                        });
                 userService.saveUser(u);
                 mailService.sendEmailTo(u, "New Team", "You have been added to " + team.getTeamName());
             }
@@ -86,11 +92,13 @@ public class TeamService {
             for(User u:  removedEmployees) {
                 u.setTeam(null);
                 u.setDepartment(null);
-                taskRepository.findTasksFromUser(u).stream().forEach(task -> {
-                    task.setTeam(null);
-                    task.setDepartment(null);
-                    taskRepository.save(task);
-                    });
+                taskRepository.findTasksFromUser(u)
+                        .stream()
+                        .forEach(task -> {
+                            task.setTeam(null);
+                            task.setDepartment(null);
+                            taskRepository.save(task);
+                        });
                 userService.saveUser(u);
             }
         }
@@ -117,7 +125,6 @@ public class TeamService {
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteTeam(Team team) {
         team.setDepartment(null);
-        team.setCreateDate(null);
         teamRepository.delete(team);
         logger.logDeletion(team.toString(), userService.getAuthenticatedUser());
     }
