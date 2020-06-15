@@ -79,11 +79,17 @@ public class DepartmentService {
             for (Team t:removedTeams) {
                 userRepository.findUsersOfTeam(t)
                         .stream()
-                        .forEach(user -> user.setDepartment(null));
+                        .forEach(user -> {
+                            user.setDepartment(null);
+                            userRepository.save(user);
+                        });
 
                 taskRepository.findTasksFromTeam(t)
                         .stream()
-                        .forEach(task -> task.setDepartment(null));
+                        .forEach(task -> {
+                            task.setDepartment(null);
+                            taskRepository.save(task);
+                        });
                 t.setDepartment(null);
                 teamRepository.save(t);
             }
