@@ -82,6 +82,7 @@ public class TeamService {
                         .forEach(task -> {
                             task.setTeam(team);
                             task.setDepartment(team.getDepartment());
+                            taskRepository.save(task);
                         });
                 userService.saveUser(u);
                 mailService.sendEmailTo(u, "New Team", "You have been added to " + team.getTeamName());
