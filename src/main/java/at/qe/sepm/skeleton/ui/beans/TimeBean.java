@@ -1,7 +1,5 @@
 package at.qe.sepm.skeleton.ui.beans;
 
-import at.qe.sepm.skeleton.model.Task;
-import at.qe.sepm.skeleton.ui.controllers.StatisticsController;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -16,28 +14,33 @@ import java.util.TimeZone;
 public class TimeBean {
     /**
      * method to get the time zone
-     * @return
+     *
+     * @return current time zone
      */
     public TimeZone getUtcTimeZone() {
         return TimeZone.getTimeZone(ZoneId.of("UTC"));
     }
 
-    public Calendar setNull (Calendar calendar) {
-        StatisticsController.setDayToBeginning(calendar);
-        return calendar;
-    }
+    /**
+     * @param instant to convert
+     * @return date
+     */
 
-    public Date instantToDate(Instant instant){
+    public Date instantToDate(Instant instant) {
         return Date.from(instant);
     }
 
-    public Integer getYearOfInstant(Instant instant){
+    /**
+     * @param instant to get year from
+     * @return year
+     */
+
+    public Integer getYearOfInstant(Instant instant) {
         Date date = instantToDate(instant);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         return calendar.get(Calendar.YEAR);
     }
-
 
 
 }

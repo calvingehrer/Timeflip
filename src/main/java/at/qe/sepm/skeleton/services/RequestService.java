@@ -2,7 +2,6 @@ package at.qe.sepm.skeleton.services;
 
 import at.qe.sepm.skeleton.model.*;
 import at.qe.sepm.skeleton.repositories.RequestRepository;
-import at.qe.sepm.skeleton.repositories.TaskRepository;
 import at.qe.sepm.skeleton.ui.beans.TimeBean;
 import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +9,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
@@ -92,20 +89,25 @@ public class RequestService {
     }
 
 
-
     @PreAuthorize("hasAuthority('TEAMLEADER') or hasAuthority('DEPARTMENTLEADER')")
     public void declineRequest(Request request) {
         request.setStatus(RequestEnum.DECLINED);
         requestRepository.save(request);
     }
 
-    public List<Request> getOpenRequestsOfEmployee(User user) { return requestRepository.findAllRequestsOfUser(user, RequestEnum.OPEN); }
+    public List<Request> getOpenRequestsOfEmployee(User user) {
+        return requestRepository.findAllRequestsOfUser(user, RequestEnum.OPEN);
+    }
 
-    public List<Request> getAcceptedRequestsOfEmployee(User user) { return requestRepository.findAllRequestsOfUser(user, RequestEnum.ACCEPTED); }
+    public List<Request> getAcceptedRequestsOfEmployee(User user) {
+        return requestRepository.findAllRequestsOfUser(user, RequestEnum.ACCEPTED);
+    }
 
-    public List<Request> getDeclinedRequestsOfEmployee(User user) { return requestRepository.findAllRequestsOfUser(user, RequestEnum.DECLINED); }
+    public List<Request> getDeclinedRequestsOfEmployee(User user) {
+        return requestRepository.findAllRequestsOfUser(user, RequestEnum.DECLINED);
+    }
 
-    public void deleteRequest (Request request) {
+    public void deleteRequest(Request request) {
         request.setRequester(null);
         request.setRequestHandlerTeamLeader(null);
         request.setRequestHandlerDepartmentLeader(null);

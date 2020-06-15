@@ -1,34 +1,22 @@
 package at.qe.sepm.skeleton.tests;
 
 import at.qe.sepm.skeleton.model.Department;
-import at.qe.sepm.skeleton.model.Room;
 import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
-import at.qe.sepm.skeleton.services.DepartmentService;
-import at.qe.sepm.skeleton.services.RoomService;
 import at.qe.sepm.skeleton.services.TeamService;
-import at.qe.sepm.skeleton.services.UserService;
-import at.qe.sepm.skeleton.ui.controllers.AddDepartmentController;
 import at.qe.sepm.skeleton.ui.controllers.AddTeamController;
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
 import java.io.IOException;
-import java.util.Map;
-
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -48,21 +36,20 @@ public class AddTeamControllerTest {
     }
 
 
-
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void add() {
         Team team = new Team();
         team.setTeamName("team1");
 
-        Assert.assertEquals(10,teamService.getAllTeams().size());
+        Assert.assertEquals(10, teamService.getAllTeams().size());
 
         addTeamController.setTeam(team);
         addTeamController.add();
 
-        Assert.assertEquals(11,teamService.getAllTeams().size());
+        Assert.assertEquals(11, teamService.getAllTeams().size());
         teamService.deleteTeam(teamService.loadTeam("team1"));
-        Assert.assertEquals(10,teamService.getAllTeams().size());
+        Assert.assertEquals(10, teamService.getAllTeams().size());
     }
 
 

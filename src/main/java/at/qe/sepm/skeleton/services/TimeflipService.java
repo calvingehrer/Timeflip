@@ -1,7 +1,6 @@
 package at.qe.sepm.skeleton.services;
 
 
-import at.qe.sepm.skeleton.model.Raspberry;
 import at.qe.sepm.skeleton.model.Timeflip;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.TimeflipRepository;
@@ -11,7 +10,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 
 
@@ -28,13 +26,12 @@ public class TimeflipService {
 
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Timeflip getTimeFlipByAddress(String macAddress){
+    public Timeflip getTimeFlipByAddress(String macAddress) {
         return timeflipRepository.findByMacAddress(macAddress);
     }
 
     @Autowired
     private Logger<String, User> logger;
-
 
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -60,7 +57,7 @@ public class TimeflipService {
 
     @PreAuthorize("hasAuthority('EMPLOYEE')")
     public Timeflip saveTimeflip(Timeflip timeflip) {
-        logger.logUpdate(timeflip.getId(),userService.getAuthenticatedUser());
+        logger.logUpdate(timeflip.getId(), userService.getAuthenticatedUser());
         return timeflipRepository.save(timeflip);
     }
 
@@ -84,7 +81,7 @@ public class TimeflipService {
     }
 
     @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('ADMIN')")
-    public Timeflip getTimeflipOfUser(User currentUser){
+    public Timeflip getTimeflipOfUser(User currentUser) {
         return timeflipRepository.findTimeflipOfUser(currentUser);
     }
 
@@ -102,7 +99,6 @@ public class TimeflipService {
     public List<Timeflip> getTimeflipsByUserPrefix(String userName) {
         return timeflipRepository.findTimflipsByUserPrefix(userName);
     }
-
 
 
 }

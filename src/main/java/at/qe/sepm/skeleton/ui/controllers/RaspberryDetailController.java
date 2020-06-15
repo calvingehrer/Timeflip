@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 /**
  * Controller for the user detail view.
- *
+ * <p>
  * This class is part of the skeleton project provided for students of the
  * courses "Software Architecture" and "Software Engineering" offered by the
  * University of Innsbruck.
@@ -60,10 +60,9 @@ public class RaspberryDetailController implements Serializable {
     public void doDeleteRaspberry() {
         this.raspberryService.deleteRaspberry(raspberry);
         raspberry = null;
-        MessagesView.successMessage("raspberry deletion","successfully deleted");
+        MessagesView.successMessage("raspberry deletion", "successfully deleted");
 
     }
-
 
 
 }

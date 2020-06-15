@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * Controller for the user list view.
- *
+ * <p>
  * This class is part of the skeleton project provided for students of the
  * courses "Software Architecture" and "Software Engineering" offered by the
  * University of Innsbruck.
@@ -51,8 +51,6 @@ public class UserListController implements Serializable {
     }
 
 
-
-
     public Collection<User> getUsersWithoutTimeflip() {
         return userService.getUsersWithoutTimeflip();
     }
@@ -61,9 +59,13 @@ public class UserListController implements Serializable {
         return userService.getAllUsersWithoutTeam();
     }
 
-    public Collection<User> getTeamLeadersWithoutTeam() { return userService.getTeamLeaderWithoutTeam(); }
+    public Collection<User> getTeamLeadersWithoutTeam() {
+        return userService.getTeamLeaderWithoutTeam();
+    }
 
-    public Collection<User> getDepartmentLeadersWithoutDepartment() { return userService.getDepartmentLeaderWithoutDepartment(); }
+    public Collection<User> getDepartmentLeadersWithoutDepartment() {
+        return userService.getDepartmentLeaderWithoutDepartment();
+    }
 
     public String getTeamname() {
         return teamname;
@@ -105,7 +107,6 @@ public class UserListController implements Serializable {
     public List<User> getEmployees(Team team) {
         return userService.getUsersOfTeam(team);
     }
-
 
 
     public User getTeamLeader(Team team) {

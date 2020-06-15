@@ -1,7 +1,6 @@
 package at.qe.sepm.skeleton.services;
 
 import at.qe.sepm.skeleton.model.Department;
-import at.qe.sepm.skeleton.model.TaskRequest;
 import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.DepartmentRepository;
@@ -14,9 +13,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -44,7 +41,6 @@ public class DepartmentService {
 
 
     /**
-     *
      * @return all departments
      */
 
@@ -55,6 +51,7 @@ public class DepartmentService {
 
     /**
      * saves a new department
+     *
      * @param department
      * @return saved Department
      */
@@ -63,8 +60,8 @@ public class DepartmentService {
     @PreAuthorize("hasAuthority('ADMIN')")
     public void saveDepartment(Department department, Set<Team> addedTeams, Set<Team> removedTeams, User oldLeader, User newLeader) {
         departmentRepository.save(department);
-        if(addedTeams !=  null) {
-            for (Team t:addedTeams) {
+        if (addedTeams != null) {
+            for (Team t : addedTeams) {
                 userRepository.findUsersOfTeam(t)
                         .stream()
                         .forEach(user -> user.setDepartment(department));
@@ -75,8 +72,8 @@ public class DepartmentService {
                 teamRepository.save(t);
             }
         }
-        if(removedTeams !=  null) {
-            for (Team t:removedTeams) {
+        if (removedTeams != null) {
+            for (Team t : removedTeams) {
                 userRepository.findUsersOfTeam(t)
                         .stream()
                         .forEach(user -> {
@@ -95,12 +92,12 @@ public class DepartmentService {
             }
         }
 
-        if (oldLeader !=  null) {
+        if (oldLeader != null) {
             oldLeader.setDepartment(null);
             userService.saveUser(oldLeader);
         }
 
-        if (newLeader !=  null) {
+        if (newLeader != null) {
             newLeader.setDepartment(department);
             userService.saveUser(newLeader);
         }
@@ -110,7 +107,6 @@ public class DepartmentService {
     }
 
     /**
-     *
      * @param headOfDepartment
      * @param department
      */
@@ -121,13 +117,12 @@ public class DepartmentService {
         newDepartment.setDepartmentName(department.getDepartmentName());
         newDepartment.setCreateDate(new Date());
 
-        saveDepartment(newDepartment, null,null, null, headOfDepartment);
+        saveDepartment(newDepartment, null, null, null, headOfDepartment);
 
         logger.logCreation(department.toString(), userService.getAuthenticatedUser());
     }
 
     /**
-     *
      * @param departmentName
      * @return department by department name
      */
@@ -139,28 +134,31 @@ public class DepartmentService {
 
     /**
      * deletes department
+     *
      * @param department
      */
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public void deleteDepartment(Department department){
+    public void deleteDepartment(Department department) {
         departmentRepository.delete(department);
         logger.logDeletion(department.getDepartmentName(), userService.getAuthenticatedUser());
     }
 
     /**
      * find  teams of department
+     *
      * @param department
      * @return Teams of the department
      */
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DEPARTMENTLEADER')")
-    public List<Team> getTeamsOfDepartment (Department department) {
+    public List<Team> getTeamsOfDepartment(Department department) {
         return teamRepository.findByDepartment(department);
     }
 
     /**
      * find department leader
+     *
      * @param department
      * @return Department leader
      */

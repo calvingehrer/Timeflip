@@ -19,7 +19,7 @@ public class RoomListController implements Serializable {
     private RoomService roomService;
 
 
-    public Collection<Room> getRooms(){
+    public Collection<Room> getRooms() {
         return roomService.getAllRooms();
     }
 
@@ -27,7 +27,7 @@ public class RoomListController implements Serializable {
         return roomService.getRoomsWithoutRaspberry();
     }
 
-    public void doDeleteRoom(){
+    public void doDeleteRoom() {
         this.roomService.deleteRoom(room);
         room = null;
     }

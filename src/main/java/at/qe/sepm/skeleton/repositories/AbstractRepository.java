@@ -1,19 +1,20 @@
 package at.qe.sepm.skeleton.repositories;
 
-import java.io.Serializable;
-import java.util.List;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.Repository;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * Common base repository for all other repositories. Provides basic methods for
  * loading, saving and removing entities.
- *
+ * <p>
  * This class is part of the skeleton project provided for students of the
  * courses "Software Architecture" and "Software Engineering" offered by the
  * University of Innsbruck.
  *
- * @param <T> The domain type this repository manages.
+ * @param <T>  The domain type this repository manages.
  * @param <ID> The type of the id of the entity this repository manages.
  */
 @NoRepositoryBean
@@ -47,7 +48,7 @@ public interface AbstractRepository<T, ID extends Serializable> extends Reposito
      * Saves a given entity. Use the returned instance for further operations as
      * the save operation might have changed the entity instance completely.
      *
-     * @param <S> The actual domain type if the entity.
+     * @param <S>    The actual domain type if the entity.
      * @param entity The entity to be saved or updated.
      * @return The saved entity.
      */

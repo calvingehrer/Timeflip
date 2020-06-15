@@ -1,6 +1,9 @@
 package at.qe.sepm.skeleton.ui.controllers;
 
-import at.qe.sepm.skeleton.model.*;
+import at.qe.sepm.skeleton.model.Request;
+import at.qe.sepm.skeleton.model.TaskRequest;
+import at.qe.sepm.skeleton.model.Vacation;
+import at.qe.sepm.skeleton.model.VacationRequest;
 import at.qe.sepm.skeleton.services.RequestService;
 import at.qe.sepm.skeleton.services.TaskService;
 import at.qe.sepm.skeleton.services.UserService;
@@ -10,15 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
 @Scope("view")
-public class RequestController implements Serializable  {
+public class RequestController implements Serializable {
     @Autowired
     private RequestService requestService;
 
@@ -33,9 +34,9 @@ public class RequestController implements Serializable  {
     private TaskService taskService;
 
 
-
     /**
      * Function to get open requests of taskRequest handler
+     *
      * @return all the requests the leader has yet to edit
      */
 
@@ -45,27 +46,37 @@ public class RequestController implements Serializable  {
 
     /**
      * Function to get open requests of requester
+     *
      * @return all the requests of the employee that have yet to be edited
      */
 
-    public List<Request> getOpenRequestsEmployee() { return requestService.getOpenRequestsOfEmployee(userService.getAuthenticatedUser()); }
+    public List<Request> getOpenRequestsEmployee() {
+        return requestService.getOpenRequestsOfEmployee(userService.getAuthenticatedUser());
+    }
 
     /**
      * Function to get accepted requests of requester
+     *
      * @return all accepted requests of user
      */
 
-    public List<Request> getAcceptedRequestsEmployee() { return requestService.getAcceptedRequestsOfEmployee(userService.getAuthenticatedUser()); }
+    public List<Request> getAcceptedRequestsEmployee() {
+        return requestService.getAcceptedRequestsOfEmployee(userService.getAuthenticatedUser());
+    }
 
     /**
      * Function to get declined requests of requester
+     *
      * @return all declined requests of user
      */
 
-    public List<Request> getDeclinedRequestsEmployee() { return requestService.getDeclinedRequestsOfEmployee(userService.getAuthenticatedUser()); }
+    public List<Request> getDeclinedRequestsEmployee() {
+        return requestService.getDeclinedRequestsOfEmployee(userService.getAuthenticatedUser());
+    }
 
     /**
      * Function to accept a request
+     *
      * @param request
      */
     public void acceptRequest(Request request) {
@@ -74,8 +85,7 @@ public class RequestController implements Serializable  {
             TaskRequest tr = (TaskRequest) request;
             try {
                 taskService.saveEditedTask(tr.getRequester(), tr.getTaskType(), tr.getRequestedStartDate(), tr.getRequestedEndDate());
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 MessagesView.errorMessage("Edit Tasks", e.getMessage());
                 requestService.declineRequest(request);
                 return;
@@ -90,8 +100,7 @@ public class RequestController implements Serializable  {
             try {
                 vacationService.checkVacationDates(vr.getRequester(), vacation.getStart(), vacation.getEnd());
                 vacationService.addVacation(vr.getRequester(), vacation);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 MessagesView.errorMessage("Vacation", "The granted vacation ist not valid, it is denied");
                 requestService.declineRequest(request);
                 return;
@@ -102,6 +111,7 @@ public class RequestController implements Serializable  {
 
     /**
      * Function to decline a taskRequest
+     *
      * @param request
      */
     public void declineRequest(Request request) {
@@ -110,14 +120,17 @@ public class RequestController implements Serializable  {
 
     /**
      * If a taskRequest is declined or was already used the user can delete it to keep an overview
+     *
      * @param request
      */
     public void deleteRequest(Request request) {
         requestService.deleteRequest(request);
     }
 
-    public List<Request> getAcceptedTaskRequestsEmployee() { return requestService.getAcceptedRequestsOfEmployee(userService.getAuthenticatedUser())
-            .stream()
-            .filter(request -> request.getDiscriminatorValue() == 1)
-            .collect(Collectors.toList()); }
+    public List<Request> getAcceptedTaskRequestsEmployee() {
+        return requestService.getAcceptedRequestsOfEmployee(userService.getAuthenticatedUser())
+                .stream()
+                .filter(request -> request.getDiscriminatorValue() == 1)
+                .collect(Collectors.toList());
+    }
 }

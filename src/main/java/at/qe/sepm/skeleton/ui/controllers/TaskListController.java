@@ -1,19 +1,19 @@
 package at.qe.sepm.skeleton.ui.controllers;
 
-import at.qe.sepm.skeleton.model.Interval;
 import at.qe.sepm.skeleton.model.Task;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.TaskService;
 import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.ui.beans.TimeBean;
-import com.sun.istack.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 
 @Component
@@ -85,20 +85,21 @@ public class TaskListController implements Serializable {
      * if interval is weekly tasks from the week of the chosen date are displayed
      * if interval is monthly tasks from the month of the chosen date are displayed
      * if the chosen date is after the current date the current tasks in the chosen interval are displayed
+     *
      * @return all tasks within a certain time frame
      */
 
     public List<Task> getTasksFromUser() {
         User currentUser = userService.getAuthenticatedUser();
         if (this.getInterval().equals("")) {
-            return taskService.getAllTasksByType(currentUser,taskType);
+            return taskService.getAllTasksByType(currentUser, taskType);
         }
         Calendar calendar = Calendar.getInstance(timeBean.getUtcTimeZone());
         if (this.chosenDate.before(new Date())) {
             calendar.setTime(this.chosenDate);
 
         }
-        Date startTimeRange  = new Date();
+        Date startTimeRange = new Date();
         Date endTimeRange = new Date();
 
         switch (this.getInterval()) {
@@ -134,7 +135,7 @@ public class TaskListController implements Serializable {
         return taskService.getAllTasksBetweenDates(currentUser, startTimeRange.toInstant(), endTimeRange.toInstant());
     }
 
-    public List<Task> getSortedTasksFromUser(){
+    public List<Task> getSortedTasksFromUser() {
         List<Task> sorted = getTasksFromUser();
         Collections.sort(sorted, (task1, task2) -> task2.getStartTime().compareTo(task1.getStartTime()));
         return sorted;
@@ -149,7 +150,6 @@ public class TaskListController implements Serializable {
         this.setStartOfTimeRange(null);
         this.setEndOfTimeRange(null);
     }
-
 
 
 }

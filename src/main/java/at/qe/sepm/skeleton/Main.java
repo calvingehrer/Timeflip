@@ -1,8 +1,5 @@
 package at.qe.sepm.skeleton;
 
-import java.util.HashMap;
-import javax.faces.webapp.FacesServlet;
-
 import at.qe.sepm.skeleton.configs.CustomServletContextInitializer;
 import at.qe.sepm.skeleton.configs.MailConfig;
 import at.qe.sepm.skeleton.configs.WebSecurityConfig;
@@ -17,10 +14,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 
+import javax.faces.webapp.FacesServlet;
+import java.util.HashMap;
+
 /**
  * Spring boot application. Execute maven with <code>mvn spring-boot:run</code>
  * to start this web application.
- *
+ * <p>
  * This class is part of the skeleton project provided for students of the
  * courses "Software Architecture" and "Software Engineering" offered by the
  * University of Innsbruck.

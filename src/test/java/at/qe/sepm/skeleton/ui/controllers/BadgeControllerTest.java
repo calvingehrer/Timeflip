@@ -1,7 +1,6 @@
 package at.qe.sepm.skeleton.ui.controllers;
 
 import at.qe.sepm.skeleton.model.Badge;
-import at.qe.sepm.skeleton.model.BadgeEnum;
 import at.qe.sepm.skeleton.repositories.UserRepository;
 import at.qe.sepm.skeleton.services.BadgeService;
 import at.qe.sepm.skeleton.services.UserService;
@@ -37,7 +36,7 @@ public class BadgeControllerTest {
     private UserRepository userRepository;
 
     @Before
-    public void initTestClass(){
+    public void initTestClass() {
         badgeController = new BadgeController();
 
         ReflectionTestUtils.setField(badgeController, "userService", userService);
@@ -45,16 +44,16 @@ public class BadgeControllerTest {
 
     }
 
-/**
-    @Test
-    @WithMockUser(username = "user2", authorities = {"DEPARTMENTLEADER"})
-    public void getBadgesFromUser() {
-        List<Badge> user2Badges = badgeController.getBadgesFromUser();
-        System.out.println(userService.getAuthenticatedUser());
-        Assert.assertFalse(user2Badges.isEmpty());
-        Assert.assertEquals("First Badge should be Code Monkey", user2Badges.get(0).getBadgeType(), BadgeEnum.WEEKLY_CODE_MONKEY);
-    }
- **/
+    /**
+     * @Test
+     * @WithMockUser(username = "user2", authorities = {"DEPARTMENTLEADER"})
+     * public void getBadgesFromUser() {
+     * List<Badge> user2Badges = badgeController.getBadgesFromUser();
+     * System.out.println(userService.getAuthenticatedUser());
+     * Assert.assertFalse(user2Badges.isEmpty());
+     * Assert.assertEquals("First Badge should be Code Monkey", user2Badges.get(0).getBadgeType(), BadgeEnum.WEEKLY_CODE_MONKEY);
+     * }
+     **/
 
     @Test
     @WithMockUser(username = "user2", authorities = {"DEPARTMENTLEADER"})

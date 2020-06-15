@@ -59,7 +59,7 @@ public class Vacation implements Comparable<Vacation> {
     }
 
     @Override
-    public int compareTo(Vacation o){
+    public int compareTo(Vacation o) {
         return this.getEnd().compareTo(o.getEnd());
-   }
+    }
 }

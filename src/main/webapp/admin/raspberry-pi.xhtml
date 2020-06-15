@@ -6,7 +6,7 @@
                 template="/WEB-INF/template.xhtml">
 
 
-    <h:outputStylesheet library="webjars" name="font-awesome/4.6.3/css/font-awesome-jsf.css" />
+    <h:outputStylesheet library="webjars" name="font-awesome/4.6.3/css/font-awesome-jsf.css"/>
 
 
     <ui:define name="title">Raspberry</ui:define>
@@ -25,7 +25,8 @@
                     <h:form id="raspberryForm">
                         <p:growl id="growl" rendered="#{not facesContext.validationFailed}" showDetail="true"/>
 
-                        <p:dataTable id="raspberryTable" var="raspberry" value="#{raspberryListController.raspberries}" scrollable="true">
+                        <p:dataTable id="raspberryTable" var="raspberry" value="#{raspberryListController.raspberries}"
+                                     scrollable="true">
                             <p:column headerText="Raspberry ID">
                                 <h:outputText value="#{raspberry.raspberryId}"/>
                             </p:column>
@@ -33,61 +34,80 @@
                                 <h:outputText value="#{raspberry.room.roomNumber}"/>
                             </p:column>
                             <p:column style="width:200px;text-align: center">
-                                <p:commandButton action="#{raspberryDetailController.doDeleteRaspberry}" value="Delete" icon="fa fa-trash" title="Delete" update=":raspberryForm:raspberryTable">
-                                    <f:setPropertyActionListener value="#{raspberry}" target="#{raspberryDetailController.raspberry}" />
-                                    <p:confirm header="Confirmation" message="Are you sure that you want to delete this raspberry? You cannot undo this operation." icon="fa fa-warning" />
+                                <p:commandButton action="#{raspberryDetailController.doDeleteRaspberry}" value="Delete"
+                                                 icon="fa fa-trash" title="Delete"
+                                                 update=":raspberryForm:raspberryTable">
+                                    <f:setPropertyActionListener value="#{raspberry}"
+                                                                 target="#{raspberryDetailController.raspberry}"/>
+                                    <p:confirm header="Confirmation"
+                                               message="Are you sure that you want to delete this raspberry? You cannot undo this operation."
+                                               icon="fa fa-warning"/>
                                 </p:commandButton>
                             </p:column>
                         </p:dataTable>
 
 
-                        <p:commandButton value="Add Raspberry" styleClass="addButton" oncomplete="PF('addRaspberryDialog').show()" />
+                        <p:commandButton value="Add Raspberry" styleClass="addButton"
+                                         oncomplete="PF('addRaspberryDialog').show()"/>
 
                         <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" width="300">
-                            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
-                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-close" />
+                            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes"
+                                             icon="fa fa-check"/>
+                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no"
+                                             icon="fa fa-close"/>
                         </p:confirmDialog>
 
                     </h:form>
 
-                    <p:dialog header="Add Raspberry" id="addRaspberryDialog" widgetVar="addRaspberryDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                    <p:dialog header="Add Raspberry" id="addRaspberryDialog" widgetVar="addRaspberryDialog" modal="true"
+                              showEffect="fade" hideEffect="fade" resizable="false">
                         <p:outputPanel>
                             <h:form>
-                                <p:growl id="growlAdd" rendered="#{not facesContext.validationFailed}" showDetail="true"/>
+                                <p:growl id="growlAdd" rendered="#{not facesContext.validationFailed}"
+                                         showDetail="true"/>
 
                                 <h:panelGrid columns="2">
-                                    <p:outputLabel value="Raspberry ID:" />
-                                    <p:inputText value="#{addRaspberryController.raspberry.raspberryId}" required="true"/>
+                                    <p:outputLabel value="Raspberry ID:"/>
+                                    <p:inputText value="#{addRaspberryController.raspberry.raspberryId}"
+                                                 required="true"/>
                                 </h:panelGrid>
-                                <p:separator />
+                                <p:separator/>
                                 <h:panelGrid columns="2">
                                     <p:outputLabel value="Select Room: "/>
-                                    <p:commandButton value="Select" update=":raspberryRoomForm" oncomplete="PF('selectRaspberryRoomDialog').show()" />
+                                    <p:commandButton value="Select" update=":raspberryRoomForm"
+                                                     oncomplete="PF('selectRaspberryRoomDialog').show()"/>
                                 </h:panelGrid>
                                 <h:panelGrid columns="2">
                                     <p:commandButton update="@form :raspberryForm:raspberryTable" value="Add"
                                                      action="#{addRaspberryController.add}"
-                                                     oncomplete="(growlAdd.messageOccured)? PF('addRaspberryDialog').show(): PF('addRaspberryDialog').hide()" />
-                                    <p:commandButton value="Abort" type="reset" onclick="PF('addRaspberryDialog').hide()"/>
+                                                     oncomplete="(growlAdd.messageOccured)? PF('addRaspberryDialog').show(): PF('addRaspberryDialog').hide()"/>
+                                    <p:commandButton value="Abort" type="reset"
+                                                     onclick="PF('addRaspberryDialog').hide()"/>
                                 </h:panelGrid>
                             </h:form>
                         </p:outputPanel>
                     </p:dialog>
 
-                    <p:dialog header="Select Room" id="selectRaspberryRoomDialog" widgetVar="selectRaspberryRoomDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                    <p:dialog header="Select Room" id="selectRaspberryRoomDialog" widgetVar="selectRaspberryRoomDialog"
+                              modal="true" showEffect="fade" hideEffect="fade" resizable="false">
                         <h:form id="raspberryRoomForm">
-                            <p:dataTable styleClass="project-table" id="raspberryRoomTable" var="room" value="#{roomListController.roomsWithoutRaspberry}" scrollable="true" scrollHeight="100">
+                            <p:dataTable styleClass="project-table" id="raspberryRoomTable" var="room"
+                                         value="#{roomListController.roomsWithoutRaspberry}" scrollable="true"
+                                         scrollHeight="100">
                                 <p:column headerText="Room Number">
                                     <h:outputText value="#{room.roomNumber}"/>
                                 </p:column>
                                 <p:column style="width:100px;text-align: center">
-                                    <p:commandButton update="@form :raspberryForm:raspberryTable" icon="fa fa-plus" title="Select" oncomplete="PF('selectRaspberryRoomDialog').hide()">
-                                        <f:setPropertyActionListener value="#{room}" target="#{addRaspberryController.room}" />
+                                    <p:commandButton update="@form :raspberryForm:raspberryTable" icon="fa fa-plus"
+                                                     title="Select" oncomplete="PF('selectRaspberryRoomDialog').hide()">
+                                        <f:setPropertyActionListener value="#{room}"
+                                                                     target="#{addRaspberryController.room}"/>
                                     </p:commandButton>
                                 </p:column>
                             </p:dataTable>
                             <h:panelGrid columns="2">
-                                <p:commandButton value="Abort" type="submit" onclick="PF('selectEmployeesDialog').hide()"/>
+                                <p:commandButton value="Abort" type="submit"
+                                                 onclick="PF('selectEmployeesDialog').hide()"/>
                             </h:panelGrid>
 
                         </h:form>

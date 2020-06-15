@@ -10,15 +10,14 @@ import java.util.Objects;
 
 /**
  * Entity representing a Task.
- *
  */
 
 @Entity
-public class Task implements Persistable<Long>, Serializable{
+public class Task implements Persistable<Long>, Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="task_id")
+    @Column(name = "task_id")
     private Long Id;
 
     @Column(name = "start_time")
@@ -34,20 +33,19 @@ public class Task implements Persistable<Long>, Serializable{
     private TaskEnum task;
 
     @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER, optional = true, cascade = CascadeType.ALL)
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne(targetEntity = Team.class, fetch = FetchType.EAGER, optional = true, cascade = CascadeType.ALL)
-    @JoinColumn(name="team_id")
+    @JoinColumn(name = "team_id")
     private Team team;
 
     @ManyToOne(targetEntity = Department.class, fetch = FetchType.EAGER, optional = true, cascade = CascadeType.ALL)
-    @JoinColumn(name="department_id")
+    @JoinColumn(name = "department_id")
     private Department department;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date createDate;
-
 
 
     @Override
@@ -125,7 +123,9 @@ public class Task implements Persistable<Long>, Serializable{
     }
 
     @Override
-    public boolean isNew() { return null == createDate; }
+    public boolean isNew() {
+        return null == createDate;
+    }
 
     @Override
     public boolean equals(Object o) {

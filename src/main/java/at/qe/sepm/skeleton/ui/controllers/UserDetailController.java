@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 /**
  * Controller for the user detail view.
- *
+ * <p>
  * This class is part of the skeleton project provided for students of the
  * courses "Software Architecture" and "Software Engineering" offered by the
  * University of Innsbruck.
@@ -70,10 +70,9 @@ public class UserDetailController implements Serializable {
     public void doDeleteUser() {
         this.userService.deleteUser(user);
         user = null;
-        MessagesView.successMessage("user deletion","successfully deleted");
+        MessagesView.successMessage("user deletion", "successfully deleted");
 
     }
-
 
 
 }
