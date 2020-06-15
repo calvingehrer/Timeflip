@@ -160,9 +160,10 @@
                     <p:dialog header="Add Department" id="addDepartmentDialog" widgetVar="addDepartmentDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
                         <p:outputPanel>
                             <h:form id="addDepartmentForm">
+                                <p:growl id="growlAdd" rendered="#{not facesContext.validationFailed}" showDetail="true"/>
                                 <h:panelGrid columns="2">
                                     <p:outputLabel value="Departmentname: " />
-                                    <p:inputText value="#{addDepartmentController.department.departmentName}" />
+                                    <p:inputText value="#{addDepartmentController.department.departmentName}" required="true" />
                                 </h:panelGrid>
                                 <p:separator />
                                 <h:panelGrid columns="2">
@@ -170,7 +171,7 @@
                                     <p:commandButton value="Select" update=":headOfDepartmentForm" oncomplete="PF('selectHeadOfDepartmentDialog').show()" />
                                 </h:panelGrid>
                                 <h:panelGrid columns="2">
-                                    <p:commandButton update="@form :departmentForm:DepartmentTable" value="Add" action="#{addDepartmentController.add}" oncomplete="PF('addDepartmentDialog').hide()" />
+                                    <p:commandButton update="@form :departmentForm:DepartmentTable" value="Add" action="#{addDepartmentController.add}" oncomplete="(growlAdd.messageOccured)? PF('addDepartmentDialog').show(): PF('addDepartmentDialog').hide()" />
                                     <p:commandButton value="Abort" type="reset" onclick="PF('addDepartmentDialog').hide()"/>
                                 </h:panelGrid>
                             </h:form>

@@ -23,12 +23,9 @@
                 <div class="card">
                     <h1>Vacations</h1>
 
-                    <p:growl id="growl" rendered="#{not facesContext.validationFailed}" severity="info" showDetail="true"/>
+                    <p:growl id="growl" rendered="#{not facesContext.validationFailed}" showDetail="true"/>
 
                     <h:form id="addVacationButton" prependId="false">
-                        <p:messages id="addVacationMessages" severity="error" >
-                            <p:autoUpdate/>
-                        </p:messages>
                         <p:commandButton value="Add a Vacaction" update="vacationListForm growl"
                                          oncomplete="PF('addVacationDialog').show()"/>
                     </h:form>
@@ -68,19 +65,21 @@
                   showEffect="fade"
                   hideEffect="fade" resizable="false">
             <h:form id="addVacationForm">
-                <p:panelGrid layout="grid" columns="2">
+                <p:growl id="growlAdd" rendered="#{not facesContext.validationFailed}" showDetail="true"/>
+
+
+                <p:panelGrid layout="grid" columns="3">
                     <h:outputText value="Select the start of the vacation"/>
                     <h:outputText value="Select the end of the vacation"/>
 
-                    <p:calendar id="start" mode="inline" value="#{vacationController.beginVacation}" timeZone="#{timeBean.getUtcTimeZone()}"
-                    />
+                    <p:calendar id="start" mode="inline" value="#{vacationController.beginVacation}" timeZone="#{timeBean.getUtcTimeZone()}" required="true"/>
 
-                    <p:calendar id="end" mode="inline" value="#{vacationController.endOfVacation}" timeZone="#{timeBean.getUtcTimeZone()}"
-                    />
+
+                    <p:calendar id="end" mode="inline" value="#{vacationController.endOfVacation}" timeZone="#{timeBean.getUtcTimeZone()}" required="true"/>
 
                     <p:commandButton value="Request" action="#{vacationController.addVacation}"
-                                     oncomplete="PF('addVacationDialog').hide()"
-                                     update="vacationListForm growl addVacationMessages "/>
+                                     oncomplete="(growlAdd.messageOccured)? PF('addVacationDialog').show(): PF('addVacationDialog').hide()"
+                                     update="vacationListForm growl"/>
                 </p:panelGrid>
             </h:form>
         </p:dialog>

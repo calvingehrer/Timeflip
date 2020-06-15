@@ -23,9 +23,8 @@
                 <div class="card">
                     <h1>Raspberry</h1>
                     <h:form id="raspberryForm">
-                        <p:messages id="messages" showDetail="true" closable="true">
-                            <p:autoUpdate />
-                        </p:messages>
+                        <p:growl id="growl" rendered="#{not facesContext.validationFailed}" showDetail="true"/>
+
                         <p:dataTable id="raspberryTable" var="raspberry" value="#{raspberryListController.raspberries}" scrollable="true">
                             <p:column headerText="Raspberry ID">
                                 <h:outputText value="#{raspberry.raspberryId}"/>
@@ -54,9 +53,11 @@
                     <p:dialog header="Add Raspberry" id="addRaspberryDialog" widgetVar="addRaspberryDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
                         <p:outputPanel>
                             <h:form>
+                                <p:growl id="growlAdd" rendered="#{not facesContext.validationFailed}" showDetail="true"/>
+
                                 <h:panelGrid columns="2">
                                     <p:outputLabel value="Raspberry ID:" />
-                                    <p:inputText value="#{addRaspberryController.raspberry.raspberryId}"/>
+                                    <p:inputText value="#{addRaspberryController.raspberry.raspberryId}" required="true"/>
                                 </h:panelGrid>
                                 <p:separator />
                                 <h:panelGrid columns="2">
@@ -64,7 +65,9 @@
                                     <p:commandButton value="Select" update=":raspberryRoomForm" oncomplete="PF('selectRaspberryRoomDialog').show()" />
                                 </h:panelGrid>
                                 <h:panelGrid columns="2">
-                                    <p:commandButton update="@form :raspberryForm:raspberryTable" value="Add" action="#{addRaspberryController.add}" oncomplete="PF('addRaspberryDialog').hide()" />
+                                    <p:commandButton update="@form :raspberryForm:raspberryTable" value="Add"
+                                                     action="#{addRaspberryController.add}"
+                                                     oncomplete="(growlAdd.messageOccured)? PF('addRaspberryDialog').show(): PF('addRaspberryDialog').hide()" />
                                     <p:commandButton value="Abort" type="reset" onclick="PF('addRaspberryDialog').hide()"/>
                                 </h:panelGrid>
                             </h:form>

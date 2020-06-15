@@ -23,9 +23,8 @@
                     <div class="card">
                         <h1>Rooms</h1>
                         <h:form id="roomForm">
-                            <p:messages id="messages" showDetail="true" closable="true">
-                                <p:autoUpdate />
-                            </p:messages>
+                            <p:growl id="growl" rendered="#{not facesContext.validationFailed}" showDetail="true"/>
+
                             <p:dataTable id="roomTable" var="room" value="#{roomListController.rooms}" scrollable="true">
                                 <p:column headerText="Room Number">
                                     <h:outputText value="#{room.roomNumber}"/>
@@ -54,12 +53,13 @@
                         <p:dialog header="Add Room" id="addRoomDialog" widgetVar="addRoomDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
                             <p:outputPanel>
                                 <h:form>
+                                    <p:growl id="growlAdd" rendered="#{not facesContext.validationFailed}" showDetail="true"/>
                                     <h:panelGrid columns="2">
                                         <p:outputLabel value="Room Number:"/>
-                                        <p:inputText value="#{addRoomController.room.roomNumber}"/>
+                                        <p:inputText value="#{addRoomController.room.roomNumber}" required="true"/>
                                     </h:panelGrid>
                                     <h:panelGrid columns="2">
-                                        <p:commandButton update="@form :roomForm:roomTable" value="Add" action="#{addRoomController.add}" oncomplete="PF('addRoomDialog').hide()" />
+                                        <p:commandButton update="@form :roomForm:roomTable" value="Add" action="#{addRoomController.add}" oncomplete="(growlAdd.messageOccured)? PF('addRoomDialog').show(): PF('addRoomDialog').hide()" />
                                         <p:commandButton value="Abort" type="reset" onclick="PF('addRoomDialog').hide()"/>
                                     </h:panelGrid>
                                 </h:form>

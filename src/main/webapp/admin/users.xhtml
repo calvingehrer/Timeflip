@@ -128,10 +128,10 @@
                             <h:form id="AddUserForm">
 
 
-                                <p:messages id="msgs" />
-                                <h:panelGrid columns="2" id="">
+                                <p:growl id="growlAdd" rendered="#{not facesContext.validationFailed}" showDetail="true"/>
+                                <h:panelGrid columns="2" id="usernamePw">
                                     <p:outputLabel for="username" value="Username: " />
-                                    <p:inputText id="username" value="#{addUserController.user.username}" requiredMessage="username required" required="true"/>
+                                    <p:inputText id="username" value="#{addUserController.user.username}" required="true"/>
                                     <p:outputLabel for="password" value="Password: " />
                                     <p:password id="password" value="#{addUserController.user.password}" required="true"/>
                                 </h:panelGrid>
@@ -154,7 +154,7 @@
                                     <f:validateLength minimum="2" />
                                     </p:inputText>
                                     <p:outputLabel value="Last Name: " />
-                                    <p:inputText value="#{addUserController.user.lastName}"/>
+                                    <p:inputText value="#{addUserController.user.lastName}" required="true"/>
                                     <p:outputLabel value="E-Mail: " />
                                     <p:inputText value="#{addUserController.user.email}"/>
                                 </h:panelGrid>
@@ -165,7 +165,7 @@
                                 </h:panelGrid>
                                 <p:separator />
                                 <h:panelGrid columns="2">
-                                    <p:commandButton update="@form :userForm:usersTable" value="Add" action="#{addUserController.add}" oncomplete="(msgs.messageOccured)? PF('addUserDialog').show(): PF('addUserDialog').hide()" />
+                                    <p:commandButton update="@form :userForm:usersTable" value="Add" action="#{addUserController.add}" oncomplete="(growlAdd.messageOccured)? PF('addUserDialog').show(): PF('addUserDialog').hide()" />
                                     <p:commandButton value="Abort" type="reset" onclick="PF('addUserDialog').hide()"/>
                                 </h:panelGrid>
                             </h:form>
