@@ -124,16 +124,14 @@
                     </h:form>
 
                     <p:dialog header="Add User" id="addUserDialog" widgetVar="addUserDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-                        <p:outputPanel>
-                            <h:form>
+                        <p:outputPanel id="AddUser">
+                            <h:form id="AddUserForm">
 
 
                                 <p:messages id="msgs" />
-                                <p:message for="username" display="icon" />
-                                <p:message for="password" display="icon" />
-                                <h:panelGrid columns="2">
+                                <h:panelGrid columns="2" id="">
                                     <p:outputLabel for="username" value="Username: " />
-                                    <p:inputText id="username" value="#{addUserController.user.username}" required="true"/>
+                                    <p:inputText id="username" value="#{addUserController.user.username}" requiredMessage="username required" required="true"/>
                                     <p:outputLabel for="password" value="Password: " />
                                     <p:password id="password" value="#{addUserController.user.password}" required="true"/>
                                 </h:panelGrid>

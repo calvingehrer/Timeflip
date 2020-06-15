@@ -90,11 +90,12 @@ class TeamServiceTest{
 
         Team team = new Team();
         team.setTeamName("Teamdel");
+
         teamService.addNewTeam(null, team);
 
         Assert.assertEquals(11, teamService.getAllTeams().size(), 0);
 
-        teamService.deleteTeam(team);
+        teamService.deleteTeam(teamService.loadTeam("Teamdel"));
 
         Assert.assertEquals(10, teamService.getAllTeams().size(), 0);
 
