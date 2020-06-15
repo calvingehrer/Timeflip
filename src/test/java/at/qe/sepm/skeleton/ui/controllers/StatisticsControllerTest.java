@@ -10,6 +10,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.primefaces.model.chart.BarChartModel;
+import org.primefaces.model.chart.PieChartModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.Authentication;
@@ -59,7 +61,6 @@ public class StatisticsControllerTest {
     }
 
     @Test
-    @Before
     @WithMockUser(username = "user2", authorities = {"DEPARTMENTLEADER"})
     public void init() {
         statisticsController.init();
@@ -72,41 +73,76 @@ public class StatisticsControllerTest {
     @WithMockUser(username = "user2", authorities = {"DEPARTMENTLEADER"})
     public void rebuildChartsUser() {
         Calendar calendar = Calendar.getInstance();
+        PieChartModel oldTodayModel = statisticsController.getTodayUserModel();
+        PieChartModel oldWeekModel = statisticsController.getWeekUserModel();
+        PieChartModel oldMonthModel = statisticsController.getMonthUserModel();
+        BarChartModel oldBarChartModel = statisticsController.getMonthBarUserModel();
+
         calendar.set(2019, Calendar.MAY, 6);
         Date date = Date.from(calendar.toInstant());
         statisticsController.setChosenDate(date);
         statisticsController.rebuildChartsUser();
+
+        Assert.assertNotEquals(oldMonthModel, statisticsController.getMonthUserModel());
+        Assert.assertNotEquals(oldWeekModel, statisticsController.getWeekUserModel());
+        Assert.assertNotEquals(oldTodayModel, statisticsController.getTodayUserModel());
+        Assert.assertNotEquals(oldBarChartModel, statisticsController.getMonthBarUserModel());
+
     }
 
     @Test
     @WithMockUser(username = "user7", authorities = {"TEAMLEADER"})
     public void rebuildChartsTeam() {
+        PieChartModel oldWeekModel = statisticsController.getWeekTeamModel();
+        PieChartModel oldMonthModel = statisticsController.getMonthTeamModel();
+        BarChartModel oldBarChartModel = statisticsController.getMonthBarTeamModel();
+
+
         Calendar calendar = Calendar.getInstance();
         calendar.set(2019, Calendar.MAY, 6);
         Date date = Date.from(calendar.toInstant());
         statisticsController.setChosenDate(date);
         statisticsController.rebuildChartsTeam();
+
+        Assert.assertNotEquals(oldWeekModel, statisticsController.getWeekTeamModel());
+        Assert.assertNotEquals(oldMonthModel, statisticsController.getMonthTeamModel());
+        Assert.assertNotEquals(oldBarChartModel, statisticsController.getMonthBarTeamModel());
     }
 
     @Test
     @WithMockUser(username = "user2", authorities = {"DEPARTMENTLEADER"})
     public void rebuildChartsDepartment() {
+        PieChartModel oldMonthModel = statisticsController.getMonthDepartmentModel();
+        BarChartModel oldBarChartModel = statisticsController.getMonthBarDepartmentModel();
+
+        Assert.assertEquals(oldMonthModel, statisticsController.getMonthDepartmentModel());
+
         Calendar calendar = Calendar.getInstance();
         calendar.set(2019, Calendar.MAY, 6);
         Date date = Date.from(calendar.toInstant());
         statisticsController.setChosenDate(date);
         statisticsController.rebuildChartsDepartment();
+
+        Assert.assertNotEquals(oldMonthModel, statisticsController.getMonthDepartmentModel());
+        Assert.assertNotEquals(oldBarChartModel, statisticsController.getMonthBarDepartmentModel());
+
     }
 
     @Test
     @WithMockUser(username = "user2", authorities = {"DEPARTMENTLEADER"})
     public void rebuildChartsDepartmentTeamBasis() {
+        PieChartModel oldMonthModel = statisticsController.getMonthTeamModel();
+        BarChartModel oldBarChartModel = statisticsController.getMonthBarTeamModel();
+
         statisticsController.init();
         Calendar calendar = Calendar.getInstance();
         calendar.set(2019, Calendar.MAY, 6);
         Date date = Date.from(calendar.toInstant());
         statisticsController.setChosenDate(date);
         statisticsController.rebuildChartsDepartmentTeamBasis();
+
+        Assert.assertNotEquals(oldMonthModel, statisticsController.getMonthTeamModel());
+        Assert.assertNotEquals(oldBarChartModel, statisticsController.getMonthBarTeamModel());
     }
 
     @Test
@@ -114,5 +150,13 @@ public class StatisticsControllerTest {
     public void setDayToBeginning() {
         Calendar calendar = Calendar.getInstance();
         StatisticsController.setDayToBeginning(calendar);
+
+        Calendar testCalendar = Calendar.getInstance();
+        testCalendar.set(Calendar.MILLISECOND, 0);
+        testCalendar.set(Calendar.SECOND, 0);
+        testCalendar.set(Calendar.MINUTE, 0);
+        testCalendar.set(Calendar.HOUR_OF_DAY, 0);
+
+        Assert.assertEquals(calendar, testCalendar);
     }
 }
