@@ -27,17 +27,19 @@ public class TeamListController implements Serializable {
     private TeamService teamService;
 
     private String teamName = "";
+    private String employee = "";
+    private String leader = "";
+    private String department = "";
 
 
     /**
-     *
      * @return all teams
      */
 
-    public Collection<Team> getTeams(){
-        if(!teamName.equals("")){
-          return teamService.getAllTeamsByTeamName(teamName);
-       }
+    public Collection<Team> getTeams() {
+        if (!teamName.equals("")) {
+            return teamService.getAllTeamsByTeamName(teamName);
+        }
         return teamService.getAllTeams();
     }
 
@@ -59,15 +61,47 @@ public class TeamListController implements Serializable {
         return teamService.getAllUsersWithoutTeam();
     }
 
+
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
+    }
+
+    public String getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(String employee) {
+        this.employee = employee;
+    }
+
+    public String getLeader() {
+        return leader;
+    }
+
+    public void setLeader(String leader) {
+        this.leader = leader;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
     /**
-     *
      * @param teamsInDepartment
      * @return teams without department
      */
 
     public Collection<Team> getTeamsNotInDepartment(Set<Team> teamsInDepartment) {
 
-        Collection<Team> allTeams= teamService.getAllTeams();
+        Collection<Team> allTeams = teamService.getAllTeams();
 
         for(Team team : teamsInDepartment){
             allTeams.remove(team);
@@ -88,5 +122,11 @@ public class TeamListController implements Serializable {
         this.team = team;
     }
 
+    public void resetFilter() {
+        this.department = "";
+        this.leader = "";
+        this.teamName = "";
+        this.employee = "";
+    }
 
 }
