@@ -9,6 +9,7 @@ public class HistoryEntry {
     private Date start;
     private Date end;
     private int seconds;
+    public int battery;
 
     public Long getId() {
         return id;
@@ -58,4 +59,11 @@ public class HistoryEntry {
         this.seconds = seconds;
     }
 
+    public int getBattery() {
+        return battery;
+    }
+
+    public void setBattery(int battery) {
+        this.battery = battery;
+    }
 }

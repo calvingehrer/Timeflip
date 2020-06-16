@@ -20,7 +20,8 @@ public enum TaskEnum {
     FORTBILDUNG ("Fortbildung"),
     PROJEKTMANAGEMENT ("Projektmanagement"),
     SONSTIGES ("Sonstiges"),
-    AUSZEIT ("Auszeit");
+    AUSZEIT ("Auszeit"),
+    NOT_DEFINED ("Not Defined");
 
     private final String description;
 
@@ -51,6 +52,7 @@ public enum TaskEnum {
         tasks.add("PROJEKTMANAGEMENT");
         tasks.add("SONSTIGES");
         tasks.add("AUSZEIT");
+        tasks.add("NOT_DEFINED");
         return tasks;
     }
 

@@ -52,7 +52,7 @@ public class HistoryService {
      * @param seconds the deuration in seconds of the HistoryEntry object
      * @return the newly created HistoryEntry object
      */
-    public HistoryEntry postHistoryObject(String macAddress, int facet, Date start, Date end, int seconds) {
+    public HistoryEntry postHistoryObject(String macAddress, int facet, Date start, Date end, int seconds, int battery) {
         if (!StringUtils.hasText(macAddress)){
             throw new IllegalArgumentException("content must not be null or empty");
         }
@@ -64,6 +64,7 @@ public class HistoryService {
         historyEntry.setStart(start);
         historyEntry.setEnd(end);
         historyEntry.setSeconds(seconds);
+        historyEntry.setBattery(battery);
         addAsTask(historyEntry);
         HISTORY_QUEUE.add(historyEntry);
 
@@ -107,13 +108,29 @@ public class HistoryService {
         Timeflip timeflip = timeflipRepository.findByMacAddress(historyEntry.getMacAddress());
         if(timeflip != null){
             User user = timeflip.getUser();
+            timeflip.setBattery(historyEntry.getBattery());
             if(user != null){
                 task.setTeam(user.getTeam());
                 task.setDepartment(user.getDepartment());
                 task.setUser(user);
             }
             int facet = historyEntry.getFacet();
-            task.setTask(TaskEnum.values()[facet-1]);
+
+            switch (facet){
+                case 1: task.setTask(timeflip.getFacet1()); break;
+                case 2: task.setTask(timeflip.getFacet2()); break;
+                case 3: task.setTask(timeflip.getFacet3()); break;
+                case 4: task.setTask(timeflip.getFacet4()); break;
+                case 5: task.setTask(timeflip.getFacet5()); break;
+                case 6: task.setTask(timeflip.getFacet6()); break;
+                case 7: task.setTask(timeflip.getFacet7()); break;
+                case 8: task.setTask(timeflip.getFacet8()); break;
+                case 9: task.setTask(timeflip.getFacet9()); break;
+                case 10: task.setTask(timeflip.getFacet10()); break;
+                case 11: task.setTask(timeflip.getFacet11()); break;
+                case 12: task.setTask(timeflip.getFacet12()); break;
+                default: task.setTask(TaskEnum.NOT_DEFINED); break;
+            }
         }
         task.setStartTime(historyEntry.getStart().toInstant());
         task.setEndTime(historyEntry.getEnd().toInstant());
