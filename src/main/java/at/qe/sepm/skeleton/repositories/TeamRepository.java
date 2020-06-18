@@ -24,6 +24,6 @@ public interface TeamRepository extends AbstractRepository<Team, String> {
     @Query("SELECT t FROM Team t WHERE t.department = :department")
     List<Team> findByDepartment(@Param("department") Department department);
 
-    //@Query("SELECT t FROM Team t WHERE t.leader = :leader")
-    //List<>
+    @Query("SELECT t FROM Team t WHERE t.department.departmentName LIKE CONCAT(:departmentPrefix, '%')")
+    List<Team> findByDepartmentPrefix(@Param("departmentPrefix") String departmentPrefix);
 }

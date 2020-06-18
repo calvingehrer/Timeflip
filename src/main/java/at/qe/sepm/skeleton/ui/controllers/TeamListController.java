@@ -28,7 +28,6 @@ public class TeamListController implements Serializable {
 
     private String teamName = "";
     private String employee = "";
-    private String leader = "";
     private String department = "";
 
 
@@ -39,6 +38,12 @@ public class TeamListController implements Serializable {
     public Collection<Team> getTeams() {
         if (!teamName.equals("")) {
             return teamService.getAllTeamsByTeamName(teamName);
+        }
+        if (!department.equals("")) {
+            return teamService.getTeamsByDepartmentName(department);
+        }
+        if (!employee.equals("")) {
+            return teamService.getTeamsWithEmployee(employee);
         }
         return teamService.getAllTeams();
     }
@@ -76,14 +81,6 @@ public class TeamListController implements Serializable {
 
     public void setEmployee(String employee) {
         this.employee = employee;
-    }
-
-    public String getLeader() {
-        return leader;
-    }
-
-    public void setLeader(String leader) {
-        this.leader = leader;
     }
 
     public String getDepartment() {
@@ -124,7 +121,6 @@ public class TeamListController implements Serializable {
 
     public void resetFilter() {
         this.department = "";
-        this.leader = "";
         this.teamName = "";
         this.employee = "";
     }

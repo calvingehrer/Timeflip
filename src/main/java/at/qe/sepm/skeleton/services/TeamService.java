@@ -3,8 +3,10 @@ package at.qe.sepm.skeleton.services;
 import at.qe.sepm.skeleton.model.Department;
 import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
+import at.qe.sepm.skeleton.model.UserRole;
 import at.qe.sepm.skeleton.repositories.TaskRepository;
 import at.qe.sepm.skeleton.repositories.TeamRepository;
+import at.qe.sepm.skeleton.repositories.UserRepository;
 import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -12,9 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 @Component
@@ -36,6 +36,9 @@ public class TeamService {
 
     @Autowired
     private TaskRepository taskRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     /**
      *
@@ -159,6 +162,32 @@ public class TeamService {
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<Team> getTeamsOfDepartment(Department department) { return teamRepository.findByDepartment(department); }
 
+
+    /**
+     *
+     * @param department department name
+     * @return teams of department searched by string
+     */
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<Team> getTeamsByDepartmentName (String department) {
+        return teamRepository.findByDepartmentPrefix(department);
+    }
+
+    /**
+     *
+     * @param employee employees in team
+     * @return teams where users got username prefix
+     */
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Set<Team> getTeamsWithEmployee (String employee) {
+        List<User> employees = userService.getAllUsersByUsername(employee);
+        Set<Team> teams = new HashSet<>();
+        for(User e: employees) {
+            if (e.getTeam() != null)
+                teams.add(e.getTeam());
+        }
+        return teams;
+    }
 
 
 

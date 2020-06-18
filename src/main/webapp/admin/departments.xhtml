@@ -19,7 +19,27 @@
                 <div class="card">
                     <p:growl id="growl" rendered="#{not facesContext.validationFailed}" showDetail="true"/>
 
-                    <h1>Departments</h1>
+                    <h1>Teams</h1>
+
+                    <h:form id="selection">
+                        <h:panelGrid columns="7">
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="Department Name: "/>
+                                <p:inputText value="#{departmentListController.department}"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="Teams: "/>
+                                <p:inputText value="#{departmentListController.team}"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="3">
+                                <p:outputLabel value="Employee: "/>
+                                <p:inputText value="#{departmentListController.employee}"/>
+                            </h:panelGrid>
+                            <p:commandButton value="Filter" update=":departmentForm"/>
+                            <p:commandButton value="Reset" action="#{departmentListController.resetFilter}"
+                                             update=":selection :departmentForm:DepartmentTable"/>
+                        </h:panelGrid>
+                    </h:form>
                     <h:form id="departmentForm">
 
                         <p:dataTable id="DepartmentTable" var="department" value="#{departmentListController.departments}" scrollable="true">
