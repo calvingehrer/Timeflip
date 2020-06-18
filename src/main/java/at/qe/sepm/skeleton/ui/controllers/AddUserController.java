@@ -33,28 +33,27 @@ public class AddUserController implements Serializable {
     /**
      * Action to add the user to the system
      */
-    public void add(){
+    public void add() {
 
-        if(user.getUsername() == null){
+        if (user.getUsername() == null) {
             return;
         }
 
         this.roles = new HashSet<>();
-        if(admin){
+        if (admin) {
             roles.add(UserRole.ADMIN);
         }
-        if(departmentleader){
+        if (departmentleader) {
             roles.add(UserRole.DEPARTMENTLEADER);
         }
-        if(teamleader){
+        if (teamleader) {
             roles.add(UserRole.TEAMLEADER);
         }
-        if(employee){
+        if (employee) {
             roles.add(UserRole.EMPLOYEE);
         }
 
         user.setRoles(roles);
-
 
 
         userService.addNewUser(user);
@@ -63,8 +62,7 @@ public class AddUserController implements Serializable {
     }
 
 
-
-    public void resetUser(){
+    public void resetUser() {
         this.user = new User();
         roles.clear();
         employee = false;
@@ -90,9 +88,13 @@ public class AddUserController implements Serializable {
         this.admin = admin;
     }
 
-    public boolean isDepartmentleader() { return departmentleader; }
+    public boolean isDepartmentleader() {
+        return departmentleader;
+    }
 
-    public void setDepartmentleader(boolean departmentleader) { this.departmentleader = departmentleader; }
+    public void setDepartmentleader(boolean departmentleader) {
+        this.departmentleader = departmentleader;
+    }
 
     public boolean isTeamleader() {
         return teamleader;
@@ -110,12 +112,12 @@ public class AddUserController implements Serializable {
         this.employee = employee;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public User getUser() {
         return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
 }

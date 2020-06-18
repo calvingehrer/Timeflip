@@ -19,17 +19,12 @@ public class RoomListController implements Serializable {
     private RoomService roomService;
 
 
-    public Collection<Room> getRooms(){
+    public Collection<Room> getRooms() {
         return roomService.getAllRooms();
     }
 
     public Collection<Room> getRoomsWithoutRaspberry() {
         return roomService.getRoomsWithoutRaspberry();
-    }
-
-    public void doDeleteRoom(){
-        this.roomService.deleteRoom(room);
-        room = null;
     }
 
     public Room getRoom() {

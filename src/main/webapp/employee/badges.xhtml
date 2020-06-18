@@ -6,38 +6,86 @@
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="title">Badges</ui:define>
+    <ui:define name="viewname">
+        <li>Badges</li>
+        <li>/</li>
+        <li>
+        <p:link outcome="/employee/badges">Badges</p:link>
+        </li>
+    </ui:define>
 
     <ui:define name="content">
         <div class="ui-g">
             <div class="ui-g-12">
                 <div class="card">
+
+                    <h:form id="selection">
+                        <h:panelGrid columns="7">
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="Interval: "/>
+                                <p:selectOneMenu value="#{badgeController.interval}">
+                                    <f:selectItem itemLabel="All" itemValue=""/>
+                                    <f:selectItem itemLabel="Daily" itemValue="Daily"/>
+                                    <f:selectItem itemLabel="Weekly" itemValue="Weekly"/>
+                                    <f:selectItem itemLabel="Monthly" itemValue="Monthly"/>
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                            <p:outputLabel value="Choose Date in Interval: "/>
+                            <p:commandButton icon="fa fa-calendar-o" onclick="PF('filterBadgeDialog').show()"/>
+
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="Type: "/>
+                                <p:selectOneMenu value="#{badgeController.badgeType}">
+                                    <f:selectItem itemLabel="All" itemValue=""/>
+                                    <f:selectItem itemLabel="Weekly Code Monkey" itemValue="WEEKLY_CODE_MONKEY"/>
+                                    <f:selectItem itemLabel="Creative Mind" itemValue="CREATIVE_MIND"/>
+                                    <f:selectItem itemLabel="Friend and Helper" itemValue="FRIEND_AND_HELPER"/>
+                                    <f:selectItem itemLabel="All Rounder" itemValue="ALL_ROUNDER"/>
+                                    <f:selectItem itemLabel="Night Owl" itemValue="NIGHT_OWL"/>
+                                    <f:selectItem itemLabel="Wisdom Seeker" itemValue="WISDOM_SEEKER"/>
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+
+                            <p:commandButton value="Filter" update=":myBadges :selection"/>
+                            <p:commandButton value="Reset" action="#{badgeController.resetFilter}" update="myBadges"/>
+
+                        </h:panelGrid>
+
+                    </h:form>
                     <h1>My Badges</h1>
 
-                    <p:dataGrid id="myBadges" var="badge" value="#{badgeController.badgesFromUser}" columns="3">
+                    <p:dataGrid id="myBadges" var="badge" value="#{badgeController.sortedBadgesOfUser}" columns="3">
 
-                    <p:panel header="#{badge.badgeType}" style="text-align:center">
-                        <h:panelGrid columns="1" style="width:100%">
-                            <h:graphicImage value="#{badge.imagePath}" width="200px" height="200px"/>
-                            <h:outputText value="#{badge.dateOfBadge}"/>
-                        </h:panelGrid>
-                    </p:panel>
+                        <p:panel header="#{badge.badgeType.toString()}" style="text-align:center">
+                            <h:panelGrid columns="1" style="width:100%">
+                                <h:graphicImage value="#{badge.imagePath}" width="200px" height="200px"/>
+                                <h:outputText value="#{timeBean.instantToDate(badge.dateOfBadge)}">
+                                    <f:convertDateTime timeZone="#{timeBean.utcTimeZone}" pattern="dd.MM.yyyy"/>
+                                </h:outputText>
+                            </h:panelGrid>
+                        </p:panel>
 
                     </p:dataGrid>
+
+                    <p:dialog header="Filter Tasks" id="filterBadgeDialog" widgetVar="filterBadgeDialog" modal="true"
+                              showEffect="fade" hideEffect="fade" resizable="false">
+                        <h:form id="timeRange">
+                            <p:calendar id="startTimeRange" mode="inline" value="#{badgeController.chosenDate}"
+                                        timeZone="#{timeBean.utcTimeZone}"/>
+
+                            <p:commandButton value="Find" update="myBadges"
+                                             oncomplete="PF('filterBadgeDialog').hide()"/>
+
+
+                        </h:form>
+                    </p:dialog>
 
                 </div>
             </div>
         </div>
 
-        <h:form id="userForm">
-
-
-        </h:form>
-
-
-
 
     </ui:define>
-
 
 
 </ui:composition>

@@ -25,7 +25,7 @@ public class LogEntry implements Serializable {
     @Column(length = 250)
     private String message;
 
-    @ManyToOne(optional = true)
+    @ManyToOne()
     private User changingUser;
 
     @Column(nullable = false)

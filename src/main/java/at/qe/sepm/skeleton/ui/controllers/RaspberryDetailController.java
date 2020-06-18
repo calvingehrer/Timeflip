@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 /**
  * Controller for the user detail view.
- *
+ * <p>
  * This class is part of the skeleton project provided for students of the
  * courses "Software Architecture" and "Software Engineering" offered by the
  * University of Innsbruck.
@@ -25,6 +25,12 @@ public class RaspberryDetailController implements Serializable {
 
     private Raspberry raspberry;
 
+    /**
+     * Returns the currently displayed user.
+     */
+    public Raspberry getRaspberry() {
+        return raspberry;
+    }
 
     public void setRaspberry(Raspberry raspberry) {
         this.raspberry = raspberry;
@@ -32,26 +38,10 @@ public class RaspberryDetailController implements Serializable {
     }
 
     /**
-     * Returns the currently displayed user.
-     *
-     * @return
-     */
-    public Raspberry getRaspberry() {
-        return raspberry;
-    }
-
-    /**
      * Action to force a reload of the currently displayed user.
      */
-    public void doReloadRaspberry() {
+    private void doReloadRaspberry() {
         raspberry = raspberryService.loadRaspberry(raspberry.getRaspberryId());
-    }
-
-    /**
-     * Action to save the currently displayed user.
-     */
-    public void doSaveRaspberry() {
-        raspberry = this.raspberryService.saveRaspberry(raspberry);
     }
 
     /**
@@ -60,10 +50,9 @@ public class RaspberryDetailController implements Serializable {
     public void doDeleteRaspberry() {
         this.raspberryService.deleteRaspberry(raspberry);
         raspberry = null;
-        MessagesView.successMessage("raspberry deletion","successfully deleted");
+        MessagesView.successMessage("raspberry deletion", "successfully deleted");
 
     }
-
 
 
 }

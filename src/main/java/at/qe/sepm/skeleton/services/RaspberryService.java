@@ -6,10 +6,8 @@ import at.qe.sepm.skeleton.model.Room;
 import at.qe.sepm.skeleton.model.Timeflip;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.RaspberryRepository;
-import at.qe.sepm.skeleton.repositories.RoomRepository;
 import at.qe.sepm.skeleton.repositories.TimeflipRepository;
 import at.qe.sepm.skeleton.repositories.UserRepository;
-import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -18,7 +16,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
@@ -28,25 +25,16 @@ import java.util.List;
 public class RaspberryService {
 
     @Autowired
-    RaspberryRepository raspberryRepository;
+    private RaspberryRepository raspberryRepository;
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
-    RoomRepository roomRepository;
+    private TimeflipRepository timeflipRepository;
     @Autowired
-    TimeflipRepository timeflipRepository;
+    private UserService userService;
 
     @Autowired
     private Logger<String, User> logger;
-
-    @Autowired
-    CurrentUserBean currentUserBean;
-
-
-    @PostConstruct
-    public void init() {
-        currentUserBean.init();
-    }
 
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -62,7 +50,7 @@ public class RaspberryService {
         newRaspberry.setRoom(room);
         saveRaspberry(newRaspberry);
         // add raspberry
-        logger.logCreation(raspberry.getId(), currentUserBean.getCurrentUser());
+        logger.logCreation(raspberry.getId(), userService.getAuthenticatedUser());
     }
 
     public User getAuthenticatedUser() {
@@ -81,7 +69,7 @@ public class RaspberryService {
             raspberry.setCreateDate(new Date());
             raspberry.setCreateUser(getAuthenticatedUser());
         }
-        logger.logUpdate(raspberry.getId(), currentUserBean.getCurrentUser());
+        logger.logUpdate(raspberry.getId(), userService.getAuthenticatedUser());
         return raspberryRepository.save(raspberry);
     }
 
@@ -95,17 +83,17 @@ public class RaspberryService {
     @Transactional
     public void deleteRaspberry(Raspberry raspberry) {
         Room room = raspberry.getRoom();
-        if(room != null){
+        if (room != null) {
             room.setRaspberry(null);
             room.setEquipped(false);
         }
 
         raspberry.setRoom(null);
-        for (Timeflip t: timeflipRepository.findTimeflipsOfRaspberrys(raspberry)) {
+        for (Timeflip t : timeflipRepository.findTimeflipsOfRaspberrys(raspberry)) {
             t.setRaspberry(null);
         }
         raspberryRepository.delete(raspberry);
-        logger.logDeletion(raspberry.getId(), currentUserBean.getCurrentUser());
+        logger.logDeletion(raspberry.getId(), userService.getAuthenticatedUser());
     }
 
 

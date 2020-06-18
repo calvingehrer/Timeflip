@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * Controller for the user list view.
- *
+ * <p>
  * This class is part of the skeleton project provided for students of the
  * courses "Software Architecture" and "Software Engineering" offered by the
  * University of Innsbruck.
@@ -34,23 +34,19 @@ public class UserListController implements Serializable {
 
     /**
      * Returns a list of all users.
-     *
-     * @return
      */
     public Collection<User> getUsers() {
-        if (!username.equals("")) {
-            return userService.getAllUsersByUsername(username);
+        if (!this.getUsername().equals("")) {
+            return userService.getAllUsersByUsername(this.getUsername());
         }
-        if (!teamname.equals("")) {
-            return userService.getAllUsersOfTeamByTeamname(teamname);
+        if (!this.getTeamname().equals("")) {
+            return userService.getAllUsersOfTeamByTeamname(this.getTeamname());
         }
-        if (!departmentname.equals("")) {
-            return userService.getAllUsersOfDepartmentByDepartmentname(departmentname);
+        if (!this.getDepartmentname().equals("")) {
+            return userService.getAllUsersOfDepartmentByDepartmentname(this.getDepartmentname());
         }
-        return userService.getAllUsersByRole(userrole);
+        return userService.getAllUsersByRole(this.getUserrole());
     }
-
-
 
 
     public Collection<User> getUsersWithoutTimeflip() {
@@ -61,9 +57,13 @@ public class UserListController implements Serializable {
         return userService.getAllUsersWithoutTeam();
     }
 
-    public Collection<User> getTeamLeadersWithoutTeam() { return userService.getTeamLeaderWithoutTeam(); }
+    public Collection<User> getTeamLeadersWithoutTeam() {
+        return userService.getTeamLeaderWithoutTeam();
+    }
 
-    public Collection<User> getDepartmentLeadersWithoutDepartment() { return userService.getDepartmentLeaderWithoutDepartment(); }
+    public Collection<User> getDepartmentLeadersWithoutDepartment() {
+        return userService.getDepartmentLeaderWithoutDepartment();
+    }
 
     public String getTeamname() {
         return teamname;
@@ -84,6 +84,8 @@ public class UserListController implements Serializable {
     public void resetFilter() {
         this.username = "";
         this.userrole = "";
+        this.teamname = "";
+        this.departmentname = "";
     }
 
     public String getUserrole() {
@@ -105,7 +107,6 @@ public class UserListController implements Serializable {
     public List<User> getEmployees(Team team) {
         return userService.getUsersOfTeam(team);
     }
-
 
 
     public User getTeamLeader(Team team) {

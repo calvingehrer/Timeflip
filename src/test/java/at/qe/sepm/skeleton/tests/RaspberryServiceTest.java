@@ -8,7 +8,6 @@ import at.qe.sepm.skeleton.services.DepartmentService;
 import at.qe.sepm.skeleton.services.RaspberryService;
 import at.qe.sepm.skeleton.services.RoomService;
 import at.qe.sepm.skeleton.services.UserService;
-import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import org.junit.*;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -30,8 +29,6 @@ class RaspberryServiceTest {
     @Autowired
     RaspberryService raspberryService;
 
-    @MockBean
-    CurrentUserBean currentUserBean;
 
     @Autowired
     RoomService roomService;
@@ -53,6 +50,8 @@ class RaspberryServiceTest {
         raspberry.setRaspberryId("testRaspberry");
         raspberryService.addNewRaspberry(raspberry, null);
         Assert.assertEquals(6, raspberryService.getAllRaspberries().size());
+        raspberryService.deleteRaspberry(raspberryService.loadRaspberry("testRaspberry"));
+        Assert.assertEquals(5, raspberryService.getAllRaspberries().size());
 
     }
 

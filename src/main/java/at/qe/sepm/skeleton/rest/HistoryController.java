@@ -1,9 +1,9 @@
 package at.qe.sepm.skeleton.rest;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class HistoryController {
@@ -18,7 +18,7 @@ public class HistoryController {
 
     @PostMapping("/history")
     private HistoryEntry sendMessage(@RequestBody HistoryEntry entry) {
-        return service.postHistoryObject(entry.getMacAddress(), entry.getFacet(), entry.getStart(), entry.getEnd(), entry.getSeconds());
+        return service.postHistoryObject(entry.getMacAddress(), entry.getFacet(), entry.getStart(), entry.getEnd(), entry.getSeconds(), entry.getBattery());
     }
 
     @DeleteMapping("/history/{id}")

@@ -10,15 +10,14 @@ import java.util.Objects;
 
 /**
  * Entity representing a Task.
- *
  */
 
 @Entity
-public class Task implements Persistable<Long>, Serializable{
+public class Task implements Persistable<Long>, Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="task_id")
+    @Column(name = "task_id")
     private Long Id;
 
     @Column(name = "start_time")
@@ -33,21 +32,20 @@ public class Task implements Persistable<Long>, Serializable{
     @Column(name = "task")
     private TaskEnum task;
 
-    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER, optional = true, cascade = CascadeType.ALL)
-    @JoinColumn(name="user_id")
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(targetEntity = Team.class, fetch = FetchType.EAGER, optional = true, cascade = CascadeType.ALL)
-    @JoinColumn(name="team_id")
+    @ManyToOne(targetEntity = Team.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "team_id")
     private Team team;
 
-    @ManyToOne(targetEntity = Department.class, fetch = FetchType.EAGER, optional = true, cascade = CascadeType.ALL)
-    @JoinColumn(name="department_id")
+    @ManyToOne(targetEntity = Department.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "department_id")
     private Department department;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date createDate;
-
 
 
     @Override
@@ -111,10 +109,6 @@ public class Task implements Persistable<Long>, Serializable{
         this.department = department;
     }
 
-    public Date getCreateDate() {
-        return createDate;
-    }
-
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
@@ -125,7 +119,9 @@ public class Task implements Persistable<Long>, Serializable{
     }
 
     @Override
-    public boolean isNew() { return null == createDate; }
+    public boolean isNew() {
+        return null == createDate;
+    }
 
     @Override
     public boolean equals(Object o) {

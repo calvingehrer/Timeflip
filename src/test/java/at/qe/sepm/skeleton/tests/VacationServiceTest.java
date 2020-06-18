@@ -7,7 +7,6 @@ import at.qe.sepm.skeleton.model.Vacation;
 import at.qe.sepm.skeleton.repositories.UserRepository;
 import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.services.VacationService;
-import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import at.qe.sepm.skeleton.ui.beans.HolidayBean;
 import at.qe.sepm.skeleton.ui.beans.TimeBean;
 import at.qe.sepm.skeleton.utils.MessagesView;
@@ -43,22 +42,38 @@ public class VacationServiceTest {
     @Autowired
     HolidayBean holidayBean;
 
-    @MockBean
-    CurrentUserBean currentUserBean;
 
     @Autowired
     TimeBean timeBean;
 
-    @Test
-    @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
-    public void initTest() {
-        vacationService.init();
-        Assert.assertNotNull(currentUserBean);
-    }
 
     @Test
     @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
     public void addVacationCheckValidationTest() {
+        User user = userRepository.findFirstByUsername("user5");
+
+        Vacation vacation = new Vacation();
+
+        Calendar calendar = Calendar.getInstance(timeBean.getUtcTimeZone());
+        calendar.set(2020, Calendar.AUGUST, 10);
+        Instant start = calendar.toInstant();
+        vacation.setStart(start);
+
+        calendar.set(2020, Calendar.AUGUST, 14);
+        Instant end = calendar.toInstant();
+        vacation.setEnd(end);
+
+        try {
+            vacationService.addVacation(user, vacation);
+        } catch (Exception e) {
+            MessagesView.errorMessage("Test adding vacation", e.getMessage());
+        }
+
+    }
+
+    @Test
+    @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
+    public void checkValidationTest() {
         User user = userRepository.findFirstByUsername("user5");
 
         Vacation vacation = new Vacation();
@@ -71,23 +86,14 @@ public class VacationServiceTest {
         vacation.setStart(start);
         vacation.setEnd(end);
 
-        Assertions.assertThrows(VacationException.class, () -> vacationService.addVacation(user, vacation));
+        Instant finalEnd1 = end;
+        Assertions.assertThrows(VacationException.class, () -> vacationService.checkVacationDates(user, start, finalEnd1));
 
         calendar.set(2021, Calendar.AUGUST, 14);
         end = calendar.toInstant();
         vacation.setEnd(end);
 
-        Assertions.assertThrows(VacationException.class, () -> vacationService.addVacation(user, vacation));
-
-        calendar.set(2020, Calendar.AUGUST, 14);
-        end = calendar.toInstant();
-        vacation.setEnd(end);
-
-        try {
-            vacationService.addVacation(user, vacation);
-        } catch (Exception e) {
-            MessagesView.errorMessage("Test adding vacation", e.getMessage());
-        }
-
+        Instant finalEnd2 = end;
+        Assertions.assertThrows(VacationException.class, () -> vacationService.checkVacationDates(user, start, finalEnd2));
     }
 }

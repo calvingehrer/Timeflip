@@ -14,7 +14,7 @@ import java.util.Set;
 
 /**
  * Entity representing users.
- *
+ * <p>
  * This class is part of the skeleton project provided for students of the
  * courses "Software Architecture" and "Software Engineering" offered by the
  * University of Innsbruck.
@@ -34,7 +34,7 @@ public class User implements Persistable<String>, Serializable {
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date createDate;
-    @ManyToOne(optional = true)
+    @ManyToOne()
     private User updateUser;
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateDate;
@@ -43,12 +43,11 @@ public class User implements Persistable<String>, Serializable {
 
     private String firstName;
     private String lastName;
-    private String fullName;
     @Email
     private String email;
 
 
-    boolean enabled;
+    private boolean enabled;
 
     @ElementCollection(targetClass = UserRole.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_user_role")
@@ -57,32 +56,29 @@ public class User implements Persistable<String>, Serializable {
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_vacation")
-    Set<Vacation> vacations = new HashSet<>();
+    private Set<Vacation> vacations = new HashSet<>();
 
-    @ManyToOne(targetEntity = Team.class, fetch = FetchType.EAGER, optional = true)
-    @JoinColumn(name="team_id")
+    @ManyToOne(targetEntity = Team.class, fetch = FetchType.EAGER)
+    @JoinColumn(name = "team_id")
     private Team team;
 
     @ManyToOne
-    @JoinColumn(name="department_id")
+    @JoinColumn(name = "department_id")
     private Department department;
+    @Enumerated(EnumType.STRING)
+    private Interval intervall;
 
-    private long vacationDays;
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
 
     public Set<Vacation> getVacations() {
         return vacations;
     }
 
-    public void setVacations(Set<Vacation> vacations) {
-        this.vacations = vacations;
-    }
-
     public void addVacation(Vacation vacation) {
         this.vacations.add(vacation);
     }
-
-    @Enumerated(EnumType.STRING)
-    private Interval intervall;
 
     public String getUsername() {
         return username;
@@ -172,10 +168,6 @@ public class User implements Persistable<String>, Serializable {
         this.updateDate = updateDate;
     }
 
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
-
     public Team getTeam() {
         return team;
     }
@@ -190,14 +182,6 @@ public class User implements Persistable<String>, Serializable {
 
     public void setDepartment(Department department) {
         this.department = department;
-    }
-
-    public long getVacationDays() {
-        return vacationDays;
-    }
-
-    public void setVacationDays(long vacationDays) {
-        this.vacationDays = vacationDays;
     }
 
     @Override
@@ -216,15 +200,12 @@ public class User implements Persistable<String>, Serializable {
             return false;
         }
         final User other = (User) obj;
-        if (!Objects.equals(this.username, other.username)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.username, other.username);
     }
 
     @Override
     public String toString() {
-        return firstName + " " + lastName ;
+        return firstName + " " + lastName;
     }
 
     @Override
@@ -232,6 +213,9 @@ public class User implements Persistable<String>, Serializable {
         return getUsername();
     }
 
+    public void setId(String id) {
+        setUsername(id);
+    }
 
     public Interval getIntervall() {
         return intervall;
@@ -240,11 +224,6 @@ public class User implements Persistable<String>, Serializable {
     public void setIntervall(Interval intervall) {
         this.intervall = intervall;
     }
-
-    public void setId(String id) {
-        setUsername(id);
-    }
-
 
     @Override
     public boolean isNew() {
@@ -256,8 +235,5 @@ public class User implements Persistable<String>, Serializable {
         return this.getVacations().stream().anyMatch(x -> x.getStart().compareTo(begin) <= 0 && x.getEnd().compareTo(begin) >= 0 || x.getStart().compareTo(end) <= 0 && x.getEnd().compareTo(end) >= 0 || x.getStart().compareTo(begin) >= 0 && x.getEnd().compareTo(end) <= 0);
     }
 
-    public String getFullName() {
-        return this.getFirstName() + " " +  this.getLastName();
-    }
 
 }

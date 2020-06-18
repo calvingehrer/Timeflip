@@ -1,15 +1,10 @@
 package at.qe.sepm.skeleton.model;
 
-import at.qe.sepm.skeleton.services.RaspberryService;
-import org.eclipse.jdt.internal.compiler.ast.NullLiteral;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -24,7 +19,7 @@ public class Room implements Persistable<String>, Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createDate;
 
-    @ManyToOne(optional = true)
+    @ManyToOne()
     private User createUser;
 
     @OneToOne(mappedBy = "room")
@@ -38,10 +33,6 @@ public class Room implements Persistable<String>, Serializable {
 
     public void setRoomNumber(String roomNumber) {
         this.roomNumber = roomNumber;
-    }
-
-    public Date getCreateDate() {
-        return createDate;
     }
 
     public void setCreateDate(Date createDate) {
@@ -81,10 +72,7 @@ public class Room implements Persistable<String>, Serializable {
             return false;
         }
         final Room other = (Room) obj;
-        if (!Objects.equals(this.roomNumber, other.roomNumber)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.roomNumber, other.roomNumber);
     }
 
     @Override

@@ -1,8 +1,6 @@
 package at.qe.sepm.skeleton.ui.controllers;
 
 
-import at.qe.sepm.skeleton.model.Raspberry;
-import at.qe.sepm.skeleton.model.TaskEnum;
 import at.qe.sepm.skeleton.model.Timeflip;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.TimeflipService;
@@ -11,10 +9,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 @Component
 @Scope("view")
@@ -22,19 +16,14 @@ public class AddTimeflipController implements Serializable {
 
 
     @Autowired
-    private TimeflipService timeflipServicee;
+    private TimeflipService timeflipService;
 
-    private Timeflip timeflip = new Timeflip();
+    private Timeflip timeflip;
 
     private User user;
 
-
-
-
-
-
-    public void add(){
-        timeflipServicee.addNewTimeflip(timeflip, user);
+    public void add() {
+        timeflipService.addNewTimeflip(timeflip, user);
     }
 
     public Timeflip getTimeflip() {
@@ -52,5 +41,4 @@ public class AddTimeflipController implements Serializable {
     public void setUser(User user) {
         this.user = user;
     }
-
 }

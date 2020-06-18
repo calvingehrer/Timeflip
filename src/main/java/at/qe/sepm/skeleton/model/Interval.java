@@ -1,6 +1,7 @@
 package at.qe.sepm.skeleton.model;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Enum to represent the Interval for the emails

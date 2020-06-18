@@ -1,5 +1,6 @@
 package at.qe.sepm.skeleton.ui.controllers;
 
+import at.qe.sepm.skeleton.model.Department;
 import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.TeamService;
@@ -9,8 +10,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 
 @Component
 @Scope("view")
@@ -18,39 +17,40 @@ public class TeamListController implements Serializable {
 
     private Team team;
 
-    private User teamLeader;
-
-    private List<User> employees;
-
     @Autowired
     private TeamService teamService;
 
     private String teamName = "";
+    private String employee = "";
+    private String department = "";
 
 
     /**
-     *
      * @return all teams
      */
 
-    public Collection<Team> getTeams(){
-        if(!teamName.equals("")){
-          return teamService.getAllTeamsByTeamName(teamName);
-       }
+    public Collection<Team> getTeams() {
+        if (!teamName.equals("")) {
+            return teamService.getAllTeamsByTeamName(teamName);
+        }
+        if (!department.equals("")) {
+            return teamService.getTeamsByDepartmentName(department);
+        }
+        if (!employee.equals("")) {
+            return teamService.getTeamsWithEmployee(employee);
+        }
         return teamService.getAllTeams();
     }
 
     /**
-     *
      * @return teams without department
      */
 
-    public Collection<Team> getTeamsWithoutDepartment(){
+    public Collection<Team> getTeamsWithoutDepartment() {
         return teamService.getTeamsWithoutDepartment();
     }
 
     /**
-     *
      * @return users without team
      */
 
@@ -58,20 +58,32 @@ public class TeamListController implements Serializable {
         return teamService.getAllUsersWithoutTeam();
     }
 
-    /**
-     *
-     * @param teamsInDepartment
-     * @return teams without department
-     */
+    public String getEmployee() {
+        return employee;
+    }
 
-    public Collection<Team> getTeamsNotInDepartment(Set<Team> teamsInDepartment) {
+    public void setEmployee(String employee) {
+        this.employee = employee;
+    }
 
-        Collection<Team> allTeams= teamService.getAllTeams();
+    public String getDepartment() {
+        return department;
+    }
 
-        for(Team team : teamsInDepartment){
-            allTeams.remove(team);
-        }
-        return allTeams;
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
+    }
+
+    public Collection<Team> getTeamsInDepartment(Department department) {
+        return teamService.getTeamsOfDepartment(department);
     }
 
 
@@ -83,5 +95,10 @@ public class TeamListController implements Serializable {
         this.team = team;
     }
 
+    public void resetFilter() {
+        this.department = "";
+        this.teamName = "";
+        this.employee = "";
+    }
 
 }

@@ -1,6 +1,5 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/template.xhtml">
@@ -8,7 +7,7 @@
     <ui:define name="title">Team Statistics</ui:define>
 
     <ui:define name="viewname">
-        <li>Pages</li>
+        <li>Team</li>
         <li>/</li>
         <li>
             <p:link outcome="/teamleader/team-statistics.xhtml">Team Statistics</p:link>
@@ -24,7 +23,7 @@
                     <h:form id="teamStatForm">
 
                         <p:messages id="messages" showDetail="true" closable="true">
-                            <p:autoUpdate />
+                            <p:autoUpdate/>
                         </p:messages>
 
                         <p:commandButton value="Choose a Date"
@@ -38,15 +37,18 @@
 
                                 <p:calendar id="start" mode="inline" value="#{statisticsController.chosenDate}"/>
 
-                                <p:commandButton value="Apply" action="#{statisticsController.rebuildChartsTeam}" update="teamStatForm:teamStats"
+                                <p:commandButton value="Apply" action="#{statisticsController.rebuildChartsTeam}"
+                                                 update="teamStatForm:teamStats"
                                                  oncomplete="PF('dateDialog').hide()"/>
                             </h:form>
                         </p:dialog>
 
                         <h:form id="teamStats">
                             <h:panelGrid columns="2" style="width:66.6%">
-                                <p:chart type="pie" model="#{statisticsController.weekTeamModel}" style="width:400px;height:300px"/>
-                                <p:chart type="pie" model="#{statisticsController.monthTeamModel}" style="width:400px;height:300px"/>
+                                <p:chart type="pie" model="#{statisticsController.weekTeamModel}"
+                                         style="width:400px;height:300px"/>
+                                <p:chart type="pie" model="#{statisticsController.monthTeamModel}"
+                                         style="width:400px;height:300px"/>
                             </h:panelGrid>
                             <p:chart type="bar" model="#{statisticsController.monthBarTeamModel}" style="height:300px"/>
                         </h:form>

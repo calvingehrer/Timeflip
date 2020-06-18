@@ -1,6 +1,7 @@
 package at.ac.uibk.rest;
 
 import org.json.JSONArray;
+import sun.management.Sensor;
 import tinyb.*;
 
 import java.util.ArrayList;
@@ -54,7 +55,7 @@ public class TimeFlipService {
      * @return the requested service, Null if service does not exist
      * @throws InterruptedException
      */
-    static BluetoothGattService getService(BluetoothDevice device, String UUID) throws InterruptedException {
+    public static BluetoothGattService getService(BluetoothDevice device, String UUID) throws InterruptedException {
         BluetoothGattService tempService = null;
         List<BluetoothGattService> bluetoothServices = null;
         do
@@ -81,7 +82,7 @@ public class TimeFlipService {
      * @param UUID the UUID of the requested characteristics
      * @return the requested characteristics, null if characteristic does not exist
      */
-    static BluetoothGattCharacteristic getCharacteristic(BluetoothGattService service, String UUID) {
+    public static BluetoothGattCharacteristic getCharacteristic(BluetoothGattService service, String UUID) {
         List<BluetoothGattCharacteristic> characteristics = service.getCharacteristics();
         if (characteristics == null)
             return null;
@@ -138,8 +139,9 @@ public class TimeFlipService {
             });
 
             BluetoothGattService timeflipService = getService(sensor, "f1196f50-71a4-11e6-bdf4-0800200c9a66");
+            BluetoothGattService batteryService = getService(sensor, "0000180f-0000-1000-8000-00805f9b34fb");
 
-            if (timeflipService == null) {
+            if (timeflipService == null || batteryService == null) {
                 sensor.disconnect();
                 System.exit(-1);
             }
@@ -148,9 +150,11 @@ public class TimeFlipService {
             BluetoothGattCharacteristic password = getCharacteristic(timeflipService, "f1196f57-71a4-11e6-bdf4-0800200c9a66");
             BluetoothGattCharacteristic command = getCharacteristic(timeflipService, "f1196f54-71a4-11e6-bdf4-0800200c9a66");
             BluetoothGattCharacteristic commandResult = getCharacteristic(timeflipService, "f1196f53-71a4-11e6-bdf4-0800200c9a66");
+            BluetoothGattCharacteristic battery = getCharacteristic(batteryService, "00002a19-0000-1000-8000-00805f9b34fb");
 
 
-            if (facet == null || password == null || command == null || commandResult == null) {
+
+            if (facet == null || password == null || command == null || commandResult == null || battery == null) {
                 System.err.println("Could not find the correct characteristics.");
                 sensor.disconnect();
                 System.exit(-1);
@@ -164,6 +168,9 @@ public class TimeFlipService {
             // write command 0X01 to receive history data
             byte[] history = {0x01};
             command.writeValue(history);
+
+            // get battery status
+            byte[] batteryRaw = battery.readValue();
 
             while (running) {
                 byte[] historyRaw = commandResult.readValue();
@@ -188,6 +195,7 @@ public class TimeFlipService {
                     entry.setMacAddress(sensor.getAddress());
                     entry.setFacet(Converter.getFacetNumber(Converter.hexToBinary(historyRawFormatted[i])));
                     entry.setSeconds(Converter.getTimeInSeconds(Converter.hexToBinary(historyRawFormatted[i])));
+                    entry.setBattery(Integer.parseInt(Converter.hexToBinary(batteryRaw), 2));
 
                     if (entry.getFacet() != 0) {
                         entries.add(entry);

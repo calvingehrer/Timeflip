@@ -17,8 +17,8 @@ import java.util.stream.Collectors;
 public class CompleteMethodBean {
     /**
      * method to complete the tasks on the ui so it is easier to choose from them
-     * @param query
-     * @return
+     *
+     * @param query Interval
      */
 
     public List<String> completeTask(String query) {
@@ -28,11 +28,11 @@ public class CompleteMethodBean {
 
     /**
      * method to complete the intervals
-     * @param query
-     * @return
+     *
+     * @param query of Interval
      */
 
-    public List<String> completeIntervall(String query) {
+    public List<String> completeInterval(String query) {
         String upperQuery = query.toUpperCase();
         return Interval.getAllIntervals().stream().filter(a -> a.contains(upperQuery)).collect(Collectors.toList());
     }

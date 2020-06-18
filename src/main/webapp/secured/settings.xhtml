@@ -1,6 +1,5 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/template.xhtml">
@@ -13,7 +12,6 @@
     </ui:define>
 
 
-
     <ui:define name="content">
 
         <div class="ui-g">
@@ -24,12 +22,13 @@
                     <var id="oldPassword" class="ManageCurrentUserConrtoller.passwords.oldPassword"/>
 
                     <h:form id="changeDetailsForm" prependId="false">
-                        
+
 
                         <p:panelGrid id="changeDetailsGrid" columns="2" cellpadding="5" layout="grid"
                                      columnClasses="ui-g-1 ui-md-2 ui-lg-2 ui-xl-2, ui-g-4 ui-md-4 ui-lg-4 ui-xl-2">
                             <p:outputLabel for="username" value="Username: "/>
-                            <p:inputText id="username" value="#{manageCurrentUserController.currentUser.username}" disabled="true"/>
+                            <p:inputText id="username" value="#{manageCurrentUserController.currentUser.username}"
+                                         disabled="true"/>
                             <p:outputLabel for="firstname" value="First Name: "/>
                             <p:inputText id="firstname" value="#{manageCurrentUserController.currentUser.firstName}"/>
                             <p:outputLabel for="lastname" value="Last Name: "/>
@@ -37,15 +36,20 @@
                             <p:outputLabel for="email" value="E-Mail: "/>
                             <p:inputText id="email" value="#{manageCurrentUserController.currentUser.email}"/>
                             <p:outputLabel for="interval" value="Interval for mails: "/>
-                            <p:autoComplete id="interval" dropdown="true" value="#{manageCurrentUserController.currentUser.intervall}" completeMethod="#{completeMethodBean.completeIntervall}"/>
+                            <p:autoComplete id="interval" dropdown="true"
+                                            value="#{manageCurrentUserController.currentUser.intervall}"
+                                            completeMethod="#{completeMethodBean.completeInterval}"/>
                             <p:outputLabel value="Password: "/>
-                            <p:commandButton id="passwordChange" update=":changeDetailsForm:editPassword" value="Change Password" oncomplete="PF('editPassword').show()">
+                            <p:commandButton id="passwordChange" update=":changeDetailsForm:editPassword"
+                                             value="Change Password" oncomplete="PF('editPassword').show()">
                             </p:commandButton>
                         </p:panelGrid>
 
                         <p:panelGrid layout="grid" columns="1">
-                            <p:commandButton id="saveDetails" value="Save" action="#{manageCurrentUserController.saveUserDetails()}" actionListener="employee/profile.xhtml"
-                                             update="changeDetailsForm" />
+                            <p:commandButton id="saveDetails" value="Save"
+                                             action="#{manageCurrentUserController.saveUserDetails()}"
+                                             actionListener="employee/profile.xhtml"
+                                             update="changeDetailsForm"/>
                         </p:panelGrid>
 
                         <p:dialog header="Change Password" id="editPassword" widgetVar="editPassword" modal="true"
@@ -53,14 +57,14 @@
                                   hideEffect="fade" resizable="false">
                             <p:outputPanel>
                                 <h:panelGrid columns="2">
-                                    <p:outputLabel for="oldP" value="Old Password: " />
-                                    <p:password id="oldP" value="#{manageCurrentUserController.oldPassword}" />
-                                    <p:outputLabel for="newP" value="New Password: " />
-                                    <p:password id="newP" value="#{manageCurrentUserController.newPassword}" />
-                                    <p:outputLabel for="confirmP" value="Confirm New Password: " />
-                                    <p:password id="confirmP" value="#{manageCurrentUserController.confirmNew}" />
+                                    <p:outputLabel for="oldP" value="Old Password: "/>
+                                    <p:password id="oldP" value="#{manageCurrentUserController.oldPassword}"/>
+                                    <p:outputLabel for="newP" value="New Password: "/>
+                                    <p:password id="newP" value="#{manageCurrentUserController.newPassword}"/>
+                                    <p:outputLabel for="confirmP" value="Confirm New Password: "/>
+                                    <p:password id="confirmP" value="#{manageCurrentUserController.confirmNew}"/>
                                 </h:panelGrid>
-                                <p:separator />
+                                <p:separator/>
 
                                 <p:panelGrid layout="grid" columns="1">
                                     <p:messages id="passwordControl" for="passwordControl" showDetail="true">
@@ -69,8 +73,11 @@
                                 </p:panelGrid>
 
                                 <h:panelGrid columns="2">
-                                    <p:commandButton id="savePassword"  value="Save" action="#{manageCurrentUserController.changePassword()}" onclick="PF('editPassword').hide()"/>
-                                    <p:commandButton id="closePassword" value="Close" onclick="PF('editPassword').hide()"/>
+                                    <p:commandButton id="savePassword" value="Save"
+                                                     action="#{manageCurrentUserController.changePassword()}"
+                                                     onclick="PF('editPassword').hide()"/>
+                                    <p:commandButton id="closePassword" value="Close"
+                                                     onclick="PF('editPassword').hide()"/>
                                 </h:panelGrid>
                             </p:outputPanel>
                         </p:dialog>

@@ -1,59 +1,57 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="title">Profile</ui:define>
+    <ui:define name="viewname">
+        <li>
+            <p:link outcome="/employee/profile">Profile</p:link>
+        </li>
+    </ui:define>
 
     <ui:define name="content">
         <h:form id="userForm">
-        <div class="ui-g">
-            <div class="ui-g-12">
-                <div class="card">
-                    <h1>Profile</h1>
-                    <p:panelGrid id="changeDetailsGrid" columns="2" cellpadding="5" layout="grid"
-                                 columnClasses="ui-g-1 ui-md-2 ui-lg-2 ui-xl-2, ui-g-4 ui-md-4 ui-lg-4 ui-xl-2">
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <div class="card">
+                        <h1>Profile</h1>
+                        <p:panelGrid id="changeDetailsGrid" columns="2" cellpadding="5" layout="grid"
+                                     columnClasses="ui-g-1 ui-md-2 ui-lg-2 ui-xl-2, ui-g-4 ui-md-4 ui-lg-4 ui-xl-2">
 
-                        <p:outputLabel value="Username:"/>
-                        <p:outputLabel id="username" value="#{manageCurrentUserController.currentUser.username}"/>
-                        <p:outputLabel value="Firstname:"/>
-                        <p:outputLabel id="firstname" value="#{manageCurrentUserController.currentUser.firstName}"/>
-                        <p:outputLabel value="Lastname:"/>
-                        <p:outputLabel id="lastname" value="#{manageCurrentUserController.currentUser.lastName}"/>
-                        <p:outputLabel value="E-Mail:"/>
-                        <p:outputLabel id="email" value="#{manageCurrentUserController.currentUser.email}"/>
-                        <p:outputLabel for="interval" value="Interval for mails: "/>
-                        <p:outputLabel id="interval" value="#{manageCurrentUserController.currentUser.intervall}"/>
-                        <p:outputLabel value="Password:"/>
-                        <p:outputLabel id="password" value="********"/>
-                        <p:outputLabel value="Roles:"/>
-                        <p:outputLabel id="roles" value="#{manageCurrentUserController.currentUser.roles}"/>
+                            <p:outputLabel value="Username:"/>
+                            <p:outputLabel id="username" value="#{manageCurrentUserController.currentUser.username}"/>
+                            <p:outputLabel value="Firstname:"/>
+                            <p:outputLabel id="firstname" value="#{manageCurrentUserController.currentUser.firstName}"/>
+                            <p:outputLabel value="Lastname:"/>
+                            <p:outputLabel id="lastname" value="#{manageCurrentUserController.currentUser.lastName}"/>
+                            <p:outputLabel value="E-Mail:"/>
+                            <p:outputLabel id="email" value="#{manageCurrentUserController.currentUser.email}"/>
+                            <p:outputLabel for="interval" value="Interval for mails: "/>
+                            <p:outputLabel id="interval" value="#{manageCurrentUserController.currentUser.intervall.toString()}"/>
+                            <p:outputLabel value="Password:"/>
+                            <p:outputLabel id="password" value="********"/>
+                            <p:outputLabel value="Roles:"/>
+                            <p:outputLabel id="roles" value="#{manageCurrentUserController.currentUser.roles}"/>
 
+                        </p:panelGrid>
+                        <br/>
 
                         <p:commandButton action="/secured/settings.xhtml" value="Edit" icon="fa fa-fw fa-edit"/>
-                        <p:commandButton ajax="false" value="Request Overview" styleClass="raised-btn" action="/employee/request-overview.xhtml?faces-redirect=true" rendered="#{!sessionInfoBean.hasRole('DEPARTMENTLEADER') and !sessionInfoBean.hasRole('ADMIN')}"/>
+                        <p:commandButton ajax="false" value="Request Overview" styleClass="raised-btn"
+                                         action="/employee/request-overview.xhtml?faces-redirect=true"
+                                         rendered="#{!sessionInfoBean.hasRole('DEPARTMENTLEADER') and !sessionInfoBean.hasRole('ADMIN')}"/>
 
-                    </p:panelGrid>
+                    </div>
                 </div>
             </div>
-        </div>
-
-
 
 
         </h:form>
 
 
-
-
     </ui:define>
-
-
-
-
-
 
 
 </ui:composition>

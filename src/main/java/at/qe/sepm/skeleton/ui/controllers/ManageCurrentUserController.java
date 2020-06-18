@@ -1,10 +1,7 @@
 package at.qe.sepm.skeleton.ui.controllers;
 
-import at.qe.sepm.skeleton.model.Interval;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.UserService;
-import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
-import at.qe.sepm.skeleton.ui.beans.SessionInfoBean;
 import at.qe.sepm.skeleton.utils.MessagesView;
 import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +12,6 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 @Scope("view")
@@ -24,23 +19,40 @@ public class ManageCurrentUserController implements Serializable {
     private static final long serialVersionUID = -5637562154142043652L;
 
     @Autowired
-    CurrentUserBean currentUserBean;
-
-    @Autowired
-    private UserService userService;
-
-    private Logger<Exception, User> logger;
-
-    private String intervall;
-
-    private String oldPassword;
-
-    private String newPassword;
-
-    private String confirmNew;
+    UserService userService;
 
     private User currentUser;
+    private Logger<Exception, User> logger;
+    private String oldPassword;
+    private String newPassword;
+    private String confirmNew;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
+
+    /**
+     * method to reload the user
+     */
+
+    private void reloadUser() {
+        this.setCurrentUser(this.userService.loadUser(currentUser.getUsername()));
+    }
+
+    /**
+     * method to load the current user
+     * has to be called in the function that uses the bean to load it when a new user is logged in
+     */
+    @PostConstruct
+    public void init() {
+        this.setCurrentUser(userService.getAuthenticatedUser());
+    }
 
     public String getOldPassword() {
         return oldPassword;
@@ -66,37 +78,11 @@ public class ManageCurrentUserController implements Serializable {
         this.confirmNew = confirmNew;
     }
 
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    public String getIntervall() { return intervall; }
-
-    public void setIntervall(String intervall) { this.intervall = intervall; }
-
-    public User getCurrentUser() {
-        return currentUser;
+    boolean checkOldPassword() {
+        return passwordEncoder.matches(oldPassword, this.getCurrentUser().getPassword());
     }
 
-    public void setCurrentUser(User currentUser) {
-        this.currentUser = currentUser;
-    }
-
-    @PostConstruct
-    public void init() {
-        currentUserBean.init();
-        this.setCurrentUser(currentUserBean.getCurrentUser());
-    }
-
-    public String getFullName() {
-        return currentUserBean.getCurrentUser().getFirstName() + " " + currentUserBean.getCurrentUser().getLastName();
-    }
-
-    public boolean checkOldPassword(){
-        return passwordEncoder.matches(oldPassword, currentUserBean.getCurrentUser().getPassword());
-    }
-
-    public boolean checkConfirmedPassword(){
+    boolean checkConfirmedPassword() {
         newPassword = passwordEncoder.encode(newPassword);
         return passwordEncoder.matches(confirmNew, newPassword);
     }
@@ -106,25 +92,23 @@ public class ManageCurrentUserController implements Serializable {
      */
 
 
-    public void changePassword(){
-        if(checkOldPassword()) {
-            if (checkConfirmedPassword()){
-                    MessagesView.successMessage("passwordControl", "The new password will be saved");
+    public void changePassword() {
+        if (checkOldPassword()) {
+            if (checkConfirmedPassword()) {
+                MessagesView.successMessage("passwordControl", "The new password will be saved");
                 try {
-                    User cu = currentUserBean.getCurrentUser();
+                    User cu = this.getCurrentUser();
                     cu.setPassword(newPassword);
                     this.userService.updateUser(cu);
-                    currentUserBean.reloadUser();
+                    this.reloadUser();
                 } catch (Exception e) {
                     e.printStackTrace();
-                    logger.logError(e, currentUserBean.getCurrentUser());
+                    logger.logError(e, this.getCurrentUser());
                 }
-            }
-            else{
+            } else {
                 MessagesView.warnMessage("passwordControl", "The new passwords don't match");
             }
-        }
-        else{
+        } else {
             MessagesView.warnMessage("passwordControl", "Old Password is incorrect");
         }
     }
@@ -136,12 +120,12 @@ public class ManageCurrentUserController implements Serializable {
 
     public void saveUserDetails() {
         try {
-            this.userService.updateUser(currentUserBean.getCurrentUser());
-            currentUserBean.reloadUser();
+            this.userService.updateUser(this.getCurrentUser());
+            this.reloadUser();
             FacesContext.getCurrentInstance().getExternalContext().redirect("/employee/profile.xhtml");
         } catch (Exception e) {
             e.printStackTrace();
-            logger.logError(e, currentUserBean.getCurrentUser());
+            logger.logError(e, this.getCurrentUser());
         }
     }
 

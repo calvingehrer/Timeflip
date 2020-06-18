@@ -6,150 +6,197 @@
                 template="/WEB-INF/template.xhtml">
 
 
-    <h:outputStylesheet library="webjars" name="font-awesome/4.6.3/css/font-awesome-jsf.css" />
+    <h:outputStylesheet library="webjars" name="font-awesome/4.6.3/css/font-awesome-jsf.css"/>
 
-
-    <ui:define name="title">Overview</ui:define>
-
+    <ui:define name="title">Timeflips • Timeflippers</ui:define>
     <ui:define name="viewname">
-        <li>Pages</li>
-        <li>/</li>
         <li><p:link outcome="/admin/timeflip">Manage Timeflip</p:link></li>
     </ui:define>
 
     <ui:define name="content">
         <div class="ui-g">
-        <div class="ui-g-12">
-        <div class="card">
-                <h1>TimeFlip</h1>
-        <h:form id="timeflipForm">
-            <p:messages id="messages" showDetail="true" closable="true">
-                <p:autoUpdate />
-            </p:messages>
-            <p:dataTable id="TimeflipTable" var="timeflips" value="#{timeflipListController.timeflips}" scrollable="true">
-                <p:column headerText="MacAddress">
-                    <h:outputText value="#{timeflips.macAddress}"/>
-                </p:column>
-                <p:column headerText="User">
-                    <h:outputText value="#{timeflips.user.username}"/>
-                </p:column>
-                <p:column style="width:200px;text-align: center">
-                    <p:commandButton update=":timeflipForm:editTimeflipForm:timeflipEditDialog" value="Edit" oncomplete="PF('timeflipEditDialog').show()" icon="fa fa-fw fa-edit">
-                        <f:setPropertyActionListener value="#{timeflips}" target="#{timeflipDetailController.timeflip}" />
-                    </p:commandButton>
-                    <p:commandButton action="#{timeflipDetailController.doDeleteTimeflip}" value="Delete" icon="fa fa-trash" title="Delete" update=":timeflipForm:TimeflipTable">
-                        <f:setPropertyActionListener value="#{timeflips}" target="#{timeflipDetailController.timeflip}" />
-                    </p:commandButton>
-                </p:column>
-            </p:dataTable>
+            <div class="ui-g-12">
+                <div class="card">
+                    <p:growl id="growl" rendered="#{not facesContext.validationFailed}" showDetail="true"/>
 
 
-            <h:form id="editTimeflipForm">
-
-                <p:dialog header="Edit Timeflip" id="timeflipEditDialog" widgetVar="timeflipEditDialog" modal="true"
-                          showEffect="fade"
-                          hideEffect="fade" resizable="false">
-                    <p:outputPanel id="timeflipData" rendered="#{not empty timeflipDetailController.timeflip}" >
-                        <h:panelGrid columns="2" >
-                            <p:outputLabel for="timeflipId" value="TimflipId: " />
-                            <p:inputText id="timeflipId" value="#{timeflipDetailController.timeflip.macAddress}" disabled="true"/>
-                            <p:outputLabel for="user" value="User: " />
-                            <p:inputText id="user" value="#{timeflipDetailController.timeflip.user}" disabled="true"/>
-
+                    <h:form id="selection">
+                        <h:panelGrid columns="7">
                             <h:panelGrid columns="2">
-                                <p:outputLabel value="Change User: "/>
-                                <p:commandButton value="Select" update=":timeflipForm:editTimeflipForm:editUserForm:userTimeflipTable" oncomplete="PF('editUserDialog').show()"/>
+                                <p:outputLabel value="Username: "/>
+                                <p:inputText value="#{timeflipListController.userName}"/>
                             </h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="Mac Adress: "/>
+                                <p:inputText value="#{timeflipListController.macId}"/>
+                            </h:panelGrid>
+                            <p:commandButton value="Filter" update=":timeflipForm:TimeflipTable"/>
+                            <p:commandButton value="Reset" action="#{userListController.resetFilter}"
+                                             update=":selection :timeflipForm:TimeflipTable"/>
                         </h:panelGrid>
+                    </h:form>
+                    <h1>TimeFlip</h1>
+                    <h:form id="timeflipForm">
 
-                        <p:separator />
-                        <h:panelGrid columns="3">
-                            <p:commandButton value="Done" action="#{timeflipDetailController.doSaveTimeflip}" oncomplete="PF('timeflipEditDialog').hide()" update=":timeflipForm:TimeflipTable"/>
-                            <p:commandButton value="Reload" action="#{timeflipDetailController.doReloadTimeflip}" update="timeflipForm:editTimeflipForm:timeflipData"/>
-                        </h:panelGrid>
-                    </p:outputPanel>
-                </p:dialog>
-
-
-                <p:dialog header="Select User" id="editUserDialog" widgetVar="editUserDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-                    <h:form id="editUserForm">
-                        <p:dataTable styleClass="project-table" id="userTimeflipTable" var="user" value="#{userListController.getUsersWithoutTimeflip()}" scrollable="true" scrollHeight="100%">
-                            <p:column headerText="Employee ID">
-                                <h:outputText value="#{user.username}"/>
+                        <p:dataTable id="TimeflipTable" var="timeflips" value="#{timeflipListController.timeflips}"
+                                     scrollable="true">
+                            <p:column headerText="MacAddress">
+                                <h:outputText value="#{timeflips.macAddress}"/>
                             </p:column>
-                            <p:column headerText="Firstname">
-                                <h:outputText value="#{user.firstName}"/>
+                            <p:column headerText="User">
+                                <h:outputText value="#{timeflips.user.username}"/>
                             </p:column>
-                            <p:column headerText="Lastname">
-                                <h:outputText value="#{user.lastName}"/>
-                            </p:column>
-
-                            <p:column style="width:100px;text-align: center">
-                                <p:commandButton update=":timeflipForm:editTimeflipForm:editUserForm:userTimeflipTable :timeflipForm:editTimeflipForm:editUserForm" icon="fa fa-fw fa-plus" title="Select" action="#{timeflipDetailController.addUser}" oncomplete="PF('editUserDialog').hide()">
-                                    <f:setPropertyActionListener value="#{user}" target="#{timeflipDetailController.user}" />
+                            <p:column style="width:200px;text-align: center">
+                                <p:commandButton update=":timeflipForm:editTimeflipForm:timeflipEditDialog" value="Edit"
+                                                 oncomplete="PF('timeflipEditDialog').show()" icon="fa fa-fw fa-edit">
+                                    <f:setPropertyActionListener value="#{timeflips}"
+                                                                 target="#{timeflipDetailController.timeflip}"/>
+                                </p:commandButton>
+                                <p:commandButton action="#{timeflipDetailController.doDeleteTimeflip}" value="Delete"
+                                                 icon="fa fa-trash" title="Delete" update=":timeflipForm:TimeflipTable">
+                                    <f:setPropertyActionListener value="#{timeflips}"
+                                                                 target="#{timeflipDetailController.timeflip}"/>
                                 </p:commandButton>
                             </p:column>
                         </p:dataTable>
+
+
+                        <h:form id="editTimeflipForm">
+
+                            <p:dialog header="Edit Timeflip" id="timeflipEditDialog" widgetVar="timeflipEditDialog"
+                                      modal="true"
+                                      showEffect="fade"
+                                      hideEffect="fade" resizable="false">
+                                <p:outputPanel id="timeflipData"
+                                               rendered="#{not empty timeflipDetailController.timeflip}">
+                                    <h:panelGrid columns="2">
+                                        <p:outputLabel for="timeflipId" value="TimflipId: "/>
+                                        <p:inputText id="timeflipId"
+                                                     value="#{timeflipDetailController.timeflip.macAddress}"
+                                                     disabled="true"/>
+                                        <p:outputLabel for="user" value="User: "/>
+                                        <p:inputText id="user" value="#{timeflipDetailController.timeflip.user}"
+                                                     disabled="true"/>
+
+                                        <h:panelGrid columns="2">
+                                            <p:outputLabel value="Change User: "/>
+                                            <p:commandButton value="Select"
+                                                             update=":timeflipForm:editTimeflipForm:editUserForm:userTimeflipTable"
+                                                             oncomplete="PF('editUserDialog').show()"/>
+                                        </h:panelGrid>
+                                    </h:panelGrid>
+
+                                    <p:separator/>
+                                    <h:panelGrid columns="3">
+                                        <p:commandButton value="Done"
+                                                         action="#{timeflipDetailController.doSaveTimeflip}"
+                                                         oncomplete="PF('timeflipEditDialog').hide()"
+                                                         update=":timeflipForm:TimeflipTable"/>
+                                        <p:commandButton value="Reload"
+                                                         action="#{timeflipDetailController.doReloadTimeflip}"
+                                                         update="timeflipForm:editTimeflipForm:timeflipData"/>
+                                    </h:panelGrid>
+                                </p:outputPanel>
+                            </p:dialog>
+
+
+                            <p:dialog header="Select User" id="editUserDialog" widgetVar="editUserDialog" modal="true"
+                                      showEffect="fade" hideEffect="fade" resizable="false">
+                                <h:form id="editUserForm">
+                                    <p:dataTable styleClass="project-table" id="userTimeflipTable" var="user"
+                                                 value="#{userListController.getUsersWithoutTimeflip()}"
+                                                 scrollable="true" scrollHeight="100%">
+                                        <p:column headerText="Employee ID">
+                                            <h:outputText value="#{user.username}"/>
+                                        </p:column>
+                                        <p:column headerText="Firstname">
+                                            <h:outputText value="#{user.firstName}"/>
+                                        </p:column>
+                                        <p:column headerText="Lastname">
+                                            <h:outputText value="#{user.lastName}"/>
+                                        </p:column>
+
+                                        <p:column style="width:100px;text-align: center">
+                                            <p:commandButton
+                                                    update=":timeflipForm:editTimeflipForm:editUserForm:userTimeflipTable :timeflipForm:editTimeflipForm:editUserForm"
+                                                    icon="fa fa-fw fa-plus" title="Select"
+                                                    action="#{timeflipDetailController.addUser}"
+                                                    oncomplete="PF('editUserDialog').hide()">
+                                                <f:setPropertyActionListener value="#{user}"
+                                                                             target="#{timeflipDetailController.user}"/>
+                                            </p:commandButton>
+                                        </p:column>
+                                    </p:dataTable>
+                                </h:form>
+                            </p:dialog>
+
+
+                        </h:form>
+
+
+                        <p:commandButton value="Add Timeflip" styleClass="addButton"
+                                         oncomplete="PF('addTimeflipDialog').show()"/>
+
                     </h:form>
-                </p:dialog>
+
+                    <p:dialog header="Add Timeflip" id="addTimeflipDialog" widgetVar="addTimeflipDialog" modal="true"
+                              showEffect="fade" hideEffect="fade" resizable="false">
+                        <p:outputPanel>
+                            <h:form>
+                                <p:growl id="growlAdd" rendered="#{not facesContext.validationFailed}"
+                                         showDetail="true"/>
+
+                                <h:panelGrid columns="2">
+                                    <p:outputLabel value="MacAddress: "/>
+                                    <p:inputText value="#{addTimeflipController.timeflip.macAddress}" required="true"/>
+                                </h:panelGrid>
+                                <p:separator/>
+                                <h:panelGrid columns="2">
+                                    <p:outputLabel value="Select user: "/>
+                                    <p:commandButton value="Select" update=":timeflipUserForm"
+                                                     oncomplete="PF('selectTimeflipUserDialog').show()"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2">
+                                    <p:commandButton update="@form :timeflipForm:TimeflipTable" value="Add"
+                                                     action="#{addTimeflipController.add}"
+                                                     oncomplete="PF('addTimeflipDialog').hide()"/>
+                                    <p:commandButton value="Abort" type="reset"
+                                                     onclick="PF('addTimeflipDialog').hide()"/>
+                                </h:panelGrid>
+                            </h:form>
+                        </p:outputPanel>
+                    </p:dialog>
+
+                    <p:dialog header="Select User" id="selectTimeflipUserDialog" widgetVar="selectTimeflipUserDialog"
+                              modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                        <h:form id="timeflipUserForm">
+                            <p:dataTable styleClass="project-table" id="timeflipUserTable" var="user"
+                                         value="#{userListController.getUsersWithoutTimeflip()}" scrollable="true"
+                                         scrollHeight="100">
+                                <p:column headerText="User ID">
+                                    <h:outputText value="#{user.username}"/>
+                                </p:column>
+
+                                <p:column style="width:100px;text-align: center">
+                                    <p:commandButton update="@form :timeflipForm:TimeflipTable" icon="fa fa-plus"
+                                                     title="Select" oncomplete="PF('selectTimeflipUserDialog').hide()">
+                                        <f:setPropertyActionListener value="#{user}"
+                                                                     target="#{addTimeflipController.user}"/>
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                            <h:panelGrid columns="2">
+                                <p:commandButton value="Abort" type="submit"
+                                                 onclick="PF('selectEmployeesDialog').hide()"/>
+                            </h:panelGrid>
+
+                        </h:form>
+
+                    </p:dialog>
 
 
-
-
-
-
-            </h:form>
-
-
-            <p:commandButton value="Add Timeflip" styleClass="addButton" oncomplete="PF('addTimeflipDialog').show()" />
-
-        </h:form>
-
-        <p:dialog header="Add Timeflip" id="addTimeflipDialog" widgetVar="addTimeflipDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-            <p:outputPanel>
-                <h:form>
-                    <h:panelGrid columns="2">
-                        <p:outputLabel value="MacAddress: " />
-                        <p:inputText value="#{addTimeflipController.timeflip.macAddress}" />
-                    </h:panelGrid>
-                    <p:separator />
-                    <h:panelGrid columns="2">
-                        <p:outputLabel value="Select user: "/>
-                        <p:commandButton value="Select" update=":timeflipUserForm" oncomplete="PF('selectTimeflipUserDialog').show()" />
-                    </h:panelGrid>
-                    <h:panelGrid columns="2">
-                        <p:commandButton update="@form :timeflipForm:TimeflipTable" value="Add" action="#{addTimeflipController.add}" oncomplete="PF('addTimeflipDialog').hide()" />
-                        <p:commandButton value="Abort" type="reset" onclick="PF('addTimeflipDialog').hide()"/>
-                    </h:panelGrid>
-                </h:form>
-            </p:outputPanel>
-        </p:dialog>
-
-        <p:dialog header="Select User" id="selectTimeflipUserDialog" widgetVar="selectTimeflipUserDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-            <h:form id="timeflipUserForm">
-                <p:dataTable styleClass="project-table" id="timeflipUserTable" var="user" value="#{userListController.getUsersWithoutTimeflip()}" scrollable="true" scrollHeight="100">
-                    <p:column headerText="User ID">
-                        <h:outputText value="#{user.username}"/>
-                    </p:column>
-
-                    <p:column style="width:100px;text-align: center">
-                        <p:commandButton update="@form :timeflipForm:TimeflipTable" icon="fa fa-plus" title="Select" oncomplete="PF('selectTimeflipUserDialog').hide()">
-                            <f:setPropertyActionListener value="#{user}" target="#{addTimeflipController.user}" />
-                        </p:commandButton>
-                    </p:column>
-                </p:dataTable>
-                <h:panelGrid columns="2">
-                    <p:commandButton value="Abort" type="submit" onclick="PF('selectEmployeesDialog').hide()"/>
-                </h:panelGrid>
-
-            </h:form>
-
-        </p:dialog>
-
-
-
-        </div>
-        </div>
+                </div>
+            </div>
         </div>
 
     </ui:define>

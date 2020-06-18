@@ -15,18 +15,13 @@ import java.util.Objects;
 @Embeddable
 public class Vacation implements Comparable<Vacation> {
 
+    public final static long MAX_VACATION_DAYS_PER_YEAR = 25;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    public final static long MAX_VACATION_DAYS_PER_YEAR = 25;
-
     private Instant start;
 
     private Instant end;
-
-    private static Long MAX_DAYS;
-
 
     public Instant getStart() {
         return start;
@@ -58,8 +53,8 @@ public class Vacation implements Comparable<Vacation> {
         return Objects.hash(start, end);
     }
 
-   //@Override
-    public int compareTo(Vacation o){
+    @Override
+    public int compareTo(Vacation o) {
         return this.getEnd().compareTo(o.getEnd());
-   }
+    }
 }
