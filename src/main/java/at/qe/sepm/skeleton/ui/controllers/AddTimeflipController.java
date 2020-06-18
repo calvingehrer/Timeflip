@@ -41,9 +41,4 @@ public class AddTimeflipController implements Serializable {
     public void setUser(User user) {
         this.user = user;
     }
-
-    public void gehHoam() {
-        System.out.println("du bisch a deppl");
-    }
-
 }
