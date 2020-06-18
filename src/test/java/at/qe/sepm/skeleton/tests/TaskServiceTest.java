@@ -185,19 +185,17 @@ class TaskServiceTest {
 
         int startHour = 8, endHour = 8, startMinute = 0, endMinute = 50;
 
-
         Calendar date = Calendar.getInstance(timeBean.getUtcTimeZone());
+        date.set(2020, Calendar.MAY, 7);
         date.set(Calendar.SECOND, 0);
-        date.set(Calendar.MILLISECOND, 0);
-
         date.set(Calendar.HOUR_OF_DAY, startHour);
+        date.set(Calendar.MILLISECOND, 0);
         date.set(Calendar.MINUTE, startMinute);
         Instant startTime = date.toInstant();
 
         date.set(Calendar.HOUR_OF_DAY, endHour);
         date.set(Calendar.MINUTE, endMinute);
         Instant endTime = date.toInstant();
-        date.set(2020, Calendar.MAY, 7);
 
         Assertions.assertThrows(TaskException.class, () -> taskService.saveEditedTask(user, null, startTime, endTime));
 
@@ -216,7 +214,11 @@ class TaskServiceTest {
 
         List<Task> adminNewTasks = taskRepository.findTasksFromUser(user);
 
+        System.out.println("new task size: " + adminNewTasks.size());
+
         Task newTask = adminNewTasks.get(0);
+
+        System.out.println("alter task = " + oldTask.getTask());
 
         Assert.assertNotEquals("Task should be IMPLEMENTIERUNG for newTask and DOKUMENTATION for oldTask", newTask.getTask(), oldTask.getTask());
 
