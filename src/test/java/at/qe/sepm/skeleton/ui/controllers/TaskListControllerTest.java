@@ -1,4 +1,4 @@
-package at.qe.sepm.skeleton.tests;
+package at.qe.sepm.skeleton.ui.controllers;
 
 import at.qe.sepm.skeleton.model.*;
 import at.qe.sepm.skeleton.services.*;

@@ -43,7 +43,6 @@ public class RoomService {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<Room> getRoomsWithoutRaspberry() {
-        //return roomRepository.findRoomsWithoutRaspberry();
         List<Room> rooms = roomRepository.findAllRooms();
 
         List<Room> roomsToRemove = new ArrayList<>();

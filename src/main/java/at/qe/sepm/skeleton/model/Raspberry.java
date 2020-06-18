@@ -29,9 +29,6 @@ public class Raspberry implements Persistable<String>, Serializable {
     @JoinColumn(unique = true)
     private Room room;
 
-    //@OneToMany(fetch = FetchType.EAGER)
-    //private Collection<Timeflip> timeflips;
-
     public String getRaspberryId() {
         return raspberryId;
     }
