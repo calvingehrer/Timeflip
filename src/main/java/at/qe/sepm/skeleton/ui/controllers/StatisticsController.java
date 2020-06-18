@@ -94,7 +94,6 @@ public class StatisticsController implements Serializable {
     }
 
 
-
     public PieChartModel getTodayUserModel() {
         return todayUserModel;
     }
@@ -184,8 +183,17 @@ public class StatisticsController implements Serializable {
         this.chosenTeam = chosenTeam;
     }
 
-    public List<Team>getTeamsOfCurrentDepartment(){
-        return departmentService.getTeamsOfDepartment(userService.getAuthenticatedUser().getDepartment());
+    /**
+     * sets the hours, minutes, seconds and milliseconds of a date to zero
+     *
+     * @param date
+     */
+
+    public static void setDayToBeginning(Calendar date) {
+        date.set(Calendar.HOUR_OF_DAY, 0);
+        date.set(Calendar.MINUTE, 0);
+        date.set(Calendar.SECOND, 0);
+        date.set(Calendar.MILLISECOND, 0);
     }
 
     public List<String> getTeamsOfDepartment() {
@@ -300,6 +308,63 @@ public class StatisticsController implements Serializable {
     }
 
     /**
+     * function that uses date to set the instant start to the beginning of the week and end to the last day of the week
+     *
+     * @param date
+     */
+    private static Instant firstDayOfWeek(Calendar date) {
+        Calendar dateForWeek = (Calendar) date.clone();
+        dateForWeek.set(Calendar.DAY_OF_WEEK, dateForWeek.getFirstDayOfWeek());
+        return dateForWeek.toInstant();
+    }
+
+    /**
+     * Returns the instant of first last day of a month
+     *
+     * @param date
+     * @return firstDay
+     */
+    private static Instant firstDayOfMonth(Calendar date) {
+        date.set(Calendar.DAY_OF_MONTH, 1);
+        return date.toInstant();
+    }
+
+    /**
+     * Returns the instant of the last day of a month
+     *
+     * @param date
+     * @return lastDay
+     */
+
+    private static Instant lastDayOfMonth(Calendar date) {
+        date.set(Calendar.DAY_OF_MONTH, date.getActualMaximum(Calendar.DAY_OF_MONTH));
+        return date.toInstant();
+    }
+
+    /**
+     * turns Calendar into Date, needed for choosing date
+     *
+     * @param date
+     * @return calendar
+     */
+    private static Calendar toCalendar(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar;
+    }
+
+    private static Instant lastDayOfWeek(Calendar date) {
+        Calendar dateForWeek = (Calendar) date.clone();
+        dateForWeek.set(Calendar.DAY_OF_WEEK, dateForWeek.getFirstDayOfWeek());
+        dateForWeek.add(Calendar.DATE, 7);
+        return dateForWeek.toInstant();
+    }
+
+    public List<Team> getTeamsOfCurrentDepartment() {
+        return departmentService.getTeamsOfDepartment(userService.getAuthenticatedUser().getDepartment());
+    }
+
+    /**
      * Functions that take a model, title, start date and end date and return a full Model of the Tasks with the help
      * of a get...ChartModel function.
      *
@@ -310,49 +375,49 @@ public class StatisticsController implements Serializable {
      * @return BarChart or PieChart
      */
 
-    private PieChartModel initUserModel(PieChartModel model, String title, Instant start, Instant end){
+    private PieChartModel initUserModel(PieChartModel model, String title, Instant start, Instant end) {
         model = new PieChartModel();
         HashMap<TaskEnum, Long> tasks = taskService.getUserTasksBetweenDates(userService.getAuthenticatedUser(), start, end);
         return getPieChartModel(model, title, tasks);
     }
 
-    private BarChartModel initBarUserModel(BarChartModel model, String title, Instant start, Instant end){
+    private BarChartModel initBarUserModel(BarChartModel model, String title, Instant start, Instant end) {
         model = new BarChartModel();
         HashMap<TaskEnum, Long> tasks = taskService.getUserTasksBetweenDates(userService.getAuthenticatedUser(), start, end);
         return getBarChartModel(model, title, tasks);
     }
 
-    private PieChartModel initTeamModel(PieChartModel model, String title, Instant start, Instant end){
+    private PieChartModel initTeamModel(PieChartModel model, String title, Instant start, Instant end) {
         model = new PieChartModel();
         HashMap<TaskEnum, Long> tasks = taskService.getTeamTasksBetweenDates(userService.getAuthenticatedUser().getTeam(), start, end);
         return getPieChartModel(model, title, tasks);
     }
 
-    private PieChartModel initTeamModelByChosenTeam(PieChartModel model, Team team, String title, Instant start, Instant end){
+    private PieChartModel initTeamModelByChosenTeam(PieChartModel model, Team team, String title, Instant start, Instant end) {
         model = new PieChartModel();
         HashMap<TaskEnum, Long> tasks = taskService.getTeamTasksBetweenDates(team, start, end);
         return getPieChartModel(model, title, tasks);
     }
 
-    private BarChartModel initBarTeamModel(BarChartModel model, String title, Instant start, Instant end){
+    private BarChartModel initBarTeamModel(BarChartModel model, String title, Instant start, Instant end) {
         model = new BarChartModel();
         HashMap<TaskEnum, Long> tasks = taskService.getTeamTasksBetweenDates(userService.getAuthenticatedUser().getTeam(), start, end);
         return getBarChartModel(model, title, tasks);
     }
 
-    private BarChartModel initBarTeamModelByChosenTeam(BarChartModel model, Team team, String title, Instant start, Instant end){
+    private BarChartModel initBarTeamModelByChosenTeam(BarChartModel model, Team team, String title, Instant start, Instant end) {
         model = new BarChartModel();
         HashMap<TaskEnum, Long> tasks = taskService.getTeamTasksBetweenDates(team, start, end);
         return getBarChartModel(model, title, tasks);
     }
 
-    private PieChartModel initDepartmentModel(PieChartModel model, String title, Instant start, Instant end){
+    private PieChartModel initDepartmentModel(PieChartModel model, String title, Instant start, Instant end) {
         model = new PieChartModel();
         HashMap<TaskEnum, Long> tasks = taskService.getDepartmentTasksBetweenDates(userService.getAuthenticatedUser().getDepartment(), start, end);
         return getPieChartModel(model, title, tasks);
     }
 
-    private BarChartModel initBarDepartmentModel(BarChartModel model, String title, Instant start, Instant end){
+    private BarChartModel initBarDepartmentModel(BarChartModel model, String title, Instant start, Instant end) {
         model = new BarChartModel();
         HashMap<TaskEnum, Long> tasks = taskService.getDepartmentTasksBetweenDates(userService.getAuthenticatedUser().getDepartment(), start, end);
         return getBarChartModel(model, title, tasks);
@@ -367,7 +432,7 @@ public class StatisticsController implements Serializable {
      * @return model
      */
 
-    private PieChartModel getPieChartModel (PieChartModel model, String title, HashMap <TaskEnum, Long> tasks){
+    private PieChartModel getPieChartModel(PieChartModel model, String title, HashMap<TaskEnum, Long> tasks) {
         if (tasks.isEmpty()) {
             model.set("No Data", 100);
         } else {
@@ -392,7 +457,7 @@ public class StatisticsController implements Serializable {
      */
 
 
-    private BarChartModel getBarChartModel (BarChartModel model, String title, HashMap <TaskEnum, Long> tasks){
+    private BarChartModel getBarChartModel(BarChartModel model, String title, HashMap<TaskEnum, Long> tasks) {
         if (tasks.isEmpty()) {
             ChartSeries series = new ChartSeries();
             series.set("No Data", 0);
@@ -422,13 +487,12 @@ public class StatisticsController implements Serializable {
      * function that rebuilds the User-Charts based on the selected Date
      */
 
-    public void rebuildChartsUser(){
+    public void rebuildChartsUser() {
         Calendar date = toCalendar(chosenDate);
 
-        if(date.after(getToday())){
+        if (date.after(getToday())) {
             MessagesView.warnMessage("date selection", "You can't select this date");
-        }
-        else{
+        } else {
             setDayToBeginning(date);
 
             Instant start = date.toInstant();
@@ -454,17 +518,15 @@ public class StatisticsController implements Serializable {
     /**
      * function that rebuilds the Team-Charts based on the selected Date
      */
-    public void rebuildChartsTeam(){
+    public void rebuildChartsTeam() {
         Calendar date = toCalendar(chosenDate);
         Calendar today = getToday();
 
-        if(today.get(Calendar.MONTH) == date.get(Calendar.MONTH) && today.get(Calendar.YEAR) == date.get(Calendar.YEAR) && today.get(Calendar.WEEK_OF_MONTH) == date.get(Calendar.WEEK_OF_MONTH )){
+        if (today.get(Calendar.MONTH) == date.get(Calendar.MONTH) && today.get(Calendar.YEAR) == date.get(Calendar.YEAR) && today.get(Calendar.WEEK_OF_MONTH) == date.get(Calendar.WEEK_OF_MONTH)) {
             MessagesView.warnMessage("date selection", "You can't select this date");
-        }
-        else if (date.after(getToday())){
+        } else if (date.after(getToday())) {
             MessagesView.warnMessage("date selection", "You can't select this date");
-        }
-        else{
+        } else {
             setDayToBeginning(date);
 
             Instant start = firstDayOfWeek(date);
@@ -482,17 +544,15 @@ public class StatisticsController implements Serializable {
     /**
      * function that rebuilds the Department-Charts on user basis, based on the selected Date
      */
-    public void rebuildChartsDepartment(){
+    public void rebuildChartsDepartment() {
         Calendar date = toCalendar(chosenDate);
         Calendar today = getToday();
 
-        if(today.get(Calendar.MONTH) == date.get(Calendar.MONTH) && today.get(Calendar.YEAR) == date.get(Calendar.YEAR)){
+        if (today.get(Calendar.MONTH) == date.get(Calendar.MONTH) && today.get(Calendar.YEAR) == date.get(Calendar.YEAR)) {
             MessagesView.warnMessage("date selection", "You can't select this date");
-        }
-        else if (date.after(getToday())){
+        } else if (date.after(getToday())) {
             MessagesView.warnMessage("date selection", "You can't select this date");
-        }
-        else{
+        } else {
             setDayToBeginning(date);
 
             Instant start = firstDayOfMonth(date);
@@ -507,20 +567,18 @@ public class StatisticsController implements Serializable {
     /**
      * function that rebuilds the Department-Charts on team basis, based on the selected Date and team
      */
-    public void rebuildChartsDepartmentTeamBasis(){
+    public void rebuildChartsDepartmentTeamBasis() {
         Calendar date = toCalendar(chosenDate);
         Calendar today = getToday();
 
-        List<Team> teams= teamService.getAllTeamsByTeamName(chosenTeam);
+        List<Team> teams = teamService.getAllTeamsByTeamName(chosenTeam);
         Team team = teams.get(0);
 
-        if(today.get(Calendar.MONTH) == date.get(Calendar.MONTH) && today.get(Calendar.YEAR) == date.get(Calendar.YEAR)){
+        if (today.get(Calendar.MONTH) == date.get(Calendar.MONTH) && today.get(Calendar.YEAR) == date.get(Calendar.YEAR)) {
             MessagesView.warnMessage("date selection", "You can't select this date");
-        }
-        else if (date.after(getToday())){
+        } else if (date.after(getToday())) {
             MessagesView.warnMessage("date selection", "You can't select this date");
-        }
-        else{
+        } else {
             setDayToBeginning(date);
 
             Instant start = firstDayOfMonth(date);
@@ -530,68 +588,6 @@ public class StatisticsController implements Serializable {
             monthBarTeamModel = initBarTeamModelByChosenTeam(monthBarTeamModel, team, "Monthly Stats", start, end);
         }
 
-    }
-
-    /**
-     * sets the hours, minutes, seconds and milliseconds of a date to zero
-     * @param date
-     */
-
-    public static void setDayToBeginning(Calendar date) {
-        date.set(Calendar.HOUR_OF_DAY, 0);
-        date.set(Calendar.MINUTE, 0);
-        date.set(Calendar.SECOND, 0);
-        date.set(Calendar.MILLISECOND, 0);
-    }
-
-    /**
-     * function that uses date to set the instant start to the beginning of the week and end to the last day of the week
-     * @param date
-     */
-    private static Instant firstDayOfWeek(Calendar date) {
-        Calendar dateForWeek = (Calendar) date.clone();
-        dateForWeek.set(Calendar.DAY_OF_WEEK, dateForWeek.getFirstDayOfWeek());
-        return dateForWeek.toInstant();
-    }
-
-    private static Instant lastDayOfWeek(Calendar date) {
-        Calendar dateForWeek = (Calendar) date.clone();
-        dateForWeek.set(Calendar.DAY_OF_WEEK, dateForWeek.getFirstDayOfWeek());
-        dateForWeek.add(Calendar.DATE, 7);
-        return dateForWeek.toInstant();
-    }
-
-    /**
-     * Returns the instant of first last day of a month
-     * @param date
-     * @return firstDay
-     */
-    private static Instant firstDayOfMonth(Calendar date) {
-        date.set(Calendar.DAY_OF_MONTH, 1);
-        return date.toInstant();
-    }
-
-    /**
-     * Returns the instant of the last day of a month
-     * @param date
-     * @return lastDay
-     */
-
-    private static Instant lastDayOfMonth(Calendar date) {
-        date.set(Calendar.DAY_OF_MONTH, date.getActualMaximum(Calendar.DAY_OF_MONTH));
-        return date.toInstant();
-    }
-
-
-    /**
-     * turns Calendar into Date, needed for choosing date
-     * @param date
-     * @return calendar
-     */
-    private static Calendar toCalendar(Date date){
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        return calendar;
     }
 
 

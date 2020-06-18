@@ -17,7 +17,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
@@ -41,7 +40,6 @@ public class RaspberryService {
     private Logger<String, User> logger;
 
 
-
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<Raspberry> getAllRaspberries() {
         return raspberryRepository.findAll();
@@ -55,7 +53,7 @@ public class RaspberryService {
         newRaspberry.setRoom(room);
         saveRaspberry(newRaspberry);
         // add raspberry
-        logger.logCreation(raspberry.getId(),userService.getAuthenticatedUser());
+        logger.logCreation(raspberry.getId(), userService.getAuthenticatedUser());
     }
 
     public User getAuthenticatedUser() {
@@ -88,13 +86,13 @@ public class RaspberryService {
     @Transactional
     public void deleteRaspberry(Raspberry raspberry) {
         Room room = raspberry.getRoom();
-        if(room != null){
+        if (room != null) {
             room.setRaspberry(null);
             room.setEquipped(false);
         }
 
         raspberry.setRoom(null);
-        for (Timeflip t: timeflipRepository.findTimeflipsOfRaspberrys(raspberry)) {
+        for (Timeflip t : timeflipRepository.findTimeflipsOfRaspberrys(raspberry)) {
             t.setRaspberry(null);
         }
         raspberryRepository.delete(raspberry);

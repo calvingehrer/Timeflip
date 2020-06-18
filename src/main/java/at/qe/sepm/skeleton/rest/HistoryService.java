@@ -1,7 +1,15 @@
 package at.qe.sepm.skeleton.rest;
 
-import at.qe.sepm.skeleton.model.*;
+import at.qe.sepm.skeleton.model.Task;
+import at.qe.sepm.skeleton.model.TaskEnum;
+import at.qe.sepm.skeleton.model.Timeflip;
+import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.HistoryRepository;
+import at.qe.sepm.skeleton.repositories.TaskRepository;
+import at.qe.sepm.skeleton.repositories.TimeflipRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,14 +17,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicLong;
-
-import at.qe.sepm.skeleton.repositories.TaskRepository;
-import at.qe.sepm.skeleton.repositories.TimeflipRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 @Service
 public class HistoryService {
@@ -46,14 +46,14 @@ public class HistoryService {
      * Creates a HistoryEntry object and adds it to the HISTORY_QUEUE.
      *
      * @param macAddress the mac address of the TimeFlip device
-     * @param facet the facet of the HistoryEntry object
-     * @param start the start date of the HistoryEntry object
-     * @param end the end date of the HistoryEntry object
-     * @param seconds the deuration in seconds of the HistoryEntry object
+     * @param facet      the facet of the HistoryEntry object
+     * @param start      the start date of the HistoryEntry object
+     * @param end        the end date of the HistoryEntry object
+     * @param seconds    the deuration in seconds of the HistoryEntry object
      * @return the newly created HistoryEntry object
      */
     public HistoryEntry postHistoryObject(String macAddress, int facet, Date start, Date end, int seconds) {
-        if (!StringUtils.hasText(macAddress)){
+        if (!StringUtils.hasText(macAddress)) {
             throw new IllegalArgumentException("content must not be null or empty");
         }
 
@@ -102,18 +102,18 @@ public class HistoryService {
      * @param historyEntry
      * @return the created Task object
      */
-    public Task addAsTask(HistoryEntry historyEntry){
+    public Task addAsTask(HistoryEntry historyEntry) {
         Task task = new Task();
         Timeflip timeflip = timeflipRepository.findByMacAddress(historyEntry.getMacAddress());
-        if(timeflip != null){
+        if (timeflip != null) {
             User user = timeflip.getUser();
-            if(user != null){
+            if (user != null) {
                 task.setTeam(user.getTeam());
                 task.setDepartment(user.getDepartment());
                 task.setUser(user);
             }
             int facet = historyEntry.getFacet();
-            task.setTask(TaskEnum.values()[facet-1]);
+            task.setTask(TaskEnum.values()[facet - 1]);
         }
         task.setStartTime(historyEntry.getStart().toInstant());
         task.setEndTime(historyEntry.getEnd().toInstant());

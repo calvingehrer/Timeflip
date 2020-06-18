@@ -1,6 +1,5 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/template.xhtml">
@@ -17,7 +16,8 @@
             <div class="ui-g-12">
                 <div class="card">
                     <h1>My Team</h1>
-                    <p:dataTable var="user" value="#{userListController.getEmployees(sessionInfoBean.currentUser.team)}">
+                    <p:dataTable var="user"
+                                 value="#{userListController.getEmployees(sessionInfoBean.currentUser.team)}">
                         <p:column headerText="Full Name">
                             <h:outputText value="#{user}"/>
                         </p:column>

@@ -16,15 +16,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.time.Instant;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -35,7 +32,7 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 @WebAppConfiguration
-class TaskServiceTest{
+class TaskServiceTest {
 
 
     @Autowired
@@ -53,7 +50,7 @@ class TaskServiceTest{
 
 
     @Test
-    @WithMockUser(username="admin",roles={"USER","ADMIN"})
+    @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
     void getAllTasksBetweenDatesTest() {
 
 
@@ -76,7 +73,7 @@ class TaskServiceTest{
     }
 
     @Test
-    @WithMockUser(username="admin",roles={"USER","ADMIN"})
+    @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
     void getDurationTest() {
 
 
@@ -92,12 +89,12 @@ class TaskServiceTest{
         task.setEndTime(endDate.toInstant());
 
 
-        Assert.assertEquals("Duration should be 80 Minutes but is not",80, taskService.getDuration(task));
+        Assert.assertEquals("Duration should be 80 Minutes but is not", 80, taskService.getDuration(task));
     }
 
     @Before
     @Test
-    @WithMockUser(username="admin",roles={"USER","ADMIN"})
+    @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
     void getUserTasksBetweenDatesTest() {
         HashMap<TaskEnum, Long> adminTasks = new HashMap<>();
 
@@ -122,15 +119,15 @@ class TaskServiceTest{
     }
 
     @Test
-    @WithMockUser(username="admin",roles={"USER","ADMIN"})
+    @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
     void getTeamTasksBetweenDatesTest() {
         HashMap<TaskEnum, Long> topManagement = new HashMap<>();
 
         topManagement.put(TaskEnum.DOKUMENTATION, 60L);
         topManagement.put(TaskEnum.MEETING, 60L);
         topManagement.put(TaskEnum.SONSTIGES, 60L);
-        topManagement.put(TaskEnum.DOKUMENTATION, topManagement.get(TaskEnum.DOKUMENTATION)+60L);
-        topManagement.put(TaskEnum.DOKUMENTATION, topManagement.get(TaskEnum.DOKUMENTATION)+60L);
+        topManagement.put(TaskEnum.DOKUMENTATION, topManagement.get(TaskEnum.DOKUMENTATION) + 60L);
+        topManagement.put(TaskEnum.DOKUMENTATION, topManagement.get(TaskEnum.DOKUMENTATION) + 60L);
         topManagement.put(TaskEnum.IMPLEMENTIERUNG, 50L);
 
 
@@ -151,7 +148,7 @@ class TaskServiceTest{
     }
 
     @Test
-    @WithMockUser(username="admin",roles={"USER","ADMIN"})
+    @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
     void getDepartmentTasksBetweenDatesTest() {
         HashMap<TaskEnum, Long> accounting = new HashMap<>();
 
@@ -159,10 +156,10 @@ class TaskServiceTest{
         accounting.put(TaskEnum.IMPLEMENTIERUNG, 80L);
         accounting.put(TaskEnum.KUNDENBESPRECHUNG, 60L);
         accounting.put(TaskEnum.DOKUMENTATION, 60L);
-        accounting.put(TaskEnum.MEETING, accounting.get(TaskEnum.MEETING)+60L);
-        accounting.put(TaskEnum.IMPLEMENTIERUNG, accounting.get(TaskEnum.IMPLEMENTIERUNG)+80L);
-        accounting.put(TaskEnum.DOKUMENTATION, accounting.get(TaskEnum.DOKUMENTATION)+60L);
-        accounting.put(TaskEnum.DOKUMENTATION, accounting.get(TaskEnum.DOKUMENTATION)+60L);
+        accounting.put(TaskEnum.MEETING, accounting.get(TaskEnum.MEETING) + 60L);
+        accounting.put(TaskEnum.IMPLEMENTIERUNG, accounting.get(TaskEnum.IMPLEMENTIERUNG) + 80L);
+        accounting.put(TaskEnum.DOKUMENTATION, accounting.get(TaskEnum.DOKUMENTATION) + 60L);
+        accounting.put(TaskEnum.DOKUMENTATION, accounting.get(TaskEnum.DOKUMENTATION) + 60L);
 
         Calendar startDate = Calendar.getInstance();
         Calendar endDate = Calendar.getInstance();
@@ -181,9 +178,8 @@ class TaskServiceTest{
     }
 
 
-
     @Test
-    @WithMockUser(username="admin",roles={"USER","ADMIN"})
+    @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
     void saveEditedTaskTest() {
         User user = userRepository.findFirstByUsername("admin");
 
@@ -203,7 +199,7 @@ class TaskServiceTest{
         Instant endTime = date.toInstant();
         date.set(2020, Calendar.MAY, 7);
 
-        Assertions.assertThrows(TaskException.class, () -> taskService.saveEditedTask(user, null, startTime,endTime));
+        Assertions.assertThrows(TaskException.class, () -> taskService.saveEditedTask(user, null, startTime, endTime));
 
 
         List<Task> adminOldTasks = taskRepository.findTasksFromUser(user);
@@ -214,8 +210,7 @@ class TaskServiceTest{
 
         try {
             taskService.saveEditedTask(user, newTaskType, startTime, endTime);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             MessagesView.errorMessage("Test editing Tasks", e.getMessage());
         }
 
@@ -227,20 +222,19 @@ class TaskServiceTest{
 
         oldTask.setTask(newTaskType);
 
-        Assert.assertEquals("Task should be equal now", oldTask , newTask);
+        Assert.assertEquals("Task should be equal now", oldTask, newTask);
 
         //back to before else getUserTasksBetweenDatesTest() fails
         try {
             taskService.saveEditedTask(user, TaskEnum.DOKUMENTATION, startTime, endTime);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             MessagesView.errorMessage("Test editing Tasks", e.getMessage());
         }
 
     }
 
     @Test
-    @WithMockUser(username="admin",roles={"USER","ADMIN"})
+    @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
     void checkIfEarlierThanTwoWeeksTest() {
 
         Calendar inTime = Calendar.getInstance(timeBean.getUtcTimeZone());
@@ -257,7 +251,7 @@ class TaskServiceTest{
     }
 
     @Test
-    @WithMockUser(username="admin",roles={"USER","ADMIN"})
+    @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
     void checkIfAfterTodayTest() {
         Calendar afterToday = Calendar.getInstance();
 
@@ -267,7 +261,7 @@ class TaskServiceTest{
     }
 
     @Test
-    @WithMockUser(username="admin",roles={"USER","ADMIN"})
+    @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
     void checkTimeTest() {
 
 
@@ -281,7 +275,7 @@ class TaskServiceTest{
     }
 
     @Test
-    @WithMockUser(username="admin",roles={"USER","ADMIN"})
+    @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
     void deleteTaskTest() {
         User user = userRepository.findFirstByUsername("admin");
 
@@ -291,23 +285,23 @@ class TaskServiceTest{
 
         List<Task> newTaskList = taskRepository.findTasksFromUser(user);
 
-        Assert.assertNotEquals("Tasks should not be the same after deleting one",taskList, newTaskList);
+        Assert.assertNotEquals("Tasks should not be the same after deleting one", taskList, newTaskList);
         taskList.remove(1);
         Assert.assertEquals("After deleting the same Task from the taskList both list should be the same", taskList, newTaskList);
     }
 
 
     @Test
-    @WithMockUser(username="admin",roles={"USER","ADMIN"})
+    @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
     void deleteTaskOfUser() {
         User user = userRepository.findFirstByUsername("user23");
 
         List<Task> taskList = taskRepository.findTasksFromUser(user);
-        Assert.assertTrue("user23 should have at least 2 tasks",!taskList.isEmpty());
+        Assert.assertTrue("user23 should have at least 2 tasks", !taskList.isEmpty());
 
         taskService.deleteTasksOfUser(user);
 
         List<Task> newTaskList = taskRepository.findTasksFromUser(user);
-        Assert.assertTrue("user23 should have no tasks anymore",newTaskList.isEmpty());
+        Assert.assertTrue("user23 should have no tasks anymore", newTaskList.isEmpty());
     }
 }

@@ -1,6 +1,5 @@
 package at.qe.sepm.skeleton.ui.beans;
 
-import at.qe.sepm.skeleton.utils.TimeConverter;
 import de.jollyday.Holiday;
 import de.jollyday.HolidayCalendar;
 import de.jollyday.HolidayManager;
@@ -9,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.Collection;
 import java.util.stream.Collectors;
 
 /**
@@ -21,17 +20,15 @@ import java.util.stream.Collectors;
 @Scope("request")
 public class HolidayBean {
     /**
-     *
      * @return public holidays with description
      */
-    public Collection<Holiday> getPublicHolidays(int year){
+    public Collection<Holiday> getPublicHolidays(int year) {
         HolidayManager m = HolidayManager.getInstance(HolidayCalendar.AUSTRIA);
         Collection<Holiday> holidays = m.getHolidays(year, "Austria");
         return holidays;
     }
 
     /**
-     *
      * @return only the dates of the public holidays
      */
     public Collection<Instant> getDatesOfPublicHolidays(int year) {

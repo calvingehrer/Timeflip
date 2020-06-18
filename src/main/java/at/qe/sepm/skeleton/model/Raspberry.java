@@ -4,7 +4,6 @@ import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Objects;
 
@@ -14,7 +13,7 @@ public class Raspberry implements Persistable<String>, Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column(name="raspberry_id",length = 100)
+    @Column(name = "raspberry_id", length = 100)
     private String raspberryId;
 
     private String password;
@@ -98,10 +97,7 @@ public class Raspberry implements Persistable<String>, Serializable {
             return false;
         }
         final Raspberry other = (Raspberry) obj;
-        if (!Objects.equals(this.raspberryId, other.raspberryId)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.raspberryId, other.raspberryId);
     }
 
     @Override

@@ -2,11 +2,11 @@ package at.qe.sepm.skeleton.model;
 
 import org.springframework.data.domain.Persistable;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Entity representing Department
@@ -33,7 +33,6 @@ public class Department implements Persistable<String>, Serializable {
     public static long getSerialVersionDID() {
         return serialVersionDID;
     }
-
 
 
     public Date getCreateDate() {

@@ -12,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -69,7 +67,7 @@ public class DepartmentDetailController implements Serializable {
         this.oldLeader = oldLeader;
     }
 
-    public Department getDepartment(){
+    public Department getDepartment() {
         return department;
     }
 
@@ -93,7 +91,7 @@ public class DepartmentDetailController implements Serializable {
         department = departmentService.loadDepartment(department.getDepartmentName());
     }
 
-    public void doSaveDepartment(){
+    public void doSaveDepartment() {
         this.departmentService.saveDepartment(department, addedTeams, removedTeams, oldLeader, newLeader);
     }
 
@@ -103,18 +101,16 @@ public class DepartmentDetailController implements Serializable {
      * otherwise you get a success message
      */
 
-    public void doDeleteDepartment(){
+    public void doDeleteDepartment() {
         if (checkIfDeletionIsAllowed(department)) {
             try {
                 this.departmentService.deleteDepartment(department);
                 department = null;
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 logger.logError(e, userService.getAuthenticatedUser());
             }
-        }
-        else {
+        } else {
             MessagesView.warnMessage("department deletion", "You can't delete this department");
             return;
         }
@@ -127,11 +123,12 @@ public class DepartmentDetailController implements Serializable {
     /**
      * checks whether there are any teams still  in the department or it
      * still has an departmentleader
+     *
      * @param department
      * @return
      */
 
-    public boolean checkIfDeletionIsAllowed (Department department){
+    public boolean checkIfDeletionIsAllowed(Department department) {
         if (!teamService.getTeamsOfDepartment(department).isEmpty()) {
             return false;
         } else return userService.getDepartmentLeader(department) == null;
@@ -150,7 +147,7 @@ public class DepartmentDetailController implements Serializable {
         this.addedTeams.add(this.addedTeam);
     }
 
-    public void removeTeam(){
+    public void removeTeam() {
         this.removedTeams.add(this.removedTeam);
     }
 

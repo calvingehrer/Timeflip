@@ -30,28 +30,25 @@ public class TeamListController implements Serializable {
 
 
     /**
-     *
      * @return all teams
      */
 
-    public Collection<Team> getTeams(){
-        if(!teamName.equals("")){
-          return teamService.getAllTeamsByTeamName(teamName);
-       }
+    public Collection<Team> getTeams() {
+        if (!teamName.equals("")) {
+            return teamService.getAllTeamsByTeamName(teamName);
+        }
         return teamService.getAllTeams();
     }
 
     /**
-     *
      * @return teams without department
      */
 
-    public Collection<Team> getTeamsWithoutDepartment(){
+    public Collection<Team> getTeamsWithoutDepartment() {
         return teamService.getTeamsWithoutDepartment();
     }
 
     /**
-     *
      * @return users without team
      */
 
@@ -60,16 +57,15 @@ public class TeamListController implements Serializable {
     }
 
     /**
-     *
      * @param teamsInDepartment
      * @return teams without department
      */
 
     public Collection<Team> getTeamsNotInDepartment(Set<Team> teamsInDepartment) {
 
-        Collection<Team> allTeams= teamService.getAllTeams();
+        Collection<Team> allTeams = teamService.getAllTeams();
 
-        for(Team team : teamsInDepartment){
+        for (Team team : teamsInDepartment) {
             allTeams.remove(team);
         }
         return allTeams;

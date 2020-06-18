@@ -1,6 +1,5 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/template.xhtml">
@@ -11,7 +10,7 @@
         <li>/</li>
         <li><p:link outcome="/misc">Misc</p:link></li>
     </ui:define>
-    
+
     <ui:define name="content">
         <script type="text/javascript">
             function start() {
@@ -37,27 +36,29 @@
             }
 
         </script>
-        
+
         <h:form>
             <div class="ui-g">
                 <div class="ui-g-12 ui-lg-6">
                     <!-- Left colum -->
                     <div class="card">
                         <h1>ProgressBar</h1>
-                        <p:commandButton value="Start" id="start" type="button" onclick="start()" widgetVar="startButton" style="width:100px;margin-right:6px"/>
-                        <p:commandButton value="Cancel" id="cancel" type="button" onclick="cancel()" style="width:100px" />
-                        <br /><br />
-                        <p:progressBar widgetVar="pb" />
+                        <p:commandButton value="Start" id="start" type="button" onclick="start()"
+                                         widgetVar="startButton" style="width:100px;margin-right:6px"/>
+                        <p:commandButton value="Cancel" id="cancel" type="button" onclick="cancel()"
+                                         style="width:100px"/>
+                        <br/><br/>
+                        <p:progressBar widgetVar="pb"/>
                     </div>
-                    
+
                     <div class="card">
                         <h1>ProgressBar - Static</h1>
-                        <p:progressBar value="50" displayOnly="true" />
+                        <p:progressBar value="50" displayOnly="true"/>
                     </div>
 
                     <div class="card">
                         <h1>Clock</h1>
-                        <p:clock />
+                        <p:clock/>
                     </div>
                 </div>
 
@@ -65,13 +66,15 @@
                     <!-- Right colum -->
                     <div class="card">
                         <h1>Galleria</h1>
-                        <p:galleria value="#{imagesView.images}" var="image" panelWidth="500" panelHeight="313" showCaption="true">
-                            <p:graphicImage name="demo/images/nature/#{image}" alt="Image Description for #{image}" title="#{image}"/>
+                        <p:galleria value="#{imagesView.images}" var="image" panelWidth="500" panelHeight="313"
+                                    showCaption="true">
+                            <p:graphicImage name="demo/images/nature/#{image}" alt="Image Description for #{image}"
+                                            title="#{image}"/>
                         </p:galleria>
                     </div>
                 </div>
             </div>
-        </h:form>    
+        </h:form>
     </ui:define>
 
 </ui:composition>

@@ -39,14 +39,16 @@
                             </h:panelGrid>
 
                             <p:commandButton value="Filter" update=":departmentBadges :selection"/>
-                            <p:commandButton value="Reset" action="#{badgeController.resetFilter}" update="departmentBadges"/>
+                            <p:commandButton value="Reset" action="#{badgeController.resetFilter}"
+                                             update="departmentBadges"/>
 
                         </h:panelGrid>
 
                     </h:form>
                     <h1>Department Badges</h1>
 
-                    <p:dataGrid id="departmentBadges" var="badge" value="#{badgeController.badgesFromDepartment}" columns="3">
+                    <p:dataGrid id="departmentBadges" var="badge" value="#{badgeController.badgesFromDepartment}"
+                                columns="3">
 
                         <p:panel header="#{badge.badgeType.toString()}" style="text-align:center">
                             <h:panelGrid columns="1" style="width:100%">
@@ -60,11 +62,14 @@
 
                     </p:dataGrid>
 
-                    <p:dialog header="Filter Tasks" id="filterBadgeDialog" widgetVar="filterBadgeDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                    <p:dialog header="Filter Tasks" id="filterBadgeDialog" widgetVar="filterBadgeDialog" modal="true"
+                              showEffect="fade" hideEffect="fade" resizable="false">
                         <h:form id="timeRange">
-                            <p:calendar id="startTimeRange" mode="inline" value="#{badgeController.chosenDate}" timeZone="#{timeBean.utcTimeZone}"/>
+                            <p:calendar id="startTimeRange" mode="inline" value="#{badgeController.chosenDate}"
+                                        timeZone="#{timeBean.utcTimeZone}"/>
 
-                            <p:commandButton value="Find" update="departmentBadges" oncomplete="PF('filterBadgeDialog').hide()"/>
+                            <p:commandButton value="Find" update="departmentBadges"
+                                             oncomplete="PF('filterBadgeDialog').hide()"/>
 
 
                         </h:form>
@@ -73,9 +78,6 @@
                 </div>
             </div>
         </div>
-
-
-
 
 
     </ui:define>

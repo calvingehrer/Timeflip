@@ -5,7 +5,6 @@ import java.time.Instant;
 
 /**
  * Entity representing Badges.
- *
  */
 
 
@@ -25,7 +24,7 @@ public class Badge {
     private Instant dateOfBadge;
 
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Column(name = "badge_image")
@@ -75,8 +74,6 @@ public class Badge {
     public String toString() {
         return "at.qe.sepm.skeleton.model.User[ id=" + badgeId + " ]";
     }
-
-
 
 
 }

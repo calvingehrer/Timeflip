@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
@@ -28,7 +27,7 @@ public class DepartmentListController implements Serializable {
      * @return all department
      */
 
-    public Collection<Department> getDepartments(){
+    public Collection<Department> getDepartments() {
         return departmentService.getAllDepartments();
     }
 
@@ -37,7 +36,7 @@ public class DepartmentListController implements Serializable {
      * @return all teams in the department
      */
 
-    public List<Team> getTeamsOfDepartment (Department department) {
+    public List<Team> getTeamsOfDepartment(Department department) {
         return departmentService.getTeamsOfDepartment(department);
     }
 

@@ -14,7 +14,7 @@ import java.util.Set;
 
 /**
  * Entity representing users.
- *
+ * <p>
  * This class is part of the skeleton project provided for students of the
  * courses "Software Architecture" and "Software Engineering" offered by the
  * University of Innsbruck.
@@ -60,11 +60,11 @@ public class User implements Persistable<String>, Serializable {
     Set<Vacation> vacations = new HashSet<>();
 
     @ManyToOne(targetEntity = Team.class, fetch = FetchType.EAGER, optional = true)
-    @JoinColumn(name="team_id")
+    @JoinColumn(name = "team_id")
     private Team team;
 
     @ManyToOne
-    @JoinColumn(name="department_id")
+    @JoinColumn(name = "department_id")
     private Department department;
 
     private long vacationDays;
@@ -216,15 +216,12 @@ public class User implements Persistable<String>, Serializable {
             return false;
         }
         final User other = (User) obj;
-        if (!Objects.equals(this.username, other.username)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.username, other.username);
     }
 
     @Override
     public String toString() {
-        return firstName + " " + lastName ;
+        return firstName + " " + lastName;
     }
 
     @Override

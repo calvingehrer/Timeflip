@@ -88,7 +88,7 @@ public class VacationController implements Serializable {
     }
 
     @PostConstruct
-    public void init(){
+    public void init() {
         this.setVacations(this.vacationService.getVacationFromUser(userService.getAuthenticatedUser()));
     }
 
@@ -99,8 +99,8 @@ public class VacationController implements Serializable {
      */
 
 
-    public void addVacation(){
-        if(getBeginVacation() == null || getEndOfVacation() == null){
+    public void addVacation() {
+        if (getBeginVacation() == null || getEndOfVacation() == null) {
             MessagesView.errorMessage("vacation", "Please choose a date");
         }
         User currentUser = userService.getAuthenticatedUser();
@@ -113,19 +113,15 @@ public class VacationController implements Serializable {
             try {
                 vacationService.checkVacationDates(userService.getAuthenticatedUser(), vacation.getStart(), vacation.getEnd());
                 vacationService.addVacation(currentUser, vacation);
-            }
-            catch (VacationException e){
+            } catch (VacationException e) {
                 MessagesView.errorMessage("Vacation", e.getMessage());
                 return;
             }
             MessagesView.successMessage("Vacation", "Vacation saved");
-        }
-
-        else {
+        } else {
             try {
                 this.vacationService.checkVacationDates(currentUser, this.getBeginVacation().toInstant(), this.getEndOfVacation().toInstant());
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 MessagesView.errorMessage("vacation", e.getMessage());
                 return;
             }

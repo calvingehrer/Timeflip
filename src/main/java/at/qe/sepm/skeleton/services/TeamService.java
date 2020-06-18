@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -38,7 +37,6 @@ public class TeamService {
     private TaskRepository taskRepository;
 
     /**
-     *
      * @return all teams
      */
 
@@ -49,6 +47,7 @@ public class TeamService {
 
     /**
      * adds a new Team
+     *
      * @param employees
      * @param team
      */
@@ -59,12 +58,11 @@ public class TeamService {
         newTeam.setTeamName(team.getTeamName());
         newTeam.setDepartment(team.getDepartment());
         newTeam.setCreateDate(new Date());
-        saveTeam(employees,null,newTeam);
+        saveTeam(employees, null, newTeam);
         logger.logCreation(team.getTeamName(), userService.getAuthenticatedUser());
     }
 
     /**
-     *
      * @param team
      * @return saved Team
      */
@@ -73,24 +71,33 @@ public class TeamService {
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DEPARTMENTLEADER')")
     public void saveTeam(Set<User> addedEmployees, Set<User> removedEmployees, Team team) {
         teamRepository.save(team);
-        if(addedEmployees != null){
-            for(User u: addedEmployees) {
+        if (addedEmployees != null) {
+            for (User u : addedEmployees) {
                 u.setTeam(team);
                 u.setDepartment(team.getDepartment());
+                taskRepository.findTasksFromUser(u)
+                        .stream()
+                        .forEach(task -> {
+                            task.setTeam(team);
+                            task.setDepartment(team.getDepartment());
+                            taskRepository.save(task);
+                        });
                 userService.saveUser(u);
                 mailService.sendEmailTo(u, "New Team", "You have been added to " + team.getTeamName());
             }
         }
 
         if (removedEmployees != null) {
-            for(User u:  removedEmployees) {
+            for (User u : removedEmployees) {
                 u.setTeam(null);
                 u.setDepartment(null);
-                taskRepository.findTasksFromUser(u).stream().forEach(task -> {
-                    task.setTeam(null);
-                    task.setDepartment(null);
-                    taskRepository.save(task);
-                    });
+                taskRepository.findTasksFromUser(u)
+                        .stream()
+                        .forEach(task -> {
+                            task.setTeam(null);
+                            task.setDepartment(null);
+                            taskRepository.save(task);
+                        });
                 userService.saveUser(u);
             }
         }
@@ -99,7 +106,6 @@ public class TeamService {
     }
 
     /**
-     *
      * @param teamName
      * @return team by team name
      */
@@ -111,57 +117,60 @@ public class TeamService {
 
     /**
      * deletes Team
+     *
      * @param team
      */
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteTeam(Team team) {
         team.setDepartment(null);
-        team.setCreateDate(null);
         teamRepository.delete(team);
         logger.logDeletion(team.toString(), userService.getAuthenticatedUser());
     }
 
     /**
-     *
      * @param teamName
      * @return Teams starting with the given string
      */
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DEPARTMENTLEADER')")
-    public List<Team> getAllTeamsByTeamName (String teamName) { return this.teamRepository.getAllTeamsByTeamPrefix(teamName); }
+    public List<Team> getAllTeamsByTeamName(String teamName) {
+        return this.teamRepository.getAllTeamsByTeamPrefix(teamName);
+    }
 
     /**
-     *
      * @return teams without department
      */
     @PreAuthorize("hasAuthority('ADMIN')")
-    public List<Team> getTeamsWithoutDepartment() { return this.teamRepository.getTeamsWithoutDepartment();}
+    public List<Team> getTeamsWithoutDepartment() {
+        return this.teamRepository.getTeamsWithoutDepartment();
+    }
 
     /**
-     *
      * @return users without team
      */
     @PreAuthorize("hasAuthority('ADMIN')")
-    public List<User> getAllUsersWithoutTeam() { return userService.getAllUsersWithoutTeam(); }
+    public List<User> getAllUsersWithoutTeam() {
+        return userService.getAllUsersWithoutTeam();
+    }
 
     /**
-     *
      * @param team
      * @return users of the given team
      */
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DEPARTMENTLEADER') or hasAuthority('TEAMLEADER')")
-    public List<User> getUsersOfTeam(Team team) { return userService.getUsersOfTeam(team); }
+    public List<User> getUsersOfTeam(Team team) {
+        return userService.getUsersOfTeam(team);
+    }
 
     /**
-     *
      * @param department
      * @return teams of the department
      */
     @PreAuthorize("hasAuthority('ADMIN')")
-    public List<Team> getTeamsOfDepartment(Department department) { return teamRepository.findByDepartment(department); }
-
-
+    public List<Team> getTeamsOfDepartment(Department department) {
+        return teamRepository.findByDepartment(department);
+    }
 
 
 }

@@ -6,24 +6,22 @@ import at.qe.sepm.skeleton.services.DepartmentService;
 import at.qe.sepm.skeleton.services.TeamService;
 import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.ui.controllers.TeamDetailController;
-import org.junit.*;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 @WebAppConfiguration
-class TeamServiceTest{
+class TeamServiceTest {
 
 
     @Autowired
@@ -39,13 +37,11 @@ class TeamServiceTest{
     TeamDetailController teamDetailController = new TeamDetailController();
 
 
-
-
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     void getAllTeams() {
         List<Team> teams = new ArrayList<>(teamService.getAllTeams());
-        for(Team team : teams){
+        for (Team team : teams) {
             System.out.println(team.getTeamName());
         }
 
@@ -63,7 +59,7 @@ class TeamServiceTest{
         Assert.assertEquals("Management", testTeam.getDepartment().getDepartmentName());
 
         testTeam.setDepartment(departmentService.loadDepartment("Accounting"));
-        teamService.saveTeam(null,null,testTeam);
+        teamService.saveTeam(null, null, testTeam);
         Assert.assertEquals("Accounting", testTeam.getDepartment().getDepartmentName());
         Assert.assertEquals(10, teamService.getAllTeams().size(), 0);
     }
@@ -74,12 +70,12 @@ class TeamServiceTest{
 
         Team newTeam1 = new Team();
         newTeam1.setTeamName("Teamadd");
-        Assert.assertEquals(10,teamService.getAllTeams().size(), 0);
+        Assert.assertEquals(10, teamService.getAllTeams().size(), 0);
         teamService.addNewTeam(null, newTeam1);
         Assert.assertEquals(11, teamService.getAllTeams().size(), 0);
         teamDetailController.setTeam(newTeam1);
         teamDetailController.doDeleteTeam();
-        Assert.assertEquals(10,teamService.getAllTeams().size(), 0);
+        Assert.assertEquals(10, teamService.getAllTeams().size(), 0);
 
     }
 
@@ -90,11 +86,12 @@ class TeamServiceTest{
 
         Team team = new Team();
         team.setTeamName("Teamdel");
+
         teamService.addNewTeam(null, team);
 
         Assert.assertEquals(11, teamService.getAllTeams().size(), 0);
 
-        teamService.deleteTeam(team);
+        teamService.deleteTeam(teamService.loadTeam("Teamdel"));
 
         Assert.assertEquals(10, teamService.getAllTeams().size(), 0);
 

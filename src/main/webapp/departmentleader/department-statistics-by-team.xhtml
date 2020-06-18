@@ -26,13 +26,11 @@
                     <h:form id="departmentStatFormByTeam">
 
                         <p:messages id="messages" showDetail="true" closable="true">
-                            <p:autoUpdate />
+                            <p:autoUpdate/>
                         </p:messages>
 
                         <p:commandButton value="Choose Team and Date"
-                                             oncomplete="PF('teamDateDialog').show()"/>
-
-
+                                         oncomplete="PF('teamDateDialog').show()"/>
 
 
                         <p:dialog header="Choose a Team" id="chooseTeam" widgetVar="teamDateDialog"
@@ -44,18 +42,20 @@
 
                                     <p:commandButton value="Choose Team and Date"
                                                      oncomplete="PF('teamDateDialog').show()"/>
-                                <h:outputText value="Select the Date you want the statistics from"/>
+                                    <h:outputText value="Select the Date you want the statistics from"/>
 
-                                <p:calendar id="start" mode="inline" value="#{statisticsController.chosenDate}"/>
+                                    <p:calendar id="start" mode="inline" value="#{statisticsController.chosenDate}"/>
 
-                                <h:outputText value="Select the Team you want the statistics from"/>
+                                    <h:outputText value="Select the Team you want the statistics from"/>
 
-                                <p:selectOneMenu value="#{statisticsController.chosenTeam}" >
-                                    <f:selectItems value="#{statisticsController.teamsOfDepartment}"/>
-                                </p:selectOneMenu>
+                                    <p:selectOneMenu value="#{statisticsController.chosenTeam}">
+                                        <f:selectItems value="#{statisticsController.teamsOfDepartment}"/>
+                                    </p:selectOneMenu>
 
-                                <p:commandButton value="Apply" action="#{statisticsController.rebuildChartsDepartmentTeamBasis}" update="departmentStatFormByTeam:teamStats"
-                                                 oncomplete="PF('teamDateDialog').hide()"/>
+                                    <p:commandButton value="Apply"
+                                                     action="#{statisticsController.rebuildChartsDepartmentTeamBasis}"
+                                                     update="departmentStatFormByTeam:teamStats"
+                                                     oncomplete="PF('teamDateDialog').hide()"/>
                                 </h:panelGrid>
 
                             </h:form>
@@ -63,7 +63,8 @@
 
                         <h:form id="teamStats">
                             <h2>Team #{statisticsController.chosenTeam} </h2>
-                            <p:chart type="pie" model="#{statisticsController.monthTeamModel}" style="width:400px;height:300px"/>
+                            <p:chart type="pie" model="#{statisticsController.monthTeamModel}"
+                                     style="width:400px;height:300px"/>
                             <p:chart type="bar" model="#{statisticsController.monthBarTeamModel}" style="height:300px"/>
                         </h:form>
                     </h:form>

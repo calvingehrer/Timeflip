@@ -7,15 +7,12 @@ import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.TeamService;
 import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.utils.MessagesView;
-import org.hibernate.criterion.IdentifierProjection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import javax.faces.application.FacesMessage;
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Component
@@ -49,7 +46,7 @@ public class TeamDetailController implements Serializable {
         doReloadTeam();
     }
 
-    public Team getTeam(){
+    public Team getTeam() {
         return team;
     }
 
@@ -103,17 +100,15 @@ public class TeamDetailController implements Serializable {
      * otherwise it displays a success message
      */
 
-    public void doDeleteTeam(){
+    public void doDeleteTeam() {
         if (checkIfDeletionIsAllowed(team)) {
             try {
                 this.teamService.deleteTeam(team);
                 team = null;
-            }
-            catch(Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-        else {
+        } else {
             MessagesView.warnMessage("team deletion", "You can't delete this team");
             return;
         }
@@ -124,20 +119,16 @@ public class TeamDetailController implements Serializable {
 
     /**
      * checks if a deletion is allowed
+     *
      * @param team
      * @return
      */
 
-    public boolean checkIfDeletionIsAllowed (Team team){
+    public boolean checkIfDeletionIsAllowed(Team team) {
         if (!userService.getUsersOfTeam(team).isEmpty()) {
             return false;
-        }
-        else if (userService.getTeamLeader(team) != null) {
-            return false;
-        }
-        return true;
+        } else return userService.getTeamLeader(team) == null;
     }
-
 
 
     /**

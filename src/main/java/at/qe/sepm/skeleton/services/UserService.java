@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * Service for accessing and manipulating user data.
- *
+ * <p>
  * This class is part of the skeleton project provided for students of the
  * courses "Software Architecture" and "Software Engineering" offered by the
  * University of Innsbruck.
@@ -92,7 +92,6 @@ public class UserService {
     }
 
     /**
-     *
      * @param username
      * @return users whose username starts with given string
      */
@@ -102,7 +101,6 @@ public class UserService {
     }
 
     /**
-     *
      * @param teamname
      * @return users whose teamname starts with given string
      */
@@ -113,16 +111,14 @@ public class UserService {
     }
 
     /**
-     *
      * @param department
-     * @return  users whose departmentname starts with given string
+     * @return users whose departmentname starts with given string
      */
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<User> getAllUsersOfDepartmentByDepartmentname(String department) {
         return userRepository.findByDepartmentnamePrefix(department);
     }
-
 
 
     /**
@@ -161,6 +157,7 @@ public class UserService {
 
     /**
      * adds a new user
+     *
      * @param user
      */
 
@@ -224,6 +221,7 @@ public class UserService {
 
     /**
      * updates user
+     *
      * @param toSave
      * @return
      */
@@ -235,7 +233,6 @@ public class UserService {
     }
 
     /**
-     *
      * @param team
      * @return teamleader of team
      */
@@ -245,7 +242,6 @@ public class UserService {
     }
 
     /**
-     *
      * @return users who are currently not in a team
      */
 
@@ -255,7 +251,6 @@ public class UserService {
     }
 
     /**
-     *
      * @param team
      * @return users in given team
      */
@@ -266,7 +261,6 @@ public class UserService {
     }
 
     /**
-     *
      * @param department
      * @return departmentleader of department
      */
@@ -276,7 +270,6 @@ public class UserService {
     }
 
     /**
-     *
      * @return teamleaders who have no team
      */
 
@@ -286,7 +279,6 @@ public class UserService {
     }
 
     /**
-     *
      * @return departmemtleader withour department
      */
 
@@ -296,7 +288,6 @@ public class UserService {
     }
 
     /**
-     *
      * @return users who have no timeflip
      */
 
@@ -311,11 +302,12 @@ public class UserService {
 
     /**
      * deletes all tasks of the user
+     *
      * @param user
      */
 
-    public void deleteTaskOfUser (User user) {
-        for (Task t: taskRepository.findTasksFromUser(user)) {
+    public void deleteTaskOfUser(User user) {
+        for (Task t : taskRepository.findTasksFromUser(user)) {
             t.setUser(null);
             t.setDepartment(null);
             t.setTeam(null);
@@ -328,11 +320,12 @@ public class UserService {
 
     /**
      * deletes all badges of the user
+     *
      * @param user
      */
 
     public void deleteBadgesOfUser(User user) {
-        for(Badge b: badgeRepository.findBadgesFromUser(user)) {
+        for (Badge b : badgeRepository.findBadgesFromUser(user)) {
             badgeRepository.delete(b);
             logger.logDeletion(b.getBadgeType().toString(), getAuthenticatedUser());
         }
@@ -343,11 +336,12 @@ public class UserService {
      * when user is a team-leader and the field for department-leader is not null
      * only set the field team-leader null
      * vise versa for department-leader
+     *
      * @param user
      */
 
     public void deleteRequestsOfUser(User user) {
-        for (Request r: requestRepository.findAllRequestsOfRequester(user)) {
+        for (Request r : requestRepository.findAllRequestsOfRequester(user)) {
             requestRepository.delete(r);
             logger.logDeletion(r.getDescription(), getAuthenticatedUser());
         }
@@ -355,9 +349,7 @@ public class UserService {
             for (Request r : requestRepository.findAllRequestsOfRequestHandlerTL(user)) {
                 if (r.getRequestHandlerDepartmentLeader() == null) {
                     requestRepository.delete(r);
-                }
-
-                else {
+                } else {
                     r.setRequestHandlerTeamLeader(null);
                     requestRepository.save(r);
                 }
@@ -367,9 +359,7 @@ public class UserService {
             for (Request r : requestRepository.findAllRequestsOfRequestHandlerDL(user)) {
                 if (r.getRequestHandlerTeamLeader() == null) {
                     requestRepository.delete(r);
-                }
-
-                else {
+                } else {
                     r.setRequestHandlerDepartmentLeader(null);
                     requestRepository.save(r);
                 }

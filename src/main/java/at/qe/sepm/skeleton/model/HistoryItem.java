@@ -71,7 +71,7 @@ public class HistoryItem implements Persistable<Long>, Serializable {
     }
 
     @Override
-    public boolean isNew(){
+    public boolean isNew() {
         return false;
     }
 

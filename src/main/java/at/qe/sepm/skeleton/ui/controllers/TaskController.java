@@ -1,31 +1,30 @@
 package at.qe.sepm.skeleton.ui.controllers;
 
-import at.qe.sepm.skeleton.model.*;
+import at.qe.sepm.skeleton.model.Task;
+import at.qe.sepm.skeleton.model.TaskEnum;
+import at.qe.sepm.skeleton.model.User;
+import at.qe.sepm.skeleton.model.UserRole;
 import at.qe.sepm.skeleton.services.RequestService;
 import at.qe.sepm.skeleton.services.TaskService;
 import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.ui.beans.TimeBean;
 import at.qe.sepm.skeleton.utils.MessagesView;
-import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.ManagedBean;
-import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.time.ZoneId;
-import java.util.*;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.stream.Collectors;
 
 
 @ManagedBean
 @Component
 @Scope("view")
-public class TaskController implements Serializable  {
+public class TaskController implements Serializable {
 
     @Autowired
     private RequestService requestService;
@@ -141,9 +140,8 @@ public class TaskController implements Serializable  {
             String startDate = simpleDateFormat.format(timeBean.instantToDate(this.getStartTime()));
             String endDate = simpleDateFormat.format(timeBean.instantToDate(this.getEndTime()));
 
-            requestService.addTaskRequest(u, this.getStartTime(), this.getEndTime(), this.getTask(),  "Changing time frame from " + startDate + " to "  + endDate + " to  " + this.task.toString());
-        }
-        catch (Exception e){
+            requestService.addTaskRequest(u, this.getStartTime(), this.getEndTime(), this.getTask(), "Changing time frame from " + startDate + " to " + endDate + " to  " + this.task.toString());
+        } catch (Exception e) {
             MessagesView.errorMessage("Edit Tasks", e.getMessage());
         }
 
@@ -160,13 +158,12 @@ public class TaskController implements Serializable  {
     public void editDateWithinTimeFrame() {
         try {
             taskService.checkIfAfterToday(this.getRequestedDate().toInstant());
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             MessagesView.errorMessage("Edit Tasks", e.getMessage());
             return;
         }
         if (!userService.getAuthenticatedUser().getRoles().contains(UserRole.DEPARTMENTLEADER) && !userService.getAuthenticatedUser().getRoles().contains(UserRole.ADMIN)) {
-            if(taskService.checkIfEarlierThanTwoWeeks(this.getRequestedDate().toInstant())) {
+            if (taskService.checkIfEarlierThanTwoWeeks(this.getRequestedDate().toInstant())) {
                 sendRequest();
                 return;
             }
@@ -178,14 +175,13 @@ public class TaskController implements Serializable  {
         try {
             setStartAndEndTime();
             taskService.saveEditedTask(userService.getAuthenticatedUser(), this.getTask(), this.getStartTime(), this.getEndTime());
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             MessagesView.errorMessage("Edit Tasks", e.getMessage());
         }
     }
 
 
-    public void setStartAndEndTime(){
+    public void setStartAndEndTime() {
         try {
             taskService.checkTime(this.getStartHour(), this.getEndHour(), this.getStartMinute(), this.getEndMinute());
             Calendar calendar = Calendar.getInstance(timeBean.getUtcTimeZone());
@@ -201,9 +197,8 @@ public class TaskController implements Serializable  {
             calendar.set(Calendar.HOUR_OF_DAY, endHour);
             calendar.set(Calendar.MINUTE, endMinute);
             this.setEndTime(calendar.toInstant());
-        }
-        catch (Exception e) {
-            MessagesView.errorMessage("Edit Tasks",e.getMessage());
+        } catch (Exception e) {
+            MessagesView.errorMessage("Edit Tasks", e.getMessage());
         }
     }
 

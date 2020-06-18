@@ -1,13 +1,10 @@
 package at.qe.sepm.skeleton.model;
 
-import org.springframework.data.domain.Persistable;
-
-import javax.persistence.*;
-import java.io.Serializable;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 import java.time.Instant;
-import java.util.Date;
 
-@Entity(name="taskrequest")
+@Entity(name = "taskrequest")
 @DiscriminatorValue("1")
 public class TaskRequest extends Request {
     private Instant requestedStartDate;

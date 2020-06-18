@@ -1,13 +1,10 @@
 package at.qe.sepm.skeleton.model;
 
-import org.assertj.core.data.TemporalOffset;
 import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.*;
-import java.util.Map.*;
 
 @Entity
 public class Timeflip implements Persistable<String>, Serializable {
@@ -21,7 +18,7 @@ public class Timeflip implements Persistable<String>, Serializable {
     private String macAddress;
 
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER, optional = true, cascade = CascadeType.ALL)
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @OneToOne
@@ -55,13 +52,15 @@ public class Timeflip implements Persistable<String>, Serializable {
     }
 
 
-    public Map<Integer, TaskEnum> getTasks() { return tasks; }
+    public Map<Integer, TaskEnum> getTasks() {
+        return tasks;
+    }
 
     public void setTasks(Map<Integer, TaskEnum> tasks) {
         this.tasks = tasks;
     }
 
-    public List<TaskEnum> getTaskValues(){
+    public List<TaskEnum> getTaskValues() {
         return new ArrayList<TaskEnum>(tasks.values());
     }
 

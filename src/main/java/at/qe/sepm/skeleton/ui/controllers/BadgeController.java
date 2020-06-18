@@ -1,18 +1,17 @@
 package at.qe.sepm.skeleton.ui.controllers;
 
 import at.qe.sepm.skeleton.model.Badge;
-import at.qe.sepm.skeleton.model.BadgeEnum;
-import at.qe.sepm.skeleton.model.Task;
-import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.BadgeService;
 import at.qe.sepm.skeleton.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 @Component
 @Scope("view")
@@ -59,8 +58,8 @@ public class BadgeController implements Serializable {
         }
         Date startTimeRange;
         Date endTimeRange;
-        switch(interval){
-            case("Daily"):
+        switch (interval) {
+            case ("Daily"):
                 calendar.set(Calendar.HOUR_OF_DAY, 0);
                 calendar.set(Calendar.HOUR_OF_DAY, 0);
                 calendar.set(Calendar.MINUTE, 0);
@@ -70,7 +69,7 @@ public class BadgeController implements Serializable {
                 endTimeRange = calendar.getTime();
                 return badgeService.getBadgesBetweenDates(userService.getAuthenticatedUser(), forUser,
                         startTimeRange.toInstant(), endTimeRange.toInstant());
-            case("Weekly"):
+            case ("Weekly"):
                 calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
                 calendar.set(Calendar.HOUR_OF_DAY, 0);
                 calendar.set(Calendar.MINUTE, 0);
@@ -80,7 +79,7 @@ public class BadgeController implements Serializable {
                 endTimeRange = calendar.getTime();
                 return badgeService.getBadgesBetweenDates(userService.getAuthenticatedUser(), forUser,
                         startTimeRange.toInstant(), endTimeRange.toInstant());
-            case("Monthly"):
+            case ("Monthly"):
                 calendar.set(Calendar.DAY_OF_MONTH, 1);
                 calendar.set(Calendar.HOUR_OF_DAY, 0);
                 calendar.set(Calendar.MINUTE, 0);
@@ -90,18 +89,19 @@ public class BadgeController implements Serializable {
                 endTimeRange = calendar.getTime();
                 return badgeService.getBadgesBetweenDates(userService.getAuthenticatedUser(), forUser,
                         startTimeRange.toInstant(), endTimeRange.toInstant());
-            default: return badgeService.getBadgesOfType(userService.getAuthenticatedUser(), forUser, this.badgeType);
+            default:
+                return badgeService.getBadgesOfType(userService.getAuthenticatedUser(), forUser, this.badgeType);
         }
 
     }
 
-    public List<Badge> getBadgesFromDepartment(){
+    public List<Badge> getBadgesFromDepartment() {
         List<Badge> sorted = getBadges(false);
         Collections.sort(sorted, (task1, task2) -> task2.getDateOfBadge().compareTo(task1.getDateOfBadge()));
         return sorted;
     }
 
-    public List<Badge> getBadgesFromLastWeek(){
+    public List<Badge> getBadgesFromLastWeek() {
 
         Calendar lastWeek = getWeekStart();
         lastWeek.add(Calendar.DATE, -7);
