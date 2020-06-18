@@ -1,6 +1,7 @@
 package at.qe.sepm.skeleton.ui.controllers;
 
 import at.qe.sepm.skeleton.model.Badge;
+import at.qe.sepm.skeleton.model.BadgeEnum;
 import at.qe.sepm.skeleton.repositories.UserRepository;
 import at.qe.sepm.skeleton.services.BadgeService;
 import at.qe.sepm.skeleton.services.UserService;
@@ -41,34 +42,24 @@ public class BadgeControllerTest {
 
         ReflectionTestUtils.setField(badgeController, "userService", userService);
         ReflectionTestUtils.setField(badgeController, "badgeService", badgeService);
-
     }
 
-    /**
-     * @Test
-     * @WithMockUser(username = "user2", authorities = {"DEPARTMENTLEADER"})
-     * public void getBadgesFromUser() {
-     * List<Badge> user2Badges = badgeController.getBadgesFromUser();
-     * System.out.println(userService.getAuthenticatedUser());
-     * Assert.assertFalse(user2Badges.isEmpty());
-     * Assert.assertEquals("First Badge should be Code Monkey", user2Badges.get(0).getBadgeType(), BadgeEnum.WEEKLY_CODE_MONKEY);
-     * }
-     **/
+
+    @Test
+    @WithMockUser(username = "user2", authorities = {"DEPARTMENTLEADER"})
+    public void getBadgesFromUser() {
+    List<Badge> user2Badges = badgeController.getSortedBadgesOfUser();
+    System.out.println(userService.getAuthenticatedUser());
+    Assert.assertFalse(user2Badges.isEmpty());
+    Assert.assertEquals("First Badge should be Code Monkey", user2Badges.get(0).getBadgeType(), BadgeEnum.WEEKLY_CODE_MONKEY);
+    }
+
 
     @Test
     @WithMockUser(username = "user2", authorities = {"DEPARTMENTLEADER"})
     public void getBadgesFromDepartment() {
         List<Badge> departmentBadges = badgeController.getBadgesFromDepartment();
         Assert.assertFalse(departmentBadges.isEmpty());
-
-        /*
-        * somehow not true
-        *
-        List<Badge> user20Badges = badgeService.getAllBadgesFromUser(userRepository.findFirstByUsername("user20"));
-        System.out.println(user20Badges.get(0));
-        System.out.println(departmentBadges.get(0));
-        Assert.assertTrue("user8 is in Accounting, so the badge from him should be in departmentBadges", departmentBadges.containsAll(user20Badges));
-        */
     }
 
     @Test

@@ -213,12 +213,8 @@ class TaskServiceTest {
         }
 
         List<Task> adminNewTasks = taskRepository.findTasksFromUser(user);
-
-        System.out.println("new task size: " + adminNewTasks.size());
-
         Task newTask = adminNewTasks.get(0);
 
-        System.out.println("alter task = " + oldTask.getTask());
 
         Assert.assertNotEquals("Task should be IMPLEMENTIERUNG for newTask and DOKUMENTATION for oldTask", newTask.getTask(), oldTask.getTask());
 
