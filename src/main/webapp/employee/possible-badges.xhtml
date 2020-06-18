@@ -5,6 +5,13 @@
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="title">Badges</ui:define>
+    <ui:define name="viewname">
+        <li>Badges</li>
+        <li>/</li>
+        <li>
+        <p:link outcome="/employee/possible-badges">Possible Badges</p:link>
+        </li>
+    </ui:define>
 
     <ui:define name="content">
         <div class="ui-g">

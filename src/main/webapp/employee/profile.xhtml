@@ -5,6 +5,11 @@
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="title">Profile</ui:define>
+    <ui:define name="viewname">
+        <li>
+            <p:link outcome="/employee/profile">Profile</p:link>
+        </li>
+    </ui:define>
 
     <ui:define name="content">
         <h:form id="userForm">
@@ -24,7 +29,7 @@
                             <p:outputLabel value="E-Mail:"/>
                             <p:outputLabel id="email" value="#{manageCurrentUserController.currentUser.email}"/>
                             <p:outputLabel for="interval" value="Interval for mails: "/>
-                            <p:outputLabel id="interval" value="#{manageCurrentUserController.currentUser.intervall}"/>
+                            <p:outputLabel id="interval" value="#{manageCurrentUserController.currentUser.intervall.toString()}"/>
                             <p:outputLabel value="Password:"/>
                             <p:outputLabel id="password" value="********"/>
                             <p:outputLabel value="Roles:"/>
