@@ -26,7 +26,6 @@ import java.io.IOException;
 @WebAppConfiguration
 public class AddDepartmentControllerTest {
 
-    // @Autowired
     private AddDepartmentController addDepartmentController;
 
     @Autowired
@@ -34,12 +33,6 @@ public class AddDepartmentControllerTest {
 
     @Autowired
     private UserService userService;
-
-    @Mock
-    private FacesContext facesContext;
-
-    @Mock
-    private ExternalContext externalContext;
 
     @Before
     public void init() throws IOException {

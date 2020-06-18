@@ -127,10 +127,4 @@ public class RequestController implements Serializable {
         requestService.deleteRequest(request);
     }
 
-    public List<Request> getAcceptedTaskRequestsEmployee() {
-        return requestService.getAcceptedRequestsOfEmployee(userService.getAuthenticatedUser())
-                .stream()
-                .filter(request -> request.getDiscriminatorValue() == 1)
-                .collect(Collectors.toList());
-    }
 }

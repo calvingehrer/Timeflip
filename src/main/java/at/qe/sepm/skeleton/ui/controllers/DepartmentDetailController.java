@@ -88,11 +88,14 @@ public class DepartmentDetailController implements Serializable {
     }
 
     public void doReloadDepartment() {
+        addedTeams.clear();
+        removedTeams.clear();
         department = departmentService.loadDepartment(department.getDepartmentName());
     }
 
     public void doSaveDepartment() {
         this.departmentService.saveDepartment(department, addedTeams, removedTeams, oldLeader, newLeader);
+        doReloadDepartment();
     }
 
     /**

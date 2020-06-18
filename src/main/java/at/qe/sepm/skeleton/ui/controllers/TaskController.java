@@ -155,7 +155,7 @@ public class TaskController implements Serializable {
      * when both checks went through it saves the task
      */
 
-    public void editDateWithinTimeFrame() {
+    public void editTasks() {
         try {
             taskService.checkIfAfterToday(this.getRequestedDate().toInstant());
         } catch (Exception e) {

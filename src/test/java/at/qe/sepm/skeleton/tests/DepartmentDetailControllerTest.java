@@ -3,12 +3,15 @@ package at.qe.sepm.skeleton.tests;
 import at.qe.sepm.skeleton.model.Department;
 import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
+import at.qe.sepm.skeleton.repositories.DepartmentRepository;
 import at.qe.sepm.skeleton.services.DepartmentService;
 import at.qe.sepm.skeleton.services.TeamService;
+import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.ui.controllers.DepartmentDetailController;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,21 +35,56 @@ public class DepartmentDetailControllerTest {
     @Autowired
     TeamService teamService;
 
+    @Autowired
+    UserService userService;
+
+
+    @Autowired
+    DepartmentRepository departmentRepository;
+
     @Before
     public void init() throws IOException {
 
         departmentDetailController = new DepartmentDetailController();
 
         ReflectionTestUtils.setField(departmentDetailController, "teamService", teamService);
-    }
-
-
-    @Test
-    public void doReloadDepartment() {
+        ReflectionTestUtils.setField(departmentDetailController, "departmentService", departmentService);
+        ReflectionTestUtils.setField(departmentDetailController, "userService", userService);
     }
 
     @Test
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void doSaveDepartment() {
+        Department department = departmentService.loadDepartment("Management");
+        departmentDetailController.setDepartment(department);
+        Team team = teamService.loadTeam("Top-Management");
+        Assert.assertEquals(2,teamService.getTeamsOfDepartment(department).size());
+        User oldLeader = userService.loadUser("user1");
+        Assert.assertEquals(oldLeader, userService.getDepartmentLeader(department));
+
+
+        departmentDetailController.setRemovedTeam(team);
+        departmentDetailController.removeTeam();
+        User newLeader = userService.loadUser("user34");
+        departmentDetailController.setNewLeader(newLeader);
+        departmentDetailController.replaceLeader();
+        departmentDetailController.doSaveDepartment();
+
+        oldLeader = userService.loadUser("user1");
+        newLeader = userService.loadUser("user34");
+        Assert.assertEquals(1,teamService.getTeamsOfDepartment(department).size());
+        Assert.assertNull(oldLeader.getDepartment());
+        Assert.assertEquals(newLeader, userService.getDepartmentLeader(department));
+
+
+        departmentDetailController.setAddedTeam(team);
+        departmentDetailController.addTeam();
+        newLeader = userService.loadUser("user1");
+        oldLeader = userService.loadUser("user34");
+        departmentDetailController.setNewLeader(newLeader);
+        departmentDetailController.replaceLeader();
+        departmentDetailController.doSaveDepartment();
+        Assert.assertEquals(2, teamService.getTeamsOfDepartment(department).size());
     }
 
     @Test
@@ -56,11 +94,40 @@ public class DepartmentDetailControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void checkIfDeletionIsAllowed() {
+        Department department = departmentService.loadDepartment("Management");
+        Assert.assertFalse(departmentDetailController.checkIfDeletionIsAllowed(department));
+
+        Team team1 = teamService.loadTeam("Top-Management");
+        Team team2 = teamService.loadTeam("Coordination & Controll");
+        departmentDetailController.setDepartment(department);
+        departmentDetailController.setRemovedTeam(team1);
+        departmentDetailController.removeTeam();
+        departmentDetailController.setRemovedTeam(team2);
+        departmentDetailController.removeTeam();
+        departmentDetailController.doSaveDepartment();
+        department = departmentService.loadDepartment("Management");
+        Assert.assertFalse(departmentDetailController.checkIfDeletionIsAllowed(department));
+
+        departmentDetailController.setAddedTeam(team1);
+        departmentDetailController.addTeam();
+        departmentDetailController.setAddedTeam(team2);
+        departmentDetailController.addTeam();
+        departmentDetailController.doSaveDepartment();
     }
 
     @Test
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void replaceLeader() {
+        departmentDetailController.setDepartment(departmentService.loadDepartment("Management"));
+        departmentDetailController.setNewLeader(userService.loadUser("user34"));
+        departmentDetailController.replaceLeader();
+        Assert.assertEquals(userService.loadUser("user34"), departmentDetailController.getNewLeader());
+        Assert.assertEquals(userService.loadUser("user1"), departmentDetailController.getOldLeader());
+        departmentDetailController.setNewLeader(userService.loadUser("user1"));
+        departmentDetailController.replaceLeader();
+
     }
 
     @Test

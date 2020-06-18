@@ -52,6 +52,8 @@ class TaskServiceTest {
     @Test
     @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
     void getAllTasksBetweenDatesTest() {
+        User user = userRepository.findFirstByUsername("admin");
+
 
 
         Calendar startDate = Calendar.getInstance();
@@ -67,7 +69,6 @@ class TaskServiceTest {
         Instant end = endDate.toInstant();
 
 
-        User user = userRepository.findFirstByUsername("admin");
         Assert.assertEquals(taskService.getAllTasksBetweenDates(user, start, end), taskRepository.findUserTasksBetweenDates(user, start, end));
 
     }
@@ -96,6 +97,9 @@ class TaskServiceTest {
     @Test
     @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
     void getUserTasksBetweenDatesTest() {
+        User user = userRepository.findFirstByUsername("admin");
+
+        Assert.assertEquals(2,taskService.getAllTasksBetweenDates(user, null, null).size());
         HashMap<TaskEnum, Long> adminTasks = new HashMap<>();
 
         adminTasks.put(TaskEnum.DOKUMENTATION, 50L);
@@ -113,7 +117,6 @@ class TaskServiceTest {
         Instant start = startDate.toInstant();
         Instant end = endDate.toInstant();
 
-        User user = userRepository.findFirstByUsername("admin");
         Assert.assertEquals(adminTasks, taskService.getUserTasksBetweenDates(user, start, end));
 
     }
