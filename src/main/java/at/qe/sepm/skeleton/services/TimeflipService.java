@@ -72,7 +72,7 @@ public class TimeflipService {
         logger.logCreation(timeflip.getId(), userService.getAuthenticatedUser());
     }
 
-    @PreAuthorize("hasAuthority('EMPLOYEE')")
+    @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('ADMIN')")
     public Timeflip saveTimeflip(Timeflip timeflip) {
         logger.logUpdate(timeflip.getId(), userService.getAuthenticatedUser());
         return timeflipRepository.save(timeflip);
@@ -90,31 +90,15 @@ public class TimeflipService {
         logger.logDeletion(timeflip.getId(), userService.getAuthenticatedUser());
     }
 
-    @PreAuthorize("hasAuthority('EMPLOYEE') or principal.username eq #username")
-    public void configureTimeFlip(Timeflip timeflip){
 
-    }
-
-
-    @PreAuthorize("hasAuthority('EMPLOYEE') or principal.username eq #username")
+    @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('ADMIN') or principal.username eq #username")
     public Timeflip loadTimeflip(String timeflipId) {
         return timeflipRepository.findByMacAddress(timeflipId);
     }
 
-    @PreAuthorize("hasAuthority('EMPLOYEE')")
+    @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('ADMIN')")
     public Timeflip getTimeflipOfUser(User currentUser){
         return timeflipRepository.findTimeflipOfUser(currentUser);
-    }
-
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public void deleteTimeFlipOfUser(User user) {
-        Timeflip timeflip = timeflipRepository.findTimeflipOfUser(user);
-        if (timeflip != null) {
-            timeflip.setUser(null);
-            timeflipRepository.save(timeflip);
-            timeflipRepository.delete(timeflip);
-        }
-        logger.logDeletion(timeflip.getId(), user);
     }
 
     public List<Timeflip> getTimeflipsByUserPrefix(String userName) {
