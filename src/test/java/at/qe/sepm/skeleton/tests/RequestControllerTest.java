@@ -76,13 +76,14 @@ public class RequestControllerTest {
         calendar.set(2020, 9, 20);
         Date end = calendar.getTime();
 
-        Request request = requestService.addVacationRequest(userService.loadUser("user19"), start, end, "requesting vacation");
-        Assert.assertEquals(2,requestService.getOpenRequestsOfEmployee(userService.loadUser("user19")).size());
-        requestController.declineRequest(request);
+        Request request1 = requestService.addVacationRequest(userService.loadUser("user19"), start, end, "requesting vacation");
+        Request request2 = requestService.addTaskRequest(userService.loadUser("user19"), start.toInstant(), end.toInstant(), TaskEnum.KUNDENBESPRECHUNG, "changing tasks");
+        Assert.assertEquals(3,requestService.getOpenRequestsOfEmployee(userService.loadUser("user19")).size());
+        requestController.declineRequest(request1);
         Assert.assertEquals(2,requestService.getDeclinedRequestsOfEmployee(userService.loadUser("user19")).size());
-        requestController.deleteRequest(request);
+        requestController.deleteRequest(request1);
+        requestController.deleteRequest(request2);
         Assert.assertEquals(1,requestService.getOpenRequestsOfEmployee(userService.loadUser("user19")).size());
     }
-
 
 }

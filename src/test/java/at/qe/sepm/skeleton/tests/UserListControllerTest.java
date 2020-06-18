@@ -48,6 +48,15 @@ public class UserListControllerTest {
         userListController.setUserrole("Admin");
         Assert.assertEquals(1, userListController.getUsers().size());
         userListController.resetFilter();
+        userListController.setUserrole("Departmentleader");
+        Assert.assertEquals(6, userListController.getUsers().size());
+        userListController.resetFilter();
+        userListController.setUserrole("Teamleader");
+        Assert.assertEquals(12, userListController.getUsers().size());
+        userListController.resetFilter();
+        userListController.setUserrole("Employee");
+        Assert.assertEquals(35, userListController.getUsers().size());
+        userListController.resetFilter();
         Assert.assertEquals(36, userListController.getUsers().size());
     }
 
