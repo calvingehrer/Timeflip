@@ -40,14 +40,13 @@ public class TeamDetailController implements Serializable {
 
     private Set<User> removedEmployees = new HashSet<>();
 
+    public Team getTeam() {
+        return team;
+    }
 
     public void setTeam(Team team) {
         this.team = team;
         doReloadTeam();
-    }
-
-    public Team getTeam() {
-        return team;
     }
 
     public User getEmployeeAdd() {

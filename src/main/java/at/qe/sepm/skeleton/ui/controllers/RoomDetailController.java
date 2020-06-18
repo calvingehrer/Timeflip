@@ -25,12 +25,6 @@ public class RoomDetailController implements Serializable {
 
     private Room room;
 
-
-    public void setRoom(Room room) {
-        this.room = room;
-        doReloadRoom();
-    }
-
     /**
      * Returns the currently displayed room.
      *
@@ -38,6 +32,11 @@ public class RoomDetailController implements Serializable {
      */
     public Room getRoom() {
         return room;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
+        doReloadRoom();
     }
 
     /**

@@ -19,7 +19,6 @@ public class MailService {
 
     /**
      * sends mail to a specified address
-     *
      */
     private void sendMail(String toAddress, String subject, String text) {
         SimpleMailMessage message = new SimpleMailMessage();

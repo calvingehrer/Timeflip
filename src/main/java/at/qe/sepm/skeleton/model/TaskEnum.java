@@ -5,37 +5,27 @@ import java.util.List;
 
 /**
  * Enumeration of available Tasks.
- *
  */
 public enum TaskEnum {
 
-    KONZEPTION ("Konzeption"),
-    DESIGN ("Design"),
-    IMPLEMENTIERUNG ("Implementierung"),
-    TESTEN ("Testen"),
-    DOKUMENTATION  ("Dokumentation"),
-    FEHLERMANAGEMENT ("Fehlermanagement"),
-    MEETING ("Meeting"),
-    KUNDENBESPRECHUNG ("Kundenbesprechung"),
-    FORTBILDUNG ("Fortbildung"),
-    PROJEKTMANAGEMENT ("Projektmanagement"),
-    SONSTIGES ("Sonstiges"),
-    AUSZEIT ("Auszeit"),
-    NOT_DEFINED ("Not Defined");
+    KONZEPTION("Konzeption"),
+    DESIGN("Design"),
+    IMPLEMENTIERUNG("Implementierung"),
+    TESTEN("Testen"),
+    DOKUMENTATION("Dokumentation"),
+    FEHLERMANAGEMENT("Fehlermanagement"),
+    MEETING("Meeting"),
+    KUNDENBESPRECHUNG("Kundenbesprechung"),
+    FORTBILDUNG("Fortbildung"),
+    PROJEKTMANAGEMENT("Projektmanagement"),
+    SONSTIGES("Sonstiges"),
+    AUSZEIT("Auszeit"),
+    NOT_DEFINED("Not Defined");
 
     private final String description;
 
     TaskEnum(String description) {
         this.description = description;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    @Override
-    public String toString() {
-        return this.getDescription();
     }
 
     public static List<String> getAllTasks() {
@@ -54,6 +44,15 @@ public enum TaskEnum {
         tasks.add("AUSZEIT");
         tasks.add("NOT_DEFINED");
         return tasks;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public String toString() {
+        return this.getDescription();
     }
 
 }

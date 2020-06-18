@@ -65,6 +65,12 @@ public class User implements Persistable<String>, Serializable {
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
+    @Enumerated(EnumType.STRING)
+    private Interval intervall;
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
 
     public Set<Vacation> getVacations() {
         return vacations;
@@ -73,9 +79,6 @@ public class User implements Persistable<String>, Serializable {
     public void addVacation(Vacation vacation) {
         this.vacations.add(vacation);
     }
-
-    @Enumerated(EnumType.STRING)
-    private Interval intervall;
 
     public String getUsername() {
         return username;
@@ -165,10 +168,6 @@ public class User implements Persistable<String>, Serializable {
         this.updateDate = updateDate;
     }
 
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
-
     public Team getTeam() {
         return team;
     }
@@ -214,6 +213,9 @@ public class User implements Persistable<String>, Serializable {
         return getUsername();
     }
 
+    public void setId(String id) {
+        setUsername(id);
+    }
 
     public Interval getIntervall() {
         return intervall;
@@ -222,11 +224,6 @@ public class User implements Persistable<String>, Serializable {
     public void setIntervall(Interval intervall) {
         this.intervall = intervall;
     }
-
-    public void setId(String id) {
-        setUsername(id);
-    }
-
 
     @Override
     public boolean isNew() {

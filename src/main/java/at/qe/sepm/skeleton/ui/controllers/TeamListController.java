@@ -10,8 +10,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 
 @Component
 @Scope("view")
@@ -45,16 +43,14 @@ public class TeamListController implements Serializable {
     }
 
     /**
-     *
      * @return teams without department
      */
 
-    public Collection<Team> getTeamsWithoutDepartment(){
+    public Collection<Team> getTeamsWithoutDepartment() {
         return teamService.getTeamsWithoutDepartment();
     }
 
     /**
-     *
      * @return users without team
      */
 

@@ -1,6 +1,14 @@
 package at.qe.sepm.skeleton.rest;
 
-import at.qe.sepm.skeleton.model.*;
+import at.qe.sepm.skeleton.model.Task;
+import at.qe.sepm.skeleton.model.TaskEnum;
+import at.qe.sepm.skeleton.model.Timeflip;
+import at.qe.sepm.skeleton.model.User;
+import at.qe.sepm.skeleton.repositories.TaskRepository;
+import at.qe.sepm.skeleton.repositories.TimeflipRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,25 +17,15 @@ import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicLong;
 
-import at.qe.sepm.skeleton.repositories.TaskRepository;
-import at.qe.sepm.skeleton.repositories.TimeflipRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
 @Service
 public class HistoryService {
 
+    private static final AtomicLong ID_COUNTER = new AtomicLong(1);
+    private static final ConcurrentLinkedQueue<HistoryEntry> HISTORY_QUEUE = new ConcurrentLinkedQueue<>();
     @Autowired
     public TimeflipRepository timeflipRepository;
-
     @Autowired
     public TaskRepository taskRepository;
-
-    private static final AtomicLong ID_COUNTER = new AtomicLong(1);
-
-    private static final ConcurrentLinkedQueue<HistoryEntry> HISTORY_QUEUE = new ConcurrentLinkedQueue<>();
 
     /**
      * @return autoincremented ID
@@ -41,14 +39,14 @@ public class HistoryService {
      * Creates a HistoryEntry object and adds it to the HISTORY_QUEUE.
      *
      * @param macAddress the mac address of the TimeFlip device
-     * @param facet the facet of the HistoryEntry object
-     * @param start the start date of the HistoryEntry object
-     * @param end the end date of the HistoryEntry object
-     * @param seconds the deuration in seconds of the HistoryEntry object
+     * @param facet      the facet of the HistoryEntry object
+     * @param start      the start date of the HistoryEntry object
+     * @param end        the end date of the HistoryEntry object
+     * @param seconds    the deuration in seconds of the HistoryEntry object
      * @return the newly created HistoryEntry object
      */
     public HistoryEntry postHistoryObject(String macAddress, int facet, Date start, Date end, int seconds, int battery) {
-        if (!StringUtils.hasText(macAddress)){
+        if (!StringUtils.hasText(macAddress)) {
             throw new IllegalArgumentException("content must not be null or empty");
         }
 
@@ -98,33 +96,59 @@ public class HistoryService {
      * @param historyEntry
      * @return the created Task object
      */
-    public Task addAsTask(HistoryEntry historyEntry){
+    public Task addAsTask(HistoryEntry historyEntry) {
         Task task = new Task();
         Timeflip timeflip = timeflipRepository.findByMacAddress(historyEntry.getMacAddress());
-        if(timeflip != null){
+        if (timeflip != null) {
             User user = timeflip.getUser();
             timeflip.setBattery(historyEntry.getBattery());
-            if(user != null){
+            if (user != null) {
                 task.setTeam(user.getTeam());
                 task.setDepartment(user.getDepartment());
                 task.setUser(user);
             }
             int facet = historyEntry.getFacet();
 
-            switch (facet){
-                case 1: task.setTask(timeflip.getFacet1()); break;
-                case 2: task.setTask(timeflip.getFacet2()); break;
-                case 3: task.setTask(timeflip.getFacet3()); break;
-                case 4: task.setTask(timeflip.getFacet4()); break;
-                case 5: task.setTask(timeflip.getFacet5()); break;
-                case 6: task.setTask(timeflip.getFacet6()); break;
-                case 7: task.setTask(timeflip.getFacet7()); break;
-                case 8: task.setTask(timeflip.getFacet8()); break;
-                case 9: task.setTask(timeflip.getFacet9()); break;
-                case 10: task.setTask(timeflip.getFacet10()); break;
-                case 11: task.setTask(timeflip.getFacet11()); break;
-                case 12: task.setTask(timeflip.getFacet12()); break;
-                default: task.setTask(TaskEnum.NOT_DEFINED); break;
+            switch (facet) {
+                case 1:
+                    task.setTask(timeflip.getFacet1());
+                    break;
+                case 2:
+                    task.setTask(timeflip.getFacet2());
+                    break;
+                case 3:
+                    task.setTask(timeflip.getFacet3());
+                    break;
+                case 4:
+                    task.setTask(timeflip.getFacet4());
+                    break;
+                case 5:
+                    task.setTask(timeflip.getFacet5());
+                    break;
+                case 6:
+                    task.setTask(timeflip.getFacet6());
+                    break;
+                case 7:
+                    task.setTask(timeflip.getFacet7());
+                    break;
+                case 8:
+                    task.setTask(timeflip.getFacet8());
+                    break;
+                case 9:
+                    task.setTask(timeflip.getFacet9());
+                    break;
+                case 10:
+                    task.setTask(timeflip.getFacet10());
+                    break;
+                case 11:
+                    task.setTask(timeflip.getFacet11());
+                    break;
+                case 12:
+                    task.setTask(timeflip.getFacet12());
+                    break;
+                default:
+                    task.setTask(TaskEnum.NOT_DEFINED);
+                    break;
             }
         }
         task.setStartTime(historyEntry.getStart().toInstant());

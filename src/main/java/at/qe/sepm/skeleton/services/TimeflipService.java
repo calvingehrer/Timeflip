@@ -1,12 +1,13 @@
 package at.qe.sepm.skeleton.services;
 
 
-import at.qe.sepm.skeleton.model.*;
+import at.qe.sepm.skeleton.model.TaskEnum;
+import at.qe.sepm.skeleton.model.Timeflip;
+import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.TimeflipRepository;
 import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
@@ -21,18 +22,15 @@ public class TimeflipService {
 
     @Autowired
     TimeflipRepository timeflipRepository;
-
-
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public Timeflip getTimeFlipByAddress(String macAddress){
-        return timeflipRepository.findByMacAddress(macAddress);
-    }
-
     @Autowired
     private Logger<String, User> logger;
-
     @Autowired
     private UserService userService;
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Timeflip getTimeFlipByAddress(String macAddress) {
+        return timeflipRepository.findByMacAddress(macAddress);
+    }
 
     /**
      * A Function to get the current user
@@ -98,7 +96,7 @@ public class TimeflipService {
     }
 
     @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('ADMIN')")
-    public Timeflip getTimeflipOfUser(User currentUser){
+    public Timeflip getTimeflipOfUser(User currentUser) {
         return timeflipRepository.findTimeflipOfUser(currentUser);
     }
 

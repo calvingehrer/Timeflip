@@ -27,21 +27,15 @@ import java.util.stream.Collectors;
 public class VacationService {
 
     @Autowired
-    private Logger<String, User> logger;
-
-
-    @Autowired
     UserService userService;
-
     @Autowired
     UserRepository userRepository;
-
     @Autowired
     HolidayBean holidayBean;
-
     @Autowired
     TimeBean timeBean;
-
+    @Autowired
+    private Logger<String, User> logger;
 
     /**
      * Add a new Vacation
@@ -87,9 +81,9 @@ public class VacationService {
     /**
      * checks if the dates are valid
      *
-     * @param user that wants vacation
+     * @param user      that wants vacation
      * @param startDate of vacation
-     * @param endDate of vacation
+     * @param endDate   of vacation
      */
 
     public void checkVacationDates(User user, Instant startDate, Instant endDate) throws VacationException {

@@ -81,9 +81,9 @@ public class TaskService {
     }
 
     /**
-     * @param user that is wanted
+     * @param user  that is wanted
      * @param start of the date
-     * @param end of the date
+     * @param end   of the date
      * @return Map of all user task types between two Dates with duration of each task type
      */
 
@@ -95,9 +95,9 @@ public class TaskService {
     }
 
     /**
-     * @param team that is wanted
+     * @param team  that is wanted
      * @param start of the date
-     * @param end of the date
+     * @param end   of the date
      * @return Map of all team task types between two Dates with duration of each task type
      */
 
@@ -109,8 +109,8 @@ public class TaskService {
 
     /**
      * @param department that is wanted
-     * @param start of the date
-     * @param end of the date
+     * @param start      of the date
+     * @param end        of the date
      * @return Map of all department task types between two Dates with duration of each task type
      */
 
@@ -124,7 +124,7 @@ public class TaskService {
      * fills the list of task types with duration
      *
      * @param dailyTasks is empty HashMap
-     * @param tasks of user, team or department
+     * @param tasks      of user, team or department
      * @return filled list
      */
 
@@ -276,10 +276,10 @@ public class TaskService {
     /**
      * checks whether the hours and the minutes are correct
      *
-     * @param startHour of task
-     * @param endHour of task
+     * @param startHour   of task
+     * @param endHour     of task
      * @param startMinute of task
-     * @param endMinute of task
+     * @param endMinute   of task
      */
 
     public void checkTime(long startHour, long endHour, long startMinute, long endMinute) throws TaskException {

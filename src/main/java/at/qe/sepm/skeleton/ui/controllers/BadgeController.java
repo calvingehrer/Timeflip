@@ -27,6 +27,14 @@ public class BadgeController implements Serializable {
     private String badgeType = "";
     private Date chosenDate;
 
+    public static Calendar getWeekStart() {
+
+        Calendar lastWeek = Calendar.getInstance();
+        StatisticsController.setDayToBeginning(lastWeek);
+        lastWeek.getFirstDayOfWeek();
+        return lastWeek;
+    }
+
     public String getInterval() {
         return interval;
     }
@@ -106,14 +114,6 @@ public class BadgeController implements Serializable {
         Calendar lastWeek = getWeekStart();
         lastWeek.add(Calendar.DATE, -7);
         return badgeService.getAllBadgesAfterDate(lastWeek.toInstant());
-    }
-
-    public static Calendar getWeekStart() {
-
-        Calendar lastWeek = Calendar.getInstance();
-        StatisticsController.setDayToBeginning(lastWeek);
-        lastWeek.getFirstDayOfWeek();
-        return lastWeek;
     }
 
     public void resetFilter() {

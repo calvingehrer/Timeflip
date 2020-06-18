@@ -23,6 +23,14 @@ import java.util.Date;
 @Scope("view")
 public class ScheduleController implements Serializable {
     private LazyScheduleModel lazyEventModel;
+    @Autowired
+    private TimeBean timeBean;
+    @Autowired
+    private HolidayBean holidayBean;
+    @Autowired
+    private VacationService vacationService;
+    @Autowired
+    private UserService userService;
 
     public LazyScheduleModel getLazyEventModel() {
         return lazyEventModel;
@@ -31,18 +39,6 @@ public class ScheduleController implements Serializable {
     public void setLazyEventModel(LazyScheduleModel lazyEventModel) {
         this.lazyEventModel = lazyEventModel;
     }
-
-    @Autowired
-    private TimeBean timeBean;
-    @Autowired
-    private HolidayBean holidayBean;
-
-    @Autowired
-    private VacationService vacationService;
-
-    @Autowired
-    private UserService userService;
-
 
     /**
      * method to initialize the calendar with vacation and public holidays

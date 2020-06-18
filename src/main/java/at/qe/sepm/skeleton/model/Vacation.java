@@ -15,12 +15,10 @@ import java.util.Objects;
 @Embeddable
 public class Vacation implements Comparable<Vacation> {
 
+    public final static long MAX_VACATION_DAYS_PER_YEAR = 25;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    public final static long MAX_VACATION_DAYS_PER_YEAR = 25;
-
     private Instant start;
 
     private Instant end;

@@ -52,7 +52,6 @@ public class DepartmentService {
 
     /**
      * saves a new department
-     *
      */
 
 
@@ -137,7 +136,6 @@ public class DepartmentService {
 
     /**
      * find  teams of department
-     *
      */
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DEPARTMENTLEADER')")
@@ -147,7 +145,6 @@ public class DepartmentService {
 
     /**
      * find department leader
-     *
      */
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DEPARTMENTLEADER')")
     public User getDepartmentLeader(Department department) {
@@ -171,10 +168,10 @@ public class DepartmentService {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Set<Department> getByEmployee (String employee) {
+    public Set<Department> getByEmployee(String employee) {
         List<User> employees = userService.getAllUsersByUsername(employee);
         Set<Department> departments = new HashSet<>();
-        for(User e: employees) {
+        for (User e : employees) {
             if (e.getDepartment() != null)
                 departments.add(e.getDepartment());
         }

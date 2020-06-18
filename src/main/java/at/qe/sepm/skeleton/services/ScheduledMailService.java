@@ -27,11 +27,9 @@ import java.util.Map;
 @Component
 public class ScheduledMailService {
     @Autowired
-    private MailService mailService;
-
-    @Autowired
     TaskRepository taskRepository;
-
+    @Autowired
+    private MailService mailService;
     @Autowired
     private MailRepository mailRepository;
 

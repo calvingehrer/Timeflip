@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Set;
 
-public interface DepartmentRepository extends AbstractRepository<Department, String>{
+public interface DepartmentRepository extends AbstractRepository<Department, String> {
 
     Department findByDepartmentName(String departmentName);
 

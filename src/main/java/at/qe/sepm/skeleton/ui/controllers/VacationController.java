@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Controller
 @Scope("view")
@@ -31,21 +30,14 @@ import java.util.stream.Collectors;
 public class VacationController implements Serializable {
 
     private static final long serialVersionUID = 921418060697365626L;
-
-
-    @Autowired
-    private VacationService vacationService;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private RequestService requestService;
-
-
     @Autowired
     TimeBean timeBean;
-
+    @Autowired
+    private VacationService vacationService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private RequestService requestService;
     private Date beginVacation;
     private Date endOfVacation;
     private Set<Vacation> vacations;

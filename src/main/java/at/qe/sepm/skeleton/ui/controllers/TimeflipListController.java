@@ -16,21 +16,15 @@ import java.util.Collection;
 @Scope("view")
 public class TimeflipListController implements Serializable {
 
-    private Timeflip timeflip;
-
-    @Autowired
-    private TimeflipService timeflipService;
-
-    private String macAddress = "";
-    private String userName = "";
-
-
     @Autowired
     UserService userService;
-
     @Autowired
     ManageCurrentUserController manageCurrentUserController;
-
+    private Timeflip timeflip;
+    @Autowired
+    private TimeflipService timeflipService;
+    private String macAddress = "";
+    private String userName = "";
 
     public Timeflip getTimeflipOfUser() {
         return timeflipService.getTimeflipOfUser(userService.getAuthenticatedUser());
