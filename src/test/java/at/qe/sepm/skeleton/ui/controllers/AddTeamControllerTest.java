@@ -1,4 +1,4 @@
-package at.qe.sepm.skeleton.tests;
+package at.qe.sepm.skeleton.ui.controllers;
 
 import at.qe.sepm.skeleton.model.Department;
 import at.qe.sepm.skeleton.model.Team;

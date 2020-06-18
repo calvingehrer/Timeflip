@@ -1,4 +1,4 @@
-package at.qe.sepm.skeleton.tests;
+package at.qe.sepm.skeleton.ui.controllers;
 
 import at.qe.sepm.skeleton.model.Timeflip;
 import at.qe.sepm.skeleton.model.User;
@@ -48,8 +48,6 @@ public class AddTimeflipControllerTest {
         timeflip.setMacAddress("00:12:23:vf:as:7s");
 
         User user = userService.loadUser("user10");
-        //User user = new User();
-        //user.setUsername("testUser");
 
         Assert.assertEquals(11,timeflipService.getAllTimeflips().size());
 
