@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.time.ZoneId;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicLong;
@@ -27,9 +28,6 @@ public class HistoryService {
 
     @Autowired
     public TaskRepository taskRepository;
-
-    @Autowired
-    public TimeBean timeBean;
 
     private static final AtomicLong ID_COUNTER = new AtomicLong(1);
 
@@ -149,7 +147,7 @@ public class HistoryService {
                     break;
             }
         }
-        Calendar calendar = Calendar.getInstance(timeBean.getUtcTimeZone());
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(ZoneId.of("UTC")));
         calendar.setTime(historyEntry.getStart());
         task.setStartTime(calendar.toInstant());
         calendar.setTime(historyEntry.getEnd());

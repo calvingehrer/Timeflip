@@ -30,12 +30,15 @@ class TimeFlipServiceTest {
     private static final String CHARACTERISTIC_1_UUID = "f000aa11-0002-0000-0000-000000000000";
     private static final String CHARACTERISTIC_2_UUID = "0000aa12-0002-0000-0000-000000000000";
 
-
-    private BluetoothDevice bluetoothDevice = mock(BluetoothDevice.class);
-    private BluetoothGattService bluetoothGattService = mock(BluetoothGattService.class);
+    @Mock
+    private BluetoothDevice bluetoothDevice;
+    @Mock
+    private BluetoothGattService bluetoothGattService;
 
     @BeforeEach
     public void setUp() {
+        bluetoothDevice = mock(BluetoothDevice.class);
+        bluetoothGattService = mock(BluetoothGattService.class);
         when(bluetoothDevice.getAddress()).thenReturn(DEVICE_MAC);
         when(bluetoothDevice.getName()).thenReturn(NAME);
         when(bluetoothDevice.getConnected()).thenReturn(CONNECTED);
@@ -83,4 +86,6 @@ class TimeFlipServiceTest {
         assertEquals(CHARACTERISTIC_1_UUID, characteristic1.getUUID());
     }
 }
+
  */
+
