@@ -4,7 +4,6 @@ import at.qe.sepm.skeleton.model.Department;
 import at.qe.sepm.skeleton.model.Team;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.TeamService;
-import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -48,7 +47,7 @@ public class AddTeamController implements Serializable {
         this.team.setDepartment(this.department);
     }
 
-    public void addEmployee(){
+    public void addEmployee() {
         this.employees.add(this.employee);
     }
 
@@ -72,7 +71,7 @@ public class AddTeamController implements Serializable {
         return employee;
     }
 
-    public void setEmployee(User employee){
+    public void setEmployee(User employee) {
         this.employee = employee;
     }
 

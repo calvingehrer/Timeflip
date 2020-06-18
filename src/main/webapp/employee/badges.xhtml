@@ -49,22 +49,25 @@
 
                     <p:dataGrid id="myBadges" var="badge" value="#{badgeController.sortedBadgesOfUser}" columns="3">
 
-                    <p:panel header="#{badge.badgeType.toString()}" style="text-align:center">
-                        <h:panelGrid columns="1" style="width:100%">
-                            <h:graphicImage value="#{badge.imagePath}" width="200px" height="200px"/>
-                            <h:outputText value="#{timeBean.instantToDate(badge.dateOfBadge)}">
-                                <f:convertDateTime timeZone="#{timeBean.utcTimeZone}" pattern="dd.MM.yyyy"/>
-                            </h:outputText>
-                        </h:panelGrid>
-                    </p:panel>
+                        <p:panel header="#{badge.badgeType.toString()}" style="text-align:center">
+                            <h:panelGrid columns="1" style="width:100%">
+                                <h:graphicImage value="#{badge.imagePath}" width="200px" height="200px"/>
+                                <h:outputText value="#{timeBean.instantToDate(badge.dateOfBadge)}">
+                                    <f:convertDateTime timeZone="#{timeBean.utcTimeZone}" pattern="dd.MM.yyyy"/>
+                                </h:outputText>
+                            </h:panelGrid>
+                        </p:panel>
 
                     </p:dataGrid>
 
-                    <p:dialog header="Filter Tasks" id="filterBadgeDialog" widgetVar="filterBadgeDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                    <p:dialog header="Filter Tasks" id="filterBadgeDialog" widgetVar="filterBadgeDialog" modal="true"
+                              showEffect="fade" hideEffect="fade" resizable="false">
                         <h:form id="timeRange">
-                            <p:calendar id="startTimeRange" mode="inline" value="#{badgeController.chosenDate}" timeZone="#{timeBean.utcTimeZone}"/>
+                            <p:calendar id="startTimeRange" mode="inline" value="#{badgeController.chosenDate}"
+                                        timeZone="#{timeBean.utcTimeZone}"/>
 
-                            <p:commandButton value="Find" update="myBadges" oncomplete="PF('filterBadgeDialog').hide()"/>
+                            <p:commandButton value="Find" update="myBadges"
+                                             oncomplete="PF('filterBadgeDialog').hide()"/>
 
 
                         </h:form>
@@ -75,11 +78,7 @@
         </div>
 
 
-
-
-
     </ui:define>
-
 
 
 </ui:composition>

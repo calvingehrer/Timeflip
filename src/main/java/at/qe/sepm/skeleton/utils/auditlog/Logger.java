@@ -56,7 +56,6 @@ public interface Logger<T, C> {
      * Logs Logout of User
      *
      * @param objectIdentifier the name of the object
-     *
      */
     void logLogout(T objectIdentifier);
 

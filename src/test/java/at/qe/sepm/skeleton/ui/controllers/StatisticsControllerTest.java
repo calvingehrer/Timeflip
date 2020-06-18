@@ -9,14 +9,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.primefaces.model.chart.BarChartModel;
 import org.primefaces.model.chart.PieChartModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -24,8 +20,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Calendar;
 import java.util.Date;
-
-import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -50,7 +44,7 @@ public class StatisticsControllerTest {
     private UserService userService;
 
     @Before
-    public void initTestClass(){
+    public void initTestClass() {
         statisticsController = new StatisticsController();
 
         ReflectionTestUtils.setField(statisticsController, "taskService", taskService);
@@ -125,7 +119,6 @@ public class StatisticsControllerTest {
 
         Assert.assertNotEquals(oldMonthModel, statisticsController.getMonthDepartmentModel());
         Assert.assertNotEquals(oldBarChartModel, statisticsController.getMonthBarDepartmentModel());
-
     }
 
     @Test

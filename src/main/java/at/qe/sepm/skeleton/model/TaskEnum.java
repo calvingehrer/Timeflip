@@ -5,22 +5,21 @@ import java.util.List;
 
 /**
  * Enumeration of available Tasks.
- *
  */
 public enum TaskEnum {
 
-    KONZEPTION ("Konzeption"),
-    DESIGN ("Design"),
-    IMPLEMENTIERUNG ("Implementierung"),
-    TESTEN ("Testen"),
-    DOKUMENTATION  ("Dokumentation"),
-    FEHLERMANAGEMENT ("Fehlermanagement"),
-    MEETING ("Meeting"),
-    KUNDENBESPRECHUNG ("Kundenbesprechung"),
-    FORTBILDUNG ("Fortbildung"),
-    PROJEKTMANAGEMENT ("Projektmanagement"),
-    SONSTIGES ("Sonstiges"),
-    AUSZEIT ("Auszeit");
+    KONZEPTION("Konzeption"),
+    DESIGN("Design"),
+    IMPLEMENTIERUNG("Implementierung"),
+    TESTEN("Testen"),
+    DOKUMENTATION("Dokumentation"),
+    FEHLERMANAGEMENT("Fehlermanagement"),
+    MEETING("Meeting"),
+    KUNDENBESPRECHUNG("Kundenbesprechung"),
+    FORTBILDUNG("Fortbildung"),
+    PROJEKTMANAGEMENT("Projektmanagement"),
+    SONSTIGES("Sonstiges"),
+    AUSZEIT("Auszeit");
 
     private final String description;
 

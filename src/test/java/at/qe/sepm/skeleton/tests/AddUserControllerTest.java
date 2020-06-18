@@ -1,9 +1,10 @@
 package at.qe.sepm.skeleton.tests;
 
-import at.qe.sepm.skeleton.model.*;
-import at.qe.sepm.skeleton.services.*;
+import at.qe.sepm.skeleton.model.UserRole;
+import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.ui.controllers.AddUserController;
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class AddUserControllerTest {
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void add() {
-        Assert.assertEquals(36,userService.getAllUsers().size());
+        Assert.assertEquals(36, userService.getAllUsers().size());
         addUserController.add();
         Assert.assertEquals(36, userService.getAllUsers().size());
         addUserController.getUser().setUsername("testUser1");

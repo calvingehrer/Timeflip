@@ -1,16 +1,12 @@
 package at.qe.sepm.skeleton.tests;
 
-import at.qe.sepm.skeleton.model.Department;
 import at.qe.sepm.skeleton.model.Room;
-import at.qe.sepm.skeleton.model.User;
-import at.qe.sepm.skeleton.services.DepartmentService;
 import at.qe.sepm.skeleton.services.RoomService;
-import org.junit.*;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -22,7 +18,6 @@ class RoomServiceTest {
 
     @Autowired
     RoomService roomService;
-
 
 
     @Test
@@ -48,7 +43,7 @@ class RoomServiceTest {
         Assert.assertEquals(1, roomService.getRoomsWithoutRaspberry().size());
 
 
-}
+    }
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})

@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.time.Duration;
 import java.time.Instant;
@@ -46,6 +45,7 @@ public class VacationService {
 
     /**
      * Add a new Vacation
+     *
      * @param user
      * @param vacation
      */
@@ -86,6 +86,7 @@ public class VacationService {
 
     /**
      * checks if the dates are valid
+     *
      * @param user
      * @param startDate
      * @param endDate
@@ -135,8 +136,9 @@ public class VacationService {
 
     /**
      * check if the vacation falls into a public holiday as they do not count as vacation days
+     *
      * @param startDate start of vacation
-     * @param endDate end of vacation
+     * @param endDate   end of vacation
      * @return the amount of public holidays in the time frame
      */
 
@@ -149,7 +151,6 @@ public class VacationService {
         }
         return publicHolidays;
     }
-
 
 
 }

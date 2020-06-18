@@ -9,9 +9,10 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 @Component
 @Scope("application")
@@ -26,15 +27,15 @@ public class BadgeService {
     @Autowired
     private UserRepository userRepository;
 
-    public List<Badge> getAllBadgesFromUser(User user){
+    public List<Badge> getAllBadgesFromUser(User user) {
         return badgeRepository.findBadgesFromUser(user);
     }
 
-    public List<Badge> getAllBadgesFromDepartment(Department department){
+    public List<Badge> getAllBadgesFromDepartment(Department department) {
         return badgeRepository.findBadgesFromDepartment(department);
     }
 
-    public List<Badge> getAllBadgesAfterDate(Instant date){
+    public List<Badge> getAllBadgesAfterDate(Instant date) {
         return badgeRepository.findBadgesAfterDate(date);
     }
 
@@ -43,12 +44,11 @@ public class BadgeService {
     }
 
 
-
     /**
      * creates the Badges of the given period
      */
 
-    public void evaluateWeeklyBadges(Instant startDate, Instant endDate){
+    public void evaluateWeeklyBadges(Instant startDate, Instant endDate) {
 
         evaluateCodeMonkey(startDate, endDate);
         evaluateCreativeMind(startDate, endDate);
@@ -62,11 +62,12 @@ public class BadgeService {
 
     /**
      * creates Badge for the Code Monkey (Person with most Implementation Time) of the given period
+     *
      * @param startDate
      * @param endDate
      */
 
-    private void evaluateCodeMonkey(Instant startDate, Instant endDate){
+    private void evaluateCodeMonkey(Instant startDate, Instant endDate) {
         List<Task> implementationList;
 
         implementationList = taskRepository.findTypeTasksBetweenDates(TaskEnum.IMPLEMENTIERUNG, startDate, endDate);
@@ -74,7 +75,7 @@ public class BadgeService {
 
         String userWithMostSeconds = evaluateUserWithMostTime(implementationList);
 
-        if(userWithMostSeconds.isEmpty()){
+        if (userWithMostSeconds.isEmpty()) {
             return;
         }
 
@@ -90,18 +91,19 @@ public class BadgeService {
 
     /**
      * creates Badge for the Creative Mind (Person with most Design Time) of the given period
+     *
      * @param startDate
      * @param endDate
      */
 
-    private void evaluateCreativeMind(Instant startDate, Instant endDate){
+    private void evaluateCreativeMind(Instant startDate, Instant endDate) {
         List<Task> designList;
 
         designList = taskRepository.findTypeTasksBetweenDates(TaskEnum.DESIGN, startDate, endDate);
 
         String userWithMostSeconds = evaluateUserWithMostTime(designList);
 
-        if(userWithMostSeconds.isEmpty()){
+        if (userWithMostSeconds.isEmpty()) {
             return;
         }
 
@@ -116,21 +118,21 @@ public class BadgeService {
     }
 
 
-
     /**
      * creates Badge for the Friend and Helper (Person with most Customer Service Time) of the given period
+     *
      * @param startDate
      * @param endDate
      */
 
-    private void evaluateFriendAndHelper(Instant startDate, Instant endDate){
+    private void evaluateFriendAndHelper(Instant startDate, Instant endDate) {
         List<Task> customerServiceList;
 
         customerServiceList = taskRepository.findTypeTasksBetweenDates(TaskEnum.KUNDENBESPRECHUNG, startDate, endDate);
 
         String userWithMostSeconds = evaluateUserWithMostTime(customerServiceList);
 
-        if(userWithMostSeconds.isEmpty()){
+        if (userWithMostSeconds.isEmpty()) {
             return;
         }
 
@@ -154,22 +156,21 @@ public class BadgeService {
      * @param endDate
      */
 
-    private void evaluateAllRounder(Instant startDate, Instant endDate){
+    private void evaluateAllRounder(Instant startDate, Instant endDate) {
         List<Task> taskList;
 
         taskList = taskRepository.findTasksBetweenDates(startDate, endDate);
 
         HashMap<String, List<TaskEnum>> differentTasksPerUser = new HashMap<>();
 
-        for(Task entry : taskList){
+        for (Task entry : taskList) {
             String currentUserID = entry.getUser().getId();
-            if(!differentTasksPerUser.containsKey(currentUserID)){
+            if (!differentTasksPerUser.containsKey(currentUserID)) {
                 List<TaskEnum> differentTasks = new ArrayList<>();
                 differentTasks.add(entry.getTask());
                 differentTasksPerUser.put(currentUserID, differentTasks);
-            }
-            else{
-                if(!differentTasksPerUser.get(currentUserID).contains(entry.getTask())){
+            } else {
+                if (!differentTasksPerUser.get(currentUserID).contains(entry.getTask())) {
                     differentTasksPerUser.get(currentUserID).add(entry.getTask());
                 }
             }
@@ -177,16 +178,15 @@ public class BadgeService {
 
         String userWithMostDifferentTasks = "";
 
-        for(String userId : differentTasksPerUser.keySet()){
-            if(userWithMostDifferentTasks.isEmpty()){
+        for (String userId : differentTasksPerUser.keySet()) {
+            if (userWithMostDifferentTasks.isEmpty()) {
                 userWithMostDifferentTasks = userId;
-            }
-            else if(differentTasksPerUser.get(userId).size() > differentTasksPerUser.get(userWithMostDifferentTasks).size()){
+            } else if (differentTasksPerUser.get(userId).size() > differentTasksPerUser.get(userWithMostDifferentTasks).size()) {
                 userWithMostDifferentTasks = userId;
             }
         }
 
-        if(userWithMostDifferentTasks.isEmpty()){
+        if (userWithMostDifferentTasks.isEmpty()) {
             return;
         }
 
@@ -202,32 +202,33 @@ public class BadgeService {
 
     /**
      * creates Badge for the Night Owl (Person with most time during 20:00 and 6:00) of the given period
+     *
      * @param startDate
      * @param endDate
      */
 
-    private void evaluateNightOwl(Instant startDate, Instant endDate){
+    private void evaluateNightOwl(Instant startDate, Instant endDate) {
         List<Task> taskList;
 
         taskList = taskRepository.findTasksBetweenDates(startDate, endDate);
 
         List<Task> nightTasks = new ArrayList<>();
 
-        for(Task entry : taskList){
+        for (Task entry : taskList) {
             Integer hour = entry.getStartTime().atZone(ZoneOffset.UTC).getHour();
-            if(hour >= 20 || hour < 6 && entry.getTask() != TaskEnum.AUSZEIT){
+            if (hour >= 20 || hour < 6 && entry.getTask() != TaskEnum.AUSZEIT) {
                 nightTasks.add(entry);
             }
         }
 
-        if(nightTasks.isEmpty()){
+        if (nightTasks.isEmpty()) {
             return;
         }
 
 
         String userWithMostSeconds = evaluateUserWithMostTime(nightTasks);
 
-        if(userWithMostSeconds.isEmpty()){
+        if (userWithMostSeconds.isEmpty()) {
             return;
         }
 
@@ -243,18 +244,19 @@ public class BadgeService {
 
     /**
      * creates Badge for the Wisdom Seeker (Person with most Fortbildung Time) of the given period
+     *
      * @param startDate
      * @param endDate
      */
 
-    private void evaluateWisdomSeeker(Instant startDate, Instant endDate){
+    private void evaluateWisdomSeeker(Instant startDate, Instant endDate) {
         List<Task> educationList;
 
         educationList = taskRepository.findTypeTasksBetweenDates(TaskEnum.FORTBILDUNG, startDate, endDate);
 
         String userWithMostSeconds = evaluateUserWithMostTime(educationList);
 
-        if(userWithMostSeconds.isEmpty()){
+        if (userWithMostSeconds.isEmpty()) {
             return;
         }
 
@@ -270,6 +272,7 @@ public class BadgeService {
 
     /**
      * Help function for badges that have a specific taskTypeList and need to find user with most seconds; returns The userWithMostSeconds
+     *
      * @param taskTypeList
      * @return userWithMostSeconds
      */
@@ -278,12 +281,11 @@ public class BadgeService {
 
         HashMap<String, Integer> specificTaskTimePerUser = new HashMap<>();
 
-        for(Task entry : taskTypeList){
+        for (Task entry : taskTypeList) {
             String currentUserID = entry.getUser().getId();
-            if(!specificTaskTimePerUser.containsKey(currentUserID)){
+            if (!specificTaskTimePerUser.containsKey(currentUserID)) {
                 specificTaskTimePerUser.put(currentUserID, entry.getSeconds()); // maybe not username?
-            }
-            else{
+            } else {
                 specificTaskTimePerUser.put(currentUserID, specificTaskTimePerUser.get(currentUserID) + entry.getSeconds());
             }
 
@@ -291,11 +293,10 @@ public class BadgeService {
 
         String userWithMostSeconds = "";
 
-        for(String userId : specificTaskTimePerUser.keySet()){
-            if(userWithMostSeconds.isEmpty()){
+        for (String userId : specificTaskTimePerUser.keySet()) {
+            if (userWithMostSeconds.isEmpty()) {
                 userWithMostSeconds = userId;
-            }
-            else if(specificTaskTimePerUser.get(userId) > specificTaskTimePerUser.get(userWithMostSeconds)){
+            } else if (specificTaskTimePerUser.get(userId) > specificTaskTimePerUser.get(userWithMostSeconds)) {
                 userWithMostSeconds = userId;
             }
         }
@@ -306,36 +307,34 @@ public class BadgeService {
     public List<Badge> getBadgesOfType(User user, boolean isUser, String type) {
         BadgeEnum badgeType;
         switch (type) {
-            case("WEEKLY_CODE_MONKEY"):
+            case ("WEEKLY_CODE_MONKEY"):
                 badgeType = BadgeEnum.WEEKLY_CODE_MONKEY;
                 break;
-            case("ALL_ROUNDER"):
+            case ("ALL_ROUNDER"):
                 badgeType = BadgeEnum.ALL_ROUNDER;
                 break;
-            case("CREATIVE_MIND"):
+            case ("CREATIVE_MIND"):
                 badgeType = BadgeEnum.CREATIVE_MIND;
                 break;
-            case("FRIEND_AND_HELPER"):
+            case ("FRIEND_AND_HELPER"):
                 badgeType = BadgeEnum.FRIEND_AND_HELPER;
                 break;
-            case("NIGHT_OWL"):
+            case ("NIGHT_OWL"):
                 badgeType = BadgeEnum.NIGHT_OWL;
                 break;
-            case("WISDOM_SEEKER"):
+            case ("WISDOM_SEEKER"):
                 badgeType = BadgeEnum.WISDOM_SEEKER;
                 break;
             default:
                 if (isUser) {
                     return badgeRepository.findBadgesFromUser(user);
-                }
-                else {
+                } else {
                     return badgeRepository.findBadgesFromDepartment(user.getDepartment());
                 }
         }
-        if(isUser) {
+        if (isUser) {
             return badgeRepository.findBadgeFromUserByType(user, badgeType);
-        }
-        else {
+        } else {
             return badgeRepository.findBadgesFromDepartmentByType(user.getDepartment(), badgeType);
         }
     }
@@ -343,8 +342,7 @@ public class BadgeService {
     public List<Badge> getBadgesBetweenDates(User user, boolean forUser, Instant startDate, Instant endDate) {
         if (forUser) {
             return badgeRepository.findBadgesFromUserInInterval(user, startDate, endDate);
-        }
-        else {
+        } else {
             return badgeRepository.findBadgesFromDepartmentInIntervall(user.getDepartment(), startDate, endDate);
         }
     }

@@ -14,7 +14,8 @@
         <div class="ui-g">
             <div class="ui-g-12">
                 <div class="card">
-                    <p:growl id="growl" rendered="#{not facesContext.validationFailed}" severity="info" showDetail="true"/>
+                    <p:growl id="growl" rendered="#{not facesContext.validationFailed}" severity="info"
+                             showDetail="true"/>
 
                     <h1>User</h1>
 
@@ -33,7 +34,7 @@
                                 <p:inputText value="#{userListController.departmentname}"/>
                             </h:panelGrid>
                             <h:panelGrid columns="3">
-                                <p:outputLabel value="User Role: " />
+                                <p:outputLabel value="User Role: "/>
                                 <p:selectOneMenu value="#{userListController.userrole}">
                                     <f:selectItem itemLabel="All" itemValue=""/>
                                     <f:selectItem itemLabel="Admin" itemValue="Admin"/>
@@ -43,8 +44,10 @@
                                 </p:selectOneMenu>
                                 <p:commandButton value="Filter" update=":userForm"/>
                             </h:panelGrid>
-                            <p:commandButton value="Reset" action="#{userListController.resetFilter}" update=":selection :userForm:usersTable"/>
-                            <p:commandButton value="Add User" styleClass="addButton" oncomplete="PF('addUserDialog').show()" />
+                            <p:commandButton value="Reset" action="#{userListController.resetFilter}"
+                                             update=":selection :userForm:usersTable"/>
+                            <p:commandButton value="Add User" styleClass="addButton"
+                                             oncomplete="PF('addUserDialog').show()"/>
                         </h:panelGrid>
                     </h:form>
 
@@ -61,24 +64,28 @@
                                 <h:outputText value="#{user.lastName}"/>
                             </p:column>
                             <p:column headerText="Roles">
-                                <h:outputText value="#{user.roles}" />
+                                <h:outputText value="#{user.roles}"/>
                             </p:column>
                             <p:column headerText="Team">
-                                <h:outputText value="#{user.team}" />
+                                <h:outputText value="#{user.team}"/>
                             </p:column>
                             <p:column headerText="Department">
-                                <h:outputText value="#{user.department}" />
+                                <h:outputText value="#{user.department}"/>
                             </p:column>
                             <p:column headerText="Enabled">
                                 <h:selectBooleanCheckbox value="#{user.enabled}" disabled="true"/>
                             </p:column>
                             <p:column style="width:200px;text-align: center">
-                                <p:commandButton update=":userForm:userEditDialog" value="Edit" oncomplete="PF('userEditDialog').show()" icon="fa fa-fw fa-edit">
-                                    <f:setPropertyActionListener value="#{user}" target="#{userDetailController.user}" />
+                                <p:commandButton update=":userForm:userEditDialog" value="Edit"
+                                                 oncomplete="PF('userEditDialog').show()" icon="fa fa-fw fa-edit">
+                                    <f:setPropertyActionListener value="#{user}" target="#{userDetailController.user}"/>
                                 </p:commandButton>
-                                <p:commandButton action="#{userDetailController.doDeleteUser}" value="Delete" icon="fa fa-trash" title="Delete" update=":userForm:usersTable growl">
-                                    <f:setPropertyActionListener value="#{user}" target="#{userDetailController.user}" />
-                                    <p:confirm header="Confirmation" message="Are you sure that you want to delete this user? You cannot undo this operation." icon="fa fa-warning" />
+                                <p:commandButton action="#{userDetailController.doDeleteUser}" value="Delete"
+                                                 icon="fa fa-trash" title="Delete" update=":userForm:usersTable growl">
+                                    <f:setPropertyActionListener value="#{user}" target="#{userDetailController.user}"/>
+                                    <p:confirm header="Confirmation"
+                                               message="Are you sure that you want to delete this user? You cannot undo this operation."
+                                               icon="fa fa-warning"/>
                                 </p:commandButton>
                             </p:column>
                         </p:dataTable>
@@ -88,86 +95,97 @@
                                   hideEffect="fade" resizable="false">
                             <p:outputPanel id="userData" rendered="#{not empty userDetailController.user}">
                                 <h:panelGrid columns="2">
-                                    <p:outputLabel for="editUsername" value="Username: " />
-                                    <p:inputText id="editUsername" value="#{userDetailController.user.username}" disabled="true"/>
-                                    <p:outputLabel for="password" value="Password: " />
-                                    <p:password id="editPassword" value="#{userDetailController.user.password}" disabled="true"/>
+                                    <p:outputLabel for="editUsername" value="Username: "/>
+                                    <p:inputText id="editUsername" value="#{userDetailController.user.username}"
+                                                 disabled="true"/>
+                                    <p:outputLabel for="password" value="Password: "/>
+                                    <p:password id="editPassword" value="#{userDetailController.user.password}"
+                                                disabled="true"/>
                                 </h:panelGrid>
-                                <p:separator />
+                                <p:separator/>
                                 <h:panelGrid columns="2">
-                                    <p:outputLabel for="firstName" value="First Name: " />
+                                    <p:outputLabel for="firstName" value="First Name: "/>
                                     <p:inputText id="firstName" value="#{userDetailController.user.firstName}"/>
-                                    <p:outputLabel for="firstName" value="Last Name: " />
+                                    <p:outputLabel for="firstName" value="Last Name: "/>
                                     <p:inputText id="lastName" value="#{userDetailController.user.lastName}"/>
-                                    <p:outputLabel for="email" value="E-Mail: " />
+                                    <p:outputLabel for="email" value="E-Mail: "/>
                                     <p:inputText id="email" value="#{userDetailController.user.email}"/>
                                 </h:panelGrid>
-                                <p:separator />
+                                <p:separator/>
                                 <h:panelGrid columns="2">
-                                    <p:outputLabel for="enabled" value="Enabled: " />
+                                    <p:outputLabel for="enabled" value="Enabled: "/>
                                     <p:selectBooleanCheckbox id="enabled" value="#{userDetailController.user.enabled}"/>
                                 </h:panelGrid>
-                                <p:separator />
+                                <p:separator/>
                                 <h:panelGrid columns="3">
-                                    <p:commandButton value="Save" action="#{userDetailController.doSaveUser()}" oncomplete="PF('userEditDialog').hide()" update=":userForm:usersTable"/>
-                                    <p:commandButton value="Reload" action="#{userDetailController.doReloadUser()}" update=":userForm:userData"/>
+                                    <p:commandButton value="Save" action="#{userDetailController.doSaveUser()}"
+                                                     oncomplete="PF('userEditDialog').hide()"
+                                                     update=":userForm:usersTable"/>
+                                    <p:commandButton value="Reload" action="#{userDetailController.doReloadUser()}"
+                                                     update=":userForm:userData"/>
                                     <p:commandButton value="Abort" onclick="PF('userEditDialog').hide()"/>
                                 </h:panelGrid>
                             </p:outputPanel>
                         </p:dialog>
 
                         <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" width="300">
-                            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
-                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-close" />
+                            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes"
+                                             icon="fa fa-check"/>
+                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no"
+                                             icon="fa fa-close"/>
                         </p:confirmDialog>
 
                     </h:form>
 
-                    <p:dialog header="Add User" id="addUserDialog" widgetVar="addUserDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-                        <p:outputPanel>
-                            <h:form>
+                    <p:dialog header="Add User" id="addUserDialog" widgetVar="addUserDialog" modal="true"
+                              showEffect="fade" hideEffect="fade" resizable="false">
+                        <p:outputPanel id="AddUser">
+                            <h:form id="AddUserForm">
 
 
-                                <p:messages id="msgs" />
-                                <p:message for="username" display="icon" />
-                                <p:message for="password" display="icon" />
-                                <h:panelGrid columns="2">
-                                    <p:outputLabel for="username" value="Username: " />
-                                    <p:inputText id="username" value="#{addUserController.user.username}" required="true"/>
-                                    <p:outputLabel for="password" value="Password: " />
-                                    <p:password id="password" value="#{addUserController.user.password}" required="true"/>
+                                <p:growl id="growlAdd" rendered="#{not facesContext.validationFailed}"
+                                         showDetail="true"/>
+                                <h:panelGrid columns="2" id="usernamePw">
+                                    <p:outputLabel for="username" value="Username: "/>
+                                    <p:inputText id="username" value="#{addUserController.user.username}"
+                                                 required="true"/>
+                                    <p:outputLabel for="password" value="Password: "/>
+                                    <p:password id="password" value="#{addUserController.user.password}"
+                                                required="true"/>
                                 </h:panelGrid>
-                                <p:separator />
-                                <p:outputLabel value="Roles: " />
+                                <p:separator/>
+                                <p:outputLabel value="Roles: "/>
                                 <h:panelGrid columns="2">
                                     <p:selectBooleanCheckbox value="#{addUserController.admin}"/>
-                                    <p:outputLabel value="Admin" />
+                                    <p:outputLabel value="Admin"/>
                                     <p:selectBooleanCheckbox value="#{addUserController.departmentleader}"/>
-                                    <p:outputLabel value="Departmentleader" />
+                                    <p:outputLabel value="Departmentleader"/>
                                     <p:selectBooleanCheckbox value="#{addUserController.teamleader}"/>
-                                    <p:outputLabel value="Teamleader" />
+                                    <p:outputLabel value="Teamleader"/>
                                     <p:selectBooleanCheckbox value="#{addUserController.employee}"/>
-                                    <p:outputLabel value="Employee" />
+                                    <p:outputLabel value="Employee"/>
                                 </h:panelGrid>
-                                <p:separator />
+                                <p:separator/>
                                 <h:panelGrid columns="2">
-                                    <p:outputLabel value="First Name: " />
+                                    <p:outputLabel value="First Name: "/>
                                     <p:inputText value="#{addUserController.user.firstName}" required="true">
-                                    <f:validateLength minimum="2" />
+                                        <f:validateLength minimum="2"/>
                                     </p:inputText>
-                                    <p:outputLabel value="Last Name: " />
-                                    <p:inputText value="#{addUserController.user.lastName}"/>
-                                    <p:outputLabel value="E-Mail: " />
+                                    <p:outputLabel value="Last Name: "/>
+                                    <p:inputText value="#{addUserController.user.lastName}" required="true"/>
+                                    <p:outputLabel value="E-Mail: "/>
                                     <p:inputText value="#{addUserController.user.email}"/>
                                 </h:panelGrid>
-                                <p:separator />
+                                <p:separator/>
                                 <h:panelGrid columns="2">
-                                    <p:outputLabel value="Enabled: " />
+                                    <p:outputLabel value="Enabled: "/>
                                     <p:selectBooleanCheckbox value="#{addUserController.user.enabled}"/>
                                 </h:panelGrid>
-                                <p:separator />
+                                <p:separator/>
                                 <h:panelGrid columns="2">
-                                    <p:commandButton update="@form :userForm:usersTable" value="Add" action="#{addUserController.add}" oncomplete="(msgs.messageOccured)? PF('addUserDialog').show(): PF('addUserDialog').hide()" />
+                                    <p:commandButton update="@form :userForm:usersTable" value="Add"
+                                                     action="#{addUserController.add}"
+                                                     oncomplete="(growlAdd.messageOccured)? PF('addUserDialog').show(): PF('addUserDialog').hide()"/>
                                     <p:commandButton value="Abort" type="reset" onclick="PF('addUserDialog').hide()"/>
                                 </h:panelGrid>
                             </h:form>

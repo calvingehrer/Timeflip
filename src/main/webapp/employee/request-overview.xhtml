@@ -1,7 +1,7 @@
 <ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:h="http://java.sun.com/jsf/html"
-                xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns="http://www.w3.org/1999/xhtml"
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="title">Requests</ui:define>
@@ -39,7 +39,8 @@
                         </p:column>
 
                         <p:column style="width:200px;text-align: center">
-                            <p:commandButton update=":acceptedRequestsTable" action="#{requestController.deleteRequest(acceptedRequest)}"
+                            <p:commandButton update=":acceptedRequestsTable"
+                                             action="#{requestController.deleteRequest(acceptedRequest)}"
                                              value="Delete" icon="fa fa-trash" title="Delete"/>
 
                         </p:column>
@@ -55,11 +56,11 @@
                         </p:column>
 
                         <p:column style="width:200px;text-align: center">
-                            <p:commandButton update=":declinedRequestsTable" action="#{requestController.deleteRequest(declinedRequest)}"
+                            <p:commandButton update=":declinedRequestsTable"
+                                             action="#{requestController.deleteRequest(declinedRequest)}"
                                              value="Delete" icon="fa fa-trash" title="Delete"/>
                         </p:column>
                     </p:dataTable>
-
 
 
                 </div>

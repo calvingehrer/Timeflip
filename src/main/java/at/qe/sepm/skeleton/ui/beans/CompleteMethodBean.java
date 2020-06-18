@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 public class CompleteMethodBean {
     /**
      * method to complete the tasks on the ui so it is easier to choose from them
+     *
      * @param query
      * @return
      */
@@ -28,6 +29,7 @@ public class CompleteMethodBean {
 
     /**
      * method to complete the intervals
+     *
      * @param query
      * @return
      */

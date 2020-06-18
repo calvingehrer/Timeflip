@@ -1,14 +1,11 @@
 package at.qe.sepm.skeleton.model;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
 public enum RequestEnum {
 
-    ACCEPTED ("Accepted"),
-    DECLINED ("Declined"),
-    OPEN ("Open");
+    ACCEPTED("Accepted"),
+    DECLINED("Declined"),
+    OPEN("Open");
 
     private final String description;
 

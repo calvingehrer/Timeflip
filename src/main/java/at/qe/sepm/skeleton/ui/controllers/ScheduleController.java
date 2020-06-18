@@ -21,7 +21,6 @@ import java.time.Instant;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Set;
 
 @Component
 @Scope("view")
@@ -80,11 +79,11 @@ public class ScheduleController implements Serializable {
                     addEvent(new DefaultScheduleEvent("Vacation", startVacation, endVacation, f));
                 });
 
-                Collection<Holiday> holidays =  holidayBean.getPublicHolidays(timeBean.getYearOfInstant(startInstant));
+                Collection<Holiday> holidays = holidayBean.getPublicHolidays(timeBean.getYearOfInstant(startInstant));
                 if (!timeBean.getYearOfInstant(startInstant).equals(timeBean.getYearOfInstant(endInstant))) {
                     holidays.addAll(holidayBean.getPublicHolidays(timeBean.getYearOfInstant(endInstant)));
                 }
-                holidays.forEach(h ->{
+                holidays.forEach(h -> {
                     Calendar calendar = Calendar.getInstance(timeBean.getUtcTimeZone());
                     calendar.setTime(h.getDate().toDate());
                     calendar.add(Calendar.DATE, 1);

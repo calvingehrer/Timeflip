@@ -13,7 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -37,9 +36,8 @@ public class RoomService {
     private Logger<String, User> logger;
 
 
-
     @PreAuthorize("hasAuthority('ADMIN')")
-    public List<Room> getAllRooms(){
+    public List<Room> getAllRooms() {
         return roomRepository.findAll();
     }
 
@@ -50,8 +48,8 @@ public class RoomService {
 
         List<Room> roomsToRemove = new ArrayList<>();
 
-        for(Room room : rooms){
-            if(room.getRaspberry() != null){
+        for (Room room : rooms) {
+            if (room.getRaspberry() != null) {
                 roomsToRemove.add(room);
             }
         }
@@ -91,6 +89,7 @@ public class RoomService {
     /**
      * Deletes the room.
      * if it is equipped it deletes the raspberry as well
+     *
      * @param room the room to delete
      */
     @PreAuthorize("hasAuthority('ADMIN')")

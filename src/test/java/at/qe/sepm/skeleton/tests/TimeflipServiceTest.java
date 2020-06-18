@@ -1,19 +1,16 @@
 package at.qe.sepm.skeleton.tests;
 
-import at.qe.sepm.skeleton.model.*;
-
+import at.qe.sepm.skeleton.model.Timeflip;
 import at.qe.sepm.skeleton.services.TimeflipService;
 import at.qe.sepm.skeleton.services.UserService;
-import org.junit.*;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -78,7 +75,7 @@ class TimeflipServiceTest {
     @Test
     @WithMockUser(username = "employee", authorities = {"EMPLOYEE"})
     void loadTimeflip() {
-        Assert.assertEquals("00:80:41:ae:fd:7e",timeflipService.loadTimeflip("00:80:41:ae:fd:7e").getId() );
+        Assert.assertEquals("00:80:41:ae:fd:7e", timeflipService.loadTimeflip("00:80:41:ae:fd:7e").getId());
     }
 
     /*

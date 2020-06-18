@@ -1,11 +1,12 @@
 package at.qe.sepm.skeleton.tests;
 
-import at.qe.sepm.skeleton.model.*;
-import at.qe.sepm.skeleton.services.*;
-import at.qe.sepm.skeleton.ui.controllers.AddDepartmentController;
-import at.qe.sepm.skeleton.ui.controllers.AddTeamController;
+import at.qe.sepm.skeleton.model.Timeflip;
+import at.qe.sepm.skeleton.model.User;
+import at.qe.sepm.skeleton.services.TimeflipService;
+import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.ui.controllers.AddTimeflipController;
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
