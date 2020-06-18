@@ -117,5 +117,9 @@ public class TimeflipService {
         logger.logDeletion(timeflip.getId(), user);
     }
 
+    public List<Timeflip> getTimeflipsByUserPrefix(String userName) {
+        return timeflipRepository.findTimflipsByUserPrefix(userName);
+    }
+
 
 }
