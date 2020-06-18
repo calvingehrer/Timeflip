@@ -56,11 +56,28 @@ public class StatisticsControllerTest {
 
     @Test
     @WithMockUser(username = "user2", authorities = {"DEPARTMENTLEADER"})
-    public void init() {
+    public void initDepartmentLeader() {
         statisticsController.init();
         Assert.assertTrue(statisticsController.getTodayUserModel().isFill());
         Assert.assertFalse(statisticsController.getTeamsOfCurrentDepartment().isEmpty());
         Assert.assertTrue(statisticsController.getMonthDepartmentModel().isFill());
+    }
+
+    @Test
+    @WithMockUser(username = "user10", authorities = {"TEAMLEADER"})
+    public void initTeamLeader() {
+        statisticsController.init();
+        Assert.assertTrue(statisticsController.getTodayUserModel().isFill());
+        Assert.assertTrue(statisticsController.getWeekTeamModel().isFill());
+    }
+
+    @Test
+    @WithMockUser(username = "user30", authorities = {"EMPLOYEE"})
+    public void initEmployee() {
+        statisticsController.init();
+        Assert.assertTrue(statisticsController.getTodayUserModel().isFill());
+        Assert.assertTrue(statisticsController.getWeekUserModel().isFill());
+        Assert.assertTrue(statisticsController.getMonthUserModel().isFill());
     }
 
     @Test

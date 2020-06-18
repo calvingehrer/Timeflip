@@ -33,7 +33,7 @@ public class RequestService {
     private Logger<String, User> logger;
 
 
-    public void addRequest(Request request, User requester, String message) {
+    public Request addRequest(Request request, User requester, String message) {
         User requestHandler1 = userService.getTeamLeader(requester.getTeam());
         if (requester.equals(requestHandler1)) {
             requestHandler1 = null;
@@ -45,26 +45,27 @@ public class RequestService {
         request.setRequestHandlerTeamLeader(requestHandler1);
         request.setRequestHandlerDepartmentLeader(requestHandler2);
         request.setCreateDate(new Date());
-        requestRepository.save(request);
+        Request r = requestRepository.save(request);
         logger.logCreation(request.getDescription(), requester);
+        return r;
     }
 
 
-    public void addTaskRequest(User requester, Instant requestedStartDate, Instant requestedEndDate, TaskEnum type, String message) {
+    public Request addTaskRequest(User requester, Instant requestedStartDate, Instant requestedEndDate, TaskEnum type, String message) {
         TaskRequest r = new TaskRequest();
         r.setRequestedStartDate(requestedStartDate);
         r.setRequestedEndDate(requestedEndDate);
         r.setTaskType(type);
-        addRequest(r, requester, message);
+        r = (TaskRequest) addRequest(r, requester, message);
         String pattern = "MM-dd-yyyy HH,mm";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         String startDate = simpleDateFormat.format(timeBean.instantToDate(requestedStartDate));
         String endDate = simpleDateFormat.format(timeBean.instantToDate(requestedEndDate));
         mailService.sendEmailTo(requester, "Request sent", "Your request to change the time between " + startDate + " and " + endDate + " to " + type.toString() + " has been sent.");
-
+        return r;
     }
 
-    public void addVacationRequest(User requester, Date requestedStartDate, Date requestedEndDate, String message) {
+    public Request addVacationRequest(User requester, Date requestedStartDate, Date requestedEndDate, String message) {
         VacationRequest r = new VacationRequest();
         String pattern = "MM-dd-yyyy";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
@@ -72,9 +73,9 @@ public class RequestService {
         String endDate = simpleDateFormat.format(requestedEndDate);
         r.setRequestedStartDate(requestedStartDate);
         r.setRequestedEndDate(requestedEndDate);
-        addRequest(r, requester, message);
+        r = (VacationRequest) addRequest(r, requester, message);
         mailService.sendEmailTo(requester, "Request sent", "Your request to take a vacation from  " + startDate + " to  " + endDate + " has been sent.");
-
+        return r;
     }
 
     @PreAuthorize("hasAuthority('TEAMLEADER') or hasAuthority('DEPARTMENTLEADER')")
@@ -114,6 +115,8 @@ public class RequestService {
         requestRepository.delete(request);
         logger.logDeletion(request.getDescription(), userService.getAuthenticatedUser());
     }
+
+
 
 
 }

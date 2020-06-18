@@ -37,16 +37,16 @@ public class UserListController implements Serializable {
      *
      */
     public Collection<User> getUsers() {
-        if (!username.equals("")) {
-            return userService.getAllUsersByUsername(username);
+        if (!this.getUsername().equals("")) {
+            return userService.getAllUsersByUsername(this.getUsername());
         }
-        if (!teamname.equals("")) {
-            return userService.getAllUsersOfTeamByTeamname(teamname);
+        if (!this.getTeamname().equals("")) {
+            return userService.getAllUsersOfTeamByTeamname(this.getTeamname());
         }
-        if (!departmentname.equals("")) {
-            return userService.getAllUsersOfDepartmentByDepartmentname(departmentname);
+        if (!this.getDepartmentname().equals("")) {
+            return userService.getAllUsersOfDepartmentByDepartmentname(this.getDepartmentname());
         }
-        return userService.getAllUsersByRole(userrole);
+        return userService.getAllUsersByRole(this.getUserrole());
     }
 
 
@@ -85,6 +85,8 @@ public class UserListController implements Serializable {
     public void resetFilter() {
         this.username = "";
         this.userrole = "";
+        this.teamname = "";
+        this.departmentname = "";
     }
 
     public String getUserrole() {

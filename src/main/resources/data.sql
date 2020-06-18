@@ -223,3 +223,7 @@ INSERT IGNORE INTO timeflip (MAC_ADDRESS, CREATE_DATE, CREATE_USER_USERNAME, RAS
 INSERT IGNORE INTO timeflip (MAC_ADDRESS, CREATE_DATE, CREATE_USER_USERNAME, RASPBERRY_RASPBERRY_ID) VALUES ('00:82:44:ae:fd:8e', '2020-05-15 15:30:14', 'admin', 5)
 INSERT IGNORE INTO timeflip (MAC_ADDRESS, CREATE_DATE, CREATE_USER_USERNAME, RASPBERRY_RASPBERRY_ID) VALUES ('00:81:44:ae:fd:8e', '2020-05-15 15:30:14', 'admin', 5)
 INSERT IGNORE INTO timeflip (MAC_ADDRESS, USER_ID, CREATE_DATE, CREATE_USER_USERNAME, RASPBERRY_RASPBERRY_ID) VALUES ('0C:61:CF:C7:CE:20', 'admin', '2020-05-15 15:30:14', 'admin', 1)
+
+INSERT IGNORE INTO request (request_id, request_type, requester, request_handler_tl, request_handler_dl, requested_start_date, requested_end_date, status) VALUES (1, 2, 'user19', 'user7', 'user2', '2020-07-15 00:00:00', '2020-07-20 00:00:00', 'OPEN')
+INSERT IGNORE INTO request (request_id, request_type, requester, request_handler_tl, request_handler_dl, requested_start_date, requested_end_date, status) VALUES (2, 2, 'user19', 'user7', 'user2', '2020-08-15 00:00:00', '2020-08-20 00:00:00', 'ACCEPTED')
+INSERT IGNORE INTO request (request_id, request_type, requester, request_handler_tl, request_handler_dl, requested_start_date, requested_end_date, status) VALUES (3, 2, 'user19', 'user7', 'user2', '2020-06-15 00:00:00', '2020-06-20 00:00:00', 'DECLINED')

@@ -36,6 +36,28 @@ public class UserListControllerTest {
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void getUsers() {
         Assert.assertEquals(36, userListController.getUsers().size());
+        userListController.setUsername("user");
+        Assert.assertEquals(34, userListController.getUsers().size());
+        userListController.resetFilter();
+        userListController.setTeamname("Top");
+        Assert.assertEquals(3, userListController.getUsers().size());
+        userListController.resetFilter();
+        userListController.setDepartmentname("IT");
+        Assert.assertEquals(6, userListController.getUsers().size());
+        userListController.resetFilter();
+        userListController.setUserrole("Admin");
+        Assert.assertEquals(1, userListController.getUsers().size());
+        userListController.resetFilter();
+        userListController.setUserrole("Departmentleader");
+        Assert.assertEquals(6, userListController.getUsers().size());
+        userListController.resetFilter();
+        userListController.setUserrole("Teamleader");
+        Assert.assertEquals(12, userListController.getUsers().size());
+        userListController.resetFilter();
+        userListController.setUserrole("Employee");
+        Assert.assertEquals(35, userListController.getUsers().size());
+        userListController.resetFilter();
+        Assert.assertEquals(36, userListController.getUsers().size());
     }
 
     @Test
