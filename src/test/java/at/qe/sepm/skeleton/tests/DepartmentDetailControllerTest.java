@@ -55,11 +55,11 @@ public class DepartmentDetailControllerTest {
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void doSaveDepartment() {
-        Department department = departmentService.loadDepartment("Management");
+        Department department = departmentService.loadDepartment("IT");
         departmentDetailController.setDepartment(department);
-        Team team = teamService.loadTeam("Top-Management");
+        Team team = teamService.loadTeam("Network & Security");
         Assert.assertEquals(2,teamService.getTeamsOfDepartment(department).size());
-        User oldLeader = userService.loadUser("user1");
+        User oldLeader = userService.loadUser("user3");
         Assert.assertEquals(oldLeader, userService.getDepartmentLeader(department));
 
 
@@ -70,7 +70,7 @@ public class DepartmentDetailControllerTest {
         departmentDetailController.replaceLeader();
         departmentDetailController.doSaveDepartment();
 
-        oldLeader = userService.loadUser("user1");
+        oldLeader = userService.loadUser("user3");
         newLeader = userService.loadUser("user34");
         Assert.assertEquals(1,teamService.getTeamsOfDepartment(department).size());
         Assert.assertNull(oldLeader.getDepartment());
@@ -79,18 +79,12 @@ public class DepartmentDetailControllerTest {
 
         departmentDetailController.setAddedTeam(team);
         departmentDetailController.addTeam();
-        newLeader = userService.loadUser("user1");
+        newLeader = userService.loadUser("user3");
         oldLeader = userService.loadUser("user34");
         departmentDetailController.setNewLeader(newLeader);
         departmentDetailController.replaceLeader();
         departmentDetailController.doSaveDepartment();
         Assert.assertEquals(2, teamService.getTeamsOfDepartment(department).size());
-    }
-
-    @Test
-    @WithMockUser(username = "admin", authorities = {"ADMIN"})
-    public void doDeleteDepartment() {
-
     }
 
     @Test
@@ -115,6 +109,8 @@ public class DepartmentDetailControllerTest {
         departmentDetailController.setAddedTeam(team2);
         departmentDetailController.addTeam();
         departmentDetailController.doSaveDepartment();
+        Assert.assertEquals(2, teamService.getTeamsOfDepartment(department).size());
+
     }
 
     @Test

@@ -84,22 +84,22 @@ public class TeamDetailControllerTest {
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void doSaveTeam() {
+        User newLeader = userService.loadUser("user33");
         User oldLeader = userService.loadUser("user7");
         Team team = teamService.loadTeam("Coordination & Controll");
         Assert.assertEquals(oldLeader, userService.getTeamLeader(team));
 
 
         teamDetailController.setTeam(team);
-        User newLeader = userService.loadUser("user33");
         teamDetailController.setNewLeader(newLeader);
         teamDetailController.replaceLeader();
         teamDetailController.doSaveTeam();
-        Assert.assertEquals(newLeader, userService.getTeamLeader(team));
+        newLeader = userService.loadUser("user33");
         oldLeader = userService.loadUser("user7");
+        Assert.assertEquals(newLeader, userService.getTeamLeader(team));
         Assert.assertNull(oldLeader.getDepartment());
 
-
-        teamDetailController.setNewLeader(newLeader);
+        teamDetailController.setNewLeader(oldLeader);
         teamDetailController.replaceLeader();
         teamDetailController.doSaveTeam();
 

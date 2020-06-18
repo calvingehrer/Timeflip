@@ -35,9 +35,6 @@ class TeamServiceTest{
     @Autowired
     DepartmentService departmentService;
 
-    //@Autowired
-    TeamDetailController teamDetailController = new TeamDetailController();
-
 
 
 
@@ -54,8 +51,6 @@ class TeamServiceTest{
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     void saveTeam() {
-
-
         Team testTeam = teamService.loadTeam("Top-Management");
         Assert.assertEquals("Management", testTeam.getDepartment().getDepartmentName());
 
@@ -63,6 +58,8 @@ class TeamServiceTest{
         teamService.saveTeam(null,null,testTeam);
         Assert.assertEquals("Accounting", testTeam.getDepartment().getDepartmentName());
         Assert.assertEquals(10, teamService.getAllTeams().size(), 0);
+        testTeam.setDepartment(departmentService.loadDepartment("Management"));
+        teamService.saveTeam(null,null,testTeam);
     }
 
     @Test
