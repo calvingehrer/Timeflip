@@ -68,7 +68,7 @@
                 <p:growl id="growlAdd" rendered="#{not facesContext.validationFailed}" showDetail="true"/>
 
 
-                <p:panelGrid layout="grid" columns="3">
+                <p:panelGrid layout="grid" columns="2">
                     <h:outputText value="Select the start of the vacation"/>
                     <h:outputText value="Select the end of the vacation"/>
 
@@ -80,7 +80,7 @@
                                 timeZone="#{timeBean.getUtcTimeZone()}" required="true"/>
 
                     <p:commandButton value="Request" action="#{vacationController.addVacation}"
-                                     oncomplete="(growlAdd.messageOccured)? PF('addVacationDialog').show(): PF('addVacationDialog').hide()"
+                                     oncomplete="PF('addVacationDialog').hide()"
                                      update="vacationListForm growl"/>
                 </p:panelGrid>
             </h:form>

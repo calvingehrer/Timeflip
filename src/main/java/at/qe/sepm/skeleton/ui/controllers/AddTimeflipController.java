@@ -18,7 +18,7 @@ public class AddTimeflipController implements Serializable {
     @Autowired
     private TimeflipService timeflipService;
 
-    private Timeflip timeflip = new Timeflip();
+    private Timeflip timeflip;
 
     private User user;
 

@@ -216,7 +216,7 @@
                                 <h:panelGrid columns="2">
                                     <p:commandButton update="@form :departmentForm:DepartmentTable" value="Add"
                                                      action="#{addDepartmentController.add}"
-                                                     oncomplete="(growlAdd.messageOccured)? PF('addDepartmentDialog').show(): PF('addDepartmentDialog').hide()"/>
+                                                     oncomplete="PF('addDepartmentDialog').hide()"/>
                                     <p:commandButton value="Abort" type="reset"
                                                      onclick="PF('addDepartmentDialog').hide()"/>
                                 </h:panelGrid>

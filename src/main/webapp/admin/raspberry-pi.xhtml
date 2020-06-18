@@ -80,7 +80,7 @@
                                 <h:panelGrid columns="2">
                                     <p:commandButton update="@form :raspberryForm:raspberryTable" value="Add"
                                                      action="#{addRaspberryController.add}"
-                                                     oncomplete="(growlAdd.messageOccured)? PF('addRaspberryDialog').show(): PF('addRaspberryDialog').hide()"/>
+                                                     oncomplete="PF('addRaspberryDialog').hide()"/>
                                     <p:commandButton value="Abort" type="reset"
                                                      onclick="PF('addRaspberryDialog').hide()"/>
                                 </h:panelGrid>

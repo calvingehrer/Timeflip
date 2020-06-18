@@ -44,6 +44,10 @@ public class Timeflip implements Persistable<String>, Serializable {
         this.tasks = tasks;
     }
 
+    public List<TaskEnum> getTaskValues() {
+        return new ArrayList<TaskEnum>(tasks.values());
+    }
+
     @Override
     public String getId() {
         return getMacAddress();
@@ -83,6 +87,10 @@ public class Timeflip implements Persistable<String>, Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
     }
 
     public void setCreateDate(Date createDate) {

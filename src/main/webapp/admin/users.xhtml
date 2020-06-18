@@ -185,7 +185,7 @@
                                 <h:panelGrid columns="2">
                                     <p:commandButton update="@form :userForm:usersTable" value="Add"
                                                      action="#{addUserController.add}"
-                                                     oncomplete="(growlAdd.messageOccured)? PF('addUserDialog').show(): PF('addUserDialog').hide()"/>
+                                                     oncomplete="PF('addUserDialog').hide()"/>
                                     <p:commandButton value="Abort" type="reset" onclick="PF('addUserDialog').hide()"/>
                                 </h:panelGrid>
                             </h:form>

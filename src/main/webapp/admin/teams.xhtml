@@ -249,7 +249,7 @@
                                 <h:panelGrid columns="2">
                                     <p:commandButton update="@form :teamForm:TeamTable" value="Add"
                                                      action="#{addTeamController.add}"
-                                                     oncomplete="(growlAdd.messageOccured)? PF('addTeamDialog').show(): PF('addTeamDialog').hide()"/>
+                                                     oncomplete="PF('addTeamDialog').hide()"/>
                                     <p:commandButton value="Abort" type="reset" onclick="PF('addTeamDialog').hide()"/>
                                 </h:panelGrid>
                             </h:form>

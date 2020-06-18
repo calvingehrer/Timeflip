@@ -163,7 +163,7 @@
                                 <h:panelGrid columns="2">
                                     <p:commandButton update="@form :timeflipForm:TimeflipTable" value="Add"
                                                      action="#{addTimeflipController.add}"
-                                                     oncomplete="(growlAdd.messageOccured)? PF('addTimeflipDialog').show(): PF('addTimeflipDialog').hide()"/>
+                                                     oncomplete="PF('addTimeflipDialog').hide()"/>
                                     <p:commandButton value="Abort" type="reset"
                                                      onclick="PF('addTimeflipDialog').hide()"/>
                                 </h:panelGrid>
