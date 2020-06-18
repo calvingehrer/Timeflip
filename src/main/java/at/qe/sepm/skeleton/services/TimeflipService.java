@@ -3,15 +3,12 @@ package at.qe.sepm.skeleton.services;
 
 import at.qe.sepm.skeleton.model.*;
 import at.qe.sepm.skeleton.repositories.TimeflipRepository;
-import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -33,16 +30,12 @@ public class TimeflipService {
     private Logger<String, User> logger;
 
     @Autowired
-    CurrentUserBean currentUserBean;
+    private UserService userService;
 
     /**
      * A Function to get the current user
      */
 
-    @PostConstruct
-    public void init() {
-        currentUserBean.init();
-    }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<Timeflip> getAllTimeflips() {
@@ -76,12 +69,12 @@ public class TimeflipService {
         newTimeflip.setFacet12(TaskEnum.AUSZEIT);
 
         saveTimeflip(newTimeflip);
-        logger.logCreation(timeflip.getId(), currentUserBean.getCurrentUser());
+        logger.logCreation(timeflip.getId(), userService.getAuthenticatedUser());
     }
 
     @PreAuthorize("hasAuthority('EMPLOYEE')")
     public Timeflip saveTimeflip(Timeflip timeflip) {
-        logger.logUpdate(timeflip.getId(), currentUserBean.getCurrentUser());
+        logger.logUpdate(timeflip.getId(), userService.getAuthenticatedUser());
         return timeflipRepository.save(timeflip);
     }
 
@@ -94,7 +87,7 @@ public class TimeflipService {
         timeflip.setCreateDate(null);
 
         timeflipRepository.delete(timeflip);
-        logger.logDeletion(timeflip.getId(), currentUserBean.getCurrentUser());
+        logger.logDeletion(timeflip.getId(), userService.getAuthenticatedUser());
     }
 
     @PreAuthorize("hasAuthority('EMPLOYEE') or principal.username eq #username")
