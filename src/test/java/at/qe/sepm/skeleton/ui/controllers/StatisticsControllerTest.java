@@ -125,7 +125,6 @@ public class StatisticsControllerTest {
 
         Assert.assertNotEquals(oldMonthModel, statisticsController.getMonthDepartmentModel());
         Assert.assertNotEquals(oldBarChartModel, statisticsController.getMonthBarDepartmentModel());
-
     }
 
     @Test
