@@ -59,6 +59,14 @@ public class DepartmentListControllerTest {
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void getDepartments() {
         Assert.assertEquals(5, departmentListController.getDepartments().size());
+        departmentListController.setDepartment("IT");
+        Assert.assertEquals(1, departmentListController.getDepartments().size());
+        departmentListController.resetFilter();
+        departmentListController.setTeam("I");
+        Assert.assertEquals(1, departmentListController.getDepartments().size());
+        departmentListController.resetFilter();
+        departmentListController.setEmployee("user10");
+        Assert.assertEquals(1, departmentListController.getDepartments().size());
     }
 
     @Test

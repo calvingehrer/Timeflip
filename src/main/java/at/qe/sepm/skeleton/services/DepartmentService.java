@@ -14,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -148,8 +149,35 @@ public class DepartmentService {
      * find department leader
      *
      */
-
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DEPARTMENTLEADER')")
     public User getDepartmentLeader(Department department) {
         return userService.getDepartmentLeader(department);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Set<Department> getByDepartmentName(String departmentName) {
+        return departmentRepository.findByDepartmentNamePrefix(departmentName);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Set<Department> getByTeamName(String teamName) {
+        Set<Department> departments = new HashSet<>();
+        for (Team t : teamRepository.getAllTeamsByTeamPrefix(teamName)) {
+            if (t.getDepartment() != null) {
+                departments.add(t.getDepartment());
+            }
+        }
+        return departments;
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public Set<Department> getByEmployee (String employee) {
+        List<User> employees = userService.getAllUsersByUsername(employee);
+        Set<Department> departments = new HashSet<>();
+        for(User e: employees) {
+            if (e.getDepartment() != null)
+                departments.add(e.getDepartment());
+        }
+        return departments;
     }
 }

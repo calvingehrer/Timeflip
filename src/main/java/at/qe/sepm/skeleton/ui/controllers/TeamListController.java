@@ -23,17 +23,24 @@ public class TeamListController implements Serializable {
     private TeamService teamService;
 
     private String teamName = "";
+    private String employee = "";
+    private String department = "";
 
 
     /**
-     *
      * @return all teams
      */
 
-    public Collection<Team> getTeams(){
-        if(!teamName.equals("")){
-          return teamService.getAllTeamsByTeamName(teamName);
-       }
+    public Collection<Team> getTeams() {
+        if (!teamName.equals("")) {
+            return teamService.getAllTeamsByTeamName(teamName);
+        }
+        if (!department.equals("")) {
+            return teamService.getTeamsByDepartmentName(department);
+        }
+        if (!employee.equals("")) {
+            return teamService.getTeamsWithEmployee(employee);
+        }
         return teamService.getAllTeams();
     }
 
@@ -55,6 +62,30 @@ public class TeamListController implements Serializable {
         return teamService.getAllUsersWithoutTeam();
     }
 
+    public String getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(String employee) {
+        this.employee = employee;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
+    }
+
     public Collection<Team> getTeamsInDepartment(Department department) {
         return teamService.getTeamsOfDepartment(department);
     }
@@ -68,5 +99,10 @@ public class TeamListController implements Serializable {
         this.team = team;
     }
 
+    public void resetFilter() {
+        this.department = "";
+        this.teamName = "";
+        this.employee = "";
+    }
 
 }
