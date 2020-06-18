@@ -39,6 +39,6 @@ public class RoomListControllerTest {
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void getRoomsWithoutRaspberry() {
-        Assert.assertEquals(2, roomListController.getRoomsWithoutRaspberry().size());
+        Assert.assertEquals(1, roomListController.getRoomsWithoutRaspberry().size());
     }
 }

@@ -50,6 +50,7 @@ class DepartmentServiceTest {
         headOfDepartment.setDepartment(null);
         userService.saveUser(headOfDepartment);
 
+        userService.deleteUser(userService.loadUser("headOdDepartment"));
         departmentService.deleteDepartment(departmentService.loadDepartment("TestDepartment"));
 
         Assert.assertEquals(5, departmentService.getAllDepartments().size());

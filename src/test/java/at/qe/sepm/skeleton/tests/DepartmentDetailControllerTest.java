@@ -53,14 +53,6 @@ public class DepartmentDetailControllerTest {
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void doDeleteDepartment() {
 
-        User headOfDepartment = new User();
-        headOfDepartment.setUsername("headOdDepartment");
-        Department department = new Department();
-        department.setDepartmentName("TestDepartment");
-
-        departmentService.addNewDepartment(headOfDepartment, department);
-
-
     }
 
     @Test
