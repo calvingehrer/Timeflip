@@ -17,18 +17,18 @@ import java.util.Set;
 @Component
 @Scope("view")
 public class AddTeamController implements Serializable {
+    private final Set<User> employees = new HashSet<>();
     @Autowired
     private TeamService teamService;
     @Autowired
     private Logger<String, User> logger;
-
-    private final Set<User> employees = new HashSet<>();
-
     private Team team = new Team();
-
     private User employee;
-
     private Department department;
+
+    public Set<User> getEmployees() {
+        return employees;
+    }
 
     public void add() {
         teamService.addNewTeam(employees, team);
@@ -43,7 +43,7 @@ public class AddTeamController implements Serializable {
         this.team.setDepartment(this.department);
     }
 
-    public void addEmployee(){
+    public void addEmployee() {
         this.employees.add(this.employee);
     }
 
@@ -67,7 +67,7 @@ public class AddTeamController implements Serializable {
         return employee;
     }
 
-    public void setEmployee(User employee){
+    public void setEmployee(User employee) {
         this.employee = employee;
     }
 

@@ -3,7 +3,6 @@ package at.qe.sepm.skeleton.ui.beans;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.model.UserRole;
 import at.qe.sepm.skeleton.services.UserService;
-import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.Authentication;
@@ -13,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Session information bean to retrieve session-specific parameters.
- *
+ * <p>
  * This class is part of the skeleton project provided for students of the
  * courses "Software Architecture" and "Software Engineering" offered by the
  * University of Innsbruck.
@@ -25,8 +24,6 @@ public class SessionInfoBean {
     @Autowired
     private UserService userService;
 
-    private Logger<String, User> logger;
-
     /**
      * Attribute to cache the current user.
      */
@@ -35,8 +32,6 @@ public class SessionInfoBean {
     /**
      * Returns the currently logged on user, null if no user is authenticated
      * for this session.
-     *
-     * @return
      */
     public User getCurrentUser() {
         if (currentUser == null) {
@@ -52,23 +47,18 @@ public class SessionInfoBean {
     /**
      * Returns the username of the user for this session, empty string if no
      * user has been authenticated for this session.
-     *
-     * @return
      */
     public String getCurrentUserName() {
         if (!isLoggedIn()) {
             return "";
         }
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String name = auth.getName(); //get logged in username
-        return name;
+        return auth.getName();
     }
 
     /**
      * Returns the roles of the user for this session as space-separated list,
      * empty string if no user has been authenticated for this session-
-     *
-     * @return
      */
     public String getCurrentUserRoles() {
         if (!isLoggedIn()) {

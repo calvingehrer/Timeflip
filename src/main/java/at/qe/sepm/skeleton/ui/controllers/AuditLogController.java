@@ -20,6 +20,7 @@ public class AuditLogController implements Serializable {
     private String type = "";
     private String date = "";
     private String changingUser = "";
+    private LogEntry logEntry;
 
     public String getId() {
         return id;
@@ -65,8 +66,6 @@ public class AuditLogController implements Serializable {
         }
         return auditLogService.getAllEntriesByID(id);
     }
-
-    private LogEntry logEntry;
 
     public LogEntry getLogEntry() {
         return logEntry;

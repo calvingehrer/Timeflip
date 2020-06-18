@@ -1,13 +1,14 @@
 package at.qe.sepm.skeleton.utils;
 
-import java.util.Map;
-import javax.faces.context.FacesContext;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.config.Scope;
 
+import javax.faces.context.FacesContext;
+import java.util.Map;
+
 /**
  * Custom scope implementation for spring to enable JSF2-like view-scoped beans.
- *
+ * <p>
  * This class is part of the skeleton project provided for students of the
  * courses "Software Architecture" and "Software Engineering" offered by the
  * University of Innsbruck.

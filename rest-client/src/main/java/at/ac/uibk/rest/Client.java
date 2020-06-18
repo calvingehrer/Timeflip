@@ -92,8 +92,9 @@ public class Client implements Runnable {
 
             Long id = responseJson.getLong("id");
             String macAddress = responseJson.getString("macAddress");
+            int facet = responseJson.getInt("facet");
 
-            System.out.printf("Sending... Id: #%d, MAC-Address: %s\n", id, macAddress);
+            System.out.printf("Sending... Id: #%d, MAC-Address: %s, Facet: %d\n", id, macAddress, facet);
             return true;
         } else {
             System.err.printf("Error posting message, service returned status code %d\n", response.getStatusLine().getStatusCode());

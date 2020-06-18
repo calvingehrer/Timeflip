@@ -5,7 +5,6 @@ import java.time.Instant;
 
 /**
  * Entity representing Badges.
- *
  */
 
 
@@ -25,19 +24,11 @@ public class Badge {
     private Instant dateOfBadge;
 
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Column(name = "badge_image")
     private String imagePath;
-
-    public Long getBadgeId() {
-        return badgeId;
-    }
-
-    public void setBadgeId(Long badgeId) {
-        this.badgeId = badgeId;
-    }
 
     public BadgeEnum getBadgeType() {
         return badgeType;
@@ -75,8 +66,6 @@ public class Badge {
     public String toString() {
         return "at.qe.sepm.skeleton.model.User[ id=" + badgeId + " ]";
     }
-
-
 
 
 }

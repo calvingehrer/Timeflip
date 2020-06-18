@@ -2,19 +2,17 @@ package at.qe.sepm.skeleton.model;
 
 import org.springframework.data.domain.Persistable;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Entity representing Department
  */
 @Entity
 public class Department implements Persistable<String>, Serializable {
-
-    private static final long serialVersionDID = 1L;
 
     @Id
     @Column(length = 100)
@@ -30,8 +28,9 @@ public class Department implements Persistable<String>, Serializable {
         this.departmentName = departmentName;
     }
 
-    public static long getSerialVersionDID() {
-        return serialVersionDID;
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 
     @Override
@@ -47,7 +46,7 @@ public class Department implements Persistable<String>, Serializable {
 
     @Override
     public boolean isNew() {
-        return false;
+        return null == createDate;
     }
 
 }

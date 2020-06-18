@@ -18,7 +18,7 @@ public class RaspberryListController implements Serializable {
     @Autowired
     private RaspberryService raspberryService;
 
-    public Collection<Raspberry> getRaspberries(){
+    public Collection<Raspberry> getRaspberries() {
         return raspberryService.getAllRaspberries();
     }
 

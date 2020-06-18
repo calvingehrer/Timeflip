@@ -1,6 +1,5 @@
 package at.qe.sepm.skeleton.ui.beans;
 
-import at.qe.sepm.skeleton.ui.controllers.StatisticsController;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -15,45 +14,33 @@ import java.util.TimeZone;
 public class TimeBean {
     /**
      * method to get the time zone
-     * @return
+     *
+     * @return current time zone
      */
     public TimeZone getUtcTimeZone() {
         return TimeZone.getTimeZone(ZoneId.of("UTC"));
     }
 
-    public Calendar setNull (Calendar calendar) {
-        StatisticsController.setDayToBeginning(calendar);
-        return calendar;
+    /**
+     * @param instant to convert
+     * @return date
+     */
+
+    public Date instantToDate(Instant instant) {
+        return Date.from(instant);
     }
 
-    public Calendar getStartOfDay(Calendar calendar) {
-        return setNull(calendar);
+    /**
+     * @param instant to get year from
+     * @return year
+     */
+
+    public Integer getYearOfInstant(Instant instant) {
+        Date date = instantToDate(instant);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.get(Calendar.YEAR);
     }
 
-    public Calendar getEndOfDay(Calendar calendar) {
-        calendar.add(Calendar.DATE, 1);
-        return setNull(calendar);
-    }
-
-    public Calendar getStartOfWeek(Calendar calendar) {
-        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-        return setNull(calendar);
-    }
-
-    public Calendar getEndOfWeek(Calendar calendar) {
-        calendar.add(Calendar.DATE, 7);
-        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-        return setNull(calendar);
-    }
-
-    public Calendar getStartOfMonth(Calendar calendar) {
-        calendar.set(Calendar.DATE, 1);
-        return setNull(calendar);
-    }
-
-    public Calendar getEndOfMonth(Calendar calendar) {
-        calendar.set(Calendar.DATE, 1);
-        return setNull(calendar);
-    }
 
 }

@@ -12,9 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Component
 @Scope("view")
@@ -29,17 +29,22 @@ public class DepartmentDetailController implements Serializable {
     @Autowired
     private TeamService teamService;
 
+    private Set<Team> addedTeams = new HashSet<>();
+
+    private Set<Team> removedTeams = new HashSet<>();
+
+    private Team addedTeam;
+
+    private Team removedTeam;
+
     @Autowired
     private Logger<String, User> logger;
 
-    private Department department = new Department();
+    private Department department;
 
-    public User newLeader;
+    private User newLeader;
 
-    public void setDepartment(Department department) {
-        this.department = department;
-        doReloadDepartment();
-    }
+    private User oldLeader;
 
     public User getNewLeader() {
         return newLeader;
@@ -49,16 +54,39 @@ public class DepartmentDetailController implements Serializable {
         this.newLeader = newLeader;
     }
 
-    public Department getDepartment(){
+    public Department getDepartment() {
         return department;
     }
 
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+
+    public Team getAddedTeam() {
+        return addedTeam;
+    }
+
+    public void setAddedTeam(Team addedTeam) {
+        this.addedTeam = addedTeam;
+    }
+
+    public Team getRemovedTeam() {
+        return removedTeam;
+    }
+
+    public void setRemovedTeam(Team removedTeam) {
+        this.removedTeam = removedTeam;
+    }
+
     public void doReloadDepartment() {
+        addedTeams.clear();
+        removedTeams.clear();
         department = departmentService.loadDepartment(department.getDepartmentName());
     }
 
-    public void doSaveDepartment(){
-        department = this.departmentService.saveDepartment(department);
+    public void doSaveDepartment() {
+        this.departmentService.saveDepartment(department, addedTeams, removedTeams, oldLeader, newLeader);
+        doReloadDepartment();
     }
 
     /**
@@ -67,18 +95,16 @@ public class DepartmentDetailController implements Serializable {
      * otherwise you get a success message
      */
 
-    public void doDeleteDepartment(){
+    public void doDeleteDepartment() {
         if (checkIfDeletionIsAllowed(department)) {
             try {
                 this.departmentService.deleteDepartment(department);
                 department = null;
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 logger.logError(e, userService.getAuthenticatedUser());
             }
-        }
-        else {
+        } else {
             MessagesView.warnMessage("department deletion", "You can't delete this department");
             return;
         }
@@ -91,11 +117,11 @@ public class DepartmentDetailController implements Serializable {
     /**
      * checks whether there are any teams still  in the department or it
      * still has an departmentleader
-     * @param department
-     * @return
+     *
+     * @param department to check
      */
 
-    public boolean checkIfDeletionIsAllowed (Department department){
+    private boolean checkIfDeletionIsAllowed(Department department) {
         if (!teamService.getTeamsOfDepartment(department).isEmpty()) {
             return false;
         } else return userService.getDepartmentLeader(department) == null;
@@ -107,12 +133,22 @@ public class DepartmentDetailController implements Serializable {
      */
 
     public void replaceLeader() {
-        User oldLeader = userService.getDepartmentLeader(department);
-        oldLeader.setDepartment(null);
-        userService.saveUser(oldLeader);
-        User newLeader = this.getNewLeader();
-        newLeader.setDepartment(department);
-        userService.saveUser(newLeader);
-        logger.logUpdate("New depatmentleader" + newLeader, userService.getAuthenticatedUser());
+        this.oldLeader = userService.getDepartmentLeader(department);
+    }
+
+    public void addTeam() {
+        this.addedTeams.add(this.addedTeam);
+    }
+
+    public void removeTeam() {
+        this.removedTeams.add(this.removedTeam);
+    }
+
+    public Set<Team> getAddedTeams() {
+        return addedTeams;
+    }
+
+    public Set<Team> getRemovedTeams() {
+        return removedTeams;
     }
 }

@@ -3,6 +3,7 @@ package at.qe.sepm.skeleton.rest;
 import java.util.Date;
 
 public class HistoryEntry {
+    public int battery;
     private Long id;
     private String macAddress;
     private int facet;
@@ -50,12 +51,19 @@ public class HistoryEntry {
         this.end = end;
     }
 
-    public int getSeconds() {
+    int getSeconds() {
         return seconds;
     }
 
-    public void setSeconds(int seconds) {
+    void setSeconds(int seconds) {
         this.seconds = seconds;
     }
 
+    public int getBattery() {
+        return battery;
+    }
+
+    public void setBattery(int battery) {
+        this.battery = battery;
+    }
 }

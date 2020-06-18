@@ -8,29 +8,29 @@ import java.util.Date;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="request_type", discriminatorType = DiscriminatorType.INTEGER)
+@DiscriminatorColumn(name = "request_type", discriminatorType = DiscriminatorType.INTEGER)
 public abstract class Request implements Persistable<Long>, Serializable {
     private static final long serialVersionUID = 1543543567124567565L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="request_id")
+    @Column(name = "request_id")
     private Long Id;
 
     @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
-    @JoinColumn(name="requester")
+    @JoinColumn(name = "requester")
     private User requester;
 
     @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
-    @JoinColumn(name="request_handler_tl")
+    @JoinColumn(name = "request_handler_tl")
     private User requestHandlerTeamLeader;
 
     @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
-    @JoinColumn(name="request_handler_dl")
+    @JoinColumn(name = "request_handler_dl")
     private User requestHandlerDepartmentLeader;
 
     @Enumerated(EnumType.STRING)
-    @Column(name="status")
+    @Column(name = "status")
     private RequestEnum status;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -84,16 +84,14 @@ public abstract class Request implements Persistable<Long>, Serializable {
         this.description = description;
     }
 
-    public Date getCreateDate() {
-        return createDate;
-    }
-
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
 
     @Override
-    public boolean isNew() { return null == createDate; }
+    public boolean isNew() {
+        return null == createDate;
+    }
 
     public abstract int getDiscriminatorValue();
 }

@@ -18,7 +18,7 @@ import java.util.Collection;
 
 /**
  * Some very basic tests for {@link UserService}.
- *
+ * <p>
  * This class is part of the skeleton project provided for students of the
  * courses "Software Architecture" and "Software Engineering" offered by the
  * University of Innsbruck.
@@ -89,7 +89,6 @@ public class UserServiceTest {
         Assert.assertNotNull("User1 could not be loaded from test data source", toBeSavedUser);
 
         Assert.assertNull("User \"user1\" has a updateUser defined", toBeSavedUser.getUpdateUser());
-        Assert.assertNull("User \"user1\" has a updateDate defined", toBeSavedUser.getUpdateDate());
 
         toBeSavedUser.setEmail("changed-email@whatever.wherever");
         userService.saveUser(toBeSavedUser);
@@ -131,6 +130,7 @@ public class UserServiceTest {
         Assert.assertNotNull("User \"newuser\" does not have a createUser defined after being saved", freshlyCreatedUser.getCreateUser());
         Assert.assertEquals("User \"newuser\" has wrong createUser set", adminUser, freshlyCreatedUser.getCreateUser());
         Assert.assertNotNull("User \"newuser\" does not have a createDate defined after being saved", freshlyCreatedUser.getCreateDate());
+        //userService.deleteUser(userService.loadUser("newUser"));
     }
 
     @Test(expected = org.springframework.orm.jpa.JpaSystemException.class)
@@ -206,6 +206,7 @@ public class UserServiceTest {
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void testGetAllUsersByUsername() {
         Collection<User> usersStartingWithUser = userService.getAllUsersByUsername("user");
+
         Assert.assertEquals("Call to userService.loadUser returned wrong user", 34, usersStartingWithUser.size());
     }
 

@@ -4,18 +4,14 @@ package at.qe.sepm.skeleton.services;
 import at.qe.sepm.skeleton.exceptions.TaskException;
 import at.qe.sepm.skeleton.model.*;
 import at.qe.sepm.skeleton.repositories.TaskRepository;
-import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import at.qe.sepm.skeleton.ui.beans.TimeBean;
 import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.time.Duration;
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -28,20 +24,11 @@ public class TaskService {
     @Autowired
     private TaskRepository taskRepository;
     @Autowired
-    TimeBean timeBean;
-    @Autowired
-    CurrentUserBean currentUserBean;
+    private TimeBean timeBean;
     @Autowired
     private Logger<String, User> logger;
-
-    /**
-     * A Function to get the current user
-     */
-
-    @PostConstruct
-    public void init() {
-        currentUserBean.init();
-    }
+    @Autowired
+    private UserService userService;
 
     public List<Task> getAllTasksBetweenDates(User user, Instant start, Instant end) {
         if (start == null || end == null) {
@@ -49,9 +36,42 @@ public class TaskService {
         }
         return taskRepository.findUserTasksBetweenDates(user, start, end);
     }
+
+    public List<Task> getAllTasksByType(User user, String type) {
+        switch (type) {
+            case ("KONZEPTION"):
+                return taskRepository.findByType(user, TaskEnum.KONZEPTION);
+            case ("DESIGN"):
+                return taskRepository.findByType(user, TaskEnum.DESIGN);
+            case ("IMPLEMENTIERUNG"):
+                return taskRepository.findByType(user, TaskEnum.IMPLEMENTIERUNG);
+            case ("TESTEN"):
+                return taskRepository.findByType(user, TaskEnum.TESTEN);
+            case ("FEHLERMANAGEMENT"):
+                return taskRepository.findByType(user, TaskEnum.FEHLERMANAGEMENT);
+            case ("MEETING"):
+                return taskRepository.findByType(user, TaskEnum.MEETING);
+            case ("KUNDENBESPRECHUNG"):
+                return taskRepository.findByType(user, TaskEnum.KUNDENBESPRECHUNG);
+            case ("FORTBILDUNG"):
+                return taskRepository.findByType(user, TaskEnum.FORTBILDUNG);
+            case ("PROJEKTMANAGEMENT"):
+                return taskRepository.findByType(user, TaskEnum.PROJEKTMANAGEMENT);
+            case ("SONSTIGES"):
+                return taskRepository.findByType(user, TaskEnum.SONSTIGES);
+            case ("AUSZEIT"):
+                return taskRepository.findByType(user, TaskEnum.AUSZEIT);
+            case ("DOKUMENTATION"):
+                return taskRepository.findByType(user, TaskEnum.DOKUMENTATION);
+            default:
+                return getAllTasksBetweenDates(user, null, null);
+
+        }
+
+    }
+
     /**
-     *
-     * @param task
+     * @param task to search
      * @return duration of the task in minutes
      */
 
@@ -61,10 +81,9 @@ public class TaskService {
     }
 
     /**
-     *
-     * @param user
-     * @param start
-     * @param end
+     * @param user  that is wanted
+     * @param start of the date
+     * @param end   of the date
      * @return Map of all user task types between two Dates with duration of each task type
      */
 
@@ -76,10 +95,9 @@ public class TaskService {
     }
 
     /**
-     *
-     * @param team
-     * @param start
-     * @param end
+     * @param team  that is wanted
+     * @param start of the date
+     * @param end   of the date
      * @return Map of all team task types between two Dates with duration of each task type
      */
 
@@ -90,10 +108,9 @@ public class TaskService {
     }
 
     /**
-     *
-     * @param department
-     * @param start
-     * @param end
+     * @param department that is wanted
+     * @param start      of the date
+     * @param end        of the date
      * @return Map of all department task types between two Dates with duration of each task type
      */
 
@@ -105,8 +122,9 @@ public class TaskService {
 
     /**
      * fills the list of task types with duration
-     * @param dailyTasks
-     * @param tasks
+     *
+     * @param dailyTasks is empty HashMap
+     * @param tasks      of user, team or department
      * @return filled list
      */
 
@@ -132,42 +150,27 @@ public class TaskService {
      * 3. If the task before or the task after has the same task type as the given task
      * 4. If the task before or the task after falls into the exact same time frame it only changes the task type
      **/
-    public void saveEditedTask (User user, TaskEnum task, Date date, int startHour, int endHour, int startMinute, int endMinute) throws TaskException {
+    public void saveEditedTask(User user, TaskEnum task, Instant startTime, Instant endTime) throws TaskException {
         if (task == null) {
             throw new TaskException("Please enter a task");
         }
-        checkTime(startHour, endHour, startMinute, endMinute);
 
-        Calendar calendar = Calendar.getInstance(timeBean.getUtcTimeZone());
-
-        calendar.setTime(date);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-
-        calendar.set(Calendar.HOUR_OF_DAY, startHour);
-        calendar.set(Calendar.MINUTE, startMinute);
-        Instant startTime = calendar.toInstant();
-
-        calendar.set(Calendar.HOUR_OF_DAY, endHour);
-        calendar.set(Calendar.MINUTE, endMinute);
-        Instant endTime = calendar.toInstant();
 
         Task toSave = new Task();
 
-        Task taskBefore = taskRepository.findTaskThatFallsInTimeFrame(user,startTime);
-        Task taskAfter = taskRepository.findTaskThatFallsInTimeFrame(user,endTime);
+        Task taskBefore = taskRepository.findTaskThatFallsInTimeFrame(user, startTime);
+        Task taskAfter = taskRepository.findTaskThatFallsInTimeFrame(user, endTime);
 
         if (taskBefore != null && taskBefore.equals(taskAfter)) {
             if (taskBefore.getTask() == task) {
                 return;
             }
-            if (Duration.between(taskBefore.getStartTime(),startTime).toMinutes() == 0
-                    && Duration.between(taskBefore.getEndTime(),endTime).toMinutes() == 0) {
+            if (Duration.between(taskBefore.getStartTime(), startTime).toMinutes() == 0
+                    && Duration.between(taskBefore.getEndTime(), endTime).toMinutes() == 0) {
                 taskBefore.setTask(task);
                 taskRepository.save(taskBefore);
                 return;
-            }
-            else {
+            } else {
                 Task newTask = new Task();
                 newTask.setStartTime(endTime);
                 newTask.setEndTime(taskAfter.getEndTime());
@@ -186,45 +189,41 @@ public class TaskService {
         }
         if (taskBefore != null) {
 
-                if (taskBefore.getTask() == task) {
-                    taskBefore.setEndTime(endTime);
-                    taskRepository.save(taskBefore);
-                    return;
-                }
+            if (taskBefore.getTask() == task) {
+                taskBefore.setEndTime(endTime);
 
-                if (Duration.between(taskBefore.getStartTime(), startTime).toMinutes() == 0){
-                    taskBefore.setTask(task);
-                    taskBefore.setEndTime(endTime);
-                    taskRepository.save(taskBefore);
-                    return;
-                }
-                else {
-                    taskBefore.setEndTime(startTime);
-                    taskRepository.save(taskBefore);
-                }
+                taskRepository.save(taskBefore);
+                return;
+            }
+
+            if (Duration.between(taskBefore.getStartTime(), startTime).toMinutes() == 0) {
+                taskBefore.setTask(task);
+                taskBefore.setEndTime(endTime);
+                taskRepository.save(taskBefore);
+                return;
+            } else {
+                taskBefore.setEndTime(startTime);
+                taskRepository.save(taskBefore);
+            }
 
 
         }
         if (taskAfter != null) {
 
-                if (taskAfter.getTask() == task) {
-                    taskAfter.setStartTime(startTime);
-                    taskRepository.save(taskAfter);
-                    return;
-                }
-                if (Duration.between(taskAfter.getStartTime(), endTime).toMinutes() == 0) {
-                    taskAfter.setTask(task);
-                    taskAfter.setStartTime(startTime);
-                    taskRepository.save(taskAfter);
-                    return;
-                }
-                else {
-
-                    taskAfter.setStartTime(endTime);
-
-
-                    taskRepository.save(taskAfter);
-                }
+            if (taskAfter.getTask() == task) {
+                taskAfter.setStartTime(startTime);
+                taskRepository.save(taskAfter);
+                return;
+            }
+            if (Duration.between(taskAfter.getStartTime(), endTime).toMinutes() == 0) {
+                taskAfter.setTask(task);
+                taskAfter.setStartTime(startTime);
+                taskRepository.save(taskAfter);
+                return;
+            } else {
+                taskAfter.setStartTime(endTime);
+                taskRepository.save(taskAfter);
+            }
 
 
         }
@@ -238,33 +237,32 @@ public class TaskService {
         toSave.setCreateDate(new Date());
 
         taskRepository.save(toSave);
-        logger.logUpdate(task.toString(), currentUserBean.getCurrentUser());
+
+        logger.logUpdate(task.toString(), userService.getAuthenticatedUser());
     }
 
     /**
      * check if something is earlier than the current or the last week
-     * @param user
-     * @param date
-     * @throws TaskException
+     *
+     * @param date to check
      */
 
-    public boolean checkIfEarlierThanTwoWeeks (Instant date) {
+    public boolean checkIfEarlierThanTwoWeeks(Instant date) {
         Calendar calendar = Calendar.getInstance(timeBean.getUtcTimeZone());
-        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-        calendar.add(Calendar.DATE, -7);
-        calendar.set(Calendar.HOUR_OF_DAY,0);
-        calendar.set(Calendar.MINUTE,0);
-        calendar.set(Calendar.SECOND,0);
+        calendar.add(Calendar.DATE, -14);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
 
-        Instant lastMonday = calendar.toInstant();
-        return date.isBefore(lastMonday);
+        Instant twoWeeks = calendar.toInstant();
+        return date.isBefore(twoWeeks);
     }
 
     /**
      * checks whether the requested date was after today
      * Throws an exception when it is
-     * @param date
-     * @throws TaskException
+     *
+     * @param date to check
      */
 
     public void checkIfAfterToday(Instant date) throws TaskException {
@@ -277,11 +275,11 @@ public class TaskService {
 
     /**
      * checks whether the hours and the minutes are correct
-     * @param startHour
-     * @param endHour
-     * @param startMinute
-     * @param endMinute
-     * @throws TaskException
+     *
+     * @param startHour   of task
+     * @param endHour     of task
+     * @param startMinute of task
+     * @param endMinute   of task
      */
 
     public void checkTime(long startHour, long endHour, long startMinute, long endMinute) throws TaskException {
@@ -295,7 +293,8 @@ public class TaskService {
 
     /**
      * Method to delete Tasks
-     * @param task
+     *
+     * @param task to delete
      */
 
     public void deleteTask(Task task) {
@@ -303,15 +302,14 @@ public class TaskService {
         task.setTeam(null);
         task.setDepartment(null);
         taskRepository.delete(task);
-        logger.logDeletion(task.getTask().toString(), currentUserBean.getCurrentUser());
+        logger.logDeletion(task.getTask().toString(), userService.getAuthenticatedUser());
     }
 
-    public void deleteTasksOfUser (User user) {
-        for (Task t: taskRepository.findTasksFromUser(user)) {
+    public void deleteTasksOfUser(User user) {
+        for (Task t : taskRepository.findTasksFromUser(user)) {
             deleteTask(t);
         }
     }
-
 
 
 }

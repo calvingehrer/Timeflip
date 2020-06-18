@@ -18,12 +18,9 @@ public class MailService {
     private JavaMailSender mailSender;
 
     /**
-     * sends mail to
-     * @param toAddress
-     * @param subject
-     * @param text
+     * sends mail to a specified address
      */
-    public void sendMail(String toAddress, String subject, String text) {
+    private void sendMail(String toAddress, String subject, String text) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(toAddress);
         message.setSubject(subject);
@@ -32,7 +29,7 @@ public class MailService {
 
     }
 
-    public void sendEmailTo(User user, String subject, String text) {
+    void sendEmailTo(User user, String subject, String text) {
         if (user.getEmail() != null && !user.getEmail().isEmpty()) {
             sendMail(user.getEmail(), subject, text);
         }

@@ -111,8 +111,7 @@ public class AuditLogger implements Logger<String, User> {
     /**
      * Create the Log Entry in the DB
      *
-     * @param changer
-     * @return
+     * @param changer user
      */
     private LogEntry createLogEntry(User changer) {
         LogEntry logEntry = new LogEntry();

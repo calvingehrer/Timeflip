@@ -6,99 +6,156 @@
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="title">MyTimeflip</ui:define>
+    <ui:define name="viewname">
+        <li><p:link outcome="/employee/myTimeflip">My Timeflip</p:link></li>
+    </ui:define>
 
     <ui:define name="content">
         <div class="ui-g">
             <div class="ui-g-12">
-                <div class="card">
-                    <h1>My Timeflip</h1>
 
                     <h:form id="timeflipForm">
 
-                    <p:dataTable id="TimeflipTable" var="timeflip" value="#{timeflipListController.timeflipOfUser}">
-                        <p:column headerText="TimeflipId">
-                            <h:outputText value="#{timeflip.macAddress}"/>
-                        </p:column>
-                        <p:column headerText="Tasks">
-                            <h:outputText value="#{timeflip.taskValues}"/>
-                        </p:column>
+                        <div class="ui-g-12">
+                            <p:panel id="timeFlipPanel" header="My Timeflip Device" styleClass="tasks" style="width:30%">
 
-                        <p:column style="width:200px;text-align: center">
-                        <p:commandButton update=":timeflipForm:timeflipEditDialog" value="Add Tasks" oncomplete="PF('timeflipEditDialog').show()" icon="fa fa-fw fa-edit">
-                            <f:setPropertyActionListener value="#{timeflip}" target="#{timeflipDetailController.timeflip}" />
-                        </p:commandButton>
-                        </p:column>
+                                <h:panelGrid columns="2" style="width: 100%">
+                                    <p:outputLabel value="Device ID: "/>
+                                    <p:outputLabel value="#{timeflipListController.timeflipOfUser.macAddress}"/>
+                                    <p:outputLabel value="User: "/>
+                                    <p:outputLabel value="#{timeflipListController.timeflipOfUser.user}"/>
+                                    <p:outputLabel value="Battery: "/>
+                                    <p:outputLabel value="#{timeflipListController.timeflipOfUser.battery}%"/>
+                                    <p:outputLabel value="Last Synchronisation: "/>
+                                    <p:outputLabel
+                                            value="#{timeBean.instantToDate(taskListController.sortedTasksFromUser.get(0).endTime)}">
+                                        <f:convertDateTime timeZone="#{timeBean.utcTimeZone}"
+                                                           pattern="dd.MM.yyyy, HH:mm"/>
+                                    </p:outputLabel>
+                                </h:panelGrid>
+                            </p:panel>
+                        </div>
 
-                    </p:dataTable>
+                        <div class="ui-g-12">
+                            <p:panel id="timeFlipFacetPanel" header="TimeFlip Configuration" styleClass="tasks" style="width:30%">
+                                <h:panelGrid columns="2" style="width:100%">
+                                    <p:outputLabel value="Facet" style="font-weight:bold"/>
+                                    <p:outputLabel value="Task" style="font-weight:bold"/>
+                                    <p:outputLabel value="1" />
+                                    <p:outputLabel value="#{timeflipListController.timeflipOfUser.facet1}"/>
+                                    <p:outputLabel value="2" />
+                                    <p:outputLabel value="#{timeflipListController.timeflipOfUser.facet2}"/>
+                                    <p:outputLabel value="3" />
+                                    <p:outputLabel value="#{timeflipListController.timeflipOfUser.facet3}"/>
+                                    <p:outputLabel value="4" />
+                                    <p:outputLabel value="#{timeflipListController.timeflipOfUser.facet4}"/>
+                                    <p:outputLabel value="5" />
+                                    <p:outputLabel value="#{timeflipListController.timeflipOfUser.facet5}"/>
+                                    <p:outputLabel value="6" />
+                                    <p:outputLabel value="#{timeflipListController.timeflipOfUser.facet6}"/>
+                                    <p:outputLabel value="7" />
+                                    <p:outputLabel value="#{timeflipListController.timeflipOfUser.facet7}"/>
+                                    <p:outputLabel value="8" />
+                                    <p:outputLabel value="#{timeflipListController.timeflipOfUser.facet8}"/>
+                                    <p:outputLabel value="9" />
+                                    <p:outputLabel value="#{timeflipListController.timeflipOfUser.facet9}"/>
+                                    <p:outputLabel value="10" />
+                                    <p:outputLabel value="#{timeflipListController.timeflipOfUser.facet10}"/>
+                                    <p:outputLabel value="11" />
+                                    <p:outputLabel value="#{timeflipListController.timeflipOfUser.facet11}"/>
+                                    <p:outputLabel value="12" />
+                                    <p:outputLabel value="#{timeflipListController.timeflipOfUser.facet12}"/>
+                                </h:panelGrid>
+                                <p:commandButton update=":timeflipForm:timeflipEditDialog" value="Configure" oncomplete="PF('timeflipEditDialog').show()" icon="fa fa-fw fa-edit"
+                                                 style="margin-top: 10px">
+                                    <f:setPropertyActionListener value="#{timeflipListController.timeflipOfUser}" target="#{timeflipDetailController.timeflip}" />
+                                </p:commandButton>
+                            </p:panel>
+                        </div>
 
                         <p:dialog header="Edit Timeflip" id="timeflipEditDialog" widgetVar="timeflipEditDialog" modal="true"
                                   showEffect="fade"
-                                  hideEffect="fade" resizable="false">
+                                  hideEffect="fade" resizable="false" width="15%">
                             <p:outputPanel id="userData" rendered="#{not empty timeflipDetailController.timeflip}">
-                                <h:panelGrid columns="2">
-                                    <p:outputLabel for="macaddress" value="Macaddress: " />
+                                <h:panelGrid columns="2" style="width: 100%" columnClasses="forty-percent top-alignment, sixty-percent top-alignment">
+                                    <p:outputLabel for="macaddress" value="ID: " />
                                     <p:inputText id="macaddress" value="#{timeflipDetailController.timeflip.macAddress}" disabled="true"/>
                                 </h:panelGrid>
                                 <p:separator />
-                                <p:outputLabel value="Tasks: " />
-                                <h:panelGrid columns="2">
-                                    <p:selectBooleanCheckbox value="#{timeflipDetailController.design}"/>
-                                    <p:outputLabel value="Design" />
-                                    <p:selectBooleanCheckbox value="#{timeflipDetailController.konzeption}"/>
-                                    <p:outputLabel value="Konzeption" />
-                                    <p:selectBooleanCheckbox value="#{timeflipDetailController.implementierung}"/>
-                                    <p:outputLabel value="Implementierung" />
-                                    <p:selectBooleanCheckbox value="#{timeflipDetailController.testen}"/>
-                                    <p:outputLabel value="Testen" />
-                                    <p:selectBooleanCheckbox value="#{timeflipDetailController.dokumentation}"/>
-                                    <p:outputLabel value="Dokumentation" />
-                                    <p:selectBooleanCheckbox value="#{timeflipDetailController.fehlermanagement}"/>
-                                    <p:outputLabel value="Fehlermanagement" />
-                                    <p:selectBooleanCheckbox value="#{timeflipDetailController.meeting}"/>
-                                    <p:outputLabel value="Meeting" />
-                                    <p:selectBooleanCheckbox value="#{timeflipDetailController.kundenbesprechung}"/>
-                                    <p:outputLabel value="Kundenbesprechung" />
-                                    <p:selectBooleanCheckbox value="#{timeflipDetailController.fortbildung}"/>
-                                    <p:outputLabel value="Fortbildung" />
-                                    <p:selectBooleanCheckbox value="#{timeflipDetailController.projektmanagement}"/>
-                                    <p:outputLabel value="Projektmanagement" />
-                                    <p:selectBooleanCheckbox value="#{timeflipDetailController.sonstiges}"/>
-                                    <p:outputLabel value="Sonstiges" />
-                                    <p:selectBooleanCheckbox value="#{timeflipDetailController.auszeit}"/>
-                                    <p:outputLabel value="Auszeit" />
+
+                                <h:panelGrid columns="2" style="width: 100%" columnClasses="forty-percent top-alignment, sixty-percent top-alignment">
+                                    <p:outputLabel value="Facet" style="font-weight:bold"/>
+                                    <p:outputLabel value="Task" style="font-weight:bold"/>
+                                    <p:outputLabel value="1"/>
+                                    <p:selectOneMenu value="#{timeflipDetailController.timeflip.facet1}" dynamic="true" style="width:200px">
+                                        <f:selectItem itemLabel="Select One" itemValue="" />
+                                        <f:selectItems value="#{timeflipDetailController.taskList}" />
+                                    </p:selectOneMenu>
+                                    <p:outputLabel value="2"/>
+                                    <p:selectOneMenu value="#{timeflipDetailController.timeflip.facet2}" dynamic="true" style="width:200px">
+                                        <f:selectItem itemLabel="Select One" itemValue="" />
+                                        <f:selectItems value="#{timeflipDetailController.taskList}" />
+                                    </p:selectOneMenu>
+                                    <p:outputLabel value="3"/>
+                                    <p:selectOneMenu value="#{timeflipDetailController.timeflip.facet3}" dynamic="true" style="width:200px">
+                                        <f:selectItem itemLabel="Select One" itemValue="" />
+                                        <f:selectItems value="#{timeflipDetailController.taskList}" />
+                                    </p:selectOneMenu>
+                                    <p:outputLabel value="4"/>
+                                    <p:selectOneMenu value="#{timeflipDetailController.timeflip.facet4}" dynamic="true" style="width:200px">
+                                        <f:selectItem itemLabel="Select One" itemValue="" />
+                                        <f:selectItems value="#{timeflipDetailController.taskList}" />
+                                    </p:selectOneMenu>
+                                    <p:outputLabel value="5"/>
+                                    <p:selectOneMenu value="#{timeflipDetailController.timeflip.facet5}" dynamic="true" style="width:200px">
+                                        <f:selectItem itemLabel="Select One" itemValue="" />
+                                        <f:selectItems value="#{timeflipDetailController.taskList}" />
+                                    </p:selectOneMenu>
+                                    <p:outputLabel value="6"/>
+                                    <p:selectOneMenu value="#{timeflipDetailController.timeflip.facet6}" dynamic="true" style="width:200px">
+                                        <f:selectItem itemLabel="Select One" itemValue="" />
+                                        <f:selectItems value="#{timeflipDetailController.taskList}" />
+                                    </p:selectOneMenu>
+                                    <p:outputLabel value="7"/>
+                                    <p:selectOneMenu value="#{timeflipDetailController.timeflip.facet7}" dynamic="true" style="width:200px">
+                                        <f:selectItem itemLabel="Select One" itemValue="" />
+                                        <f:selectItems value="#{timeflipDetailController.taskList}" />
+                                    </p:selectOneMenu>
+                                    <p:outputLabel value="8"/>
+                                    <p:selectOneMenu value="#{timeflipDetailController.timeflip.facet8}" dynamic="true" style="width:200px">
+                                        <f:selectItem itemLabel="Select One" itemValue="" />
+                                        <f:selectItems value="#{timeflipDetailController.taskList}" />
+                                    </p:selectOneMenu>
+                                    <p:outputLabel value="9"/>
+                                    <p:selectOneMenu value="#{timeflipDetailController.timeflip.facet9}" dynamic="true" style="width:200px">
+                                        <f:selectItem itemLabel="Select One" itemValue="" />
+                                        <f:selectItems value="#{timeflipDetailController.taskList}" />
+                                    </p:selectOneMenu>
+                                    <p:outputLabel value="10"/>
+                                    <p:selectOneMenu value="#{timeflipDetailController.timeflip.facet10}" dynamic="true" style="width:200px">
+                                        <f:selectItem itemLabel="Select One" itemValue="" />
+                                        <f:selectItems value="#{timeflipDetailController.taskList}" />
+                                    </p:selectOneMenu>
+                                    <p:outputLabel value="11"/>
+                                    <p:selectOneMenu value="#{timeflipDetailController.timeflip.facet11}" dynamic="true" style="width:200px">
+                                        <f:selectItem itemLabel="Select One" itemValue="" />
+                                        <f:selectItems value="#{timeflipDetailController.taskList}" />
+                                    </p:selectOneMenu>
+                                    <p:outputLabel value="12"/>
+                                    <p:selectOneMenu value="#{timeflipDetailController.timeflip.facet12}" dynamic="true" style="width:200px">
+                                        <f:selectItem itemLabel="Select One" itemValue="" />
+                                        <f:selectItems value="#{timeflipDetailController.taskList}" />
+                                    </p:selectOneMenu>
+
                                 </h:panelGrid>
                             </p:outputPanel>
                             <p:separator />
                             <h:panelGrid columns="2">
-                                <p:commandButton update="@form :timeflipForm:TimeflipTable" value="Add" action="#{timeflipDetailController.addTasks}" oncomplete="PF('timeflipEditDialog').hide()" />
+                                <p:commandButton update="@form :timeflipForm:timeFlipPanel" value="Add" action="#{timeflipDetailController.saveTasks}" oncomplete="PF('timeflipEditDialog').hide()" />
                                 <p:commandButton value="Abort" type="reset" onclick="PF('timeflipEditDialog').hide()"/>
                             </h:panelGrid>
-
-
                         </p:dialog>
                     </h:form>
-
-
-                    <p:dialog header="Add Activity" id="addActivityDialog" widgetVar="addActivityDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-                        <p:outputPanel>
-                            <h:form>
-                                <h:panelGrid columns="2">
-                                    <p:outputLabel value="TimeflipId: " />
-                                    <p:inputText value="#{timeflipDetailController.timeflip}" />
-
-                                    <p:selectBooleanCheckbox value="#{timeflipDetailController.design}"/>
-                                    <p:outputLabel value="Design" />
-                                </h:panelGrid>
-                                <p:separator />
-                                <h:panelGrid columns="2">
-                                    <p:commandButton update="@form :timeflipForm:TimeflipTable" value="Add" action="#{timeflipDetailController.addTasks}" oncomplete="PF('addActivityDialog').hide()" />
-                                    <p:commandButton value="Abort" type="reset" onclick="PF('addActivityDialog').hide()"/>
-                                </h:panelGrid>
-                            </h:form>
-                        </p:outputPanel>
-                    </p:dialog>
-
-                </div>
             </div>
         </div>
 

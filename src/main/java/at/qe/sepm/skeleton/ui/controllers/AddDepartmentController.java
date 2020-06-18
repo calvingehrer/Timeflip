@@ -36,7 +36,8 @@ public class AddDepartmentController implements Serializable {
 
     /**
      * department is mapped in team so it sets the department field
-     * @param team
+     *
+     * @param team to set
      */
     public void setTeam(Team team) {
         this.team = team;
@@ -55,8 +56,8 @@ public class AddDepartmentController implements Serializable {
      * adds the new department and resets the field
      */
 
-    public void add(){
-        departmentService.addNewDepartment(headOfDepartment,department);
+    public void add() {
+        departmentService.addNewDepartment(headOfDepartment, department);
         resetDepartment();
     }
 
@@ -64,7 +65,7 @@ public class AddDepartmentController implements Serializable {
      * resets the field
      */
 
-    public void resetDepartment(){
+    private void resetDepartment() {
         this.department = new Department();
     }
 

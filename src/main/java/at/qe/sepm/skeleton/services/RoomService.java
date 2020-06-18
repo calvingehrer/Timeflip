@@ -5,7 +5,6 @@ import at.qe.sepm.skeleton.model.Room;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.RoomRepository;
 import at.qe.sepm.skeleton.repositories.UserRepository;
-import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -14,7 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,38 +28,27 @@ public class RoomService {
     UserRepository userRepository;
     @Autowired
     RaspberryService raspberryService;
+    @Autowired
+    private UserService userService;
 
 
     @Autowired
     private Logger<String, User> logger;
 
-    @Autowired
-    CurrentUserBean currentUserBean;
-
-    /**
-     * A Function to get the current user
-     */
-
-    @PostConstruct
-    public void init() {
-        currentUserBean.init();
-    }
-
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public List<Room> getAllRooms(){
+    public List<Room> getAllRooms() {
         return roomRepository.findAll();
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<Room> getRoomsWithoutRaspberry() {
-        //return roomRepository.findRoomsWithoutRaspberry();
         List<Room> rooms = roomRepository.findAllRooms();
 
         List<Room> roomsToRemove = new ArrayList<>();
 
-        for(Room room : rooms){
-            if(room.getRaspberry() != null){
+        for (Room room : rooms) {
+            if (room.getRaspberry() != null) {
                 roomsToRemove.add(room);
             }
         }
@@ -75,7 +62,7 @@ public class RoomService {
         newRoom.setRoomNumber(room.getRoomNumber());
         newRoom.setRaspberry(null);
         saveRoom(newRoom);
-        logger.logCreation(room.getRoomNumber(), currentUserBean.getCurrentUser());
+        logger.logCreation(room.getRoomNumber(), userService.getAuthenticatedUser());
     }
 
     public User getAuthenticatedUser() {
@@ -94,13 +81,14 @@ public class RoomService {
             room.setCreateDate(new Date());
             room.setCreateUser(getAuthenticatedUser());
         }
-        logger.logUpdate(room.getRoomNumber(), currentUserBean.getCurrentUser());
+        logger.logUpdate(room.getRoomNumber(), userService.getAuthenticatedUser());
         return roomRepository.save(room);
     }
 
     /**
      * Deletes the room.
      * if it is equipped it deletes the raspberry as well
+     *
      * @param room the room to delete
      */
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -110,6 +98,6 @@ public class RoomService {
             raspberryService.deleteRaspberry(raspberry);
         }
         roomRepository.delete(room);
-        logger.logDeletion(room.getId(), currentUserBean.getCurrentUser());
+        logger.logDeletion(room.getId(), userService.getAuthenticatedUser());
     }
 }
