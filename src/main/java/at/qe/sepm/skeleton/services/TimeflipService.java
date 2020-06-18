@@ -55,7 +55,7 @@ public class TimeflipService {
         logger.logCreation(timeflip.getId(), userService.getAuthenticatedUser());
     }
 
-    @PreAuthorize("hasAuthority('EMPLOYEE')")
+    @PreAuthorize("hasAuthority('EMPLOYEE') or hasAuthority('ADMIN')")
     public Timeflip saveTimeflip(Timeflip timeflip) {
         logger.logUpdate(timeflip.getId(), userService.getAuthenticatedUser());
         return timeflipRepository.save(timeflip);
