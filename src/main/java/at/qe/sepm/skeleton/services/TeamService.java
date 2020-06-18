@@ -166,9 +166,6 @@ public class TeamService {
     public List<Team> getTeamsOfDepartment(Department department) {
         return teamRepository.findByDepartment(department);
     }
-    public List<Team> getTeamsOfDepartment(Department department) { return teamRepository.findByDepartment(department); }
-
-
     /**
      *
      * @param department department name

@@ -43,6 +43,15 @@ public class TeamListControllerTest {
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void getTeams() {
         Assert.assertEquals(10, teamListController.getTeams().size());
+        teamListController.setTeamName("I");
+        Assert.assertEquals(2, teamListController.getTeams().size());
+        teamListController.resetFilter();
+        teamListController.setDepartment("IT");
+        Assert.assertEquals(2, teamListController.getTeams().size());
+        teamListController.resetFilter();
+        teamListController.setEmployee("user7");
+        Assert.assertEquals(1, teamListController.getTeams().size());
+        teamListController.resetFilter();
     }
 
     @Test

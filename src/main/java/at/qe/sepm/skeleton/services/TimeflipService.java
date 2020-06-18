@@ -105,5 +105,4 @@ public class TimeflipService {
         return timeflipRepository.findTimflipsByUserPrefix(userName);
     }
 
-
 }

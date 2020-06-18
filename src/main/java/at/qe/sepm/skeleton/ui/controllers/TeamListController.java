@@ -78,6 +78,14 @@ public class TeamListController implements Serializable {
         this.department = department;
     }
 
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
+    }
+
     public Collection<Team> getTeamsInDepartment(Department department) {
         return teamService.getTeamsOfDepartment(department);
     }

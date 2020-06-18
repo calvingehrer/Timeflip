@@ -63,7 +63,7 @@ public class TeamDetailControllerTest {
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void checkIfDeletionIsAllowed() {
-        Team team = teamService.loadTeam("Coordination & Controll");
+        Team team = teamService.loadTeam("Coordination & Control");
         Assert.assertFalse(teamDetailController.checkIfDeletionIsAllowed(team));
 
         for (User u : userService.getUsersOfTeam(team)) {
@@ -86,7 +86,7 @@ public class TeamDetailControllerTest {
     public void doSaveTeam() {
         User newLeader = userService.loadUser("user33");
         User oldLeader = userService.loadUser("user7");
-        Team team = teamService.loadTeam("Coordination & Controll");
+        Team team = teamService.loadTeam("Coordination & Control");
         Assert.assertEquals(oldLeader, userService.getTeamLeader(team));
 
 
@@ -104,7 +104,7 @@ public class TeamDetailControllerTest {
         teamDetailController.doSaveTeam();
 
 
-        team = teamService.loadTeam("Coordination & Controll");
+        team = teamService.loadTeam("Coordination & Control");
         Department oldDepartment = departmentService.loadDepartment("Management");
         Assert.assertEquals(oldDepartment.getDepartmentName(), team.getDepartment().getDepartmentName());
         Department newDepartment = departmentService.loadDepartment("IT");
@@ -113,7 +113,7 @@ public class TeamDetailControllerTest {
         teamDetailController.setDepartment(newDepartment);
         teamDetailController.changeDepartment();
         teamDetailController.doSaveTeam();
-        team = teamService.loadTeam("Coordination & Controll");
+        team = teamService.loadTeam("Coordination & Control");
         Assert.assertEquals(newDepartment.getDepartmentName(), team.getDepartment().getDepartmentName());
 
 
@@ -121,7 +121,7 @@ public class TeamDetailControllerTest {
         teamDetailController.setDepartment(oldDepartment);
         teamDetailController.changeDepartment();
         teamDetailController.doSaveTeam();
-        team = teamService.loadTeam("Coordination & Controll");
+        team = teamService.loadTeam("Coordination & Control");
         Assert.assertEquals(oldDepartment.getDepartmentName(), team.getDepartment().getDepartmentName());
     }
 
