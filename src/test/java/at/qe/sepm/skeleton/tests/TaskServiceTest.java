@@ -7,7 +7,6 @@ import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.TaskRepository;
 import at.qe.sepm.skeleton.repositories.UserRepository;
 import at.qe.sepm.skeleton.services.TaskService;
-import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import at.qe.sepm.skeleton.ui.beans.TimeBean;
 import at.qe.sepm.skeleton.utils.MessagesView;
 import org.junit.Assert;
@@ -48,8 +47,6 @@ class TaskServiceTest{
     @Autowired
     UserRepository userRepository;
 
-    @MockBean
-    CurrentUserBean currentUserBean;
 
     @Autowired
     TimeBean timeBean;
@@ -189,7 +186,6 @@ class TaskServiceTest{
     @WithMockUser(username="admin",roles={"USER","ADMIN"})
     void saveEditedTaskTest() {
         User user = userRepository.findFirstByUsername("admin");
-        currentUserBean.setCurrentUser(user);
 
         int startHour = 8, endHour = 8, startMinute = 0, endMinute = 50;
 
@@ -288,7 +284,6 @@ class TaskServiceTest{
     @WithMockUser(username="admin",roles={"USER","ADMIN"})
     void deleteTaskTest() {
         User user = userRepository.findFirstByUsername("admin");
-        currentUserBean.setCurrentUser(user);
 
         List<Task> taskList = taskRepository.findTasksFromUser(user);
 
@@ -306,7 +301,6 @@ class TaskServiceTest{
     @WithMockUser(username="admin",roles={"USER","ADMIN"})
     void deleteTaskOfUser() {
         User user = userRepository.findFirstByUsername("user23");
-        currentUserBean.setCurrentUser(user);
 
         List<Task> taskList = taskRepository.findTasksFromUser(user);
         Assert.assertTrue("user23 should have at least 2 tasks",!taskList.isEmpty());

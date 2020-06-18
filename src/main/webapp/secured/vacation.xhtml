@@ -44,8 +44,9 @@
 
 
                     <h:form id="vacationListForm" prependId="false">
-                        <p:dataTable id="vacationsTable" var="vacation" value="#{vacationController.vacations}">
-                            <p:column headerText="Begin"> <!--sortBy="#{vacation.start}"-->
+                        <p:dataTable id="vacationsTable" var="vacation" value="#{vacationController.sortedVacation}"
+                                     scrollable="true">
+                            <p:column headerText="Begin">
                                 <h:outputText value="#{timeBean.instantToDate(vacation.start)}">
                                     <f:convertDateTime timeZone="#{timeBean.utcTimeZone}" pattern="dd.MM.yyyy"/>
                                 </h:outputText>

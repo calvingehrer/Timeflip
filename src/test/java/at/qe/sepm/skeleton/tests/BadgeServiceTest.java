@@ -5,7 +5,6 @@ import at.qe.sepm.skeleton.repositories.BadgeRepository;
 import at.qe.sepm.skeleton.repositories.TaskRepository;
 import at.qe.sepm.skeleton.repositories.UserRepository;
 import at.qe.sepm.skeleton.services.BadgeService;
-import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import at.qe.sepm.skeleton.ui.beans.TimeBean;
 import org.junit.Assert;
 import org.junit.Test;
@@ -42,8 +41,6 @@ public class BadgeServiceTest {
     @Autowired
     TaskRepository taskRepository;
 
-    @MockBean
-    CurrentUserBean currentUserBean;
 
     @Autowired
     TimeBean timeBean;

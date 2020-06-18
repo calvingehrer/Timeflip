@@ -5,7 +5,6 @@ import at.qe.sepm.skeleton.exceptions.VacationException;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.model.Vacation;
 import at.qe.sepm.skeleton.repositories.UserRepository;
-import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import at.qe.sepm.skeleton.ui.beans.HolidayBean;
 import at.qe.sepm.skeleton.ui.beans.TimeBean;
 import at.qe.sepm.skeleton.utils.TimeConverter;
@@ -18,7 +17,6 @@ import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.time.Duration;
 import java.time.Instant;
-import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Collections;
@@ -32,8 +30,6 @@ public class VacationService {
     @Autowired
     private Logger<String, User> logger;
 
-    @Autowired
-    CurrentUserBean currentUserBean;
 
     @Autowired
     UserService userService;
@@ -47,15 +43,6 @@ public class VacationService {
     @Autowired
     TimeBean timeBean;
 
-
-    /**
-     * A Function to get the current user
-     */
-
-    @PostConstruct
-    public void init() {
-        currentUserBean.init();
-    }
 
     /**
      * Add a new Vacation
@@ -79,7 +66,8 @@ public class VacationService {
 
         managedUser.addVacation(vacation);
         userRepository.save(managedUser);
-        logger.logCreation("Vacation of " + user.getUsername(), currentUserBean.getCurrentUser());
+        logger.logCreation("Vacation of " + user.getUsername(), userService.getAuthenticatedUser());
+
     }
 
     /**

@@ -19,9 +19,32 @@
         <div class="ui-g">
             <div class="ui-g-12">
                 <div class="card">
-                    <p:growl id="growl" rendered="#{not facesContext.validationFailed}" severity="info" showDetail="true"/>
+                    <p:growl id="growl" rendered="#{not facesContext.validationFailed}" severity="info"
+                             showDetail="true"/>
 
                     <h1>Teams</h1>
+
+                    <h:form id="selection">
+                        <h:panelGrid columns="7">
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="Teamname: "/>
+                                <p:inputText value="#{teamListController.teamName}"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="Department: "/>
+                                <p:inputText value="#{teamListController.department}"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="3">
+                                <p:outputLabel value="Employee: "/>
+                                <p:inputText value="#{teamListController.employee}"/>
+                            </h:panelGrid>
+                            <p:commandButton value="Filter" update=":teamForm"/>
+                            <p:commandButton value="Reset" action="#{teamListController.resetFilter}"
+                                             update=":selection :teamForm:TeamTable"/>
+                        </h:panelGrid>
+                    </h:form>
+
+
                     <h:form id="teamForm">
 
                         <p:dataTable id="TeamTable" var="team" value="#{teamListController.teams}" scrollable="true">
@@ -29,7 +52,8 @@
                                 <h:outputText value="#{team.teamName}"/>
                             </p:column>
                             <p:column headerText="Employees">
-                                <p:dataList id="UsersOfTeam" var="user" value="#{userListController.getEmployees(team)}" type="definition">
+                                <p:dataList id="UsersOfTeam" var="user" value="#{userListController.getEmployees(team)}"
+                                            type="definition">
                                     <p:column>
                                         <h:outputText value="#{user}"/>
                                     </p:column>

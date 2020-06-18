@@ -3,8 +3,9 @@ package at.qe.sepm.skeleton.ui.controllers;
 
 import at.qe.sepm.skeleton.model.TaskEnum;
 import at.qe.sepm.skeleton.services.TaskService;
-import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
+import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.utils.MessagesView;
+import com.fasterxml.jackson.annotation.JacksonAnnotationsInside;
 import org.primefaces.model.chart.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -23,7 +24,8 @@ public class StatisticsController implements Serializable {
     TaskService taskService;
 
     @Autowired
-    CurrentUserBean currentUserBean;
+    private UserService userService;
+
 
     private PieChartModel todayUserModel;
     private PieChartModel weekUserModel;
@@ -46,7 +48,6 @@ public class StatisticsController implements Serializable {
 
     @PostConstruct
     public void init() {
-        currentUserBean.init();
         userTasksDaily();
         userTasksWeekly();
         userTasksMonthly();
@@ -255,37 +256,37 @@ public class StatisticsController implements Serializable {
 
     private PieChartModel initUserModel(PieChartModel model, String title, Instant start, Instant end){
         model = new PieChartModel();
-        HashMap<TaskEnum, Long> tasks = taskService.getUserTasksBetweenDates(currentUserBean.getCurrentUser(), start, end);
+        HashMap<TaskEnum, Long> tasks = taskService.getUserTasksBetweenDates(userService.getAuthenticatedUser(), start, end);
         return getPieChartModel(model, title, tasks);
     }
 
     private BarChartModel initBarUserModel(BarChartModel model, String title, Instant start, Instant end){
         model = new BarChartModel();
-        HashMap<TaskEnum, Long> tasks = taskService.getUserTasksBetweenDates(currentUserBean.getCurrentUser(), start, end);
+        HashMap<TaskEnum, Long> tasks = taskService.getUserTasksBetweenDates(userService.getAuthenticatedUser(), start, end);
         return getBarChartModel(model, title, tasks);
     }
 
     private PieChartModel initTeamModel(PieChartModel model, String title, Instant start, Instant end){
         model = new PieChartModel();
-        HashMap<TaskEnum, Long> tasks = taskService.getTeamTasksBetweenDates(currentUserBean.getCurrentUser().getTeam(), start, end);
+        HashMap<TaskEnum, Long> tasks = taskService.getTeamTasksBetweenDates(userService.getAuthenticatedUser().getTeam(), start, end);
         return getPieChartModel(model, title, tasks);
     }
 
     private BarChartModel initBarTeamModel(BarChartModel model, String title, Instant start, Instant end){
         model = new BarChartModel();
-        HashMap<TaskEnum, Long> tasks = taskService.getTeamTasksBetweenDates(currentUserBean.getCurrentUser().getTeam(), start, end);
+        HashMap<TaskEnum, Long> tasks = taskService.getTeamTasksBetweenDates(userService.getAuthenticatedUser().getTeam(), start, end);
         return getBarChartModel(model, title, tasks);
     }
 
     private PieChartModel initDepartmentModel(PieChartModel model, String title, Instant start, Instant end){
         model = new PieChartModel();
-        HashMap<TaskEnum, Long> tasks = taskService.getDepartmentTasksBetweenDates(currentUserBean.getCurrentUser().getDepartment(), start, end);
+        HashMap<TaskEnum, Long> tasks = taskService.getDepartmentTasksBetweenDates(userService.getAuthenticatedUser().getDepartment(), start, end);
         return getPieChartModel(model, title, tasks);
     }
 
     private BarChartModel initBarDepartmentModel(BarChartModel model, String title, Instant start, Instant end){
         model = new BarChartModel();
-        HashMap<TaskEnum, Long> tasks = taskService.getDepartmentTasksBetweenDates(currentUserBean.getCurrentUser().getDepartment(), start, end);
+        HashMap<TaskEnum, Long> tasks = taskService.getDepartmentTasksBetweenDates(userService.getAuthenticatedUser().getDepartment(), start, end);
         return getBarChartModel(model, title, tasks);
     }
 

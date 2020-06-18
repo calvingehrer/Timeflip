@@ -4,7 +4,6 @@ package at.qe.sepm.skeleton.ui.controllers;
 import at.qe.sepm.skeleton.model.Timeflip;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.TimeflipService;
-import at.qe.sepm.skeleton.ui.beans.CurrentUserBean;
 import at.qe.sepm.skeleton.ui.beans.SessionInfoBean;
 import at.qe.sepm.skeleton.services.UserService;
 import at.qe.sepm.skeleton.ui.beans.SessionInfoBean;
@@ -28,6 +27,7 @@ public class TimeflipListController implements Serializable {
     private TimeflipService timeflipService;
 
     private String macAddress = "";
+    private String userName = "";
 
 
     @Autowired
@@ -35,24 +35,19 @@ public class TimeflipListController implements Serializable {
 
     @Autowired
     ManageCurrentUserController manageCurrentUserController;
-    @Autowired
-    CurrentUserBean currentUserBean;
-
-    @PostConstruct
-    public void init() {
-        currentUserBean.init();
-    }
 
 
     public Timeflip getTimeflipOfUser() {
-        User currentUser = currentUserBean.getCurrentUser();
-        return timeflipService.getTimeflipOfUser(currentUser);
+        return timeflipService.getTimeflipOfUser(userService.getAuthenticatedUser());
     }
 
 
 
 
     public Collection<Timeflip> getTimeflips(){
+        if(!userName.equals("")) {
+            return timeflipService.getTimeflipsByUserPrefix(userName);
+        }
         if(!macAddress.equals("")){
             return timeflipService.getAllTimeflipsByMacAddress(macAddress);
         }
@@ -81,5 +76,13 @@ public class TimeflipListController implements Serializable {
 
     public void setMacId(String macId) {
         this.macAddress = macId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }
