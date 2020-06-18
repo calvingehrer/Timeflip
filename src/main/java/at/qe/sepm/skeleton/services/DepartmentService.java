@@ -52,8 +52,6 @@ public class DepartmentService {
     /**
      * saves a new department
      *
-     * @param department
-     * @return saved Department
      */
 
 
@@ -63,10 +61,8 @@ public class DepartmentService {
         if (addedTeams != null) {
             for (Team t : addedTeams) {
                 userRepository.findUsersOfTeam(t)
-                        .stream()
                         .forEach(user -> user.setDepartment(department));
                 taskRepository.findTasksFromTeam(t)
-                        .stream()
                         .forEach(task -> task.setDepartment(department));
                 t.setDepartment(department);
                 teamRepository.save(t);
@@ -75,14 +71,12 @@ public class DepartmentService {
         if (removedTeams != null) {
             for (Team t : removedTeams) {
                 userRepository.findUsersOfTeam(t)
-                        .stream()
                         .forEach(user -> {
                             user.setDepartment(null);
                             userRepository.save(user);
                         });
 
                 taskRepository.findTasksFromTeam(t)
-                        .stream()
                         .forEach(task -> {
                             task.setDepartment(null);
                             taskRepository.save(task);
@@ -107,8 +101,7 @@ public class DepartmentService {
     }
 
     /**
-     * @param headOfDepartment
-     * @param department
+     * adds a new department
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     public void addNewDepartment(User headOfDepartment, Department department) {
@@ -123,8 +116,7 @@ public class DepartmentService {
     }
 
     /**
-     * @param departmentName
-     * @return department by department name
+     * loads a department
      */
 
     @PreAuthorize("hasAuthority('ADMIN') or principal.username eq #username")
@@ -134,8 +126,6 @@ public class DepartmentService {
 
     /**
      * deletes department
-     *
-     * @param department
      */
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -147,8 +137,6 @@ public class DepartmentService {
     /**
      * find  teams of department
      *
-     * @param department
-     * @return Teams of the department
      */
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DEPARTMENTLEADER')")
@@ -159,8 +147,6 @@ public class DepartmentService {
     /**
      * find department leader
      *
-     * @param department
-     * @return Department leader
      */
 
     public User getDepartmentLeader(Department department) {

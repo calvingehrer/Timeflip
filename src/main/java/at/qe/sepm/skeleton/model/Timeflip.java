@@ -17,7 +17,7 @@ public class Timeflip implements Persistable<String>, Serializable {
     @Column(length = 100)
     private String macAddress;
 
-    @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER, optional = true, cascade = CascadeType.ALL)
+    @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -58,14 +58,6 @@ public class Timeflip implements Persistable<String>, Serializable {
 
     public void setTasks(Map<Integer, TaskEnum> tasks) {
         this.tasks = tasks;
-    }
-
-    public List<TaskEnum> getTaskValues() {
-        return new ArrayList<TaskEnum>(tasks.values());
-    }
-
-    public Date getCreateDate() {
-        return createDate;
     }
 
     public void setCreateDate(Date createDate) {

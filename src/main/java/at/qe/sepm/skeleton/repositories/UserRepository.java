@@ -20,15 +20,9 @@ public interface UserRepository extends AbstractRepository<User, String> {
 
     User findFirstByUsername(String username);
 
-    List<User> findByUsernameContaining(String username);
-
-
     @Query("SELECT u FROM User u WHERE 'Admin' = u.firstName or 'Miranda' = u.firstName")
     List<User> findTestUser();
 
-
-    @Query("SELECT u FROM User u WHERE CONCAT(u.firstName, ' ', u.lastName) = :wholeName")
-    List<User> findByWholeNameConcat(@Param("wholeName") String wholeName);
 
     @Query("SELECT u FROM User u WHERE :role MEMBER OF u.roles")
     List<User> findByRole(@Param("role") UserRole role);
@@ -62,9 +56,4 @@ public interface UserRepository extends AbstractRepository<User, String> {
 
     @Query("SELECT u FROM User u")
     List<User> getAllUsers();
-
-    @Query("SELECT u FROM User u WHERE u.username LIKE 'default'")
-    User findDefaultUser();
-
-
 }

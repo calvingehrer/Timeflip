@@ -85,17 +85,6 @@ public class TimeflipService {
         return timeflipRepository.findTimeflipOfUser(currentUser);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public void deleteTimeFlipOfUser(User user) {
-        Timeflip timeflip = timeflipRepository.findTimeflipOfUser(user);
-        if (timeflip != null) {
-            timeflip.setUser(null);
-            timeflipRepository.save(timeflip);
-            timeflipRepository.delete(timeflip);
-        }
-        logger.logDeletion(timeflip.getId(), user);
-    }
-
     public List<Timeflip> getTimeflipsByUserPrefix(String userName) {
         return timeflipRepository.findTimflipsByUserPrefix(userName);
     }

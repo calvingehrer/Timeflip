@@ -14,9 +14,6 @@ import java.util.Objects;
 @Entity
 public class Team implements Persistable<String>, Serializable {
 
-    private static final long serialVersionTID = 1L;
-
-
     @Id
     @Column(length = 100)
     private String teamName;
@@ -29,17 +26,8 @@ public class Team implements Persistable<String>, Serializable {
     private Date createDate;
 
 
-    public Date getCreateDate() {
-        return createDate;
-    }
-
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
-    }
-
-
-    public static long getSerialVersionTID() {
-        return serialVersionTID;
     }
 
     public String getTeamName() {

@@ -48,8 +48,8 @@ public class TeamService {
     /**
      * adds a new Team
      *
-     * @param employees
-     * @param team
+     * @param employees to add
+     * @param team to add
      */
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DEPARTMENTLEADER')")
@@ -63,8 +63,7 @@ public class TeamService {
     }
 
     /**
-     * @param team
-     * @return saved Team
+     * @param team to save
      */
 
 
@@ -76,7 +75,6 @@ public class TeamService {
                 u.setTeam(team);
                 u.setDepartment(team.getDepartment());
                 taskRepository.findTasksFromUser(u)
-                        .stream()
                         .forEach(task -> {
                             task.setTeam(team);
                             task.setDepartment(team.getDepartment());
@@ -92,7 +90,6 @@ public class TeamService {
                 u.setTeam(null);
                 u.setDepartment(null);
                 taskRepository.findTasksFromUser(u)
-                        .stream()
                         .forEach(task -> {
                             task.setTeam(null);
                             task.setDepartment(null);
@@ -106,7 +103,7 @@ public class TeamService {
     }
 
     /**
-     * @param teamName
+     * @param teamName to load
      * @return team by team name
      */
 
@@ -118,7 +115,7 @@ public class TeamService {
     /**
      * deletes Team
      *
-     * @param team
+     * @param team to delete
      */
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -129,7 +126,7 @@ public class TeamService {
     }
 
     /**
-     * @param teamName
+     * @param teamName to find
      * @return Teams starting with the given string
      */
 
@@ -155,16 +152,7 @@ public class TeamService {
     }
 
     /**
-     * @param team
-     * @return users of the given team
-     */
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DEPARTMENTLEADER') or hasAuthority('TEAMLEADER')")
-    public List<User> getUsersOfTeam(Team team) {
-        return userService.getUsersOfTeam(team);
-    }
-
-    /**
-     * @param department
+     * @param department to find
      * @return teams of the department
      */
     @PreAuthorize("hasAuthority('ADMIN')")

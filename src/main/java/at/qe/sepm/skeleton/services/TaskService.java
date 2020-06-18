@@ -71,7 +71,7 @@ public class TaskService {
     }
 
     /**
-     * @param task
+     * @param task to search
      * @return duration of the task in minutes
      */
 
@@ -81,9 +81,9 @@ public class TaskService {
     }
 
     /**
-     * @param user
-     * @param start
-     * @param end
+     * @param user that is wanted
+     * @param start of the date
+     * @param end of the date
      * @return Map of all user task types between two Dates with duration of each task type
      */
 
@@ -95,9 +95,9 @@ public class TaskService {
     }
 
     /**
-     * @param team
-     * @param start
-     * @param end
+     * @param team that is wanted
+     * @param start of the date
+     * @param end of the date
      * @return Map of all team task types between two Dates with duration of each task type
      */
 
@@ -108,9 +108,9 @@ public class TaskService {
     }
 
     /**
-     * @param department
-     * @param start
-     * @param end
+     * @param department that is wanted
+     * @param start of the date
+     * @param end of the date
      * @return Map of all department task types between two Dates with duration of each task type
      */
 
@@ -123,8 +123,8 @@ public class TaskService {
     /**
      * fills the list of task types with duration
      *
-     * @param dailyTasks
-     * @param tasks
+     * @param dailyTasks is empty HashMap
+     * @param tasks of user, team or department
      * @return filled list
      */
 
@@ -244,8 +244,7 @@ public class TaskService {
     /**
      * check if something is earlier than the current or the last week
      *
-     * @param date
-     * @throws TaskException
+     * @param date to check
      */
 
     public boolean checkIfEarlierThanTwoWeeks(Instant date) {
@@ -263,8 +262,7 @@ public class TaskService {
      * checks whether the requested date was after today
      * Throws an exception when it is
      *
-     * @param date
-     * @throws TaskException
+     * @param date to check
      */
 
     public void checkIfAfterToday(Instant date) throws TaskException {
@@ -278,11 +276,10 @@ public class TaskService {
     /**
      * checks whether the hours and the minutes are correct
      *
-     * @param startHour
-     * @param endHour
-     * @param startMinute
-     * @param endMinute
-     * @throws TaskException
+     * @param startHour of task
+     * @param endHour of task
+     * @param startMinute of task
+     * @param endMinute of task
      */
 
     public void checkTime(long startHour, long endHour, long startMinute, long endMinute) throws TaskException {
@@ -297,7 +294,7 @@ public class TaskService {
     /**
      * Method to delete Tasks
      *
-     * @param task
+     * @param task to delete
      */
 
     public void deleteTask(Task task) {

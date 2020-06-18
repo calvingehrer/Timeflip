@@ -50,11 +50,11 @@ public class HistoryEntry {
         this.end = end;
     }
 
-    public int getSeconds() {
+    int getSeconds() {
         return seconds;
     }
 
-    public void setSeconds(int seconds) {
+    void setSeconds(int seconds) {
         this.seconds = seconds;
     }
 

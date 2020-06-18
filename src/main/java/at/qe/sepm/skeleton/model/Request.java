@@ -84,10 +84,6 @@ public abstract class Request implements Persistable<Long>, Serializable {
         this.description = description;
     }
 
-    public Date getCreateDate() {
-        return createDate;
-    }
-
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }

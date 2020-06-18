@@ -14,8 +14,6 @@ import java.util.Date;
 @Entity
 public class Department implements Persistable<String>, Serializable {
 
-    private static final long serialVersionDID = 1L;
-
     @Id
     @Column(length = 100)
     private String departmentName;
@@ -30,14 +28,6 @@ public class Department implements Persistable<String>, Serializable {
         this.departmentName = departmentName;
     }
 
-    public static long getSerialVersionDID() {
-        return serialVersionDID;
-    }
-
-
-    public Date getCreateDate() {
-        return createDate;
-    }
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;

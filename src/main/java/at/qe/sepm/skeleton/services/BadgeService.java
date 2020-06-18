@@ -63,8 +63,6 @@ public class BadgeService {
     /**
      * creates Badge for the Code Monkey (Person with most Implementation Time) of the given period
      *
-     * @param startDate
-     * @param endDate
      */
 
     private void evaluateCodeMonkey(Instant startDate, Instant endDate) {
@@ -92,8 +90,6 @@ public class BadgeService {
     /**
      * creates Badge for the Creative Mind (Person with most Design Time) of the given period
      *
-     * @param startDate
-     * @param endDate
      */
 
     private void evaluateCreativeMind(Instant startDate, Instant endDate) {
@@ -121,8 +117,6 @@ public class BadgeService {
     /**
      * creates Badge for the Friend and Helper (Person with most Customer Service Time) of the given period
      *
-     * @param startDate
-     * @param endDate
      */
 
     private void evaluateFriendAndHelper(Instant startDate, Instant endDate) {
@@ -152,8 +146,6 @@ public class BadgeService {
      * every task between startDate and endDate, then creating a HashMap where every new task gets saved per user.
      * Finally the user with the most different tasks is searched in that HashMap.
      *
-     * @param startDate
-     * @param endDate
      */
 
     private void evaluateAllRounder(Instant startDate, Instant endDate) {
@@ -203,8 +195,6 @@ public class BadgeService {
     /**
      * creates Badge for the Night Owl (Person with most time during 20:00 and 6:00) of the given period
      *
-     * @param startDate
-     * @param endDate
      */
 
     private void evaluateNightOwl(Instant startDate, Instant endDate) {
@@ -215,7 +205,7 @@ public class BadgeService {
         List<Task> nightTasks = new ArrayList<>();
 
         for (Task entry : taskList) {
-            Integer hour = entry.getStartTime().atZone(ZoneOffset.UTC).getHour();
+            int hour = entry.getStartTime().atZone(ZoneOffset.UTC).getHour();
             if (hour >= 20 || hour < 6 && entry.getTask() != TaskEnum.AUSZEIT) {
                 nightTasks.add(entry);
             }
@@ -244,9 +234,6 @@ public class BadgeService {
 
     /**
      * creates Badge for the Wisdom Seeker (Person with most Fortbildung Time) of the given period
-     *
-     * @param startDate
-     * @param endDate
      */
 
     private void evaluateWisdomSeeker(Instant startDate, Instant endDate) {
@@ -273,8 +260,6 @@ public class BadgeService {
     /**
      * Help function for badges that have a specific taskTypeList and need to find user with most seconds; returns The userWithMostSeconds
      *
-     * @param taskTypeList
-     * @return userWithMostSeconds
      */
 
     private String evaluateUserWithMostTime(List<Task> taskTypeList) {

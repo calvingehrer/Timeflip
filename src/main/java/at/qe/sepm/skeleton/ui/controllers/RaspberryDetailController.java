@@ -34,7 +34,6 @@ public class RaspberryDetailController implements Serializable {
     /**
      * Returns the currently displayed user.
      *
-     * @return
      */
     public Raspberry getRaspberry() {
         return raspberry;
@@ -43,15 +42,8 @@ public class RaspberryDetailController implements Serializable {
     /**
      * Action to force a reload of the currently displayed user.
      */
-    public void doReloadRaspberry() {
+    private void doReloadRaspberry() {
         raspberry = raspberryService.loadRaspberry(raspberry.getRaspberryId());
-    }
-
-    /**
-     * Action to save the currently displayed user.
-     */
-    public void doSaveRaspberry() {
-        raspberry = this.raspberryService.saveRaspberry(raspberry);
     }
 
     /**

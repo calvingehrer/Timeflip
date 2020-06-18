@@ -19,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -79,11 +80,11 @@ public class VacationController implements Serializable {
         this.endOfVacation = endOfVacation;
     }
 
-    public Set<Vacation> getVacations() {
+    private Set<Vacation> getVacations() {
         return vacations;
     }
 
-    public void setVacations(Set<Vacation> vacations) {
+    private void setVacations(Set<Vacation> vacations) {
         this.vacations = vacations;
     }
 
@@ -139,7 +140,6 @@ public class VacationController implements Serializable {
 
     public List<Vacation> getSortedVacation() {
         Set<Vacation> sorted = getVacations();
-        List<Vacation> sortedVacation = sorted.stream().collect(Collectors.toList());
-        return sortedVacation;
+        return new ArrayList<>(sorted);
     }
 }

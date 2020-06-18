@@ -46,10 +46,6 @@ public class AddRaspberryControllerTest {
         Room room = roomService.loadRoom("6");
         addRaspberryController.setRoom(room);
 
-        for(Raspberry raspberry1 : raspberryService.getAllRaspberries()){
-            System.out.println(raspberry1.getRaspberryId());
-        }
-
         Assert.assertEquals(5, raspberryService.getAllRaspberries().size());
         Assert.assertFalse(room.isEquipped());
         addRaspberryController.add();

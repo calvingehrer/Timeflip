@@ -48,7 +48,6 @@ public class DepartmentDetailController implements Serializable {
 
     public void setDepartment(Department department) {
         this.department = department;
-//        doReloadDepartment();
     }
 
     public User getNewLeader() {
@@ -57,14 +56,6 @@ public class DepartmentDetailController implements Serializable {
 
     public void setNewLeader(User newLeader) {
         this.newLeader = newLeader;
-    }
-
-    public User getOldLeader() {
-        return oldLeader;
-    }
-
-    public void setOldLeader(User oldLeader) {
-        this.oldLeader = oldLeader;
     }
 
     public Department getDepartment() {
@@ -124,11 +115,10 @@ public class DepartmentDetailController implements Serializable {
      * checks whether there are any teams still  in the department or it
      * still has an departmentleader
      *
-     * @param department
-     * @return
+     * @param department to check
      */
 
-    public boolean checkIfDeletionIsAllowed(Department department) {
+    private boolean checkIfDeletionIsAllowed(Department department) {
         if (!teamService.getTeamsOfDepartment(department).isEmpty()) {
             return false;
         } else return userService.getDepartmentLeader(department) == null;

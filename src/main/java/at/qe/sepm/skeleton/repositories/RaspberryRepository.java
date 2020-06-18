@@ -10,8 +10,4 @@ import java.util.List;
 public interface RaspberryRepository extends AbstractRepository<Raspberry, String> {
 
     Raspberry findByRaspberryId(String raspberryId);
-
-    @Query("SELECT r from Raspberry r")
-    List<Raspberry> findRaspberryOfTimeflip(@Param("timeflip") Timeflip timeflip);
-
 }

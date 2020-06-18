@@ -19,10 +19,6 @@ public class TeamListController implements Serializable {
 
     private Team team;
 
-    private User teamLeader;
-
-    private List<User> employees;
-
     @Autowired
     private TeamService teamService;
 

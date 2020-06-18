@@ -19,7 +19,7 @@ public class Room implements Persistable<String>, Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createDate;
 
-    @ManyToOne(optional = true)
+    @ManyToOne()
     private User createUser;
 
     @OneToOne(mappedBy = "room")
@@ -33,10 +33,6 @@ public class Room implements Persistable<String>, Serializable {
 
     public void setRoomNumber(String roomNumber) {
         this.roomNumber = roomNumber;
-    }
-
-    public Date getCreateDate() {
-        return createDate;
     }
 
     public void setCreateDate(Date createDate) {

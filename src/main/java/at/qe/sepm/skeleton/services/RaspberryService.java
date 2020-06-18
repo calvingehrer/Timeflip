@@ -30,8 +30,6 @@ public class RaspberryService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private RoomRepository roomRepository;
-    @Autowired
     private TimeflipRepository timeflipRepository;
     @Autowired
     private UserService userService;

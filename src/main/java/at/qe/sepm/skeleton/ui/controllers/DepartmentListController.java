@@ -32,7 +32,7 @@ public class DepartmentListController implements Serializable {
     }
 
     /**
-     * @param department
+     * @param department to find
      * @return all teams in the department
      */
 
@@ -41,7 +41,7 @@ public class DepartmentListController implements Serializable {
     }
 
     /**
-     * @param department
+     * @param department to find
      * @return the head of the department
      */
 

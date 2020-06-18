@@ -21,7 +21,7 @@ public class Raspberry implements Persistable<String>, Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createDate;
 
-    @ManyToOne(optional = true)
+    @ManyToOne()
     private User createUser;
 
 
@@ -31,7 +31,6 @@ public class Raspberry implements Persistable<String>, Serializable {
 
     //@OneToMany(fetch = FetchType.EAGER)
     //private Collection<Timeflip> timeflips;
-
 
     public String getRaspberryId() {
         return raspberryId;
@@ -49,10 +48,6 @@ public class Raspberry implements Persistable<String>, Serializable {
         this.password = password;
     }
 
-    public Date getCreateDate() {
-        return createDate;
-    }
-
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
@@ -65,7 +60,6 @@ public class Raspberry implements Persistable<String>, Serializable {
         this.createUser = createUser;
     }
 
-
     public Room getRoom() {
         return room;
     }
@@ -73,15 +67,6 @@ public class Raspberry implements Persistable<String>, Serializable {
     public void setRoom(Room room) {
         this.room = room;
     }
-
-/*
-    public Collection<Timeflip> getTimeflips() {
-        return timeflips;
-    }
-
-    public void setTimeflips(Collection<Timeflip> timeflips) {
-        this.timeflips = timeflips;
-    }*/
 
     @Override
     public String getId() {

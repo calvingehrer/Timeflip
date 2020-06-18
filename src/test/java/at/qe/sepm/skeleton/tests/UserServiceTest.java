@@ -207,10 +207,6 @@ public class UserServiceTest {
     public void testGetAllUsersByUsername() {
         Collection<User> usersStartingWithUser = userService.getAllUsersByUsername("user");
 
-        for(User user : usersStartingWithUser){
-            System.out.println(user.getUsername());
-        }
-
         Assert.assertEquals("Call to userService.loadUser returned wrong user", 34, usersStartingWithUser.size());
     }
 

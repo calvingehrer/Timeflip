@@ -7,11 +7,5 @@ import org.springframework.data.repository.query.Param;
 
 public interface DepartmentRepository extends AbstractRepository<Department, String> {
 
-
     Department findByDepartmentName(String departmentName);
-
-
-    @Query("SELECT d FROM Department d WHERE d.departmentName = :departmentName ")
-    Department findByDepartmentName1(@Param("departmentName") String departmentName);
-
 }

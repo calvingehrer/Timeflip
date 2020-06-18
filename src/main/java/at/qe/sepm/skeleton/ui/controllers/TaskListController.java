@@ -38,19 +38,11 @@ public class TaskListController implements Serializable {
     private String taskType = "";
 
 
-    public Date getStartOfTimeRange() {
-        return startOfTimeRange;
-    }
-
-    public void setStartOfTimeRange(Date startOfTimeRange) {
+    private void setStartOfTimeRange(Date startOfTimeRange) {
         this.startOfTimeRange = startOfTimeRange;
     }
 
-    public Date getEndOfTimeRange() {
-        return endOfTimeRange;
-    }
-
-    public void setEndOfTimeRange(Date endOfTimeRange) {
+    private void setEndOfTimeRange(Date endOfTimeRange) {
         this.endOfTimeRange = endOfTimeRange;
     }
 
@@ -89,7 +81,7 @@ public class TaskListController implements Serializable {
      * @return all tasks within a certain time frame
      */
 
-    public List<Task> getTasksFromUser() {
+    private List<Task> getTasksFromUser() {
         User currentUser = userService.getAuthenticatedUser();
         if (this.getInterval().equals("")) {
             return taskService.getAllTasksByType(currentUser, taskType);
@@ -137,7 +129,7 @@ public class TaskListController implements Serializable {
 
     public List<Task> getSortedTasksFromUser() {
         List<Task> sorted = getTasksFromUser();
-        Collections.sort(sorted, (task1, task2) -> task2.getStartTime().compareTo(task1.getStartTime()));
+        sorted.sort((task1, task2) -> task2.getStartTime().compareTo(task1.getStartTime()));
         return sorted;
     }
 

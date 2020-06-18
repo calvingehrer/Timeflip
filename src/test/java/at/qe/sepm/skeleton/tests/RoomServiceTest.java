@@ -32,11 +32,6 @@ class RoomServiceTest {
         Room room = new Room();
         room.setRoomNumber("22");
 
-
-        for(Room r : roomService.getRoomsWithoutRaspberry()){
-            System.out.println(r.getRoomNumber());
-        }
-
         Assert.assertEquals(1, roomService.getRoomsWithoutRaspberry().size());
 
         roomService.addNewRoom(room);

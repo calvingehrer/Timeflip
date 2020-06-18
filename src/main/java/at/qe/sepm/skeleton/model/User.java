@@ -34,7 +34,7 @@ public class User implements Persistable<String>, Serializable {
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date createDate;
-    @ManyToOne(optional = true)
+    @ManyToOne()
     private User updateUser;
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateDate;
@@ -43,12 +43,11 @@ public class User implements Persistable<String>, Serializable {
 
     private String firstName;
     private String lastName;
-    private String fullName;
     @Email
     private String email;
 
 
-    boolean enabled;
+    private boolean enabled;
 
     @ElementCollection(targetClass = UserRole.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_user_role")
@@ -57,9 +56,9 @@ public class User implements Persistable<String>, Serializable {
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_vacation")
-    Set<Vacation> vacations = new HashSet<>();
+    private Set<Vacation> vacations = new HashSet<>();
 
-    @ManyToOne(targetEntity = Team.class, fetch = FetchType.EAGER, optional = true)
+    @ManyToOne(targetEntity = Team.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "team_id")
     private Team team;
 
@@ -67,14 +66,8 @@ public class User implements Persistable<String>, Serializable {
     @JoinColumn(name = "department_id")
     private Department department;
 
-    private long vacationDays;
-
     public Set<Vacation> getVacations() {
         return vacations;
-    }
-
-    public void setVacations(Set<Vacation> vacations) {
-        this.vacations = vacations;
     }
 
     public void addVacation(Vacation vacation) {
@@ -190,14 +183,6 @@ public class User implements Persistable<String>, Serializable {
 
     public void setDepartment(Department department) {
         this.department = department;
-    }
-
-    public long getVacationDays() {
-        return vacationDays;
-    }
-
-    public void setVacationDays(long vacationDays) {
-        this.vacationDays = vacationDays;
     }
 
     @Override

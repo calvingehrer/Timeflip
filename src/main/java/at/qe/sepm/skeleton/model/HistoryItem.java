@@ -20,7 +20,6 @@ public class HistoryItem implements Persistable<Long>, Serializable {
     private Date start;
     @Temporal(TemporalType.TIMESTAMP)
     private Date end;
-    private int seconds;
 
     public Long getId() {
         return id;
@@ -60,14 +59,6 @@ public class HistoryItem implements Persistable<Long>, Serializable {
 
     public void setEnd(Date end) {
         this.end = end;
-    }
-
-    public int getSeconds() {
-        return seconds;
-    }
-
-    public void setSeconds(int seconds) {
-        this.seconds = seconds;
     }
 
     @Override

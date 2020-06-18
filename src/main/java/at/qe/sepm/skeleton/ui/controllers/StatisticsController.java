@@ -186,7 +186,7 @@ public class StatisticsController implements Serializable {
     /**
      * sets the hours, minutes, seconds and milliseconds of a date to zero
      *
-     * @param date
+     * @param date to set
      */
 
     public static void setDayToBeginning(Calendar date) {
@@ -215,7 +215,7 @@ public class StatisticsController implements Serializable {
         calendar.add(Calendar.DATE, 1);
         Instant end = calendar.toInstant();
 
-        todayUserModel = initUserModel(todayUserModel, "Daily Stats", start, end);
+        todayUserModel = initUserModel("Daily Stats", start, end);
 
     }
 
@@ -228,7 +228,7 @@ public class StatisticsController implements Serializable {
         calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
         Instant start = calendar.toInstant();
 
-        weekUserModel = initUserModel(weekUserModel, "Weekly Stats", start, end);
+        weekUserModel = initUserModel("Weekly Stats", start, end);
     }
 
 
@@ -241,8 +241,8 @@ public class StatisticsController implements Serializable {
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         Instant start = calendar.toInstant();
 
-        monthUserModel = initUserModel(monthUserModel, "Monthly Stats", start, end);
-        monthBarUserModel = initBarUserModel(monthBarUserModel, "Monthly Stats", start, end);
+        monthUserModel = initUserModel("Monthly Stats", start, end);
+        monthBarUserModel = initBarUserModel(start, end);
     }
 
     private void teamTasksLastWeek() {
@@ -255,7 +255,7 @@ public class StatisticsController implements Serializable {
         calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
         Instant start = calendar.toInstant();
 
-        weekTeamModel = initTeamModel(weekTeamModel, "Weekly Stats", start, end);
+        weekTeamModel = initTeamModel("Weekly Stats", start, end);
     }
 
     private void teamTasksLastMonth() {
@@ -266,8 +266,8 @@ public class StatisticsController implements Serializable {
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         Instant start = calendar.toInstant();
 
-        monthTeamModel = initTeamModel(monthTeamModel, "Monthly Stats", start, end);
-        monthBarTeamModel = initBarTeamModel(monthBarTeamModel, "Monthly Stats", start, end);
+        monthTeamModel = initTeamModel("Monthly Stats", start, end);
+        monthBarTeamModel = initBarTeamModel(start, end);
     }
 
     private void departmentTasksLastMonth() {
@@ -278,8 +278,8 @@ public class StatisticsController implements Serializable {
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         Instant start = calendar.toInstant();
 
-        monthDepartmentModel = initDepartmentModel(monthDepartmentModel, "Monthly Stats", start, end);
-        monthBarDepartmentModel = initBarDepartmentModel(monthBarDepartmentModel, "Monthly Stats", start, end);
+        monthDepartmentModel = initDepartmentModel(start, end);
+        monthBarDepartmentModel = initBarDepartmentModel(start, end);
     }
 
     /**
@@ -310,7 +310,7 @@ public class StatisticsController implements Serializable {
     /**
      * function that uses date to set the instant start to the beginning of the week and end to the last day of the week
      *
-     * @param date
+     * @param date to set
      */
     private static Instant firstDayOfWeek(Calendar date) {
         Calendar dateForWeek = (Calendar) date.clone();
@@ -321,7 +321,7 @@ public class StatisticsController implements Serializable {
     /**
      * Returns the instant of first last day of a month
      *
-     * @param date
+     * @param date to set
      * @return firstDay
      */
     private static Instant firstDayOfMonth(Calendar date) {
@@ -332,7 +332,7 @@ public class StatisticsController implements Serializable {
     /**
      * Returns the instant of the last day of a month
      *
-     * @param date
+     * @param date to set
      * @return lastDay
      */
 
@@ -344,7 +344,7 @@ public class StatisticsController implements Serializable {
     /**
      * turns Calendar into Date, needed for choosing date
      *
-     * @param date
+     * @param date to set
      * @return calendar
      */
     private static Calendar toCalendar(Date date) {
@@ -360,7 +360,7 @@ public class StatisticsController implements Serializable {
         return dateForWeek.toInstant();
     }
 
-    public List<Team> getTeamsOfCurrentDepartment() {
+    List<Team> getTeamsOfCurrentDepartment() {
         return departmentService.getTeamsOfDepartment(userService.getAuthenticatedUser().getDepartment());
     }
 
@@ -368,67 +368,66 @@ public class StatisticsController implements Serializable {
      * Functions that take a model, title, start date and end date and return a full Model of the Tasks with the help
      * of a get...ChartModel function.
      *
-     * @param model
-     * @param title
-     * @param start
-     * @param end
+     * @param title to set
+     * @param start of date
+     * @param end of date
      * @return BarChart or PieChart
      */
 
-    private PieChartModel initUserModel(PieChartModel model, String title, Instant start, Instant end) {
-        model = new PieChartModel();
+    private PieChartModel initUserModel(String title, Instant start, Instant end) {
+        PieChartModel model = new PieChartModel();
         HashMap<TaskEnum, Long> tasks = taskService.getUserTasksBetweenDates(userService.getAuthenticatedUser(), start, end);
         return getPieChartModel(model, title, tasks);
     }
 
-    private BarChartModel initBarUserModel(BarChartModel model, String title, Instant start, Instant end) {
-        model = new BarChartModel();
+    private BarChartModel initBarUserModel(Instant start, Instant end) {
+        BarChartModel model = new BarChartModel();
         HashMap<TaskEnum, Long> tasks = taskService.getUserTasksBetweenDates(userService.getAuthenticatedUser(), start, end);
-        return getBarChartModel(model, title, tasks);
+        return getBarChartModel(model, tasks);
     }
 
-    private PieChartModel initTeamModel(PieChartModel model, String title, Instant start, Instant end) {
-        model = new PieChartModel();
+    private PieChartModel initTeamModel(String title, Instant start, Instant end) {
+        PieChartModel model = new PieChartModel();
         HashMap<TaskEnum, Long> tasks = taskService.getTeamTasksBetweenDates(userService.getAuthenticatedUser().getTeam(), start, end);
         return getPieChartModel(model, title, tasks);
     }
 
-    private PieChartModel initTeamModelByChosenTeam(PieChartModel model, Team team, String title, Instant start, Instant end) {
-        model = new PieChartModel();
+    private PieChartModel initTeamModelByChosenTeam(Team team, Instant start, Instant end) {
+        PieChartModel model = new PieChartModel();
         HashMap<TaskEnum, Long> tasks = taskService.getTeamTasksBetweenDates(team, start, end);
-        return getPieChartModel(model, title, tasks);
+        return getPieChartModel(model, "Monthly Stats", tasks);
     }
 
-    private BarChartModel initBarTeamModel(BarChartModel model, String title, Instant start, Instant end) {
-        model = new BarChartModel();
+    private BarChartModel initBarTeamModel(Instant start, Instant end) {
+        BarChartModel model = new BarChartModel();
         HashMap<TaskEnum, Long> tasks = taskService.getTeamTasksBetweenDates(userService.getAuthenticatedUser().getTeam(), start, end);
-        return getBarChartModel(model, title, tasks);
+        return getBarChartModel(model, tasks);
     }
 
-    private BarChartModel initBarTeamModelByChosenTeam(BarChartModel model, Team team, String title, Instant start, Instant end) {
-        model = new BarChartModel();
+    private BarChartModel initBarTeamModelByChosenTeam(Team team, Instant start, Instant end) {
+        BarChartModel model = new BarChartModel();
         HashMap<TaskEnum, Long> tasks = taskService.getTeamTasksBetweenDates(team, start, end);
-        return getBarChartModel(model, title, tasks);
+        return getBarChartModel(model, tasks);
     }
 
-    private PieChartModel initDepartmentModel(PieChartModel model, String title, Instant start, Instant end) {
-        model = new PieChartModel();
+    private PieChartModel initDepartmentModel(Instant start, Instant end) {
+        PieChartModel model = new PieChartModel();
         HashMap<TaskEnum, Long> tasks = taskService.getDepartmentTasksBetweenDates(userService.getAuthenticatedUser().getDepartment(), start, end);
-        return getPieChartModel(model, title, tasks);
+        return getPieChartModel(model, "Monthly Stats", tasks);
     }
 
-    private BarChartModel initBarDepartmentModel(BarChartModel model, String title, Instant start, Instant end) {
-        model = new BarChartModel();
+    private BarChartModel initBarDepartmentModel(Instant start, Instant end) {
+        BarChartModel model = new BarChartModel();
         HashMap<TaskEnum, Long> tasks = taskService.getDepartmentTasksBetweenDates(userService.getAuthenticatedUser().getDepartment(), start, end);
-        return getBarChartModel(model, title, tasks);
+        return getBarChartModel(model, tasks);
     }
 
     /**
      * Takes a model, title and a HashMap of tasks as parameters and fills the model with a PieChart of the tasks.
      *
-     * @param model
-     * @param title
-     * @param tasks
+     * @param model to create
+     * @param title of the model
+     * @param tasks to add to the model
      * @return model
      */
 
@@ -450,14 +449,13 @@ public class StatisticsController implements Serializable {
     /**
      * Takes a model, title and a HashMap of tasks as parameters and fills the model with a BarChart of the tasks.
      *
-     * @param model
-     * @param title
-     * @param tasks
+     * @param model to create
+     * @param tasks to add to the model
      * @return model
      */
 
 
-    private BarChartModel getBarChartModel(BarChartModel model, String title, HashMap<TaskEnum, Long> tasks) {
+    private BarChartModel getBarChartModel(BarChartModel model, HashMap<TaskEnum, Long> tasks) {
         if (tasks.isEmpty()) {
             ChartSeries series = new ChartSeries();
             series.set("No Data", 0);
@@ -477,7 +475,7 @@ public class StatisticsController implements Serializable {
         yAxis.setLabel("Minutes");
 
 
-        model.setTitle(title);
+        model.setTitle("Monthly Stats");
         model.setBarWidth(100);
         model.setShadow(false);
         return model;
@@ -500,17 +498,17 @@ public class StatisticsController implements Serializable {
             date.add(Calendar.DATE, 1);
             Instant end;
             end = date.toInstant();
-            todayUserModel = initUserModel(todayUserModel, "Daily Stats", start, end);
+            todayUserModel = initUserModel("Daily Stats", start, end);
             date.add(Calendar.DATE, -1);
 
             start = firstDayOfWeek(date);
             end = lastDayOfWeek(date);
-            weekUserModel = initUserModel(weekUserModel, "Weekly Stats", start, end);
+            weekUserModel = initUserModel("Weekly Stats", start, end);
 
             start = firstDayOfMonth(date);
             end = lastDayOfMonth(date);
-            monthUserModel = initUserModel(monthUserModel, "Monthly Stats", start, end);
-            monthBarUserModel = initBarUserModel(monthBarUserModel, "Monthly Stats", start, end);
+            monthUserModel = initUserModel("Monthly Stats", start, end);
+            monthBarUserModel = initBarUserModel(start, end);
         }
 
     }
@@ -531,13 +529,13 @@ public class StatisticsController implements Serializable {
 
             Instant start = firstDayOfWeek(date);
             Instant end = lastDayOfWeek(date);
-            weekTeamModel = initTeamModel(weekTeamModel, "Weekly Stats", start, end);
+            weekTeamModel = initTeamModel("Weekly Stats", start, end);
 
 
             start = firstDayOfMonth(date);
             end = lastDayOfMonth(date);
-            monthTeamModel = initTeamModel(monthTeamModel, "Monthly Stats", start, end);
-            monthBarTeamModel = initBarTeamModel(monthBarTeamModel, "Monthly Stats", start, end);
+            monthTeamModel = initTeamModel("Monthly Stats", start, end);
+            monthBarTeamModel = initBarTeamModel(start, end);
         }
     }
 
@@ -558,8 +556,8 @@ public class StatisticsController implements Serializable {
             Instant start = firstDayOfMonth(date);
             Instant end = lastDayOfMonth(date);
 
-            monthDepartmentModel = initDepartmentModel(monthDepartmentModel, "Monthly Stats", start, end);
-            monthBarDepartmentModel = initBarDepartmentModel(monthBarDepartmentModel, "Monthly Stats", start, end);
+            monthDepartmentModel = initDepartmentModel(start, end);
+            monthBarDepartmentModel = initBarDepartmentModel(start, end);
         }
 
     }
@@ -584,8 +582,8 @@ public class StatisticsController implements Serializable {
             Instant start = firstDayOfMonth(date);
             Instant end = lastDayOfMonth(date);
 
-            monthTeamModel = initTeamModelByChosenTeam(monthTeamModel, team, "Monthly Stats", start, end);
-            monthBarTeamModel = initBarTeamModelByChosenTeam(monthBarTeamModel, team, "Monthly Stats", start, end);
+            monthTeamModel = initTeamModelByChosenTeam(team, start, end);
+            monthBarTeamModel = initBarTeamModelByChosenTeam(team, start, end);
         }
 
     }

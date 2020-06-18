@@ -43,15 +43,8 @@ public class RoomDetailController implements Serializable {
     /**
      * Action to force a reload of the currently displayed room.
      */
-    public void doReloadRoom() {
+    private void doReloadRoom() {
         room = roomService.loadRoom(room.getRoomNumber());
-    }
-
-    /**
-     * Action to save the currently displayed room.
-     */
-    public void doSaveRoom() {
-        room = this.roomService.saveRoom(room);
     }
 
     /**

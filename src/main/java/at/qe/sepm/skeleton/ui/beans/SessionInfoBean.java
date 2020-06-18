@@ -25,8 +25,6 @@ public class SessionInfoBean {
     @Autowired
     private UserService userService;
 
-    private Logger<String, User> logger;
-
     /**
      * Attribute to cache the current user.
      */
@@ -36,7 +34,6 @@ public class SessionInfoBean {
      * Returns the currently logged on user, null if no user is authenticated
      * for this session.
      *
-     * @return
      */
     public User getCurrentUser() {
         if (currentUser == null) {
@@ -53,22 +50,19 @@ public class SessionInfoBean {
      * Returns the username of the user for this session, empty string if no
      * user has been authenticated for this session.
      *
-     * @return
      */
     public String getCurrentUserName() {
         if (!isLoggedIn()) {
             return "";
         }
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String name = auth.getName(); //get logged in username
-        return name;
+        return auth.getName();
     }
 
     /**
      * Returns the roles of the user for this session as space-separated list,
      * empty string if no user has been authenticated for this session-
      *
-     * @return
      */
     public String getCurrentUserRoles() {
         if (!isLoggedIn()) {

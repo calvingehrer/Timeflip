@@ -36,15 +36,6 @@ public interface AbstractRepository<T, ID extends Serializable> extends Reposito
     List<T> findAll();
 
     /**
-     * Retrieves an entity by its id.
-     *
-     * @param id must not be {@literal null}.
-     * @return The entity with the given id or {@literal null} if none found.
-     * @throws IllegalArgumentException If {@code id} is {@literal null}.
-     */
-    T findById(ID id);
-
-    /**
      * Saves a given entity. Use the returned instance for further operations as
      * the save operation might have changed the entity instance completely.
      *

@@ -18,9 +18,6 @@ public class AddRaspberryController implements Serializable {
     @Autowired
     private RaspberryService raspberryService;
 
-    @Autowired
-    private RoomService roomService;
-
     private Raspberry raspberry = new Raspberry();
 
     private Room room;

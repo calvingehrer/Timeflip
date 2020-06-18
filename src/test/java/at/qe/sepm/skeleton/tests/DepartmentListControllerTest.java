@@ -58,9 +58,6 @@ public class DepartmentListControllerTest {
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void getDepartments() {
-        for(Department dep : departmentListController.getDepartments()){
-            System.out.println(dep.getDepartmentName());
-        }
         Assert.assertEquals(5, departmentListController.getDepartments().size());
     }
 

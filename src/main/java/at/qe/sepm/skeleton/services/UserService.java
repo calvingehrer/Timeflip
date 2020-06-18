@@ -55,44 +55,35 @@ public class UserService {
 
     /**
      * Returns a collection of all users.
-     *
-     * @return
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
-
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public List<User> getTestUser() {
-        return userRepository.findTestUser();
-    }
-
-
     /**
      * Returns a list of all users with the given role
      *
-     * @param role
-     * @return
+     * @param role to search users by
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<User> getAllUsersByRole(String role) {
-        if (role.equals("Admin")) {
-            return userRepository.findByRole(UserRole.ADMIN);
-        } else if (role.equals("Departmentleader")) {
-            return userRepository.findByRole(UserRole.DEPARTMENTLEADER);
-        } else if (role.equals("Teamleader")) {
-            return userRepository.findByRole(UserRole.TEAMLEADER);
-        } else if (role.equals("Employee")) {
-            return userRepository.findByRole(UserRole.EMPLOYEE);
-        } else {
-            return userRepository.findAll();
+        switch (role) {
+            case "Admin":
+                return userRepository.findByRole(UserRole.ADMIN);
+            case "Departmentleader":
+                return userRepository.findByRole(UserRole.DEPARTMENTLEADER);
+            case "Teamleader":
+                return userRepository.findByRole(UserRole.TEAMLEADER);
+            case "Employee":
+                return userRepository.findByRole(UserRole.EMPLOYEE);
+            default:
+                return userRepository.findAll();
         }
     }
 
     /**
-     * @param username
+     * @param username to find
      * @return users whose username starts with given string
      */
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -101,7 +92,7 @@ public class UserService {
     }
 
     /**
-     * @param teamname
+     * @param teamname to find
      * @return users whose teamname starts with given string
      */
 
@@ -111,7 +102,7 @@ public class UserService {
     }
 
     /**
-     * @param department
+     * @param department to find
      * @return users whose departmentname starts with given string
      */
 
@@ -158,7 +149,7 @@ public class UserService {
     /**
      * adds a new user
      *
-     * @param user
+     * @param user to add
      */
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DEPARTMENTLEADER')")
@@ -205,7 +196,7 @@ public class UserService {
         return this.userRepository.findFirstByUsername(user.getUsername());
     }
 
-    protected User setUpdatingFieldsBeforePersist(User toSave) {
+    private User setUpdatingFieldsBeforePersist(User toSave) {
         if (toSave.isNew()) {
             if (toSave.getPassword() != null) {
                 toSave.getPassword();
@@ -222,18 +213,17 @@ public class UserService {
     /**
      * updates user
      *
-     * @param toSave
-     * @return
+     * @param toSave User
      */
 
     @Transactional
-    public User updateUser(User toSave) {
+    public void updateUser(User toSave) {
         logger.logUpdate(toSave.getUsername(), getAuthenticatedUser());
-        return userRepository.save(setUpdatingFieldsBeforePersist(toSave));
+        userRepository.save(setUpdatingFieldsBeforePersist(toSave));
     }
 
     /**
-     * @param team
+     * @param team to find
      * @return teamleader of team
      */
 
@@ -251,17 +241,16 @@ public class UserService {
     }
 
     /**
-     * @param team
+     * @param team to find
      * @return users in given team
      */
-
 
     public List<User> getUsersOfTeam(Team team) {
         return userRepository.findUsersOfTeam(team);
     }
 
     /**
-     * @param department
+     * @param department to find
      * @return departmentleader of department
      */
 
@@ -303,10 +292,10 @@ public class UserService {
     /**
      * deletes all tasks of the user
      *
-     * @param user
+     * @param user to find
      */
 
-    public void deleteTaskOfUser(User user) {
+    private void deleteTaskOfUser(User user) {
         for (Task t : taskRepository.findTasksFromUser(user)) {
             t.setUser(null);
             t.setDepartment(null);
@@ -321,10 +310,10 @@ public class UserService {
     /**
      * deletes all badges of the user
      *
-     * @param user
+     * @param user to delete
      */
 
-    public void deleteBadgesOfUser(User user) {
+    private void deleteBadgesOfUser(User user) {
         for (Badge b : badgeRepository.findBadgesFromUser(user)) {
             badgeRepository.delete(b);
             logger.logDeletion(b.getBadgeType().toString(), getAuthenticatedUser());
@@ -337,10 +326,10 @@ public class UserService {
      * only set the field team-leader null
      * vise versa for department-leader
      *
-     * @param user
+     * @param user to request
      */
 
-    public void deleteRequestsOfUser(User user) {
+    private void deleteRequestsOfUser(User user) {
         for (Request r : requestRepository.findAllRequestsOfRequester(user)) {
             requestRepository.delete(r);
             logger.logDeletion(r.getDescription(), getAuthenticatedUser());

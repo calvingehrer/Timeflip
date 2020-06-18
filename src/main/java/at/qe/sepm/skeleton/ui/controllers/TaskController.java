@@ -109,19 +109,19 @@ public class TaskController implements Serializable {
         this.requestedDate = requestedDate;
     }
 
-    public Instant getStartTime() {
+    private Instant getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Instant startTime) {
+    private void setStartTime(Instant startTime) {
         this.startTime = startTime;
     }
 
-    public Instant getEndTime() {
+    private Instant getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Instant endTime) {
+    private void setEndTime(Instant endTime) {
         this.endTime = endTime;
     }
 
@@ -130,7 +130,7 @@ public class TaskController implements Serializable {
      * does not check whether the user is a departmentleader because a depaartmentleader does not have to request
      */
 
-    public void sendRequest() {
+    private void sendRequest() {
         User u = userService.getAuthenticatedUser();
         try {
             setStartAndEndTime();
@@ -181,7 +181,7 @@ public class TaskController implements Serializable {
     }
 
 
-    public void setStartAndEndTime() {
+    private void setStartAndEndTime() {
         try {
             taskService.checkTime(this.getStartHour(), this.getEndHour(), this.getStartMinute(), this.getEndMinute());
             Calendar calendar = Calendar.getInstance(timeBean.getUtcTimeZone());

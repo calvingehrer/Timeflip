@@ -4,7 +4,6 @@ import at.qe.sepm.skeleton.model.Task;
 import at.qe.sepm.skeleton.model.TaskEnum;
 import at.qe.sepm.skeleton.model.Timeflip;
 import at.qe.sepm.skeleton.model.User;
-import at.qe.sepm.skeleton.repositories.HistoryRepository;
 import at.qe.sepm.skeleton.repositories.TaskRepository;
 import at.qe.sepm.skeleton.repositories.TimeflipRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +19,6 @@ import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class HistoryService {
-
-    @Autowired
-    public HistoryRepository historyRepository;
 
     @Autowired
     public TimeflipRepository timeflipRepository;

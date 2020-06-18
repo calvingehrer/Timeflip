@@ -71,7 +71,7 @@ public class VacationService {
     }
 
     /**
-     * @param user
+     * @param user to get vacations from
      * @return Set of Vacation from Current User
      */
 
@@ -87,10 +87,9 @@ public class VacationService {
     /**
      * checks if the dates are valid
      *
-     * @param user
-     * @param startDate
-     * @param endDate
-     * @throws VacationException
+     * @param user that wants vacation
+     * @param startDate of vacation
+     * @param endDate of vacation
      */
 
     public void checkVacationDates(User user, Instant startDate, Instant endDate) throws VacationException {
@@ -142,7 +141,7 @@ public class VacationService {
      * @return the amount of public holidays in the time frame
      */
 
-    public long checkPublicHolidays(Instant startDate, Instant endDate) {
+    private long checkPublicHolidays(Instant startDate, Instant endDate) {
         long publicHolidays = 0;
         for (Instant i = startDate; i.isBefore(endDate); i = i.plusSeconds(86400)) {
             if (holidayBean.getDatesOfPublicHolidays(timeBean.getYearOfInstant(startDate)).contains(i.truncatedTo(ChronoUnit.DAYS))) {

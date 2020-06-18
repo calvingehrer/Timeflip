@@ -69,11 +69,12 @@ public class ScheduledMailService {
         }
     }
 
-    public String generateStatisticsMessage(User user, Interval interval) {
+    private String generateStatisticsMessage(User user, Interval interval) {
         StringBuilder message = new StringBuilder();
         HashMap<TaskEnum, Long> tasks = getUserTasks(user, interval);
         message.append("Statistics\n\n");
 
+        assert tasks != null;
         for (Map.Entry<TaskEnum, Long> entry : tasks.entrySet()) {
             message.append(entry.getKey().toString());
             message.append(": ");
@@ -84,7 +85,7 @@ public class ScheduledMailService {
         return message.toString();
     }
 
-    public HashMap<TaskEnum, Long> getUserTasks(User user, Interval interval) {
+    private HashMap<TaskEnum, Long> getUserTasks(User user, Interval interval) {
         switch (interval) {
             case DAILY:
                 return userTasksDaily(user);

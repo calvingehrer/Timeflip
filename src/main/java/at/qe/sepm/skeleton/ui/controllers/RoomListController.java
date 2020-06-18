@@ -27,11 +27,6 @@ public class RoomListController implements Serializable {
         return roomService.getRoomsWithoutRaspberry();
     }
 
-    public void doDeleteRoom() {
-        this.roomService.deleteRoom(room);
-        room = null;
-    }
-
     public Room getRoom() {
         return room;
     }

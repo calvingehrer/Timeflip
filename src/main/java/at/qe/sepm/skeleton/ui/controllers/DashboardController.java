@@ -18,20 +18,8 @@ import java.io.Serializable;
 public class DashboardController implements Serializable {
 
     private static final long serialVersionUID = 2723138783409404659L;
-    private final ScheduleEvent event = new DefaultScheduleEvent();
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private VacationService vacationService;
-    @Autowired
-    private TeamService teamService;
-    @Autowired
-    private MailService mailService;
-    @Autowired
-    private DepartmentService departmentService;
     @Autowired
     private SessionInfoBean sessionInfoBean;
-
 
     public String getName() {
         return sessionInfoBean.getCurrentUser().getFirstName();
@@ -40,7 +28,5 @@ public class DashboardController implements Serializable {
     public String getDepartment() {
         return String.valueOf(sessionInfoBean.getCurrentUser().getDepartment());
     }
-    //public int getTeam(){return teamService.getUsersOfTeam(sessionInfoBean.)}
-
 
 }

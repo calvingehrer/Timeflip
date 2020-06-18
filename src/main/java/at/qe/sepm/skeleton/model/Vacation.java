@@ -25,9 +25,6 @@ public class Vacation implements Comparable<Vacation> {
 
     private Instant end;
 
-    private static Long MAX_DAYS;
-
-
     public Instant getStart() {
         return start;
     }

@@ -17,7 +17,7 @@ import javax.servlet.ServletException;
 public class CustomServletContextInitializer implements ServletContextInitializer {
 
     @Override
-    public void onStartup(ServletContext sc) throws ServletException {
+    public void onStartup(ServletContext sc){
         sc.setInitParameter("javax.faces.DEFAULT_SUFFIX", ".xhtml");
         sc.setInitParameter("javax.faces.PROJECT_STAGE", "Development");
         sc.setInitParameter("primefaces.THEME", "ecuador-cyan");

@@ -30,14 +30,6 @@ public class Badge {
     @Column(name = "badge_image")
     private String imagePath;
 
-    public Long getBadgeId() {
-        return badgeId;
-    }
-
-    public void setBadgeId(Long badgeId) {
-        this.badgeId = badgeId;
-    }
-
     public BadgeEnum getBadgeType() {
         return badgeType;
     }

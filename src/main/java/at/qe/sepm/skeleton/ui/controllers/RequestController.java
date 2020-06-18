@@ -77,7 +77,7 @@ public class RequestController implements Serializable {
     /**
      * Function to accept a request
      *
-     * @param request
+     * @param request to accept
      */
     public void acceptRequest(Request request) {
         if (request.getDiscriminatorValue() == 1) {
@@ -112,7 +112,7 @@ public class RequestController implements Serializable {
     /**
      * Function to decline a taskRequest
      *
-     * @param request
+     * @param request to decline
      */
     public void declineRequest(Request request) {
         requestService.declineRequest(request);
@@ -121,16 +121,10 @@ public class RequestController implements Serializable {
     /**
      * If a taskRequest is declined or was already used the user can delete it to keep an overview
      *
-     * @param request
+     * @param request to delete
      */
     public void deleteRequest(Request request) {
         requestService.deleteRequest(request);
     }
 
-    public List<Request> getAcceptedTaskRequestsEmployee() {
-        return requestService.getAcceptedRequestsOfEmployee(userService.getAuthenticatedUser())
-                .stream()
-                .filter(request -> request.getDiscriminatorValue() == 1)
-                .collect(Collectors.toList());
-    }
 }

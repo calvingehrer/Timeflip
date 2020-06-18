@@ -23,22 +23,22 @@ public class TimeflipDetailController implements Serializable {
     @Autowired
     TimeflipService timeflipService;
 
-    Timeflip timeflip;
+    private Timeflip timeflip;
 
     User user;
 
-    boolean design = false;
-    boolean konzeption = false;
-    boolean implementierung = false;
-    boolean testen = false;
-    boolean dokumentation = false;
-    boolean fehlermanagement = false;
-    boolean meeting = false;
-    boolean kundenbesprechung = false;
-    boolean fortbildung = false;
-    boolean projektmanagement = false;
-    boolean sonstiges = false;
-    boolean auszeit = false;
+    private boolean design = false;
+    private boolean konzeption = false;
+    private boolean implementierung = false;
+    private boolean testen = false;
+    private boolean dokumentation = false;
+    private boolean fehlermanagement = false;
+    private boolean meeting = false;
+    private boolean kundenbesprechung = false;
+    private boolean fortbildung = false;
+    private boolean projektmanagement = false;
+    private boolean sonstiges = false;
+    private boolean auszeit = false;
 
 
     private List<TaskEnum> tasks = new ArrayList<>();

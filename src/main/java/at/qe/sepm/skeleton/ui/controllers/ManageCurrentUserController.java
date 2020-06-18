@@ -35,7 +35,7 @@ public class ManageCurrentUserController implements Serializable {
      * method to reload the user
      */
 
-    public void reloadUser() {
+    private void reloadUser() {
         this.setCurrentUser(this.userService.loadUser(currentUser.getUsername()));
     }
 
@@ -48,10 +48,7 @@ public class ManageCurrentUserController implements Serializable {
         this.setCurrentUser(userService.getAuthenticatedUser());
     }
 
-
     private Logger<Exception, User> logger;
-
-    private String intervall;
 
     private String oldPassword;
 
@@ -88,24 +85,12 @@ public class ManageCurrentUserController implements Serializable {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public String getIntervall() {
-        return intervall;
-    }
 
-    public void setIntervall(String intervall) {
-        this.intervall = intervall;
-    }
-
-
-    public String getFullName() {
-        return this.getCurrentUser().getFirstName() + " " + this.getCurrentUser().getLastName();
-    }
-
-    public boolean checkOldPassword() {
+    boolean checkOldPassword() {
         return passwordEncoder.matches(oldPassword, this.getCurrentUser().getPassword());
     }
 
-    public boolean checkConfirmedPassword() {
+    boolean checkConfirmedPassword() {
         newPassword = passwordEncoder.encode(newPassword);
         return passwordEncoder.matches(confirmNew, newPassword);
     }

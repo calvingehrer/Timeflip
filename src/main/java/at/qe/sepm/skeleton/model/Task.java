@@ -32,15 +32,15 @@ public class Task implements Persistable<Long>, Serializable {
     @Column(name = "task")
     private TaskEnum task;
 
-    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER, optional = true, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(targetEntity = Team.class, fetch = FetchType.EAGER, optional = true, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = Team.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "team_id")
     private Team team;
 
-    @ManyToOne(targetEntity = Department.class, fetch = FetchType.EAGER, optional = true, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = Department.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "department_id")
     private Department department;
 
@@ -107,10 +107,6 @@ public class Task implements Persistable<Long>, Serializable {
 
     public void setDepartment(Department department) {
         this.department = department;
-    }
-
-    public Date getCreateDate() {
-        return createDate;
     }
 
     public void setCreateDate(Date createDate) {
