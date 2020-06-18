@@ -29,6 +29,31 @@ public class Timeflip implements Persistable<String>, Serializable {
     @ManyToOne
     private Raspberry raspberry;
 
+
+    @ElementCollection(targetClass = TaskEnum.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "map_task_type")
+    @Enumerated(EnumType.STRING)
+    private Map<Integer, TaskEnum> tasks = new HashMap<>();
+
+
+    public Map<Integer, TaskEnum> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(Map<Integer, TaskEnum> tasks) {
+        this.tasks = tasks;
+    }
+
+    @Override
+    public String getId() {
+        return getMacAddress();
+    }
+
+    @Override
+    public boolean isNew() {
+        return null == createDate;
+    }
+
     private int battery;
 
     private TaskEnum facet1;
@@ -60,10 +85,6 @@ public class Timeflip implements Persistable<String>, Serializable {
         this.user = user;
     }
 
-    public Date getCreateDate() {
-        return createDate;
-    }
-
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
@@ -82,10 +103,6 @@ public class Timeflip implements Persistable<String>, Serializable {
 
     public void setBattery(int battery) {
         this.battery = battery;
-    }
-
-    public User getCreateUser() {
-        return createUser;
     }
 
     public void setCreateUser(User createUser) {
@@ -188,14 +205,5 @@ public class Timeflip implements Persistable<String>, Serializable {
         this.facet12 = facet12;
     }
 
-    @Override
-    public String getId() {
-        return getMacAddress();
-    }
-
-    @Override
-    public boolean isNew() {
-        return false;
-    }
 }
 
