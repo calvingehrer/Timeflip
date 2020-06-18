@@ -1,22 +1,20 @@
 package at.qe.sepm.skeleton.rest;
 
-import at.qe.sepm.skeleton.model.*;
+import at.qe.sepm.skeleton.model.Task;
+import at.qe.sepm.skeleton.model.TaskEnum;
+import at.qe.sepm.skeleton.model.Timeflip;
+import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.HistoryRepository;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.atomic.AtomicLong;
-
 import at.qe.sepm.skeleton.repositories.TaskRepository;
 import at.qe.sepm.skeleton.repositories.TimeflipRepository;
+import at.qe.sepm.skeleton.ui.beans.TimeBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class HistoryService {
@@ -29,6 +27,9 @@ public class HistoryService {
 
     @Autowired
     public TaskRepository taskRepository;
+
+    @Autowired
+    public TimeBean timeBean;
 
     private static final AtomicLong ID_COUNTER = new AtomicLong(1);
 
@@ -122,18 +123,37 @@ public class HistoryService {
                 case 3: task.setTask(timeflip.getFacet3()); break;
                 case 4: task.setTask(timeflip.getFacet4()); break;
                 case 5: task.setTask(timeflip.getFacet5()); break;
-                case 6: task.setTask(timeflip.getFacet6()); break;
-                case 7: task.setTask(timeflip.getFacet7()); break;
-                case 8: task.setTask(timeflip.getFacet8()); break;
-                case 9: task.setTask(timeflip.getFacet9()); break;
-                case 10: task.setTask(timeflip.getFacet10()); break;
-                case 11: task.setTask(timeflip.getFacet11()); break;
-                case 12: task.setTask(timeflip.getFacet12()); break;
-                default: task.setTask(TaskEnum.NOT_DEFINED); break;
+                case 6:
+                    task.setTask(timeflip.getFacet6());
+                    break;
+                case 7:
+                    task.setTask(timeflip.getFacet7());
+                    break;
+                case 8:
+                    task.setTask(timeflip.getFacet8());
+                    break;
+                case 9:
+                    task.setTask(timeflip.getFacet9());
+                    break;
+                case 10:
+                    task.setTask(timeflip.getFacet10());
+                    break;
+                case 11:
+                    task.setTask(timeflip.getFacet11());
+                    break;
+                case 12:
+                    task.setTask(timeflip.getFacet12());
+                    break;
+                default:
+                    task.setTask(TaskEnum.NOT_DEFINED);
+                    break;
             }
         }
-        task.setStartTime(historyEntry.getStart().toInstant());
-        task.setEndTime(historyEntry.getEnd().toInstant());
+        Calendar calendar = Calendar.getInstance(timeBean.getUtcTimeZone());
+        calendar.setTime(historyEntry.getStart());
+        task.setStartTime(calendar.toInstant());
+        calendar.setTime(historyEntry.getEnd());
+        task.setEndTime(calendar.toInstant());
         task.setSeconds(historyEntry.getSeconds());
         task.setCreateDate(new Date());
 
