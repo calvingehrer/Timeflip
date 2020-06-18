@@ -75,12 +75,12 @@
                             </p:column>
                             <p:column headerText="Start" sortBy="#{timeBean.instantToDate(task.startTime)}">
                                 <h:outputText value="#{timeBean.instantToDate(task.startTime)}">
-                                    <f:convertDateTime timeZone="GMT+1" pattern="dd.MM.yyyy, HH:mm"/>
+                                    <f:convertDateTime timeZone="#{timeBean.utcTimeZone}" pattern="dd.MM.yyyy, HH:mm"/>
                                 </h:outputText>
                             </p:column>
                             <p:column headerText="End" sortBy="#{timeBean.instantToDate(task.endTime)}">
                                 <h:outputText value="#{timeBean.instantToDate(task.endTime)}">
-                                    <f:convertDateTime timeZone="GMT+1" pattern="dd.MM.yyyy, HH:mm"/>
+                                    <f:convertDateTime timeZone="#{timeBean.utcTimeZone}" pattern="dd.MM.yyyy, HH:mm"/>
                                 </h:outputText>
                             </p:column>
                             <p:column headerText="Duration[min]">
