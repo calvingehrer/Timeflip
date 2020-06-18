@@ -27,14 +27,11 @@ public class AddRaspberryControllerTest {
     @Autowired
     private RaspberryService raspberryService;
 
-    @Autowired
-    private RoomService roomService;
 
     @Before
     public void init() throws IOException {
         addRaspberryController = new AddRaspberryController();
         ReflectionTestUtils.setField(addRaspberryController, "raspberryService", raspberryService);
-        ReflectionTestUtils.setField(addRaspberryController, "roomService", roomService);
     }
 
     @Test
@@ -43,14 +40,10 @@ public class AddRaspberryControllerTest {
         Raspberry raspberry = new Raspberry();
         raspberry.setRaspberryId("testRaspberry");
         addRaspberryController.setRaspberry(raspberry);
-        Room room = roomService.loadRoom("6");
-        addRaspberryController.setRoom(room);
 
         Assert.assertEquals(5, raspberryService.getAllRaspberries().size());
-        Assert.assertFalse(room.isEquipped());
         addRaspberryController.add();
         Assert.assertEquals(6, raspberryService.getAllRaspberries().size());
-        Assert.assertTrue(roomService.loadRoom("6").isEquipped());
         raspberryService.deleteRaspberry(raspberryService.loadRaspberry("testRaspberry"));
         Assert.assertEquals(5, raspberryService.getAllRaspberries().size());
 

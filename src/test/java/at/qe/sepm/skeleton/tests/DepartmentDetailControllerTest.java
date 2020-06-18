@@ -80,38 +80,13 @@ public class DepartmentDetailControllerTest {
         departmentDetailController.setAddedTeam(team);
         departmentDetailController.addTeam();
         newLeader = userService.loadUser("user3");
-        oldLeader = userService.loadUser("user34");
         departmentDetailController.setNewLeader(newLeader);
         departmentDetailController.replaceLeader();
         departmentDetailController.doSaveDepartment();
         Assert.assertEquals(2, teamService.getTeamsOfDepartment(department).size());
     }
 
-    @Test
-    @WithMockUser(username = "admin", authorities = {"ADMIN"})
-    public void checkIfDeletionIsAllowed() {
-        Department department = departmentService.loadDepartment("Management");
-        Assert.assertFalse(departmentDetailController.checkIfDeletionIsAllowed(department));
 
-        Team team1 = teamService.loadTeam("Top-Management");
-        Team team2 = teamService.loadTeam("Coordination & Controll");
-        departmentDetailController.setDepartment(department);
-        departmentDetailController.setRemovedTeam(team1);
-        departmentDetailController.removeTeam();
-        departmentDetailController.setRemovedTeam(team2);
-        departmentDetailController.removeTeam();
-        departmentDetailController.doSaveDepartment();
-        department = departmentService.loadDepartment("Management");
-        Assert.assertFalse(departmentDetailController.checkIfDeletionIsAllowed(department));
-
-        departmentDetailController.setAddedTeam(team1);
-        departmentDetailController.addTeam();
-        departmentDetailController.setAddedTeam(team2);
-        departmentDetailController.addTeam();
-        departmentDetailController.doSaveDepartment();
-        Assert.assertEquals(2, teamService.getTeamsOfDepartment(department).size());
-
-    }
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
@@ -120,7 +95,6 @@ public class DepartmentDetailControllerTest {
         departmentDetailController.setNewLeader(userService.loadUser("user34"));
         departmentDetailController.replaceLeader();
         Assert.assertEquals(userService.loadUser("user34"), departmentDetailController.getNewLeader());
-        Assert.assertEquals(userService.loadUser("user1"), departmentDetailController.getOldLeader());
         departmentDetailController.setNewLeader(userService.loadUser("user1"));
         departmentDetailController.replaceLeader();
 

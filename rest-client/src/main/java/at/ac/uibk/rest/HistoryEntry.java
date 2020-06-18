@@ -12,6 +12,7 @@ public class HistoryEntry {
     private Date start;
     private Date end;
     private int seconds;
+    private int battery;
 
     public String getMacAddress() {
         return macAddress;
@@ -53,4 +54,11 @@ public class HistoryEntry {
         this.seconds = seconds;
     }
 
+    public int getBattery() {
+        return battery;
+    }
+
+    public void setBattery(int battery) {
+        this.battery = battery;
+    }
 }

@@ -16,4 +16,14 @@ public class HistoryController {
         return service.getHistoryItems();
     }
 
+    @PostMapping("/history")
+    private HistoryEntry sendMessage(@RequestBody HistoryEntry entry) {
+        return service.postHistoryObject(entry.getMacAddress(), entry.getFacet(), entry.getStart(), entry.getEnd(), entry.getSeconds(), entry.getBattery());
+    }
+
+    @DeleteMapping("/history/{id}")
+    private void deleteHistory(@PathVariable Long id) {
+        service.deleteHistoryEntry(id);
+    }
+
 }
