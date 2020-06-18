@@ -6,9 +6,11 @@ import at.qe.sepm.skeleton.repositories.TimeflipRepository;
 import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -54,6 +56,7 @@ public class TimeflipService {
         Timeflip newTimeflip = new Timeflip();
         newTimeflip.setMacAddress(timeflip.getMacAddress());
         newTimeflip.setUser(user);
+        newTimeflip.setCreateDate(new Date());
 
         newTimeflip.setFacet1(TaskEnum.KONZEPTION);
         newTimeflip.setFacet2(TaskEnum.DESIGN);
@@ -81,10 +84,8 @@ public class TimeflipService {
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteTimeflip(Timeflip timeflip) {
 
-
         timeflip.setRaspberry(null);
         timeflip.setUser(null);
-        timeflip.setCreateDate(null);
 
         timeflipRepository.delete(timeflip);
         logger.logDeletion(timeflip.getId(), userService.getAuthenticatedUser());

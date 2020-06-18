@@ -65,8 +65,9 @@ public class DepartmentListControllerTest {
         departmentListController.setTeam("I");
         Assert.assertEquals(1, departmentListController.getDepartments().size());
         departmentListController.resetFilter();
-        departmentListController.setEmployee("user10");
-        Assert.assertEquals(1, departmentListController.getDepartments().size());
+        departmentListController.setEmployee("user2");
+        Assert.assertEquals(4, departmentListController.getDepartments().size());
+        departmentListController.resetFilter();
     }
 
     @Test
