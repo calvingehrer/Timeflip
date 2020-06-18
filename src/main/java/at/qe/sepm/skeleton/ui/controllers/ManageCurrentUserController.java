@@ -22,6 +22,12 @@ public class ManageCurrentUserController implements Serializable {
     UserService userService;
 
     private User currentUser;
+    private Logger<Exception, User> logger;
+    private String oldPassword;
+    private String newPassword;
+    private String confirmNew;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public User getCurrentUser() {
         return currentUser;
@@ -48,15 +54,6 @@ public class ManageCurrentUserController implements Serializable {
         this.setCurrentUser(userService.getAuthenticatedUser());
     }
 
-    private Logger<Exception, User> logger;
-
-    private String oldPassword;
-
-    private String newPassword;
-
-    private String confirmNew;
-
-
     public String getOldPassword() {
         return oldPassword;
     }
@@ -80,11 +77,6 @@ public class ManageCurrentUserController implements Serializable {
     public void setConfirmNew(String confirmNew) {
         this.confirmNew = confirmNew;
     }
-
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
 
     boolean checkOldPassword() {
         return passwordEncoder.matches(oldPassword, this.getCurrentUser().getPassword());

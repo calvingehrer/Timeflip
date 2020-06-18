@@ -263,15 +263,13 @@ public class TimeflipDetailController implements Serializable {
         }
     }
 
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public User getUser() {
         return user;
     }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public void addUser() {
         this.timeflip.setUser(user);

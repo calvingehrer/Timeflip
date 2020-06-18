@@ -1,10 +1,7 @@
 package at.qe.sepm.skeleton.ui.controllers;
 
 
-import at.qe.sepm.skeleton.services.*;
 import at.qe.sepm.skeleton.ui.beans.SessionInfoBean;
-import org.primefaces.model.DefaultScheduleEvent;
-import org.primefaces.model.ScheduleEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;

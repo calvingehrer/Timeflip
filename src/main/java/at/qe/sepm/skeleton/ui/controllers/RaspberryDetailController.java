@@ -25,18 +25,16 @@ public class RaspberryDetailController implements Serializable {
 
     private Raspberry raspberry;
 
+    /**
+     * Returns the currently displayed user.
+     */
+    public Raspberry getRaspberry() {
+        return raspberry;
+    }
 
     public void setRaspberry(Raspberry raspberry) {
         this.raspberry = raspberry;
         doReloadRaspberry();
-    }
-
-    /**
-     * Returns the currently displayed user.
-     *
-     */
-    public Raspberry getRaspberry() {
-        return raspberry;
     }
 
     /**

@@ -34,7 +34,6 @@ public class UserListController implements Serializable {
 
     /**
      * Returns a list of all users.
-     *
      */
     public Collection<User> getUsers() {
         if (!this.getUsername().equals("")) {

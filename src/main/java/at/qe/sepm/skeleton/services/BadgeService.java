@@ -62,7 +62,6 @@ public class BadgeService {
 
     /**
      * creates Badge for the Code Monkey (Person with most Implementation Time) of the given period
-     *
      */
 
     private void evaluateCodeMonkey(Instant startDate, Instant endDate) {
@@ -89,7 +88,6 @@ public class BadgeService {
 
     /**
      * creates Badge for the Creative Mind (Person with most Design Time) of the given period
-     *
      */
 
     private void evaluateCreativeMind(Instant startDate, Instant endDate) {
@@ -116,7 +114,6 @@ public class BadgeService {
 
     /**
      * creates Badge for the Friend and Helper (Person with most Customer Service Time) of the given period
-     *
      */
 
     private void evaluateFriendAndHelper(Instant startDate, Instant endDate) {
@@ -145,7 +142,6 @@ public class BadgeService {
      * creates Badge for the All-Rounder (Person with most different tasks) of the given period by creating a list of
      * every task between startDate and endDate, then creating a HashMap where every new task gets saved per user.
      * Finally the user with the most different tasks is searched in that HashMap.
-     *
      */
 
     private void evaluateAllRounder(Instant startDate, Instant endDate) {
@@ -194,7 +190,6 @@ public class BadgeService {
 
     /**
      * creates Badge for the Night Owl (Person with most time during 20:00 and 6:00) of the given period
-     *
      */
 
     private void evaluateNightOwl(Instant startDate, Instant endDate) {
@@ -259,7 +254,6 @@ public class BadgeService {
 
     /**
      * Help function for badges that have a specific taskTypeList and need to find user with most seconds; returns The userWithMostSeconds
-     *
      */
 
     private String evaluateUserWithMostTime(List<Task> taskTypeList) {

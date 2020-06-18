@@ -1,6 +1,7 @@
 package at.qe.sepm.skeleton.model;
 
 import org.springframework.data.domain.Persistable;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;
@@ -17,7 +18,7 @@ public class Timeflip implements Persistable<String>, Serializable {
     private String macAddress;
 
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER, optional = true, cascade = CascadeType.ALL)
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @OneToOne
@@ -34,7 +35,19 @@ public class Timeflip implements Persistable<String>, Serializable {
     @CollectionTable(name = "map_task_type")
     @Enumerated(EnumType.STRING)
     private Map<Integer, TaskEnum> tasks = new HashMap<>();
-
+    private int battery;
+    private TaskEnum facet1;
+    private TaskEnum facet2;
+    private TaskEnum facet3;
+    private TaskEnum facet4;
+    private TaskEnum facet5;
+    private TaskEnum facet6;
+    private TaskEnum facet7;
+    private TaskEnum facet8;
+    private TaskEnum facet9;
+    private TaskEnum facet10;
+    private TaskEnum facet11;
+    private TaskEnum facet12;
 
     public Map<Integer, TaskEnum> getTasks() {
         return tasks;
@@ -57,21 +70,6 @@ public class Timeflip implements Persistable<String>, Serializable {
     public boolean isNew() {
         return null == createDate;
     }
-
-    private int battery;
-
-    private TaskEnum facet1;
-    private TaskEnum facet2;
-    private TaskEnum facet3;
-    private TaskEnum facet4;
-    private TaskEnum facet5;
-    private TaskEnum facet6;
-    private TaskEnum facet7;
-    private TaskEnum facet8;
-    private TaskEnum facet9;
-    private TaskEnum facet10;
-    private TaskEnum facet11;
-    private TaskEnum facet12;
 
     public String getMacAddress() {
         return macAddress;

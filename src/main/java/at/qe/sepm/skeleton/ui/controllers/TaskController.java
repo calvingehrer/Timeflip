@@ -27,19 +27,13 @@ import java.util.Date;
 public class TaskController implements Serializable {
 
     @Autowired
+    TimeBean timeBean;
+    @Autowired
     private RequestService requestService;
-
     @Autowired
     private TaskService taskService;
-
     @Autowired
     private UserService userService;
-
-
-    @Autowired
-    TimeBean timeBean;
-
-
     private TaskEnum task;
 
     private Date requestedDate;

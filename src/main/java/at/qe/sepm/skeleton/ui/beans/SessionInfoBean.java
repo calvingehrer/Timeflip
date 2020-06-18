@@ -3,7 +3,6 @@ package at.qe.sepm.skeleton.ui.beans;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.model.UserRole;
 import at.qe.sepm.skeleton.services.UserService;
-import at.qe.sepm.skeleton.utils.auditlog.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.Authentication;
@@ -33,7 +32,6 @@ public class SessionInfoBean {
     /**
      * Returns the currently logged on user, null if no user is authenticated
      * for this session.
-     *
      */
     public User getCurrentUser() {
         if (currentUser == null) {
@@ -49,7 +47,6 @@ public class SessionInfoBean {
     /**
      * Returns the username of the user for this session, empty string if no
      * user has been authenticated for this session.
-     *
      */
     public String getCurrentUserName() {
         if (!isLoggedIn()) {
@@ -62,7 +59,6 @@ public class SessionInfoBean {
     /**
      * Returns the roles of the user for this session as space-separated list,
      * empty string if no user has been authenticated for this session-
-     *
      */
     public String getCurrentUserRoles() {
         if (!isLoggedIn()) {

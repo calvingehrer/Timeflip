@@ -29,23 +29,21 @@ public class UserDetailController implements Serializable {
     private User user;
 
     /**
+     * Returns the currently displayed user.
+     */
+    public User getUser() {
+        return user;
+    }
+
+    /**
      * Sets the currently displayed user and reloads it form db. This user is
      * targeted by any further calls of
      * {@link #doReloadUser()}, {@link #doSaveUser()} and
      * {@link #doDeleteUser()}.
-     *
      */
     public void setUser(User user) {
         this.user = user;
         doReloadUser();
-    }
-
-    /**
-     * Returns the currently displayed user.
-     *
-     */
-    public User getUser() {
-        return user;
     }
 
     /**

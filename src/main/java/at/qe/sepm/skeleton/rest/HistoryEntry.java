@@ -3,13 +3,13 @@ package at.qe.sepm.skeleton.rest;
 import java.util.Date;
 
 public class HistoryEntry {
+    public int battery;
     private Long id;
     private String macAddress;
     private int facet;
     private Date start;
     private Date end;
     private int seconds;
-    public int battery;
 
     public Long getId() {
         return id;

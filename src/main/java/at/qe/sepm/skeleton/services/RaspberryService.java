@@ -6,7 +6,6 @@ import at.qe.sepm.skeleton.model.Room;
 import at.qe.sepm.skeleton.model.Timeflip;
 import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.RaspberryRepository;
-import at.qe.sepm.skeleton.repositories.RoomRepository;
 import at.qe.sepm.skeleton.repositories.TimeflipRepository;
 import at.qe.sepm.skeleton.repositories.UserRepository;
 import at.qe.sepm.skeleton.utils.auditlog.Logger;

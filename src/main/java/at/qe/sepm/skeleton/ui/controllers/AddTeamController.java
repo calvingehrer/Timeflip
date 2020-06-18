@@ -17,22 +17,18 @@ import java.util.Set;
 @Component
 @Scope("view")
 public class AddTeamController implements Serializable {
+    private final Set<User> employees = new HashSet<>();
     @Autowired
     private TeamService teamService;
     @Autowired
     private Logger<String, User> logger;
-
-    private final Set<User> employees = new HashSet<>();
+    private Team team = new Team();
+    private User employee;
+    private Department department;
 
     public Set<User> getEmployees() {
         return employees;
     }
-
-    private Team team = new Team();
-
-    private User employee;
-
-    private Department department;
 
     public void add() {
         teamService.addNewTeam(employees, team);

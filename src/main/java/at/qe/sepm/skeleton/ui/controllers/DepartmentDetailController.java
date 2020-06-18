@@ -46,10 +46,6 @@ public class DepartmentDetailController implements Serializable {
 
     private User oldLeader;
 
-    public void setDepartment(Department department) {
-        this.department = department;
-    }
-
     public User getNewLeader() {
         return newLeader;
     }
@@ -60,6 +56,10 @@ public class DepartmentDetailController implements Serializable {
 
     public Department getDepartment() {
         return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 
     public Team getAddedTeam() {

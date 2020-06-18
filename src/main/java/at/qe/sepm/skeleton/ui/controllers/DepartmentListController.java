@@ -90,8 +90,8 @@ public class DepartmentListController implements Serializable {
     }
 
     public void resetFilter() {
-        this.department="";
-        this.team="";
-        this.employee="";
+        this.department = "";
+        this.team = "";
+        this.employee = "";
     }
 }
