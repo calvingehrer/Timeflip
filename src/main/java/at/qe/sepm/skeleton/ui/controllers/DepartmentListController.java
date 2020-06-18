@@ -22,12 +22,48 @@ public class DepartmentListController implements Serializable {
     @Autowired
     private UserService userService;
 
+    private String department = "";
+    private String team = "";
+    private String employee = "";
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getTeam() {
+        return team;
+    }
+
+    public void setTeam(String team) {
+        this.team = team;
+    }
+
+    public String getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(String employee) {
+        this.employee = employee;
+    }
 
     /**
      * @return all department
      */
 
     public Collection<Department> getDepartments() {
+        if (!department.equals("")) {
+            return departmentService.getByDepartmentName(department);
+        }
+        if (!team.equals("")) {
+            return departmentService.getByTeamName(team);
+        }
+        if (!employee.equals("")) {
+            return departmentService.getByEmployee(employee);
+        }
         return departmentService.getAllDepartments();
     }
 
@@ -51,5 +87,11 @@ public class DepartmentListController implements Serializable {
 
     public List<Team> getTeamsOfLeadersDepartment() {
         return getTeamsOfDepartment(userService.getAuthenticatedUser().getDepartment());
+    }
+
+    public void resetFilter() {
+        this.department="";
+        this.team="";
+        this.employee="";
     }
 }
