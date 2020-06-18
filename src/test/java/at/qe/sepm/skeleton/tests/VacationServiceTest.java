@@ -57,21 +57,10 @@ public class VacationServiceTest {
         Calendar calendar = Calendar.getInstance(timeBean.getUtcTimeZone());
         calendar.set(2020, Calendar.AUGUST, 10);
         Instant start = calendar.toInstant();
-        calendar.set(2020, Calendar.AUGUST, 7);
-        Instant end = calendar.toInstant();
         vacation.setStart(start);
-        vacation.setEnd(end);
-
-        Assertions.assertThrows(VacationException.class, () -> vacationService.addVacation(user, vacation));
-
-        calendar.set(2021, Calendar.AUGUST, 14);
-        end = calendar.toInstant();
-        vacation.setEnd(end);
-
-        Assertions.assertThrows(VacationException.class, () -> vacationService.addVacation(user, vacation));
 
         calendar.set(2020, Calendar.AUGUST, 14);
-        end = calendar.toInstant();
+        Instant end = calendar.toInstant();
         vacation.setEnd(end);
 
         try {
@@ -80,5 +69,31 @@ public class VacationServiceTest {
             MessagesView.errorMessage("Test adding vacation", e.getMessage());
         }
 
+    }
+
+    @Test
+    @WithMockUser(username = "admin", roles = {"USER", "ADMIN"})
+    public void checkValidationTest() {
+        User user = userRepository.findFirstByUsername("user5");
+
+        Vacation vacation = new Vacation();
+
+        Calendar calendar = Calendar.getInstance(timeBean.getUtcTimeZone());
+        calendar.set(2020, Calendar.AUGUST, 10);
+        Instant start = calendar.toInstant();
+        calendar.set(2020, Calendar.AUGUST, 7);
+        Instant end = calendar.toInstant();
+        vacation.setStart(start);
+        vacation.setEnd(end);
+
+        Instant finalEnd1 = end;
+        Assertions.assertThrows(VacationException.class, () -> vacationService.checkVacationDates(user, start, finalEnd1));
+
+        calendar.set(2021, Calendar.AUGUST, 14);
+        end = calendar.toInstant();
+        vacation.setEnd(end);
+
+        Instant finalEnd2 = end;
+        Assertions.assertThrows(VacationException.class, () -> vacationService.checkVacationDates(user, start, finalEnd2));
     }
 }
