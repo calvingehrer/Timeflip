@@ -35,7 +35,7 @@ class AuditLogServiceTest {
     @WithMockUser(username = "departmentLeader", authorities = {"DEPARTMENTLEADER", "ADMIN"})
     void getAllEntries() {
 
-        User user = userService.getAllUsersByUsername("user1").get(0);
+        User user = userService.getAllUsersByUsername("user30").get(0);
         user.setFirstName("test");
         userService.saveUser(user);
 
@@ -60,7 +60,7 @@ class AuditLogServiceTest {
     @Test
     @WithMockUser(username = "departmentLeader", authorities = {"DEPARTMENTLEADER", "ADMIN"})
     void getAllEntriesByChangingUser() {
-        User user = userService.getAllUsersByUsername("user2").get(0);
+        User user = userService.getAllUsersByUsername("user29").get(0);
         user.setFirstName("test");
         userService.saveUser(user);
         Assert.assertEquals(emptyList, auditLogService.getAllEntriesByChangingUser("departmentLeader"));

@@ -32,6 +32,11 @@ class RoomServiceTest {
         Room room = new Room();
         room.setRoomNumber("22");
 
+
+        for(Room r : roomService.getRoomsWithoutRaspberry()){
+            System.out.println(r.getRoomNumber());
+        }
+
         Assert.assertEquals(1, roomService.getRoomsWithoutRaspberry().size());
 
         roomService.addNewRoom(room);
@@ -74,15 +79,16 @@ class RoomServiceTest {
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     void deleteRoom() {
-        Room room = roomService.loadRoom("4");
+       Assert.assertEquals(6, roomService.getAllRooms().size());
 
-        Assert.assertEquals(6, roomService.getAllRooms().size());
-
-        roomService.deleteRoom(roomService.loadRoom("4"));
-
-        Assert.assertEquals(5, roomService.getAllRooms().size());
+        Room room = new Room();
+        room.setRoomNumber("22");
 
         roomService.addNewRoom(room);
+
+        Assert.assertEquals(7, roomService.getAllRooms().size());
+
+        roomService.deleteRoom(roomService.loadRoom("22"));
 
         Assert.assertEquals(6, roomService.getAllRooms().size());
 

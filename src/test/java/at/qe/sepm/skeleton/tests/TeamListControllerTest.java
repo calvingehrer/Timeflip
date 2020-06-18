@@ -1,6 +1,7 @@
 package at.qe.sepm.skeleton.tests;
 
 import at.qe.sepm.skeleton.model.Department;
+import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.services.DepartmentService;
 import at.qe.sepm.skeleton.services.TeamService;
 import at.qe.sepm.skeleton.ui.controllers.TeamListController;
@@ -53,6 +54,11 @@ public class TeamListControllerTest {
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void getUsersNotInTeam() {
+
+        for(User u : teamListController.getUsersNotInTeam()){
+            System.out.println(u.getUsername());
+        }
+
         Assert.assertEquals(3, teamListController.getUsersNotInTeam().size());
     }
 
