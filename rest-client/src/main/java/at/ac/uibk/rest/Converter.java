@@ -59,9 +59,6 @@ public class Converter {
      * @param binary
      * @return the battery status as Integer
      */
-    public static int getBatteryState(String binary){
-        return Integer.parseInt(binary, 2);
-    }
     
     
     /**

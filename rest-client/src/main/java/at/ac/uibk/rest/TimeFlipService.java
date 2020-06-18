@@ -55,7 +55,7 @@ public class TimeFlipService {
      * @return the requested service, Null if service does not exist
      * @throws InterruptedException
      */
-    static BluetoothGattService getService(BluetoothDevice device, String UUID) throws InterruptedException {
+    public static BluetoothGattService getService(BluetoothDevice device, String UUID) throws InterruptedException {
         BluetoothGattService tempService = null;
         List<BluetoothGattService> bluetoothServices = null;
         do
@@ -82,7 +82,7 @@ public class TimeFlipService {
      * @param UUID the UUID of the requested characteristics
      * @return the requested characteristics, null if characteristic does not exist
      */
-    static BluetoothGattCharacteristic getCharacteristic(BluetoothGattService service, String UUID) {
+    public static BluetoothGattCharacteristic getCharacteristic(BluetoothGattService service, String UUID) {
         List<BluetoothGattCharacteristic> characteristics = service.getCharacteristics();
         if (characteristics == null)
             return null;

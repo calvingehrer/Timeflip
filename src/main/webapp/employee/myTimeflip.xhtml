@@ -23,6 +23,10 @@
                                     <p:outputLabel value="#{timeflipListController.timeflipOfUser.user}"/>
                                     <p:outputLabel value="Battery: "/>
                                     <p:outputLabel value="#{timeflipListController.timeflipOfUser.battery}%"/>
+                                    <p:outputLabel value="Last Synchronisation: "/>
+                                    <h:outputText value="#{timeBean.instantToDate(taskListController.sortedTasksFromUser.get(0).endTime)} ">
+                                        <f:convertDateTime timeZone="#{timeBean.utcTimeZone}" pattern="dd.MM.yyyy, HH:mm"/>
+                                    </h:outputText>
                                 </h:panelGrid>
                             </p:panel>
                         </div>
