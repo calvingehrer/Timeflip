@@ -55,14 +55,6 @@ public class TimeflipListController implements Serializable {
         this.timeflip = timeflip;
     }
 
-    public TimeflipService getTimeflipService() {
-        return timeflipService;
-    }
-
-    public void setTimeflipService(TimeflipService timeflipService) {
-        this.timeflipService = timeflipService;
-    }
-
     public String getMacId() {
         return macAddress;
     }
