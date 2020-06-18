@@ -28,7 +28,7 @@ class RoomServiceTest {
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     void getAllRooms() {
-        Assert.assertEquals(5, roomService.getAllRooms().size());
+        Assert.assertEquals(6, roomService.getAllRooms().size());
     }
 
     @Test
@@ -37,15 +37,15 @@ class RoomServiceTest {
         Room room = new Room();
         room.setRoomNumber("22");
 
-        Assert.assertEquals(0, roomService.getRoomsWithoutRaspberry().size());
+        Assert.assertEquals(1, roomService.getRoomsWithoutRaspberry().size());
 
         roomService.addNewRoom(room);
 
-        Assert.assertEquals(1, roomService.getRoomsWithoutRaspberry().size());
+        Assert.assertEquals(2, roomService.getRoomsWithoutRaspberry().size());
 
         roomService.deleteRoom(roomService.loadRoom("22"));
 
-        Assert.assertEquals(0, roomService.getRoomsWithoutRaspberry().size());
+        Assert.assertEquals(1, roomService.getRoomsWithoutRaspberry().size());
 
 
 }
@@ -54,18 +54,18 @@ class RoomServiceTest {
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     void addNewRoom() {
 
-        Assert.assertEquals(5, roomService.getAllRooms().size());
+        Assert.assertEquals(6, roomService.getAllRooms().size());
 
         Room room = new Room();
         room.setRoomNumber("22");
 
         roomService.addNewRoom(room);
 
-        Assert.assertEquals(6, roomService.getAllRooms().size());
+        Assert.assertEquals(7, roomService.getAllRooms().size());
 
         roomService.deleteRoom(roomService.loadRoom("22"));
 
-        Assert.assertEquals(5, roomService.getAllRooms().size());
+        Assert.assertEquals(6, roomService.getAllRooms().size());
 
     }
 
@@ -81,11 +81,17 @@ class RoomServiceTest {
     void deleteRoom() {
         Room room = roomService.loadRoom("4");
 
+        Assert.assertEquals(6, roomService.getAllRooms().size());
+
+        roomService.deleteRoom(roomService.loadRoom("4"));
+
         Assert.assertEquals(5, roomService.getAllRooms().size());
 
-        roomService.deleteRoom(room);
+        roomService.addNewRoom(room);
 
-        Assert.assertEquals(4, roomService.getAllRooms().size());
+        Assert.assertEquals(6, roomService.getAllRooms().size());
+
+
 
 
     }

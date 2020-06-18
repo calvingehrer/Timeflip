@@ -78,7 +78,7 @@ public class TimeflipService {
     }
 
 
-    @PreAuthorize("hasAuthority('EMPLOYEE') or principal.username eq #username")
+    @PreAuthorize("hasAuthority('EMPLOYEE') or principal.username eq #username or hasAuthority('ADMIN')")
     public Timeflip loadTimeflip(String timeflipId) {
         return timeflipRepository.findByMacAddress(timeflipId);
     }

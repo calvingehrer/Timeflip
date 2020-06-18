@@ -72,6 +72,12 @@ public class AddDepartmentControllerTest {
 
         Assert.assertEquals(6, departmentService.getAllDepartments().size());
         Assert.assertNull(addDepartmentController.getDepartment().getDepartmentName());
+
+
+        userService.loadUser("testUser").setDepartment(null);
+        userService.deleteUser(userService.loadUser("testUser"));
+        departmentService.deleteDepartment(departmentService.loadDepartment("dep1"));
+        Assert.assertEquals(5, departmentService.getAllDepartments().size());
     }
 
     @Test

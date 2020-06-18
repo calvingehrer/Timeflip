@@ -54,6 +54,9 @@ public class AddUserControllerTest {
         addUserController.add();
         Assert.assertEquals(4, userService.loadUser("testUser2").getRoles().size());
 
+        userService.deleteUser(userService.loadUser("testUser2"));
+        Assert.assertEquals(37, userService.getAllUsers().size());
+
     }
 
     @Test

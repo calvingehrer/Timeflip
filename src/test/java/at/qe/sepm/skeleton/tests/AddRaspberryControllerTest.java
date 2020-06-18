@@ -45,11 +45,19 @@ public class AddRaspberryControllerTest {
         addRaspberryController.setRaspberry(raspberry);
         Room room = roomService.loadRoom("6");
         addRaspberryController.setRoom(room);
+
+        for(Raspberry raspberry1 : raspberryService.getAllRaspberries()){
+            System.out.println(raspberry1.getRaspberryId());
+        }
+
         Assert.assertEquals(5, raspberryService.getAllRaspberries().size());
         Assert.assertFalse(room.isEquipped());
         addRaspberryController.add();
         Assert.assertEquals(6, raspberryService.getAllRaspberries().size());
         Assert.assertTrue(roomService.loadRoom("6").isEquipped());
+        raspberryService.deleteRaspberry(raspberryService.loadRaspberry("testRaspberry"));
+        Assert.assertEquals(5, raspberryService.getAllRaspberries().size());
+
 
     }
 

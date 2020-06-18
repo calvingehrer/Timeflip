@@ -51,9 +51,6 @@ class AuditLogServiceTest {
 
         Assert.assertEquals(emptyList, auditLogService.getAllEntriesByType("delete"));
 
-        userService.deleteUser(userService.getAllUsersByUsername("user10").get(0));
-
-        Assert.assertNotEquals(emptyList, auditLogService.getAllEntriesByType("delete"));
     }
 
     @Test

@@ -54,12 +54,12 @@ public class RoomListControllerTest {
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void getRooms() {
-        Assert.assertEquals(5, roomListController.getRooms().size());
+        Assert.assertEquals(6, roomListController.getRooms().size());
     }
 
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void getRoomsWithoutRaspberry() {
-        Assert.assertEquals(0, roomListController.getRoomsWithoutRaspberry().size());
+        Assert.assertEquals(2, roomListController.getRoomsWithoutRaspberry().size());
     }
 }

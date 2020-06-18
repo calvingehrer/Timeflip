@@ -35,13 +35,16 @@ public class UserListControllerTest {
 
     UserListController userListController;
 
+    @Autowired
+    UserService userService;
+
 
 
     @Before
     public void init(){
         userListController = new UserListController();
 
-        //ReflectionTestUtils.setField(userListController, "teamService", teamService);
+        ReflectionTestUtils.setField(userListController, "userService", userService);
     }
 
     @Test
@@ -65,7 +68,7 @@ public class UserListControllerTest {
     @Test
     @WithMockUser(username = "admin", authorities = {"ADMIN"})
     public void getTeamLeadersWithoutTeam() {
-        Assert.assertEquals(2, userListController.getTeamLeadersWithoutTeam());
+        Assert.assertEquals(2, userListController.getTeamLeadersWithoutTeam().size());
     }
 
     @Test

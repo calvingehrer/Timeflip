@@ -44,6 +44,9 @@ public class AddRoomControllerTest {
         Assert.assertEquals(6, roomService.getAllRooms().size());
         addRoomController.add();
         Assert.assertEquals(7, roomService.getAllRooms().size());
+        roomService.deleteRoom(roomService.loadRoom("7"));
+        Assert.assertEquals(6, roomService.getAllRooms().size());
+
     }
 
     @Test

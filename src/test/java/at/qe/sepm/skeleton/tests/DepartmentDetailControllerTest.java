@@ -92,7 +92,7 @@ public class DepartmentDetailControllerTest {
         Department department = departmentService.loadDepartment("IT");
 
         Team team = new Team();
-        team.setTeamName("testTeam");
+        team.setTeamName("Team1");
         departmentDetailController.setDepartment(department);
 
         Assert.assertEquals(0, departmentDetailController.getAddedTeams().size());
@@ -101,7 +101,6 @@ public class DepartmentDetailControllerTest {
         departmentDetailController.addTeam();
 
         Assert.assertEquals(1, departmentDetailController.getAddedTeams().size());
-
 
     }
 

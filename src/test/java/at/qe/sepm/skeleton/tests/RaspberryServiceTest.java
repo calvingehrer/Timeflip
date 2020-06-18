@@ -50,6 +50,8 @@ class RaspberryServiceTest {
         raspberry.setRaspberryId("testRaspberry");
         raspberryService.addNewRaspberry(raspberry, null);
         Assert.assertEquals(6, raspberryService.getAllRaspberries().size());
+        raspberryService.deleteRaspberry(raspberryService.loadRaspberry("testRaspberry"));
+        Assert.assertEquals(5, raspberryService.getAllRaspberries().size());
 
     }
 
