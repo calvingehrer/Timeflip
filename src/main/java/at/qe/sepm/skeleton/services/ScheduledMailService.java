@@ -7,12 +7,15 @@ import at.qe.sepm.skeleton.model.User;
 import at.qe.sepm.skeleton.repositories.MailRepository;
 import at.qe.sepm.skeleton.repositories.TaskRepository;
 import at.qe.sepm.skeleton.ui.beans.TimeBean;
+import org.joda.time.Days;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
 import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.HashMap;
 
@@ -33,7 +36,11 @@ public class ScheduledMailService {
     private MailService mailService;
 
     @Autowired
-    TaskRepository taskRepository;
+    private TaskRepository taskRepository;
+
+    @Autowired
+    private UserService userService;
+
 
     @Autowired
     private MailRepository mailRepository;
@@ -49,6 +56,7 @@ public class ScheduledMailService {
             mailService.sendEmailTo(u, "your daily stats", generateStatisticsMessage(u, Interval.DAILY));
         }
     }
+
 
     /**
      * method to send mails with statistics from the last week
@@ -71,6 +79,21 @@ public class ScheduledMailService {
             mailService.sendEmailTo(u, "your monthly stats", generateStatisticsMessage(u, Interval.MONTHLY));
         }
     }
+
+    @Scheduled(cron = "0 0 8 * * MON-FRI", zone = "Europe/Vienna")
+    public void sendSynchronisationReminder () {
+        Instant currentTime = Instant.now();
+        for (User u: userService.getAllUsers()) {
+            List<Task> lastThreeDays = taskRepository.findUserTasksBetweenDates(u, currentTime.minus(3, ChronoUnit.DAYS), currentTime);
+            if(lastThreeDays.isEmpty()){
+                if(u.getEmail() != null && !u.getEmail().isEmpty()){
+                    mailService.sendEmailTo(u, "Synchronisation Reminder",
+                            "Hello " + u.getFirstName() + "! \nPlease check your TimeFlip Device. The last synchronisation was more than 3 days ago.\nCheers,\nTimeFlipper Team");
+                }
+            }
+        }
+    }
+
 
     public String generateStatisticsMessage(User user, Interval interval){
         StringBuilder message = new StringBuilder();
