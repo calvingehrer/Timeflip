@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +31,8 @@ public class ScheduledMailService {
     TaskRepository taskRepository;
     @Autowired
     private MailService mailService;
+    @Autowired
+    private UserService userService;
     @Autowired
     private MailRepository mailRepository;
 
@@ -66,6 +69,21 @@ public class ScheduledMailService {
             mailService.sendEmailTo(u, "your monthly stats", generateStatisticsMessage(u, Interval.MONTHLY));
         }
     }
+
+    @Scheduled(cron = "0 0 8 * * MON-FRI", zone = "Europe/Vienna")
+    public void sendSynchronisationReminder () {
+        Instant currentTime = Instant.now();
+        for (User u: userService.getAllUsers()) {
+            List<Task> lastThreeDays = taskRepository.findUserTasksBetweenDates(u, currentTime.minus(3, ChronoUnit.DAYS), currentTime);
+            if(lastThreeDays.isEmpty()){
+                if(u.getEmail() != null && !u.getEmail().isEmpty()){
+                    mailService.sendEmailTo(u, "Synchronisation Reminder",
+                            "Hello " + u.getFirstName() + "! \nPlease check your TimeFlip Device. The last synchronisation was more than 3 days ago.\nCheers,\nTimeFlipper Team");
+                }
+            }
+        }
+    }
+
 
     private String generateStatisticsMessage(User user, Interval interval) {
         StringBuilder message = new StringBuilder();
