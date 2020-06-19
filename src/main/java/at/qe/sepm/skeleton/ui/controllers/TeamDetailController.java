@@ -153,7 +153,9 @@ public class TeamDetailController implements Serializable {
 
     public void replaceLeader() {
         this.addedEmployees.add(this.getNewLeader());
-        this.removedEmployees.add(userService.getTeamLeader(this.getTeam()));
+        if (userService.getTeamLeader(this.getTeam()) != null) {
+            this.removedEmployees.add(userService.getTeamLeader(this.getTeam()));
+        }
     }
 
     public void doSaveTeam() {

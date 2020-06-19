@@ -112,7 +112,7 @@
                                 <h:panelGrid columns="3">
                                     <p:commandButton value="Done" action="#{teamDetailController.doSaveTeam}"
                                                      oncomplete="PF('teamEditDialog').hide()"
-                                                     update=":teamForm:TeamTable"/>
+                                                     update=":teamForm:TeamTable :editEmployeeForm"/>
                                     <p:commandButton value="Abort" onclick="PF('teamEditDialog').hide()"/>
                                     <p:commandButton value="Reload" action="#{teamDetailController.doReloadTeam}"
                                                      update="editTeamForm:teamData"/>
@@ -269,10 +269,10 @@
                                                      oncomplete="PF('selectDepartmentDialog').show()"/>
                                 </h:panelGrid>
                                 <h:panelGrid columns="2">
-                                    <p:commandButton update="@form :teamForm:TeamTable" value="Add"
-                                                     action="#{addTeamController.add}"
+                                    <p:commandButton update="@form :teamForm:TeamTable editEmployeeForm"
+                                                     value="Add" action="#{addTeamController.add}"
                                                      oncomplete="PF('addTeamDialog').hide()"/>
-                                    <p:commandButton value="Abort" type="reset" onclick="PF('addTeamDialog').hide()"/>
+                                    <p:commandButton value="Abort" onclick="PF('addTeamDialog').hide()"/>
                                 </h:panelGrid>
                             </h:form>
                         </p:outputPanel>
