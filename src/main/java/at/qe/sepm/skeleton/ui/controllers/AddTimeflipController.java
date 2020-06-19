@@ -18,12 +18,13 @@ public class AddTimeflipController implements Serializable {
     @Autowired
     private TimeflipService timeflipService;
 
-    private Timeflip timeflip;
+    private Timeflip timeflip = new Timeflip();
 
     private User user;
 
     public void add() {
         timeflipService.addNewTimeflip(timeflip, user);
+        timeflip = new Timeflip();
     }
 
     public Timeflip getTimeflip() {
