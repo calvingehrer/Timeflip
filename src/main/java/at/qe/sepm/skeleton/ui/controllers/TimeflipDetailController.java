@@ -11,9 +11,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 @Scope("view")
@@ -41,8 +39,35 @@ public class TimeflipDetailController implements Serializable {
     boolean auszeit = false;
 
 
+    private List<TaskEnum> taskList = Arrays.asList(TaskEnum.values());
+    private ArrayList<Integer> facetNumbers = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
     private List<TaskEnum> tasks = new ArrayList<>();
 
+    public void saveTasks(){
+
+        if(timeflip == null){
+            return;
+        }
+
+        doSaveTimeflip();
+
+    }
+
+    public List<TaskEnum> getTaskList() {
+        return taskList;
+    }
+
+    public void setTaskList(List<TaskEnum> taskList) {
+        this.taskList = taskList;
+    }
+
+    public ArrayList<Integer> getFacetNumbers() {
+        return facetNumbers;
+    }
+
+    public void setFacetNumbers(ArrayList<Integer> facetNumbers) {
+        this.facetNumbers = facetNumbers;
+    }
 
     public Timeflip getTimeflip() {
         return timeflip;
@@ -234,8 +259,6 @@ public class TimeflipDetailController implements Serializable {
 
 
     public void addTasks() {
-
-
         Map<Integer, TaskEnum> map = timeflip.getTasks();
 
 
@@ -253,7 +276,7 @@ public class TimeflipDetailController implements Serializable {
                 return;
             }
             if (entry.getValue() == null) {
-                entry.setValue(tasks.get(taskCounter));
+                entry.setValue(this.tasks.get(taskCounter));
                 tasks.remove(taskCounter);
                 taskCounter--;
 
