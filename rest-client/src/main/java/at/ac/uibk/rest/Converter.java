@@ -52,14 +52,6 @@ public class Converter {
         return Integer.parseInt(timeBinary, 2);
     }
 
-    /**
-     * Converts the battery status from a binary String
-     * to an Integer
-     * 
-     * @param binary
-     * @return the battery status as Integer
-     */
-    
     
     /**
      * Creates timestamp of current time
